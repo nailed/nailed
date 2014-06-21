@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
         maven {
             //Because SpecialSource 1.7 is still beta
@@ -12,6 +11,11 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            //Reening's maven repo. It hosts nailed-mcp
+            name = "forge"
+            url = "http://maven.reening.nl"
+        }
     }
     dependencies {
         classpath "jk_5.nailed.mcp:mcp:1.0.0-SNAPSHOT"
@@ -19,6 +23,8 @@ buildscript {
 }
 
 apply plugin: "nailed-mcp"
+apply plugin: "java"
+apply plugin: "scala"
 
 nailedMCP {
     minecraftVersion = "1.7.2"
