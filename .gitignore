@@ -2,4 +2,9 @@
 build
 minecraft
 runtime
+*.ipr
+*.iml
+*.iws
+.idea
+!src/main/*
 

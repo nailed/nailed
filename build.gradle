@@ -22,10 +22,19 @@ buildscript {
     }
 }
 
-apply plugin: "nailed-mcp"
 apply plugin: "java"
 apply plugin: "scala"
+apply plugin: "idea"
+apply plugin: "nailed-mcp"
+
+group = "jk_5.nailed"
+version = "1.0.0-SNAPSHOT"
 
 nailedMCP {
     minecraftVersion = "1.7.2"
+    mainClass = "net.minecraft.server.MinecraftServer"
+}
+
+dependencies {
+    nailed 'org.scala-lang:scala-library:2.11.1'
 }
