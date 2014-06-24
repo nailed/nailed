@@ -37,4 +37,6 @@ nailedMCP {
 
 dependencies {
     nailed 'org.scala-lang:scala-library:2.11.1'
+    nailed 'net.minecraft:launchwrapper:1.9'
+    nailed 'jk_5:EventBus:1.0'
 }
