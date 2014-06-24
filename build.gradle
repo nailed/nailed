@@ -18,7 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.0.0-SNAPSHOT"
+        classpath "jk_5.nailed.mcp:mcp:1.0.1-SNAPSHOT"
     }
 }
 
@@ -31,7 +31,7 @@ group = "jk_5.nailed"
 version = "1.0.0-SNAPSHOT"
 
 nailedMCP {
-    minecraftVersion = "1.7.2"
+    minecraftVersion = "1.7.10-pre4"
     mainClass = "net.minecraft.server.MinecraftServer"
 }
 
