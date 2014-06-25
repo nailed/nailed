@@ -8,7 +8,7 @@ import java.util.regex.Pattern
 import com.google.common.collect.{ArrayListMultimap, Multimap}
 import com.google.gson.Gson
 import jk_5.eventbus.{Event, EventBus}
-import jk_5.nailed.api.NailedServer
+import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TabExecutor}
 import jk_5.nailed.api.command.CommandSender
 import org.apache.commons.lang3.Validate
@@ -21,7 +21,7 @@ import scala.collection.mutable
  *
  * @author jk-5
  */
-class PluginManager(private val server: NailedServer) {
+class PluginManager(private val server: Server) {
 
   private val eventBus = new EventBus
   private val plugins = mutable.HashMap[String, Plugin]()
@@ -145,6 +145,11 @@ class PluginManager(private val server: NailedServer) {
         }
       }
     }
+
+    val is = getClass.getClassLoader.getResourceAsStream("testplugin.json")
+    val desc = gson.fromJson(new InputStreamReader(is), classOf[PluginDescription])
+    desc.setFile(null)
+    toLoad.put(desc.getName, desc)
   }
 
   def loadPlugins(){
@@ -163,7 +168,7 @@ class PluginManager(private val server: NailedServer) {
     for(plugin <- plugins.values){
       try{
         plugin.onEnable()
-        logger.info("Enabled plugin {0} version {1} by {2}", plugin.getDescription.getName, plugin.getDescription.getVersion, plugin.getDescription.getAuthor)
+        logger.info("Enabled plugin {} version {} by {}", plugin.getDescription.getName, plugin.getDescription.getVersion, plugin.getDescription.getAuthor)
       }catch{
         case e: Exception => logger.warn("Exception encountered when loading plugin: " + plugin.getDescription.getName, e)
       }
@@ -196,19 +201,19 @@ class PluginManager(private val server: NailedServer) {
         }
       }
       if(dependStatus == java.lang.Boolean.FALSE && plugin.getDepends.contains(dependencyName)){ //Only fail if this wasn't a soft dependency
-        logger.warn("{0} (required by {1}) is unavailable", dependencyName, plugin.getName)
+        logger.warn("{} (required by {}) is unavailable", dependencyName, plugin.getName)
         status = false
       }
     }
 
     if(status) try{
-      val loader = new PluginClassLoader(Array(plugin.getFile.toURI.toURL))
+      val loader = if(plugin.getFile == null) this.getClass.getClassLoader else new PluginClassLoader(Array(plugin.getFile.toURI.toURL))
       val main = loader.loadClass(plugin.getMain)
       val cl = main.getDeclaredConstructor().newInstance().asInstanceOf[Plugin]
       cl.init(server, plugin)
       plugins.put(plugin.getName, cl)
       cl.onLoad()
-      logger.info("Loaded plugin {0} version {1} by {2}", plugin.getName, plugin.getVersion, plugin.getAuthor)
+      logger.info("Loaded plugin {} version {} by {}", plugin.getName, plugin.getVersion, plugin.getAuthor)
     }catch{
       case t: Throwable =>
         logger.warn("Error loading plugin " + plugin.getName, t)
@@ -254,7 +259,7 @@ class PluginManager(private val server: NailedServer) {
     eventBus.post(event)
     val elapsed = start - System.nanoTime()
     if(elapsed > 250000){
-      logger.warn("Event {0} took {1}ns to process!", event, elapsed)
+      logger.warn("Event {} took {}ns to process!", event.toString, elapsed.toString)
     }
     event
   }
@@ -262,7 +267,7 @@ class PluginManager(private val server: NailedServer) {
   /**
    * Unregister all of a Plugin's listener.
    *
-   * @param plugin
+   * @param plugin the plugin to unregister all listeners off
    */
   def unregisterListeners(plugin: Plugin){
     val it = listenersByPlugin.get(plugin).iterator

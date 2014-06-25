@@ -21,32 +21,6 @@ trait CommandSender {
    *
    * @param message the message to send
    */
-  @deprecated
-  def sendMessage(message: String)
-
-  /**
-   * Send several messages to this sender. Each message will be sent
-   * separately.
-   *
-   * @param messages the messages to send
-   */
-  @deprecated
-  def sendMessage(messages: String*)
-
-  /**
-   * Send several messages to this sender. Each message will be sent
-   * separately.
-   *
-   * @param messages the messages to send
-   */
-  @deprecated
-  def sendMessage(messages: Array[String])
-
-  /**
-   * Send a message to this sender.
-   *
-   * @param message the message to send
-   */
   def sendMessage(message: BaseComponent)
 
   /**

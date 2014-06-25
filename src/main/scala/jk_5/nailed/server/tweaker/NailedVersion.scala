@@ -1,4 +1,4 @@
-package jk_5.nailed.tweaker
+package jk_5.nailed.server.tweaker
 
 import java.io.{InputStream, InputStreamReader}
 

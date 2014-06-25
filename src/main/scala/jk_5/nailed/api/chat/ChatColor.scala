@@ -75,7 +75,7 @@ object ChatColor {
   def getByChar(c: Char): ChatColor = allChars.get(c).orNull
 }
 
-private case class ChatColor(code: Char, name: String){
-  override val toString = ChatColor.colorChar + code
+case class ChatColor(code: Char, name: String){
+  override val toString = new StringBuilder().append(ChatColor.colorChar).append(code).toString()
   def getName = this.name
 }

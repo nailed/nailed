@@ -40,14 +40,14 @@ class TranslatableComponent(private var translate: String, rep: Any*) extends Ba
     this.replacements = replacements
   }
 
-  def addReplacement(text: String) = this.addReplacement(new TextComponent(text))
+  def addReplacement(text: String): Unit = this.addReplacement(new TextComponent(text))
   def addReplacement(replacement: BaseComponent){
     if(this.replacements == null) this.replacements = mutable.ArrayBuffer[BaseComponent]()
     replacement.parent = this
     replacements += replacement
   }
 
-  override protected def toPlainText(builder: StringBuilder){
+  override private[chat] def toPlainText(builder: StringBuilder){
     val trans = TranslatableComponent.locales.getString(this.translate)
     if(trans == null){
       builder.append(this.translate)
@@ -66,7 +66,14 @@ class TranslatableComponent(private var translate: String, rep: Any*) extends Ba
         formatCode.charAt(0) match {
           case 's' | 'd' =>
             val withIndex = matcher.group(1)
-            this.replacements(if(withIndex != null) Integer.parseInt(withIndex) - 1 else {i += 1; i - 1}).toPlainText(builder)
+            if(withIndex != null){
+              val element = this.replacements(Integer.parseInt(withIndex) - 1)
+              element.toPlainText(builder)
+            }else{
+              val element = this.replacements(i)
+              element.toPlainText(builder)
+              i += 1
+            }
             break = true
           case '%' =>
             builder.append('%')
@@ -80,7 +87,7 @@ class TranslatableComponent(private var translate: String, rep: Any*) extends Ba
     super.toPlainText(builder)
   }
 
-  override protected def toLegacyText(builder: StringBuilder){
+  override private[chat] def toLegacyText(builder: StringBuilder){
     val trans = TranslatableComponent.locales.getString(this.translate)
     if(trans == null){
       addFormat(builder)
@@ -101,7 +108,14 @@ class TranslatableComponent(private var translate: String, rep: Any*) extends Ba
         formatCode.charAt(0) match {
           case 's' | 'd' =>
             val withIndex = matcher.group(1)
-            this.replacements(if(withIndex != null) Integer.parseInt(withIndex) - 1 else {i += 1; i - 1}).toLegacyText(builder)
+            if(withIndex != null){
+              val element = this.replacements(Integer.parseInt(withIndex) - 1)
+              element.toLegacyText(builder)
+            }else{
+              val element = this.replacements(i)
+              element.toLegacyText(builder)
+              i += 1
+            }
             break = true
           case '%' =>
             addFormat(builder)
@@ -130,4 +144,5 @@ class TranslatableComponent(private var translate: String, rep: Any*) extends Ba
 
   def setTranslate(translate: String) = this.translate = translate
   def getTranslate = this.translate
+  def getReplacements = this.rep
 }
