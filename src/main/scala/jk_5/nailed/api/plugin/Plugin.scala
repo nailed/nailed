@@ -41,7 +41,7 @@ abstract class Plugin {
    *
    * @return the data folder of this plugin
    */
-  def getDataFolder = new File(getServer.getPluginsFolder, getDescription.getName)
+  final def getDataFolder = new File(getServer.getPluginsFolder, getDescription.getName)
 
   /**
    * Get a resource from within this plugins jar or container. Care must be
@@ -55,7 +55,7 @@ abstract class Plugin {
     getClass.getClassLoader.getResourceAsStream(name)
   }
 
-  private[plugin] def init(server: NailedServer, description: PluginDescription){
+  private[plugin] final def init(server: NailedServer, description: PluginDescription){
     this.server = server
     this.description = description
     this.file = description.getFile

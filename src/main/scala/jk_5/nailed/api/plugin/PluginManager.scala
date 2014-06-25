@@ -7,7 +7,7 @@ import java.util.regex.Pattern
 
 import com.google.common.collect.{ArrayListMultimap, Multimap}
 import com.google.gson.Gson
-import jk_5.eventbus.EventBus
+import jk_5.eventbus.{Event, EventBus}
 import jk_5.nailed.api.NailedServer
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TabExecutor}
 import jk_5.nailed.api.command.CommandSender
@@ -28,6 +28,7 @@ class PluginManager(private val server: NailedServer) {
   private val toLoad = mutable.HashMap[String, PluginDescription]()
   private val commandMap = mutable.HashMap[String, Command]()
   private val commandsByPlugin: Multimap[Plugin, Command] = ArrayListMultimap.create()
+  private val listenersByPlugin: Multimap[Plugin, Any] = ArrayListMultimap.create()
   private val argsSplit = Pattern.compile(" ")
   private val logger = LogManager.getLogger
   private val gson = new Gson
@@ -214,5 +215,60 @@ class PluginManager(private val server: NailedServer) {
     }
     pluginStatuses.put(plugin, status)
     status
+  }
+
+  /**
+   * Register a listener for receiving called events. Methods in this
+   * Object which wish to receive events must be annotated with the
+   * {@link EventHandler} annotation.
+   *
+   * @param plugin the owning plugin
+   * @param listener the listener to register events for
+   */
+  def registerListener(plugin: Plugin, listener: Any){
+    eventBus.register(listener)
+    listenersByPlugin.put(plugin, listener)
+  }
+
+  /**
+   * Unregister a listener so that the events do not reach it anymore.
+   *
+   * @param listener the listener to unregister
+   */
+  def unregisterListener(listener: Any){
+    eventBus.unregister(listener)
+    listenersByPlugin.values.remove(listener)
+  }
+
+  /**
+   * Dispatch an event to all subscribed listeners and return the event once
+   * it has been handled by these listeners.
+   *
+   * @tparam T the type bounds, must be a class which extends event
+   * @param event the event to call
+   * @return the called event
+   */
+  def callEvent[T <: Event](event: T): T = {
+    Validate.notNull(event, "event")
+    val start = System.nanoTime()
+    eventBus.post(event)
+    val elapsed = start - System.nanoTime()
+    if(elapsed > 250000){
+      logger.warn("Event {0} took {1}ns to process!", event, elapsed)
+    }
+    event
+  }
+
+  /**
+   * Unregister all of a Plugin's listener.
+   *
+   * @param plugin
+   */
+  def unregisterListeners(plugin: Plugin){
+    val it = listenersByPlugin.get(plugin).iterator
+    while(it.hasNext){
+      eventBus.unregister(it.next())
+      it.remove()
+    }
   }
 }
