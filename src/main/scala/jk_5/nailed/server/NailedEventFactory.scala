@@ -4,11 +4,13 @@ import jk_5.eventbus.Event
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.event._
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
+import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.command.ICommandSender
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.Entity
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
-import net.minecraft.world.WorldServer
+import net.minecraft.world.{World, WorldServer}
 
 /**
  * No description given
@@ -46,12 +48,24 @@ object NailedEventFactory {
   def fireCommand(sender: ICommandSender, input: String): Int = {
     //TODO: pool commandsenders
     val wrapped = sender match {
-      case p: EntityPlayer => this.server.getPlayer(p.getGameProfile.getId)
+      case p: EntityPlayerMP => new NailedPlayer(p.getGameProfile.getId, p.getGameProfile.getName)//this.server.getPlayer(p.getGameProfile.getId)
       /*case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
       case r: RConConsoleSource => new RConCommandSender(r)*/
       case s: MinecraftServer => this.serverCommandSender
       case _ => return -1
     }
     if(server.getPluginManager.dispatchCommand(wrapped, input, null)) 1 else -1
+  }
+
+  def fireWorldLoad(world: World){
+
+  }
+
+  def fireWorldUnload(world: World){
+
+  }
+
+  def fireEntityInPortal(entity: Entity){
+
   }
 }

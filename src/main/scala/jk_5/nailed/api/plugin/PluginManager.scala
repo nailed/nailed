@@ -11,7 +11,7 @@ import jk_5.eventbus.{Event, EventBus}
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TabExecutor}
 import jk_5.nailed.api.command.CommandSender
-import jk_5.nailed.internalplugin.InternalPluginDescription
+import jk_5.nailed.internalplugin.{InternalPluginDescription, NailedInternalPlugin}
 import org.apache.commons.lang3.Validate
 import org.apache.logging.log4j.LogManager
 
@@ -79,7 +79,7 @@ class PluginManager(private val server: Server) {
   def dispatchCommand(sender: CommandSender, line: String, tabResults: mutable.ListBuffer[String]): Boolean = {
     val split = argsSplit.split(line)
     if(split.length == 0) return false
-    val commandName = split(0).toLowerCase
+    val commandName = split(0).substring(1).toLowerCase
     val command = commandMap.get(commandName)
     if(command.isEmpty) return false
     val args = util.Arrays.copyOfRange(split, 1, split.length)
@@ -147,7 +147,6 @@ class PluginManager(private val server: Server) {
         }
       }
     }
-    toLoad.put(InternalPluginDescription.getName, InternalPluginDescription)
   }
 
   /**
@@ -155,7 +154,9 @@ class PluginManager(private val server: Server) {
    * It checks the nailed.runtimePlugins property which should be set to the location of the plugin.json on the classpath
    */
   def discoverClasspathPlugins(){
-    val plugins = Properties.propOrEmpty("nailed.runtimePlugins").split(",")
+    val prop = Properties.propOrNone("nailed.runtimePlugins")
+    if(prop.isEmpty) return
+    val plugins = prop.get.trim.split(",")
     for(plugin <- plugins){
       val is = getClass.getClassLoader.getResourceAsStream(plugin.trim)
       if(is == null){
@@ -189,6 +190,10 @@ class PluginManager(private val server: Server) {
         case e: Exception => logger.warn("Exception encountered when loading plugin: " + plugin.getDescription.getName, e)
       }
     }
+    NailedInternalPlugin.init(server, InternalPluginDescription)
+    plugins.put(InternalPluginDescription.getName, NailedInternalPlugin)
+    NailedInternalPlugin.onLoad()
+    logger.info("Loaded plugin {} version {} by {}", InternalPluginDescription.getName, InternalPluginDescription.getVersion, InternalPluginDescription.getAuthor)
   }
 
   def enablePlugin(pluginStatuses: mutable.HashMap[PluginDescription, java.lang.Boolean], dependencyStack: mutable.Stack[PluginDescription], plugin: PluginDescription): Boolean = {
@@ -225,7 +230,7 @@ class PluginManager(private val server: Server) {
     if(status) try{
       val loader = if(plugin.getFile == null) this.getClass.getClassLoader else new PluginClassLoader(Array(plugin.getFile.toURI.toURL))
       val main = loader.loadClass(plugin.getMain)
-      val cl = main.getDeclaredConstructor().newInstance().asInstanceOf[Plugin]
+      val cl = main.newInstance().asInstanceOf[Plugin]
       cl.init(server, plugin)
       plugins.put(plugin.getName, cl)
       cl.onLoad()

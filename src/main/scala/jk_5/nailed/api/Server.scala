@@ -5,6 +5,7 @@ import java.util.UUID
 
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
+import jk_5.nailed.api.world.DimensionManager
 import org.apache.commons.lang3.Validate
 
 /**
@@ -69,4 +70,11 @@ abstract class Server {
    * @return a player object if one was found, null otherwise
    */
   def getPlayer(id: UUID): Player
+
+  /**
+   * Gets the dimensionmanager that is responsible for registering and controlling custom dimensions
+   *
+   * @return the DimensionManager instance
+   */
+  def getDimensionManager: DimensionManager
 }

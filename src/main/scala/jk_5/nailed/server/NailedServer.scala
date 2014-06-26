@@ -7,6 +7,7 @@ import jk_5.nailed.api.Server
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
+import jk_5.nailed.server.world.NailedDimensionManager
 import net.minecraft.server.dedicated.DedicatedServer
 
 /**
@@ -20,6 +21,7 @@ object NailedServer extends Server {
   private val pluginManager = new PluginManager(this)
 
   NailedEventFactory.server = this
+  Server.setInstance(this)
 
   /**
    * Gets the name of the currently running server software.
@@ -59,6 +61,17 @@ object NailedServer extends Server {
    */
   override def getPlayer(id: UUID): Player = null //TODO
 
+  /**
+   * Gets the dimensionmanager that is responsible for registering and controlling custom dimensions
+   *
+   * @return the DimensionManager instance
+   */
+  override def getDimensionManager = NailedDimensionManager
+
+  def register(){
+
+  }
+
   def preLoad(server: DedicatedServer){
     this.pluginsFolder.mkdir()
     this.pluginManager.discoverClasspathPlugins()
@@ -68,5 +81,8 @@ object NailedServer extends Server {
 
   def load(server: DedicatedServer){
     this.pluginManager.enablePlugins()
+
+    this.getDimensionManager.registerDimension(2, 0)
+    this.getDimensionManager.initWorld(2)
   }
 }

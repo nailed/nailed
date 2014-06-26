@@ -1,8 +1,9 @@
 package jk_5.nailed.api.world
 
-import jk_5.nailed.api.player.Player
 import java.io.File
 import java.util.UUID
+
+import jk_5.nailed.api.player.Player
 
 /**
  * No description given
@@ -10,6 +11,7 @@ import java.util.UUID
  * @author mattashii
  */
 trait World {
+
   /**
    * Get the unique name of the map.
    *

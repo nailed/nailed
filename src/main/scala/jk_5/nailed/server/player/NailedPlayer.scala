@@ -6,6 +6,9 @@ import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.player.Player
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.NetHandlerPlayServer
+import net.minecraft.server.MinecraftServer
+
+import scala.collection.convert.wrapAsScala._
 
 /**
  * No description given
@@ -60,21 +63,21 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
    *
    * @param message the message to send
    */
-  override def sendMessage(message: BaseComponent): Unit = ???
+  override def sendMessage(message: BaseComponent): Unit = {}
 
   /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
-  override def sendMessage(messages: BaseComponent*): Unit = ???
+  override def sendMessage(messages: BaseComponent*): Unit = {}
 
   /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
-  override def sendMessage(messages: Array[BaseComponent]): Unit = ???
+  override def sendMessage(messages: Array[BaseComponent]): Unit = {}
 
   /**
    * Gets a {@link Player} object that this represents, if there is one
@@ -143,4 +146,15 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
    * @return the World the player has to be sent to, null if that has been unloaded
    */
   override def getNextWorld: UUID = this.nextWorldUUID
+
+  override def teleportTo(dimension: Int){
+    //TODO: temp code!
+    val p = MinecraftServer.getServer.getConfigurationManager.playerEntityList.map(_.asInstanceOf[EntityPlayerMP]).find(_.getGameProfile.getId == this.uuid)
+    if(p.isDefined){
+      p.get.travelToDimension(dimension)
+    }
+  }
+
+  //TODO: temp code!
+  def getEntity = this.entity
 }

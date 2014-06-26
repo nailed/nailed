@@ -38,4 +38,6 @@ trait Player extends CommandSender with OfflinePlayer {
    * @return the friendly name
    */
   def getDisplayName: String
+
+  def teleportTo(dimension: Int)
 }
