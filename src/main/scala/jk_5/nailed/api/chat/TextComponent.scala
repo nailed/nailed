@@ -25,7 +25,7 @@ object TextComponent {
       if(c == ChatColor.colorChar){
         i += 1
         c = message.charAt(i)
-        if(c >= 'A' && c <= 'Z') c += 32 //Make it lowercase
+        if(c >= 'A' && c <= 'Z') c = Character.toLowerCase(c) //Make it lowercase
         var format = ChatColor.getByChar(c)
         if(format != null){
           if(builder.length > 0){
@@ -95,7 +95,7 @@ class TextComponent(parent: TextComponent) extends BaseComponent(parent) {
   private var text: String = _
 
   def this(text: String){
-    this(null)
+    this(null: TextComponent)
     setText(text)
   }
 
@@ -105,12 +105,12 @@ class TextComponent(parent: TextComponent) extends BaseComponent(parent) {
     setChildren(mutable.ArrayBuffer(children: _*))
   }
 
-  override protected def toPlainText(builder: StringBuilder){
+  override private[chat] def toPlainText(builder: StringBuilder){
     builder.append(this.text)
     super.toPlainText(builder)
   }
 
-  override protected def toLegacyText(builder: StringBuilder){
+  override private[chat] def toLegacyText(builder: StringBuilder){
     builder.append(this.getColor)
     if(this.isBold) builder.append(ChatColor.bold)
     if(this.isItalic) builder.append(ChatColor.italic)

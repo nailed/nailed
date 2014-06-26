@@ -1,48 +1,41 @@
 package jk_5.nailed.api.player
 
-import jk_5.nailed.api.command.CommandSender
-import jk_5.nailed.api.world.{Dimension, World}
-import net.minecraft.entity.player.EntityPlayer
 import java.util.UUID
 
+import jk_5.nailed.api.command.CommandSender
+
 /**
- * No description given
+ * Represents a player, connected or not
  *
- * @author mattashii
+ * @author jk-5
  */
-trait Player extends CommandSender{
-  /**
-   * Get the chat prefix of this player.
-   *
-   * @return the senders chat prefix
-   */
-  def getPrefix: String
+trait Player extends CommandSender with OfflinePlayer {
 
   /**
-   * Get the Player Entity.
+   * Returns the name of this player
+   * <p>
+   * Names are no longer unique past a single game session. For persistent storage
+   * it is recommended that you use {@link #getUniqueId()} instead.
    *
-   * @return the players EntityPlayer
+   * @return Player name or null if we have not seen a name for this player yet
    */
-  def getEntity: EntityPlayer
+  def getName: String
 
   /**
-   * Get the UUID of the player.
+   * Returns the UUID of this player
    *
-   * @return the senders UUID
+   * @return Player UUID
    */
-  def getUUID: UUID
+  def getUniqueId: UUID
 
   /**
-   * Get the world the player is in.
+   * Gets the "friendly" name to display of this player. This may include
+   * color.
+   * <p>
+   * Note that this name will not be displayed in game, only in chat and
+   * places defined by plugins.
    *
-   * @return the world the player is in
+   * @return the friendly name
    */
-  def getWorld: World
-
-  /**
-   * Get the dimension the player is in.
-   *
-   * @return the dimension the player is in
-   */
-  def getDimension: Dimension
+  def getDisplayName: String
 }

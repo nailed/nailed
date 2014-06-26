@@ -15,8 +15,8 @@ class PluginDescription {
   private var main: String = _
   private var version: String = _
   private var author: String = _
-  private var depends: mutable.HashSet[String] = _
-  private var softDepends: mutable.HashSet[String] = _
+  private var depends = mutable.HashSet[String]()
+  private var softDepends = mutable.HashSet[String]()
   private var file: File = _
   private var description: String = _
 

@@ -1,0 +1,6 @@
+{
+    "name": "TestPlugin",
+    "version": "0.1",
+    "author": "jk-5",
+    "main": "jk_5.nailed.testplugin.TestPlugin"
+}

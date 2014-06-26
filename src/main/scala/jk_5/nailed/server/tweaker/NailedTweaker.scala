@@ -1,4 +1,4 @@
-package jk_5.nailed.tweaker
+package jk_5.nailed.server.tweaker
 
 import java.io.File
 import java.util
@@ -12,14 +12,17 @@ import org.apache.logging.log4j.LogManager
  *
  * @author jk-5
  */
+object NailedTweaker {
+  var gameDir: File = _
+  lazy val classLoader = Launch.classLoader
+}
+
 class NailedTweaker extends ITweaker {
 
   val logger = LogManager.getLogger
-  var gameDir: File = _
-  lazy val classLoader = Launch.classLoader
 
   override def acceptOptions(args: util.List[String], gameDir: File, assetsDir: File, profile: String){
-    this.gameDir = gameDir
+    NailedTweaker.gameDir = gameDir
     NailedVersion.readConfig()
 
     logger.info(s"Initializing Nailed version ${NailedVersion.full}")

@@ -2,7 +2,7 @@ package jk_5.nailed.api.plugin
 
 import java.io.{File, InputStream}
 
-import jk_5.nailed.api.NailedServer
+import jk_5.nailed.api.Server
 import org.apache.logging.log4j.{LogManager, Logger}
 
 /**
@@ -14,7 +14,7 @@ import org.apache.logging.log4j.{LogManager, Logger}
 abstract class Plugin {
 
   private var description: PluginDescription = _
-  private var server: NailedServer = _
+  private var server: Server = _
   private var file: File = _
   private var logger: Logger = _
 
@@ -55,7 +55,7 @@ abstract class Plugin {
     getClass.getClassLoader.getResourceAsStream(name)
   }
 
-  private[plugin] final def init(server: NailedServer, description: PluginDescription){
+  private[plugin] final def init(server: Server, description: PluginDescription){
     this.server = server
     this.description = description
     this.file = description.getFile
@@ -66,4 +66,5 @@ abstract class Plugin {
   def getServer = this.server
   def getFile = this.file
   def getLogger = this.logger
+  def getPluginManager = this.server.getPluginManager
 }

@@ -90,15 +90,16 @@ abstract class BaseComponent {
 
   def this(copy: BaseComponent){
     this()
-    if(copy == null) return
-    setColor(copy.getColorRaw)
-    setBold(copy.isBoldRaw)
-    setItalic(copy.isItalicRaw)
-    setUnderlined(copy.isUnderlinedRaw)
-    setStrikethrough(copy.isStrikethroughRaw)
-    setObfuscated(copy.isObfuscatedRaw)
-    setClickEvent(copy.getClickEvent)
-    setHoverEvent(copy.getHoverEvent)
+    if(copy != null){
+      setColor(copy.getColorRaw)
+      setBold(copy.isBoldRaw)
+      setItalic(copy.isItalicRaw)
+      setUnderlined(copy.isUnderlinedRaw)
+      setStrikethrough(copy.isStrikethroughRaw)
+      setObfuscated(copy.isObfuscatedRaw)
+      setClickEvent(copy.getClickEvent)
+      setHoverEvent(copy.getHoverEvent)
+    }
   }
 
   def setColor(color: ChatColor) = this.color = color
@@ -252,7 +253,7 @@ abstract class BaseComponent {
    *
    * @param text the text to append
    */
-  def addExtra(text: String) = this.addExtra(new TextComponent(text))
+  def addExtra(text: String): Unit = this.addExtra(new TextComponent(text))
 
   /**
    * Appends a component to the component. The text will inherit this
@@ -286,7 +287,7 @@ abstract class BaseComponent {
     builder.toString()
   }
 
-  protected def toPlainText(builder: StringBuilder){
+  private[chat] def toPlainText(builder: StringBuilder){
     if(this.children != null){
       this.children.foreach(_.toPlainText(builder))
     }
@@ -304,7 +305,7 @@ abstract class BaseComponent {
     builder.toString()
   }
 
-  protected def toLegacyText(builder: StringBuilder){
+  private[chat] def toLegacyText(builder: StringBuilder){
     if(this.children != null){
       this.children.foreach(_.toLegacyText(builder))
     }
