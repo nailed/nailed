@@ -1,0 +1,59 @@
+package jk_5.nailed.server.player
+
+import java.util.UUID
+
+import jk_5.eventbus.EventHandler
+import jk_5.nailed.api.Server
+import jk_5.nailed.api.event.{PlayerJoinServerEvent, PlayerLeaveServerEvent}
+import jk_5.nailed.api.player.Player
+import net.minecraft.entity.player.EntityPlayerMP
+
+import scala.collection.mutable
+
+/**
+ * No description given
+ *
+ * @author jk-5
+ */
+trait PlayerRegistry extends Server {
+
+  private val players = mutable.ArrayBuffer[NailedPlayer]()
+  private val onlinePlayers = mutable.ArrayBuffer[NailedPlayer]()
+  private val playersById = mutable.HashMap[UUID, NailedPlayer]()
+
+  /**
+   * Gets the player with the given UUID.
+   *
+   * @param id UUID of the player to retrieve
+   * @return Some(player) if a player was found, None otherwise
+   */
+  override def getPlayer(id: UUID): Option[Player] = this.playersById.get(id)
+
+  def getPlayerFromEntity(entity: EntityPlayerMP): Player = this.getPlayer(entity.getGameProfile.getId).get
+
+  def getOrCreatePlayer(entity: EntityPlayerMP): Player = this.getPlayer(entity.getGameProfile.getId) match {
+    case Some(player) => player
+    case None =>
+      val player = new NailedPlayer(entity.getGameProfile.getId, entity.getGameProfile.getName)
+      this.players += player
+      this.playersById.put(entity.getGameProfile.getId, player)
+      player
+  }
+
+  /**
+   * Gets all currently online players
+   *
+   * @return an array containing all online players
+   */
+  override def getOnlinePlayers: Array[Player] = this.onlinePlayers.toArray
+
+  @EventHandler
+  def onPlayerJoin(event: PlayerJoinServerEvent){
+    this.onlinePlayers += event.player.asInstanceOf[NailedPlayer]
+  }
+
+  @EventHandler
+  def onPlayerLeave(event: PlayerLeaveServerEvent){
+    this.onlinePlayers -= event.player.asInstanceOf[NailedPlayer]
+  }
+}

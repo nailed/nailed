@@ -2,7 +2,6 @@ package jk_5.nailed.server.world
 
 import java.util
 
-import jk_5.nailed.api.world.DimensionManager
 import jk_5.nailed.server.NailedEventFactory
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world._
@@ -17,7 +16,7 @@ import scala.collection.mutable
  *
  * @author jk-5
  */
-object NailedDimensionManager extends DimensionManager {
+object NailedDimensionManager {
 
   private var defaultsRegistered = false
   private val providers = new util.Hashtable[Int, Class[_ <: WorldProvider]]()
@@ -95,7 +94,7 @@ object NailedDimensionManager extends DimensionManager {
     dimensions.get(dim)
   }
 
-  override def getAllDimensionIds(): Array[Int] = this.vanillaWorlds.keySet().asScala.toArray
+  def getAllDimensionIds: Array[Int] = this.vanillaWorlds.keySet().asScala.toArray
 
   def setWorld(id: Int, world: WorldServer){
     if(world != null){

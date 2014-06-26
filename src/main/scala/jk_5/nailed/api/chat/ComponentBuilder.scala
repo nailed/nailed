@@ -62,4 +62,13 @@ class ComponentBuilder(text: String) {
     parts += current
     parts.toArray
   }
+
+  def createFlat(): TextComponent = {
+    val pts = this.create()
+    val t = new TextComponent("")
+    for(p <- pts){
+      t.addExtra(p)
+    }
+    t
+  }
 }

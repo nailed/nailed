@@ -3,9 +3,9 @@ package jk_5.nailed.api
 import java.io.File
 import java.util.UUID
 
+import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
-import jk_5.nailed.api.world.DimensionManager
 import org.apache.commons.lang3.Validate
 
 /**
@@ -31,7 +31,7 @@ object Server {
   def getInstance = this.instance
 }
 
-abstract class Server {
+trait Server {
 
   /**
    * Gets the name of the currently running server software.
@@ -67,14 +67,21 @@ abstract class Server {
    * Gets the player with the given UUID.
    *
    * @param id UUID of the player to retrieve
-   * @return a player object if one was found, null otherwise
+   * @return Some(player) if a player was found, None otherwise
    */
-  def getPlayer(id: UUID): Player
+  def getPlayer(id: UUID): Option[Player]
 
   /**
-   * Gets the dimensionmanager that is responsible for registering and controlling custom dimensions
+   * Gets all currently online players
    *
-   * @return the DimensionManager instance
+   * @return an array containing all online players
    */
-  def getDimensionManager: DimensionManager
+  def getOnlinePlayers: Array[Player]
+
+  /**
+   * Broadcasts a chat message across the entire server
+   *
+   * @param message the message to broadcast
+   */
+  def broadcastMessage(message: BaseComponent)
 }

@@ -39,6 +39,21 @@ abstract class BaseComponent {
 
   private[chat] var parent: BaseComponent = null
 
+  def this(copy: BaseComponent){
+    this()
+    if(copy != null){
+      setColor(copy.getColorRaw)
+      setBold(copy.isBoldRaw)
+      setItalic(copy.isItalicRaw)
+      setUnderlined(copy.isUnderlinedRaw)
+      setStrikethrough(copy.isStrikethroughRaw)
+      setObfuscated(copy.isObfuscatedRaw)
+      setClickEvent(copy.getClickEvent)
+      setHoverEvent(copy.getHoverEvent)
+    }
+  }
+
+
   /**
    * The color of this component and any child components (unless overridden)
    */
@@ -87,20 +102,6 @@ abstract class BaseComponent {
    * hovered over
    */
   private var hoverEvent: HoverEvent = null
-
-  def this(copy: BaseComponent){
-    this()
-    if(copy != null){
-      setColor(copy.getColorRaw)
-      setBold(copy.isBoldRaw)
-      setItalic(copy.isItalicRaw)
-      setUnderlined(copy.isUnderlinedRaw)
-      setStrikethrough(copy.isStrikethroughRaw)
-      setObfuscated(copy.isObfuscatedRaw)
-      setClickEvent(copy.getClickEvent)
-      setHoverEvent(copy.getHoverEvent)
-    }
-  }
 
   def setColor(color: ChatColor) = this.color = color
   def setBold(bold: Boolean) = this.bold = bold

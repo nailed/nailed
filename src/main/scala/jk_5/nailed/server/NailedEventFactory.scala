@@ -1,10 +1,9 @@
 package jk_5.nailed.server
 
 import jk_5.eventbus.Event
-import jk_5.nailed.api.Server
 import jk_5.nailed.api.event._
+import jk_5.nailed.internalplugin.NailedInternalPlugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
-import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayerMP
@@ -19,13 +18,14 @@ import net.minecraft.world.{World, WorldServer}
  */
 object NailedEventFactory {
 
-  var server: Server = _
   private var serverCommandSender: ConsoleCommandSender = _
 
   private val preTickEvent = new ServerPreTickEvent
   private val postTickEvent = new ServerPreTickEvent
 
-  private def fireEvent(event: Event) = server.getPluginManager.callEvent(event)
+  private def fireEvent[T <: Event](event: T): T = NailedServer.getPluginManager.callEvent(event)
+
+  NailedServer.getPluginManager.registerListener(NailedInternalPlugin, NailedServer)
 
   def firePreWorldTick(server: MinecraftServer, world: WorldServer) = fireEvent(new WorldPreTickEvent(world))
   def firePostWorldTick(server: MinecraftServer, world: WorldServer) = fireEvent(new WorldPostTickEvent(world))
@@ -46,15 +46,15 @@ object NailedEventFactory {
   }
 
   def fireCommand(sender: ICommandSender, input: String): Int = {
-    //TODO: pool commandsenders
     val wrapped = sender match {
-      case p: EntityPlayerMP => new NailedPlayer(p.getGameProfile.getId, p.getGameProfile.getName)//this.server.getPlayer(p.getGameProfile.getId)
+      case p: EntityPlayerMP => NailedServer.getPlayer(p.getGameProfile.getId).orNull
       /*case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
       case r: RConConsoleSource => new RConCommandSender(r)*/
       case s: MinecraftServer => this.serverCommandSender
-      case _ => return -1
+      case _ => null
     }
-    if(server.getPluginManager.dispatchCommand(wrapped, input, null)) 1 else -1
+    if(wrapped == null) return -1
+    if(NailedServer.getPluginManager.dispatchCommand(wrapped, input, null)) 1 else -1
   }
 
   def fireWorldLoad(world: World){
@@ -67,5 +67,17 @@ object NailedEventFactory {
 
   def fireEntityInPortal(entity: Entity){
 
+  }
+
+  def firePlayerJoined(playerEntity: EntityPlayerMP){
+    val player = NailedServer.getOrCreatePlayer(playerEntity)
+    val e = this.fireEvent(new PlayerJoinServerEvent(player))
+    NailedServer.broadcastMessage(e.joinMessage)
+  }
+
+  def firePlayerLeft(playerEntity: EntityPlayerMP){
+    val player = NailedServer.getPlayerFromEntity(playerEntity)
+    val e = this.fireEvent(new PlayerLeaveServerEvent(player))
+    NailedServer.broadcastMessage(e.leaveMessage)
   }
 }

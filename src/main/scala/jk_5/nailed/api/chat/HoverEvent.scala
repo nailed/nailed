@@ -7,7 +7,7 @@ import jk_5.nailed.api.chat.HoverEventAction.HoverEventAction
  *
  * @author jk-5
  */
-final case class HoverEvent(action: HoverEventAction, value: BaseComponent*) {
+final case class HoverEvent(action: HoverEventAction, value: BaseComponent) {
   override def toString = "HoverEvent{action=%s, value=%s}".format(action, value)
 }
 
