@@ -41,4 +41,11 @@ trait Dimension extends IBlockAccess{
    * @return True if the dimension was saved successfully
    */
   def saveDimension(file: File): Boolean
+
+  /**
+   * Get the vanilla dimension id of this dimension.
+   *
+   * @return the dimension id
+   */
+  def getDimensionID: Int
 }
