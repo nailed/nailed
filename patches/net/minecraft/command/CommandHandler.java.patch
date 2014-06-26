@@ -1,0 +1,36 @@
+--- clean/net/minecraft/command/CommandHandler.java
++++ dirty/net/minecraft/command/CommandHandler.java
+@@ -6,14 +6,18 @@
+ import java.util.Iterator;
+ import java.util.List;
+ import java.util.Map;
+-import java.util.Set;
+ import java.util.Map.Entry;
++import java.util.Set;
++
++import org.apache.logging.log4j.LogManager;
++import org.apache.logging.log4j.Logger;
++
+ import net.minecraft.entity.player.EntityPlayerMP;
+ import net.minecraft.util.ChatComponentTranslation;
+ import net.minecraft.util.EnumChatFormatting;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+ 
++import jk_5.nailed.server.NailedEventFactory;
++
+ public class CommandHandler implements ICommandManager {
+     private static final Logger field_147175_a = LogManager.getLogger();
+     private final Map field_71562_a = new HashMap();
+@@ -23,6 +27,11 @@
+     public int func_71556_a(ICommandSender p_71556_1_, String p_71556_2_) {
+         p_71556_2_ = p_71556_2_.trim();
+ 
++        //Nailed start: Attempt to handle the command with our system first
++        int result = NailedEventFactory.fireCommand(p_71556_1_, p_71556_2_);
++        if(result != -1) return result;
++        //Nailed end
++
+         if (p_71556_2_.startsWith("/")) {
+             p_71556_2_ = p_71556_2_.substring(1);
+         }

@@ -1,0 +1,22 @@
+--- clean/net/minecraft/network/NetHandlerPlayServer.java
++++ dirty/net/minecraft/network/NetHandlerPlayServer.java
+@@ -86,6 +86,8 @@
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+ 
++import jk_5.nailed.server.NailedEventFactory;
++
+ public class NetHandlerPlayServer implements INetHandlerPlayServer {
+     private static final Logger field_147370_c = LogManager.getLogger();
+     public final NetworkManager field_147371_a;
+@@ -499,9 +501,7 @@
+     public void func_147231_a(IChatComponent p_147231_1_) {
+         field_147370_c.info(this.field_147369_b.func_70005_c_() + " lost connection: " + p_147231_1_);
+         this.field_147367_d.func_147132_au();
+-        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[] {this.field_147369_b.func_145748_c_()});
+-        chatcomponenttranslation.func_150256_b().func_150238_a(EnumChatFormatting.YELLOW);
+-        this.field_147367_d.func_71203_ab().func_148539_a(chatcomponenttranslation);
++        NailedEventFactory.firePlayerLeft(this.field_147369_b);
+         this.field_147369_b.func_71123_m();
+         this.field_147367_d.func_71203_ab().func_72367_e(this.field_147369_b);
+ 

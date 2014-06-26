@@ -1,0 +1,37 @@
+--- clean/net/minecraft/server/management/ServerConfigurationManager.java
++++ dirty/net/minecraft/server/management/ServerConfigurationManager.java
+@@ -59,6 +59,8 @@
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+ 
++import jk_5.nailed.server.NailedEventFactory;
++
+ public abstract class ServerConfigurationManager {
+     public static final File field_152613_a = new File("banned-players.json");
+     public static final File field_152614_b = new File("banned-ips.json");
+@@ -123,16 +125,7 @@
+         p_72355_2_.func_147099_x().func_150884_b(p_72355_2_);
+         this.func_96456_a((ServerScoreboard)worldserver.func_96441_U(), p_72355_2_);
+         this.field_72400_f.func_147132_au();
+-        ChatComponentTranslation chatcomponenttranslation;
+ 
+-        if (!p_72355_2_.func_70005_c_().equalsIgnoreCase(s)) {
+-            chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined.renamed", new Object[] {p_72355_2_.func_145748_c_(), s});
+-        } else {
+-            chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", new Object[] {p_72355_2_.func_145748_c_()});
+-        }
+-
+-        chatcomponenttranslation.func_150256_b().func_150238_a(EnumChatFormatting.YELLOW);
+-        this.func_148539_a(chatcomponenttranslation);
+         this.func_72377_c(p_72355_2_);
+         nethandlerplayserver.func_147364_a(p_72355_2_.field_70165_t, p_72355_2_.field_70163_u, p_72355_2_.field_70161_v, p_72355_2_.field_70177_z, p_72355_2_.field_70125_A);
+         this.func_72354_b(p_72355_2_, worldserver);
+@@ -160,6 +153,8 @@
+                 entity.field_98038_p = false;
+             }
+         }
++
++        NailedEventFactory.firePlayerJoined(p_72355_2_);
+     }
+ 
+     protected void func_96456_a(ServerScoreboard p_96456_1_, EntityPlayerMP p_96456_2_) {

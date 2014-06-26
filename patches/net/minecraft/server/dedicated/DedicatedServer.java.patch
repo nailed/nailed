@@ -1,0 +1,67 @@
+--- clean/net/minecraft/server/dedicated/DedicatedServer.java
++++ dirty/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -11,6 +11,10 @@
+ import java.util.List;
+ import java.util.Random;
+ import java.util.concurrent.Callable;
++
++import org.apache.logging.log4j.LogManager;
++import org.apache.logging.log4j.Logger;
++
+ import net.minecraft.command.ICommandSender;
+ import net.minecraft.command.ServerCommand;
+ import net.minecraft.crash.CrashReport;
+@@ -23,7 +27,6 @@
+ import net.minecraft.server.ServerEula;
+ import net.minecraft.server.gui.MinecraftServerGui;
+ import net.minecraft.server.management.PreYggdrasilConverter;
+-import net.minecraft.server.management.ServerConfigurationManager;
+ import net.minecraft.util.ChunkCoordinates;
+ import net.minecraft.util.CryptManager;
+ import net.minecraft.util.MathHelper;
+@@ -31,9 +34,9 @@
+ import net.minecraft.world.World;
+ import net.minecraft.world.WorldSettings;
+ import net.minecraft.world.WorldType;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+ 
++import jk_5.nailed.server.NailedEventFactory;
++
+ public class DedicatedServer extends MinecraftServer implements IServer {
+     private static final Logger field_155771_h = LogManager.getLogger();
+     private final List field_71341_l = Collections.synchronizedList(new ArrayList());
+@@ -45,6 +48,7 @@
+     private WorldSettings.GameType field_71337_q;
+     private boolean field_71335_s;
+     private static final String __OBFID = "CL_00001784";
++    public static boolean allowPlayerLogins = false;
+ 
+     public DedicatedServer(File p_i1508_1_) {
+         super(p_i1508_1_, Proxy.NO_PROXY);
+@@ -92,6 +96,8 @@
+             field_155771_h.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
+         }
+ 
++        NailedEventFactory.fireServerStartBeforeConfig(this);
++
+         field_155771_h.info("Loading properties");
+         this.field_71340_o = new PropertyManager(new File("server.properties"));
+         this.field_154332_n = new ServerEula(new File("eula.txt"));
+@@ -202,6 +208,7 @@
+                 this.func_71191_d((this.func_71207_Z() + 8) / 16 * 16);
+                 this.func_71191_d(MathHelper.func_76125_a(this.func_71207_Z(), 64, 256));
+                 this.field_71340_o.func_73667_a("max-build-height", Integer.valueOf(this.func_71207_Z()));
++                NailedEventFactory.fireStartBeforeWorldLoad(this);
+                 field_155771_h.info("Preparing level \"" + this.func_71270_I() + "\"");
+                 this.func_71247_a(this.func_71270_I(), this.func_71270_I(), k, worldtype, s2);
+                 long i1 = System.nanoTime() - j;
+@@ -220,6 +227,8 @@
+                     this.field_71339_n.func_72602_a();
+                 }
+ 
++                this.allowPlayerLogins = true; //Delay player login until here to prevent CME's
++                NailedEventFactory.fireServerStarted(this);
+                 return true;
+             }
+         }
