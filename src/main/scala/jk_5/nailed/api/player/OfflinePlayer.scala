@@ -1,6 +1,7 @@
 package jk_5.nailed.api.player
 
 import java.util.UUID
+import jk_5.nailed.api.world.World
 
 /**
  * No description given
@@ -80,4 +81,11 @@ trait OfflinePlayer {
    * @return True if the player has played before, otherwise false
    */
   def hasPlayedBefore: Boolean
+
+  /**
+   * Gets the world the player should be sent to when he logs in.
+   *
+   * @return the World the player has to be sent to, null if that has been unloaded
+   */
+  def getNextWorld: World
 }
