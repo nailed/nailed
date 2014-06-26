@@ -17,6 +17,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   private var entity: EntityPlayerMP = _
   private var displayName: String = this.name
   private var netHandler: NetHandlerPlayServer = _
+  private var nextWorldUUID: UUID = _
 
   /**
    * Returns the name of this player
@@ -129,4 +130,17 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
    * @return true if banned, otherwise false
    */
   override def isBanned: Boolean = false
+
+  /**
+   * Gets the world the player should be sent to when he logs in.
+   * <p>
+   * To comply with the new EULA changes (june 2014) players have to rejoin to get
+   * premium possibilities such as private worlds. This function makes this
+   * possible by making it able to store the World object it should be sent to.
+   * <p>
+   * The UUID of the next world is saved
+   *
+   * @return the World the player has to be sent to, null if that has been unloaded
+   */
+  override def getNextWorld: UUID = this.nextWorldUUID
 }

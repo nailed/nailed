@@ -2,6 +2,7 @@ package jk_5.nailed.api.world
 
 import jk_5.nailed.api.player.Player
 import java.io.File
+import java.util.UUID
 
 /**
  * No description given
@@ -50,4 +51,18 @@ trait World {
    * @return the file the dimensions are stored in
    */
   def saveDimensions: File
+
+  /**
+   * Stops the world processes and removes the references before it is removed from the server.
+   * <p>
+   * It removes its tickhandlers, and also saves the dimensions if needed.
+   */
+  def closeWorld
+
+  /**
+   * Get the unique id of this world.
+   *
+   * @return the UUID of this world
+   */
+  def getUniqueID: UUID
 }
