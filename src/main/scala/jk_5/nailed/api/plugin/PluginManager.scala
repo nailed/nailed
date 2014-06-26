@@ -11,10 +11,12 @@ import jk_5.eventbus.{Event, EventBus}
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TabExecutor}
 import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.internalplugin.InternalPluginDescription
 import org.apache.commons.lang3.Validate
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.mutable
+import scala.util.Properties
 
 /**
  * No description given
@@ -145,11 +147,25 @@ class PluginManager(private val server: Server) {
         }
       }
     }
+    toLoad.put(InternalPluginDescription.getName, InternalPluginDescription)
+  }
 
-    val is = getClass.getClassLoader.getResourceAsStream("testplugin.json")
-    val desc = gson.fromJson(new InputStreamReader(is), classOf[PluginDescription])
-    desc.setFile(null)
-    toLoad.put(desc.getName, desc)
+  /**
+   * Discovers plugins from the classpath
+   * It checks the nailed.runtimePlugins property which should be set to the location of the plugin.json on the classpath
+   */
+  def discoverClasspathPlugins(){
+    val plugins = Properties.propOrEmpty("nailed.runtimePlugins").split(",")
+    for(plugin <- plugins){
+      val is = getClass.getClassLoader.getResourceAsStream(plugin.trim)
+      if(is == null){
+        logger.warn("Plugin description file {} could not be found on the classpath. Skipping the plugin", plugin.trim)
+      }else{
+        val desc = gson.fromJson(new InputStreamReader(is), classOf[PluginDescription])
+        desc.setFile(null)
+        toLoad.put(desc.getName, desc)
+      }
+    }
   }
 
   def loadPlugins(){

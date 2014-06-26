@@ -46,7 +46,7 @@ object NailedEventFactory {
   def fireCommand(sender: ICommandSender, input: String): Int = {
     //TODO: pool commandsenders
     val wrapped = sender match {
-      case p: EntityPlayer => this.server.getPlayer(p.getGameProfile.getId) //TODO: use our own api player for this
+      case p: EntityPlayer => this.server.getPlayer(p.getGameProfile.getId)
       /*case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
       case r: RConConsoleSource => new RConCommandSender(r)*/
       case s: MinecraftServer => this.serverCommandSender
