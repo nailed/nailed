@@ -139,8 +139,8 @@ object NailedDimensionManager {
 
   def createProviderFor(dim: Int): WorldProvider = try{
     if(this.dimensions.containsKey(dim)){
-      val provider = this.providers.get(this.getProviderType(dim)).newInstance()
-      //provider.setDimension(dim)
+      val provider = this.providers.get(this.getProviderType(dim)).getDeclaredConstructor(classOf[Int]).newInstance(dim)
+      provider.setDimension(dim)
       provider
     }else throw new RuntimeException("No WorldProvider bound for dimension %d".format(dim))
   }catch{

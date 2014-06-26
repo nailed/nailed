@@ -6,6 +6,7 @@ import java.util.UUID
 import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
+import jk_5.nailed.api.scheduler.Scheduler
 import org.apache.commons.lang3.Validate
 
 /**
@@ -84,4 +85,6 @@ trait Server {
    * @param message the message to broadcast
    */
   def broadcastMessage(message: BaseComponent)
+
+  def getScheduler: Scheduler
 }
