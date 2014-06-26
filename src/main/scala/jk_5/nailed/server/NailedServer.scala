@@ -61,6 +61,7 @@ object NailedServer extends Server {
 
   def preLoad(server: DedicatedServer){
     this.pluginsFolder.mkdir()
+    this.pluginManager.discoverClasspathPlugins()
     this.pluginManager.discoverPlugins(this.pluginsFolder)
     this.pluginManager.loadPlugins()
   }
