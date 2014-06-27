@@ -1,5 +1,5 @@
---- clean/net/minecraft/command/CommandHandler.java
-+++ dirty/net/minecraft/command/CommandHandler.java
+--- ../src-base/minecraft/net/minecraft/command/CommandHandler.java
++++ ../src-work/minecraft/net/minecraft/command/CommandHandler.java
 @@ -6,14 +6,18 @@
  import java.util.Iterator;
  import java.util.List;

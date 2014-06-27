@@ -1,6 +1,7 @@
 package jk_5.nailed.server.chat
 
 import jk_5.nailed.api.chat._
+import net.minecraft.event
 import net.minecraft.util._
 import org.apache.logging.log4j.LogManager
 
@@ -36,6 +37,31 @@ object ChatComponentConverter {
     style.setUnderlined(component.isBoldRaw)
     style.setStrikethrough(component.isBoldRaw)
     style.setObfuscated(component.isObfuscatedRaw)
+    if(component.getHoverEvent != null){
+      val e = component.getHoverEvent
+      val newAction = e.action match {
+        case HoverEventAction.SHOW_ACHIEVEMENT => event.HoverEvent.Action.SHOW_ACHIEVEMENT
+        case HoverEventAction.SHOW_ITEM => event.HoverEvent.Action.SHOW_ITEM
+        case HoverEventAction.SHOW_TEXT => event.HoverEvent.Action.SHOW_TEXT
+        case _ => null
+      }
+      if(newAction != null){
+        style.setChatHoverEvent(new event.HoverEvent(newAction, singleComponentToVanilla(e.value)))
+      }
+    }
+    if(component.getClickEvent != null){
+      val e = component.getClickEvent
+      val newAction = e.action match {
+        case ClickEventAction.OPEN_FILE => event.ClickEvent.Action.OPEN_FILE
+        case ClickEventAction.OPEN_URL => event.ClickEvent.Action.OPEN_URL
+        case ClickEventAction.RUN_COMMAND => event.ClickEvent.Action.RUN_COMMAND
+        case ClickEventAction.SUGGEST_COMMAND => event.ClickEvent.Action.SUGGEST_COMMAND
+        case _ => null
+      }
+      if(newAction != null){
+        style.setChatClickEvent(new event.ClickEvent(newAction, e.value))
+      }
+    }
     base.setChatStyle(style)
     base
   }

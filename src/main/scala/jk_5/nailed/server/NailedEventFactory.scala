@@ -4,6 +4,7 @@ import jk_5.eventbus.Event
 import jk_5.nailed.api.event._
 import jk_5.nailed.internalplugin.NailedInternalPlugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
+import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayerMP
@@ -23,7 +24,7 @@ object NailedEventFactory {
   private val preTickEvent = new ServerPreTickEvent
   private val postTickEvent = new ServerPreTickEvent
 
-  private def fireEvent[T <: Event](event: T): T = NailedServer.getPluginManager.callEvent(event)
+  def fireEvent[T <: Event](event: T): T = NailedServer.getPluginManager.callEvent(event)
 
   NailedServer.getPluginManager.registerListener(NailedInternalPlugin, NailedServer)
 
@@ -70,14 +71,22 @@ object NailedEventFactory {
   }
 
   def firePlayerJoined(playerEntity: EntityPlayerMP){
-    val player = NailedServer.getOrCreatePlayer(playerEntity)
+    val player = NailedServer.getOrCreatePlayer(playerEntity).asInstanceOf[NailedPlayer]
+    player.entity = playerEntity
+    player.isOnline = true
+    player.world = NailedServer.getWorld(playerEntity.dimension)
+    player.netHandler = playerEntity.playerNetServerHandler
     val e = this.fireEvent(new PlayerJoinServerEvent(player))
-    NailedServer.broadcastMessage(e.joinMessage)
+    //NailedServer.broadcastMessage(e.joinMessage)
   }
 
   def firePlayerLeft(playerEntity: EntityPlayerMP){
-    val player = NailedServer.getPlayerFromEntity(playerEntity)
+    val player = NailedServer.getPlayerFromEntity(playerEntity).asInstanceOf[NailedPlayer]
+    player.entity = null
+    player.isOnline = false
+    player.world = null
+    player.netHandler = null
     val e = this.fireEvent(new PlayerLeaveServerEvent(player))
-    NailedServer.broadcastMessage(e.leaveMessage)
+    //NailedServer.broadcastMessage(e.leaveMessage)
   }
 }

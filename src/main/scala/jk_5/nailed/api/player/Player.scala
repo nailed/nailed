@@ -3,6 +3,7 @@ package jk_5.nailed.api.player
 import java.util.UUID
 
 import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.api.world.World
 
 /**
  * Represents a player, connected or not
@@ -39,5 +40,7 @@ trait Player extends CommandSender with OfflinePlayer {
    */
   def getDisplayName: String
 
-  def teleportTo(dimension: Int)
+  def teleportTo(world: World)
+
+  def getWorld: World
 }

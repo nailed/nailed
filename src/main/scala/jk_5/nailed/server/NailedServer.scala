@@ -10,6 +10,7 @@ import jk_5.nailed.server.chat.ChatComponentConverter._
 import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
+import jk_5.nailed.server.world.{DimensionManagerTrait, NailedDimensionManager}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 
@@ -18,7 +19,11 @@ import net.minecraft.server.dedicated.DedicatedServer
  *
  * @author jk-5
  */
-object NailedServer extends Server with PlayerRegistry {
+object NailedServer
+  extends Server
+  with PlayerRegistry
+  with DimensionManagerTrait
+{
 
   private val pluginsFolder = new File(NailedTweaker.gameDir, "plugins")
   private val pluginManager = new PluginManager(this)
@@ -51,7 +56,7 @@ object NailedServer extends Server with PlayerRegistry {
   def load(server: DedicatedServer){
     this.pluginManager.enablePlugins()
 
-    /*this.getDimensionManager.registerDimension(2, 0)
-    this.getDimensionManager.initWorld(2)*/
+    NailedDimensionManager.registerDimension(2, 0)
+    NailedDimensionManager.initWorld(2)
   }
 }

@@ -1,5 +1,5 @@
---- clean/net/minecraft/entity/Entity.java
-+++ dirty/net/minecraft/entity/Entity.java
+--- ../src-base/minecraft/net/minecraft/entity/Entity.java
++++ ../src-work/minecraft/net/minecraft/entity/Entity.java
 @@ -35,6 +35,8 @@
  import net.minecraft.world.World;
  import net.minecraft.world.WorldServer;

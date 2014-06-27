@@ -1,5 +1,5 @@
---- clean/net/minecraft/server/MinecraftServer.java
-+++ dirty/net/minecraft/server/MinecraftServer.java
+--- ../src-base/minecraft/net/minecraft/server/MinecraftServer.java
++++ ../src-work/minecraft/net/minecraft/server/MinecraftServer.java
 @@ -1,15 +1,6 @@
  package net.minecraft.server;
  

@@ -2,6 +2,8 @@ package jk_5.nailed.server.world
 
 import java.util
 
+import jk_5.nailed.api
+import jk_5.nailed.api.{Server, world}
 import jk_5.nailed.server.NailedEventFactory
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world._
@@ -22,6 +24,7 @@ object NailedDimensionManager {
   private val providers = new util.Hashtable[Int, Class[_ <: WorldProvider]]()
   private val spawnSettings = new util.Hashtable[Int, Boolean]()
   private val vanillaWorlds = new util.Hashtable[Int, WorldServer]()
+  private val worlds = new util.Hashtable[Int, NailedWorld]()
   private val dimensions = new util.Hashtable[Int, Int]()
   private val unloadQueue = mutable.Queue[Int]()
   private val dimensionMap = new util.BitSet(java.lang.Long.SIZE << 4)
@@ -99,10 +102,12 @@ object NailedDimensionManager {
   def setWorld(id: Int, world: WorldServer){
     if(world != null){
       this.vanillaWorlds.put(id, world)
+      this.worlds.put(id, new NailedWorld(world))
       MinecraftServer.getServer.worldTickTimes.put(id, new Array[Long](100))
       logger.info(s"Loading dimension $id (${world.getWorldInfo.getWorldName}) (${world.func_73046_m()})")
     }else{
       this.vanillaWorlds.remove(id)
+      this.worlds.remove(id)
       MinecraftServer.getServer.worldTickTimes.remove(id)
       logger.info(s"Unloading dimension $id")
     }
@@ -126,11 +131,14 @@ object NailedDimensionManager {
     world.addWorldAccess(new WorldManager(mcserver, world))
     NailedEventFactory.fireWorldLoad(world)
     world.getWorldInfo.setGameType(mcserver.getGameType)
+    MinecraftServer.getServer.func_147139_a(EnumDifficulty.PEACEFUL)
   }
 
   def getVanillaWorld(dimension: Int) = this.vanillaWorlds.get(dimension)
+  def getWorld(dimension: Int) = this.worlds.get(dimension)
 
   def getVanillaWorlds = this.vanillaWorlds.values.toArray(new Array[WorldServer](this.vanillaWorlds.size()))
+  def getWorlds = this.worlds.values.toArray(new Array[api.world.World](this.worlds.size()))
 
   def shouldKeepLoaded(dimension: Int) = {
     val id = this.getProviderType(dimension)
@@ -139,7 +147,7 @@ object NailedDimensionManager {
 
   def createProviderFor(dim: Int): WorldProvider = try{
     if(this.dimensions.containsKey(dim)){
-      val provider = this.providers.get(this.getProviderType(dim)).getDeclaredConstructor(classOf[Int]).newInstance(dim)
+      val provider = this.providers.get(this.getProviderType(dim)).newInstance()
       provider.setDimension(dim)
       provider
     }else throw new RuntimeException("No WorldProvider bound for dimension %d".format(dim))
@@ -204,4 +212,8 @@ object NailedDimensionManager {
       return null;
     }
   }*/
+}
+
+trait DimensionManagerTrait extends Server {
+  override def getWorld(dimensionId: Int): world.World = NailedDimensionManager.getWorld(dimensionId)
 }

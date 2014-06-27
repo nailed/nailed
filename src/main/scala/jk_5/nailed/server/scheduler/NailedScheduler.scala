@@ -34,20 +34,7 @@ object NailedScheduler extends Scheduler {
   override def invokeAny[T](tasks: util.Collection[_ <: Callable[T]], timeout: Long, unit: TimeUnit): T = executor.invokeAny(tasks, timeout, unit)
   override def execute(command: Runnable): Unit = executor.execute(command)
 
-  override def submitSync(task: Runnable): Future[_] = {
-    val future = new DefaultPromise[_](this.executor.next())
-    this.executionQueue += new Runnable {
-      override def run(){
-        try{
-          task.run()
-          future.setSuccess(null.asInstanceOf[_])
-        }catch{
-          case e: Exception => future.setFailure(e)
-        }
-      }
-    }
-    future
-  }
+  override def submitSync(task: Runnable) = this.submit(task, null)
   override def submitSync[T](task: Runnable, result: T): Future[T] = {
     val future = new DefaultPromise[T](this.executor.next())
     this.executionQueue += new Runnable {

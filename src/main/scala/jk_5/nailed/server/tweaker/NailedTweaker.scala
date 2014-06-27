@@ -33,6 +33,9 @@ class NailedTweaker extends ITweaker {
 
   override def injectIntoClassLoader(classLoader: LaunchClassLoader){
     PluginClassLoader.register()
+    classLoader.addClassLoaderExclusion("scala.")
+    classLoader.addTransformerExclusion("jk_5.nailed.server.tweaker.transformer.")
+    classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.EventSubscribtionTransformer")
   }
 
   override def getLaunchArguments = new Array[String](0)

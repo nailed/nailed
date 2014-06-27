@@ -1,5 +1,5 @@
---- clean/net/minecraft/server/dedicated/DedicatedServer.java
-+++ dirty/net/minecraft/server/dedicated/DedicatedServer.java
+--- ../src-base/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
++++ ../src-work/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -11,6 +11,10 @@
  import java.util.List;
  import java.util.Random;

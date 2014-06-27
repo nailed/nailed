@@ -1,5 +1,5 @@
---- clean/net/minecraft/server/management/ServerConfigurationManager.java
-+++ dirty/net/minecraft/server/management/ServerConfigurationManager.java
+--- ../src-base/minecraft/net/minecraft/server/management/ServerConfigurationManager.java
++++ ../src-work/minecraft/net/minecraft/server/management/ServerConfigurationManager.java
 @@ -59,6 +59,8 @@
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;

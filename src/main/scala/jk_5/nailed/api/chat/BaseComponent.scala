@@ -104,11 +104,11 @@ abstract class BaseComponent {
   private var hoverEvent: HoverEvent = null
 
   def setColor(color: ChatColor) = this.color = color
-  def setBold(bold: Boolean) = this.bold = bold
-  def setItalic(italic: Boolean) = this.italic = italic
-  def setUnderlined(underlined: Boolean) = this.underlined = underlined
-  def setStrikethrough(strikethrough: Boolean) = this.strikethrough = strikethrough
-  def setObfuscated(obfuscated: Boolean) = this.obfuscated = obfuscated
+  def setBold(bold: java.lang.Boolean) = this.bold = bold
+  def setItalic(italic: java.lang.Boolean) = this.italic = italic
+  def setUnderlined(underlined: java.lang.Boolean) = this.underlined = underlined
+  def setStrikethrough(strikethrough: java.lang.Boolean) = this.strikethrough = strikethrough
+  def setObfuscated(obfuscated: java.lang.Boolean) = this.obfuscated = obfuscated
   def setClickEvent(clickEvent: ClickEvent) = this.clickEvent = clickEvent
   def setHoverEvent(hoverEvent: HoverEvent) = this.hoverEvent = hoverEvent
   def setParent(parent: BaseComponent) = this.parent = parent

@@ -1,5 +1,5 @@
---- clean/net/minecraft/world/WorldServer.java
-+++ dirty/net/minecraft/world/WorldServer.java
+--- ../src-base/minecraft/net/minecraft/world/WorldServer.java
++++ ../src-work/minecraft/net/minecraft/world/WorldServer.java
 @@ -1,6 +1,5 @@
  package net.minecraft.world;
  

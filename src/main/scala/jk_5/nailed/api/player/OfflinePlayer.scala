@@ -80,17 +80,4 @@ trait OfflinePlayer {
    * @return True if the player has played before, otherwise false
    */
   def hasPlayedBefore: Boolean
-
-  /**
-   * Gets the world the player should be sent to when he logs in.
-   * <p>
-   * To comply with the new EULA changes (june 2014) players have to rejoin to get
-   * premium possibilities such as private worlds. This function makes this
-   * possible by making it able to store the World object it should be sent to.
-   * <p>
-   * The UUID of the next world is saved
-   *
-   * @return the World the player has to be sent to, null if that has been unloaded
-   */
-  def getNextWorld: UUID
 }

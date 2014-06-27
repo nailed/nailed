@@ -7,6 +7,7 @@ import jk_5.nailed.api.Server
 import jk_5.nailed.api.event.{PlayerJoinServerEvent, PlayerLeaveServerEvent}
 import jk_5.nailed.api.player.Player
 import net.minecraft.entity.player.EntityPlayerMP
+import org.apache.logging.log4j.LogManager
 
 import scala.collection.mutable
 
@@ -20,6 +21,7 @@ trait PlayerRegistry extends Server {
   private val players = mutable.ArrayBuffer[NailedPlayer]()
   private val onlinePlayers = mutable.ArrayBuffer[NailedPlayer]()
   private val playersById = mutable.HashMap[UUID, NailedPlayer]()
+  private val logger = LogManager.getLogger
 
   /**
    * Gets the player with the given UUID.
@@ -50,10 +52,12 @@ trait PlayerRegistry extends Server {
   @EventHandler
   def onPlayerJoin(event: PlayerJoinServerEvent){
     this.onlinePlayers += event.player.asInstanceOf[NailedPlayer]
+    logger.info("Player " + event.player.getName + " logged in")
   }
 
   @EventHandler
   def onPlayerLeave(event: PlayerLeaveServerEvent){
     this.onlinePlayers -= event.player.asInstanceOf[NailedPlayer]
+    logger.info("Player " + event.player.getName + " logged out")
   }
 }

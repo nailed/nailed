@@ -1,0 +1,37 @@
+--- ../src-base/minecraft/net/minecraft/world/WorldProvider.java
++++ ../src-work/minecraft/net/minecraft/world/WorldProvider.java
+@@ -10,6 +10,8 @@
+ import net.minecraft.world.gen.ChunkProviderGenerate;
+ import net.minecraft.world.gen.FlatGeneratorInfo;
+ 
++import jk_5.nailed.server.world.NailedDimensionManager;
++
+ public abstract class WorldProvider {
+     public static final float[] field_111203_a = new float[] {1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
+     public World field_76579_a;
+@@ -88,7 +90,7 @@
+     }
+ 
+     public static WorldProvider func_76570_a(int p_76570_0_) {
+-        return (WorldProvider)(p_76570_0_ == -1 ? new WorldProviderHell() : (p_76570_0_ == 0 ? new WorldProviderSurface() : (p_76570_0_ == 1 ? new WorldProviderEnd() : null)));
++        return NailedDimensionManager.createProviderFor(p_76570_0_);
+     }
+ 
+     public ChunkCoordinates func_76554_h() {
+@@ -100,4 +102,16 @@
+     }
+ 
+     public abstract String func_80007_l();
++
++    /**
++     * ****** Nailed Start ********
++     */
++
++    public void setDimension(int dimensionId){
++        this.field_76574_g = dimensionId;
++    }
++
++    public String getSaveFolder() {
++        return "DIM" + this.field_76574_g;
++    }
+ }
