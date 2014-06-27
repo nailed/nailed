@@ -18,7 +18,7 @@ import scala.collection.mutable
  * @author jk-5
  */
 object NailedScheduler extends Scheduler {
-  private val executor = new DefaultEventExecutorGroup(Runtime.getRuntime.availableProcessors() * 2)
+  val executor = new DefaultEventExecutorGroup(Runtime.getRuntime.availableProcessors() * 2)
   private val executionQueue = mutable.Queue[Runnable]()
 
   override def submit(task: Runnable): Future[_] = executor.submit(task)

@@ -5,6 +5,7 @@ import java.util
 import jk_5.nailed.api
 import jk_5.nailed.api.{Server, world}
 import jk_5.nailed.server.NailedEventFactory
+import jk_5.nailed.server.map.NailedMapLoader
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world._
 import org.apache.logging.log4j.LogManager
@@ -21,62 +22,28 @@ import scala.collection.mutable
 object NailedDimensionManager {
 
   private var defaultsRegistered = false
-  private val providers = new util.Hashtable[Int, Class[_ <: WorldProvider]]()
-  private val spawnSettings = new util.Hashtable[Int, Boolean]()
+  private val customProviders = new util.Hashtable[Int, world.WorldProvider]()
   private val vanillaWorlds = new util.Hashtable[Int, WorldServer]()
   private val worlds = new util.Hashtable[Int, NailedWorld]()
-  private val dimensions = new util.Hashtable[Int, Int]()
+  private val dimensions = mutable.ArrayBuffer[Int]()
   private val unloadQueue = mutable.Queue[Int]()
   private val dimensionMap = new util.BitSet(java.lang.Long.SIZE << 4)
   private val logger = LogManager.getLogger
 
   if(!defaultsRegistered){
-    this.registerProviderType(0, classOf[WorldProviderSurface], keepLoaded = true)
-    this.registerDimension(0, 0)
+    this.registerDimension(0, NailedDefaultWorldProviders.getVoidProvider)
+
+    this.dimensionMap.set(1)
 
     defaultsRegistered = true
   }
 
-  def registerProviderType(id: Int, provider: Class[_ <: WorldProvider], keepLoaded: Boolean = false): Boolean = {
-    if(providers.containsKey(id)) return false
-    providers.put(id, provider)
-    spawnSettings.put(id, keepLoaded)
-    true
-  }
-
-  /**
-   * Unregisters a Provider type, and returns an array of all dimensions that are
-   * registered to this provider type.
-   * If the return size is greater then 0, it is required that the caller either
-   * changes those dimensions's registered type, or replace this type before the
-   * world is attempted to load, else the loader will throw an exception.
-   *
-   * @param id The provider type ID to unreigster
-   * @return An array containing all dimension IDs still registered to this provider type.
-   */
-  def unregisterProviderType(id: Int): Array[Int] = {
-    if(!providers.containsKey(id)) return new Array[Int](0)
-    providers.remove(id)
-    spawnSettings.remove(id)
-    val ret = new Array[Int](dimensions.size())
-    var x = 0
-    for(e <- dimensions.entrySet()){
-      if(e.getValue == id){
-        ret(x) = e.getKey
-        x += 1
-      }
-    }
-    util.Arrays.copyOf(ret, x)
-  }
-
-  def registerDimension(id: Int, providerType: Int){
-    if(!providers.containsKey(providerType)){
-      throw new IllegalArgumentException("Failed to register dimension for id %d, provider type %d does not exist".format(id, providerType))
-    }
-    if(dimensions.containsKey(id)){
+  def registerDimension(id: Int, provider: world.WorldProvider){
+    if(dimensions.contains(id)){
       throw new IllegalArgumentException("Failed to register dimension for id %d, One is already registered".format(id))
     }
-    dimensions.put(id, providerType)
+    customProviders.put(id, provider)
+    dimensions += id
     if(id >= 0) dimensionMap.set(id)
   }
 
@@ -84,18 +51,13 @@ object NailedDimensionManager {
    * For unregistering a dimension when the save is changed (disconnected from a server or loaded a new save
    */
   def unregisterDimension(id: Int){
-    if(!dimensions.containsKey(id)){
+    if(!dimensions.contains(id)){
       throw new IllegalArgumentException("Failed to unregister dimension for id %d; No provider registered".format(id))
     }
-    dimensions.remove(id)
+    dimensions -= id
   }
 
-  def isDimensionRegistered(dim: Int) = dimensions.containsKey(dim)
-
-  def getProviderType(dim: Int): Int = {
-    if(!dimensions.containsKey(dim)) throw new IllegalArgumentException("Could not get provider type for dimension %d, does not exist".format(dim))
-    dimensions.get(dim)
-  }
+  def isDimensionRegistered(dim: Int) = dimensions.contains(dim)
 
   def getAllDimensionIds: Array[Int] = this.vanillaWorlds.keySet().asScala.toArray
 
@@ -123,11 +85,12 @@ object NailedDimensionManager {
   def initWorld(dimension: Int){
     val overworld = this.getVanillaWorld(0)
     if(overworld == null) throw new RuntimeException("Cannot Hotload Dim: Overworld is not Loaded!")
-    if(!this.dimensions.containsKey(dimension)) throw new IllegalArgumentException("Provider type for dimension %d does not exist!".format(dimension))
+    if(!this.dimensions.contains(dimension) && !this.customProviders.containsKey(dimension)) throw new IllegalArgumentException("Provider type for dimension %d does not exist!".format(dimension))
     val mcserver = overworld.func_73046_m()
     val savehandler = overworld.getSaveHandler
     val worldSettings = new WorldSettings(overworld.getWorldInfo)
-    val world = new WorldServer(mcserver, savehandler, overworld.getWorldInfo.getWorldName, dimension, worldSettings, mcserver.theProfiler)
+    val map = NailedMapLoader.getMap(dimension)
+    val world = new WorldServer(mcserver, MinecraftServer.getServer.getActiveAnvilConverter.getSaveLoader(map.getSaveFolderName, true), map.getSaveFolderName, dimension, worldSettings, mcserver.theProfiler)
     world.addWorldAccess(new WorldManager(mcserver, world))
     NailedEventFactory.fireWorldLoad(world)
     world.getWorldInfo.setGameType(mcserver.getGameType)
@@ -140,25 +103,15 @@ object NailedDimensionManager {
   def getVanillaWorlds = this.vanillaWorlds.values.toArray(new Array[WorldServer](this.vanillaWorlds.size()))
   def getWorlds = this.worlds.values.toArray(new Array[api.world.World](this.worlds.size()))
 
-  def shouldKeepLoaded(dimension: Int) = {
-    val id = this.getProviderType(dimension)
-    this.spawnSettings.containsKey(id) && this.spawnSettings.get(id)
-  }
-
-  def createProviderFor(dim: Int): WorldProvider = try{
-    if(this.dimensions.containsKey(dim)){
-      val provider = this.providers.get(this.getProviderType(dim)).newInstance()
-      provider.setDimension(dim)
-      provider
+  def createProviderFor(dim: Int): WorldProvider = {
+    if(this.customProviders.containsKey(dim)){
+      val d = new DelegatingWorldProvider(this.customProviders.get(dim))
+      d.setDimension(dim)
+      d
     }else throw new RuntimeException("No WorldProvider bound for dimension %d".format(dim))
-  }catch{
-    case e: Exception =>
-      logger.warn(s"An error occured trying to create an instance of WorldProvider $dim (${providers.get(this.getProviderType(dim)).getName})")
-      throw new RuntimeException(e)
   }
 
   def unloadWorld(id: Int) = this.unloadQueue += id
-
   def unloadWorlds(times: util.Hashtable[java.lang.Integer, Array[Long]]){
     for(id <- this.unloadQueue){
       val w = this.vanillaWorlds.get(id)
@@ -181,37 +134,14 @@ object NailedDimensionManager {
     this.unloadQueue.clear()
   }
 
-  /**
-   * Return the next free dimension ID. Note: you are not guaranteed a contiguous
-   * block of free ids. Always call for each individual ID you wish to get.
-   * @return the next free dimension ID
-   */
   def getNextFreeDimensionId: Int = {
     var next = 0
     while(true){
       next = this.dimensionMap.nextClearBit(next)
-      if(dimensions.containsKey(next)) dimensionMap.set(next) else return next
+      if(dimensions.contains(next)) dimensionMap.set(next) else return next
     }
     next
   }
-
-  /*public static File getCurrentSaveRootDirectory()
-  {
-    if (DimensionManager.getWorld(0) != null)
-    {
-      return ((SaveHandler)DimensionManager.getWorld(0).getSaveHandler()).getWorldDirectory();
-    }
-    else if (MinecraftServer.getServer() != null)
-    {
-      MinecraftServer srv = MinecraftServer.getServer();
-      SaveHandler saveHandler = (SaveHandler) srv.getActiveAnvilConverter().getSaveLoader(srv.getFolderName(), false);
-      return saveHandler.getWorldDirectory();
-    }
-    else
-    {
-      return null;
-    }
-  }*/
 }
 
 trait DimensionManagerTrait extends Server {

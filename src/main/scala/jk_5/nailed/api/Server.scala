@@ -4,10 +4,11 @@ import java.io.File
 import java.util.UUID
 
 import jk_5.nailed.api.chat.BaseComponent
+import jk_5.nailed.api.map.MapLoader
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.api.scheduler.Scheduler
-import jk_5.nailed.api.world.World
+import jk_5.nailed.api.world.{DefaultWorldProviders, World, WorldProvider}
 import org.apache.commons.lang3.Validate
 
 /**
@@ -90,4 +91,10 @@ trait Server {
   def getScheduler: Scheduler
 
   def getWorld(dimensionId: Int): World
+
+  def getDefaultWorldProviders: DefaultWorldProviders
+
+  def createNewWorld(provider: WorldProvider): World
+
+  def getMapLoader: MapLoader
 }

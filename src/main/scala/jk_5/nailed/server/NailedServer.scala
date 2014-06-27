@@ -7,10 +7,11 @@ import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.internalplugin.NailedInternalPlugin
 import jk_5.nailed.server.chat.ChatComponentConverter._
+import jk_5.nailed.server.map.NailedMapLoader
 import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
-import jk_5.nailed.server.world.{DimensionManagerTrait, NailedDimensionManager}
+import jk_5.nailed.server.world.{DimensionManagerTrait, WorldProviders}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 
@@ -23,6 +24,7 @@ object NailedServer
   extends Server
   with PlayerRegistry
   with DimensionManagerTrait
+  with WorldProviders
 {
 
   private val pluginsFolder = new File(NailedTweaker.gameDir, "plugins")
@@ -35,6 +37,7 @@ object NailedServer
   override def getPluginsFolder = this.pluginsFolder
   override def getPluginManager = this.pluginManager
   override def getScheduler = NailedScheduler
+  override def getMapLoader = NailedMapLoader
 
   NailedServer.getPluginManager.registerListener(NailedInternalPlugin, NailedScheduler)
 
@@ -56,7 +59,10 @@ object NailedServer
   def load(server: DedicatedServer){
     this.pluginManager.enablePlugins()
 
-    NailedDimensionManager.registerDimension(2, 0)
-    NailedDimensionManager.initWorld(2)
+    //this.createNewWorld(this.getDefaultWorldProviders.getEndProvider)
+    //this.createNewWorld(this.getDefaultWorldProviders.getNetherProvider)
+    //this.createNewWorld(this.getDefaultWorldProviders.getOverworldProvider)
+    this.createNewWorld(this.getDefaultWorldProviders.getVoidProvider)
+    //this.createNewWorld(this.getDefaultWorldProviders.getFlatProvider("5x1"))
   }
 }
