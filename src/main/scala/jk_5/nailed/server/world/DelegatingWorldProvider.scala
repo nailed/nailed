@@ -35,7 +35,7 @@ class DelegatingWorldProvider(private val wrapped: world.WorldProvider) extends 
     }
   }
 
-  override protected def registerWorldChunkManager(){
+  override protected def registerWorldChunkManager() {
     wrapped.getType match {
       case "overworld" => this.worldChunkMgr = new WorldChunkManager(this.worldObj)
       case "void" => this.worldChunkMgr = new WorldChunkManagerVoid(this.worldObj)
@@ -48,4 +48,5 @@ class DelegatingWorldProvider(private val wrapped: world.WorldProvider) extends 
         this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.getBiome(info.getBiome), 0.5F)
       case _ => throw new IllegalArgumentException("Unknown world type " + wrapped.getType)
     }
+  }
 }
