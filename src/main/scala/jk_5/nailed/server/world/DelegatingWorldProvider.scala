@@ -25,34 +25,27 @@ class DelegatingWorldProvider(private val wrapped: world.WorldProvider) extends 
   }
 
   override def createChunkGenerator(): IChunkProvider = {
-    if(wrapped.getType == "overworld"){
-      new ChunkProviderGenerate(this.worldObj, this.worldObj.getSeed, this.worldObj.getWorldInfo.isMapFeaturesEnabled)
-    }else if(wrapped.getType == "void"){
-      new ChunkProviderVoid(this.worldObj)
-    }else if(wrapped.getType == "nether"){
-      new ChunkProviderHell(this.worldObj, this.worldObj.getSeed)
-    }else if(wrapped.getType == "end"){
-      new ChunkProviderEnd(this.worldObj, this.worldObj.getSeed)
-    }else if(wrapped.getType == "flat"){
-      new ChunkProviderFlat(this.worldObj, this.worldObj.getSeed, this.worldObj.getWorldInfo.isMapFeaturesEnabled, this.wrapped.getOptions)
-    }else throw new IllegalArgumentException("Unknown world type " + wrapped.getType)
+    wrapped.getType match {
+      case "overworld" => new ChunkProviderGenerate(this.worldObj, this.worldObj.getSeed, this.worldObj.getWorldInfo.isMapFeaturesEnabled)
+      case "void" => new ChunkProviderVoid(this.worldObj)
+      case "nether" => new ChunkProviderHell(this.worldObj, this.worldObj.getSeed)
+      case "end" => new ChunkProviderEnd(this.worldObj, this.worldObj.getSeed)
+      case "flat" => new ChunkProviderFlat(this.worldObj, this.worldObj.getSeed, this.worldObj.getWorldInfo.isMapFeaturesEnabled, this.wrapped.getOptions)
+      case _ => throw new IllegalArgumentException("Unknown world type " + wrapped.getType)
+    }
   }
 
   override protected def registerWorldChunkManager(){
-    if(wrapped.getType == "overworld"){
-      this.worldChunkMgr = new WorldChunkManager(this.worldObj)
-    }else if(wrapped.getType == "void"){
-      this.worldChunkMgr = new WorldChunkManagerVoid(this.worldObj)
-    }else if(wrapped.getType == "nether"){
-      this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.hell, 0.0F)
-      this.isHellWorld = true
-      this.hasNoSky = true
-    }else if(wrapped.getType == "end"){
-      this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.sky, 0.0F)
-      this.hasNoSky = true
-    }else if(wrapped.getType == "flat"){
-      val info = FlatGeneratorInfo.createFlatGeneratorFromString(this.wrapped.getOptions)
-      this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.getBiome(info.getBiome), 0.5F)
-    }else throw new IllegalArgumentException("Unknown world type " + wrapped.getType)
-  }
+    wrapped.getType match {
+      case "overworld" => this.worldChunkMgr = new WorldChunkManager(this.worldObj)
+      case "void" => this.worldChunkMgr = new WorldChunkManagerVoid(this.worldObj)
+      case "nether" => this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.hell, 0.0F)
+        this.isHellWorld = true
+        this.hasNoSky = true
+      case "end" => this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.sky, 0.0F)
+        this.hasNoSky = true
+      case "flat" => val info = FlatGeneratorInfo.createFlatGeneratorFromString(this.wrapped.getOptions)
+        this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.getBiome(info.getBiome), 0.5F)
+      case _ => throw new IllegalArgumentException("Unknown world type " + wrapped.getType)
+    }
 }
