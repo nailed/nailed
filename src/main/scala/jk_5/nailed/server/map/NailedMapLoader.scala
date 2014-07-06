@@ -77,7 +77,7 @@ object NailedMapLoader extends MapLoader {
       //TODO: ask mappacks which worlds should be loaded and add them
       //TODO: add some kind of context to createNewWorld that tells the DimensionManager which world it is currently loading
       //      Using this we can determine where we should save the map
-      val world = NailedServer.createNewWorld(NailedDefaultWorldProviders.getVoidProvider, new WorldContext("lobby", null))
+      val world = NailedServer.createNewWorld(NailedDefaultWorldProviders.getVoidProvider, new WorldContext("lobby", "DIM0"))
       map.addWorld(world)
       addMap(map)
       map
