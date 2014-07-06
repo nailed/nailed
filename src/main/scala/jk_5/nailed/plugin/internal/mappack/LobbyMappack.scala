@@ -1,4 +1,4 @@
-package jk_5.nailed.internalplugin.mappack
+package jk_5.nailed.plugin.internal.mappack
 
 import java.io.File
 

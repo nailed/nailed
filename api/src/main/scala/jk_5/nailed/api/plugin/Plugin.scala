@@ -19,8 +19,8 @@ abstract class Plugin {
   private var logger: Logger = _
 
   /**
-   * Called when the plugin has just been loaded. Most of the proxy will not
-   * be initialized, so only use it for registering configuration and other
+   * Called when the plugin has just been loaded. Most of the server will not
+   * have been initialized, so only use it for registering configuration and other
    * predefined behavior.
    */
   def onLoad(){}

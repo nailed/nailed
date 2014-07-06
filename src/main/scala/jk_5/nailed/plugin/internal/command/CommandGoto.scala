@@ -1,4 +1,4 @@
-package jk_5.nailed.internalplugin.command
+package jk_5.nailed.plugin.internal.command
 
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.command.CommandSender

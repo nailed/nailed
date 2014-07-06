@@ -40,6 +40,7 @@ class PluginManager(private val server: Server) {
     v.setAccessible(true)
     v
   }
+  private final val internalPlugins = "internalplugin.json,directorymappackloaderplugin.json"
 
   /**
    * Register a command so that it may be executed.
@@ -85,7 +86,7 @@ class PluginManager(private val server: Server) {
   def dispatchCommand(sender: CommandSender, line: String, tabResults: mutable.ListBuffer[String]): Boolean = {
     val split = argsSplit.split(line)
     if(split.length == 0) return false
-    val commandName = split(0).substring(1).toLowerCase
+    val commandName = split(0)/*.substring(1)*/.toLowerCase
     val command = commandMap.get(commandName)
     if(command.isEmpty) return false
     val args = util.Arrays.copyOfRange(split, 1, split.length)
@@ -161,7 +162,7 @@ class PluginManager(private val server: Server) {
    */
   def discoverClasspathPlugins(){
     var prop = Properties.propOrEmpty("nailed.runtimePlugins")
-    if(prop.isEmpty) prop = "internalplugin.json" else prop += ",internalplugin.json"
+    if(prop.isEmpty) prop = this.internalPlugins else prop += "," + this.internalPlugins
     val plugins = prop.trim.split(",")
     for(plugin <- plugins){
       val is = getClass.getClassLoader.getResourceAsStream(plugin.trim)

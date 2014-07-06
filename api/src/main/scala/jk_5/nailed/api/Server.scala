@@ -5,6 +5,7 @@ import java.util.UUID
 
 import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.map.MapLoader
+import jk_5.nailed.api.mappack.MappackRegistry
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.api.scheduler.Scheduler
@@ -97,4 +98,6 @@ trait Server {
   def createNewWorld(provider: WorldProvider, ctx: WorldContext): World
 
   def getMapLoader: MapLoader
+
+  def getMappackRegistry: MappackRegistry
 }

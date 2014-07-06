@@ -5,7 +5,6 @@ package jk_5.nailed.api.mappack
  *
  * @author jk-5
  */
-trait MappackMetadata {
+trait MappackWorld {
   def name: String
-  def worlds: Array[MappackWorld]
 }

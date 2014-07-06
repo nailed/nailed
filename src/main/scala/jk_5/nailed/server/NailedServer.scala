@@ -9,6 +9,7 @@ import jk_5.nailed.api.world.WorldContext
 import jk_5.nailed.server.NailedEventFactory.DummyInternalListenerPlugin
 import jk_5.nailed.server.chat.ChatComponentConverter._
 import jk_5.nailed.server.map.NailedMapLoader
+import jk_5.nailed.server.mappack.MappackRegistryTrait
 import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
@@ -26,6 +27,7 @@ object NailedServer
   with PlayerRegistry
   with DimensionManagerTrait
   with WorldProviders
+  with MappackRegistryTrait
 {
 
   private val pluginsFolder = new File(NailedTweaker.gameDir, "plugins")
