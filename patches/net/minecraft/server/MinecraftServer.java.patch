@@ -47,7 +47,7 @@
  import net.minecraft.command.CommandBase;
  import net.minecraft.command.ICommandManager;
  import net.minecraft.command.ICommandSender;
-@@ -56,18 +64,19 @@
+@@ -56,18 +64,21 @@
  import net.minecraft.world.World;
  import net.minecraft.world.WorldManager;
  import net.minecraft.world.WorldServer;
@@ -63,16 +63,18 @@
 -import org.apache.logging.log4j.LogManager;
 -import org.apache.logging.log4j.Logger;
  
-+import jk_5.nailed.api.Server$;
-+import jk_5.nailed.api.map.Map;
++import jk_5.nailed.api.world.WorldContext;
 +import jk_5.nailed.server.NailedEventFactory;
 +import jk_5.nailed.server.NailedServer;
++import jk_5.nailed.server.map.NailedMap;
++import jk_5.nailed.server.map.NailedMapLoader;
 +import jk_5.nailed.server.world.NailedDimensionManager;
++import jk_5.nailed.server.world.NailedWorld;
 +
  public abstract class MinecraftServer implements ICommandSender, Runnable, IPlayerUsage {
      private static final Logger field_147145_h = LogManager.getLogger();
      public static final File field_152367_a = new File("usercache.json");
-@@ -83,7 +92,7 @@
+@@ -83,7 +94,7 @@
      private final Random field_147146_q = new Random();
      private String field_71320_r;
      private int field_71319_s = -1;
@@ -81,7 +83,7 @@
      private ServerConfigurationManager field_71318_t;
      private boolean field_71317_u = true;
      private boolean field_71316_v;
-@@ -100,7 +109,8 @@
+@@ -100,7 +111,8 @@
      private int field_71280_D;
      private int field_143008_E = 0;
      public final long[] field_71311_j = new long[100];
@@ -91,7 +93,7 @@
      private KeyPair field_71292_I;
      private String field_71293_J;
      private String field_71294_K;
-@@ -124,10 +134,10 @@
+@@ -124,10 +136,10 @@
          this.field_152366_X = new PlayerProfileCache(this, field_152367_a);
          field_71309_l = this;
          this.field_110456_c = p_i45281_2_;
@@ -104,22 +106,29 @@
          this.field_152364_T = new YggdrasilAuthenticationService(p_i45281_2_, UUID.randomUUID().toString());
          this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
          this.field_152365_W = this.field_152364_T.createProfileRepository();
-@@ -161,9 +171,8 @@
+@@ -161,53 +173,11 @@
      protected void func_71247_a(String p_71247_1_, String p_71247_2_, long p_71247_3_, WorldType p_71247_5_, String p_71247_6_) {
          this.func_71237_c(p_71247_1_);
          this.func_71192_d("menu.loadingLevel");
 -        this.field_71305_c = new WorldServer[3];
 -        this.field_71312_k = new long[this.field_71305_c.length][100];
 -        ISaveHandler isavehandler = this.field_71310_m.func_75804_a(p_71247_1_, true);
-+        Map map = Server$.MODULE$.getInstance().getMapLoader().getLobby();
-+        ISaveHandler isavehandler = this.field_71310_m.func_75804_a(map.getSaveFolderName(), true);
-         WorldInfo worldinfo = isavehandler.func_75757_d();
-         WorldSettings worldsettings;
+-        WorldInfo worldinfo = isavehandler.func_75757_d();
+-        WorldSettings worldsettings;
  
-@@ -178,36 +187,14 @@
-             worldsettings.func_77159_a();
-         }
+-        if (worldinfo == null) {
+-            worldsettings = new WorldSettings(p_71247_3_, this.func_71265_f(), this.func_71225_e(), this.func_71199_h(), p_71247_5_);
+-            worldsettings.func_82750_a(p_71247_6_);
+-        } else {
+-            worldsettings = new WorldSettings(worldinfo);
+-        }
++        NailedMap map = (NailedMap) NailedMapLoader.createLobbyMap();
++        NailedWorld world = (NailedWorld) map.getWorlds()[0];
  
+-        if (this.field_71289_N) {
+-            worldsettings.func_77159_a();
+-        }
+-
 -        for (int j = 0; j < this.field_71305_c.length; ++j) {
 -            byte b0 = 0;
 -
@@ -148,18 +157,13 @@
 -            }
 -
 -            this.field_71318_t.func_72364_a(this.field_71305_c);
-+        WorldServer overworld = new WorldServer(this, isavehandler, map.getSaveFolderName(), 0, worldsettings, this.field_71304_b);
-+        overworld.func_72954_a(new WorldManager(this, overworld));
-+        if (!this.func_71264_H()) {
-+            overworld.func_72912_H().func_76060_a(this.func_71265_f());
-         }
-+        NailedEventFactory.fireWorldLoad(overworld);
- 
-+        this.field_71318_t.func_72364_a(new WorldServer[]{overworld});
+-        }
+-
++        this.field_71318_t.func_72364_a(new WorldServer[]{world.wrapped()});
          this.func_147139_a(this.func_147135_j());
          this.func_71222_d();
      }
-@@ -268,6 +255,7 @@
+@@ -268,6 +238,7 @@
      protected void func_71267_a(boolean p_71267_1_) {
          if (!this.field_71290_O) {
              WorldServer[] aworldserver = this.field_71305_c;
@@ -167,7 +171,7 @@
              int i = aworldserver.length;
  
              for (int j = 0; j < i; ++j) {
-@@ -308,10 +296,17 @@
+@@ -308,10 +279,17 @@
  
                  for (int i = 0; i < this.field_71305_c.length; ++i) {
                      WorldServer worldserver = this.field_71305_c[i];
@@ -185,7 +189,7 @@
              if (this.field_71307_n.func_76468_d()) {
                  this.field_71307_n.func_76470_e();
              }
-@@ -439,6 +434,7 @@
+@@ -439,6 +417,7 @@
  
      protected void func_71217_p() {
          long i = System.nanoTime();
@@ -193,7 +197,7 @@
          ++this.field_71315_w;
  
          if (this.field_71295_T) {
-@@ -486,17 +482,19 @@
+@@ -486,17 +465,19 @@
  
          this.field_71304_b.func_76319_b();
          this.field_71304_b.func_76319_b();
@@ -217,7 +221,7 @@
                  this.field_71304_b.func_76320_a(worldserver.func_72912_H().func_76065_j());
                  this.field_71304_b.func_76320_a("pools");
                  this.field_71304_b.func_76319_b();
-@@ -508,6 +506,7 @@
+@@ -508,6 +489,7 @@
                  }
  
                  this.field_71304_b.func_76320_a("tick");
@@ -225,7 +229,7 @@
                  CrashReport crashreport;
  
                  try {
-@@ -526,6 +525,7 @@
+@@ -526,6 +508,7 @@
                      throw new ReportedException(crashreport);
                  }
  
@@ -233,7 +237,7 @@
                  this.field_71304_b.func_76319_b();
                  this.field_71304_b.func_76320_a("tracker");
                  worldserver.func_73039_n().func_72788_a();
-@@ -533,16 +533,18 @@
+@@ -533,16 +516,18 @@
                  this.field_71304_b.func_76319_b();
              }
  
@@ -254,7 +258,7 @@
              ((IUpdatePlayerListBox)this.field_71322_p.get(i)).func_73660_a();
          }
  
-@@ -559,7 +561,7 @@
+@@ -559,7 +544,7 @@
  
      public static void main(String[] p_main_0_) {
          Bootstrap.func_151354_b();
@@ -263,21 +267,25 @@
          try {
              boolean flag = true;
              String s = null;
-@@ -666,7 +668,12 @@
+@@ -666,7 +651,16 @@
      }
  
      public WorldServer func_71218_a(int p_71218_1_) {
 -        return p_71218_1_ == -1 ? this.field_71305_c[1] : (p_71218_1_ == 1 ? this.field_71305_c[2] : this.field_71305_c[0]);
 +        WorldServer world = NailedDimensionManager.getVanillaWorld(p_71218_1_);
 +        if(world == null){
-+            NailedDimensionManager.initWorld(p_71218_1_);
++            if(p_71218_1_ == 0){
++                NailedDimensionManager.initWorld(p_71218_1_, new WorldContext("lobby", null));
++            }else{
++                NailedDimensionManager.initWorld(p_71218_1_, new WorldContext(null, null));
++            }
 +            world = NailedDimensionManager.getVanillaWorld(p_71218_1_);
 +        }
 +        return world;
      }
  
      public String func_71277_t() {
-@@ -726,7 +733,7 @@
+@@ -726,7 +720,7 @@
      }
  
      public String getServerModName() {
@@ -286,7 +294,7 @@
      }
  
      public CrashReport func_71230_b(CrashReport p_71230_1_) {
-@@ -908,6 +915,7 @@
+@@ -908,6 +902,7 @@
              WorldServer worldserver = this.field_71305_c[i];
  
              if (worldserver != null) {

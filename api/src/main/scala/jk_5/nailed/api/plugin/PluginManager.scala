@@ -1,6 +1,7 @@
 package jk_5.nailed.api.plugin
 
 import java.io.{File, InputStream, InputStreamReader}
+import java.net.{URL, URLClassLoader}
 import java.util
 import java.util.jar.JarFile
 import java.util.regex.Pattern
@@ -33,6 +34,12 @@ class PluginManager(private val server: Server) {
   private val argsSplit = Pattern.compile(" ")
   private val logger = LogManager.getLogger
   private val gson = new Gson
+  private val loader = this.getClass.getClassLoader.asInstanceOf[URLClassLoader]
+  private lazy val addUrlMethod = {
+    val v = classOf[URLClassLoader].getDeclaredMethod("addURL", classOf[URL])
+    v.setAccessible(true)
+    v
+  }
 
   /**
    * Register a command so that it may be executed.
@@ -223,7 +230,7 @@ class PluginManager(private val server: Server) {
     }
 
     if(status) try{
-      val loader = if(plugin.getFile == null) this.getClass.getClassLoader else new PluginClassLoader(Array(plugin.getFile.toURI.toURL))
+      if(plugin.getFile != null) addUrlMethod.invoke(loader, plugin.getFile.toURI.toURL)
       val main = loader.loadClass(plugin.getMain)
       val cl = main.newInstance().asInstanceOf[Plugin]
       cl.init(server, plugin)

@@ -62,9 +62,20 @@ object Teleporter {
       case p: EntityPlayerMP =>
         p.closeScreen()
         if(changingworlds){
+          val oldType = currentWorld.getType
+          val newType = destinationWorld.getType
+
           p.dimension = dimension
-          p.playerNetServerHandler.sendPacket(new S07PacketRespawn(1, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
-          p.playerNetServerHandler.sendPacket(new S07PacketRespawn(0, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+          if(oldType != newType){
+            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newType, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+          }else{
+            if(newType == 1){
+              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(-1, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+            }else{
+              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(1, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+            }
+            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newType, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+          }
           p.worldObj.asInstanceOf[WorldServer].getPlayerManager.removePlayer(p)
         }
       case _ =>

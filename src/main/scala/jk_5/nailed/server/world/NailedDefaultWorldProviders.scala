@@ -14,6 +14,7 @@ object NailedDefaultWorldProviders extends DefaultWorldProviders {
     override def getOptions = null
     override def getId = this.id
     override def setId(id: Int) = this.id = id
+    override def getTypeId = 0
   }
   override def getOverworldProvider: WorldProvider = new WorldProvider {
     var id: Int = _
@@ -21,6 +22,7 @@ object NailedDefaultWorldProviders extends DefaultWorldProviders {
     override def getOptions = null
     override def getId = this.id
     override def setId(id: Int) = this.id = id
+    override def getTypeId = 0
   }
   override def getNetherProvider: WorldProvider = new WorldProvider {
     var id: Int = _
@@ -28,6 +30,7 @@ object NailedDefaultWorldProviders extends DefaultWorldProviders {
     override def getOptions = null
     override def getId = this.id
     override def setId(id: Int) = this.id = id
+    override def getTypeId = -1
   }
   override def getEndProvider: WorldProvider = new WorldProvider {
     var id: Int = _
@@ -35,6 +38,7 @@ object NailedDefaultWorldProviders extends DefaultWorldProviders {
     override def getOptions = null
     override def getId = this.id
     override def setId(id: Int) = this.id = id
+    override def getTypeId = 1
   }
   override def getFlatProvider(pattern: String): WorldProvider = new WorldProvider {
     var id: Int = _
@@ -42,5 +46,6 @@ object NailedDefaultWorldProviders extends DefaultWorldProviders {
     override def getOptions = pattern
     override def getId = this.id
     override def setId(id: Int) = this.id = id
+    override def getTypeId = 0
   }
 }

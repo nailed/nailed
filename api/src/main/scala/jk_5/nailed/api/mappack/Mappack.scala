@@ -29,5 +29,5 @@ trait Mappack {
    * @param destinationDirectory The location where the game world should be prepared
    * @param promise              The callback to call when the map is set up.
    */
-  def prepareWorld(destinationDirectory: File, promise: Promise[_])
+  def prepareWorld(destinationDirectory: File, promise: Promise[Void])
 }

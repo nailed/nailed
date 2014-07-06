@@ -13,6 +13,7 @@ trait MapLoader {
   def setLobbyMappack(mappack: Mappack): Boolean
   def getLobbyMappack: Mappack
   def getLobby: Map
-  def getMap(dimension: Int): Map
+  def getMap(mapId: Int): Option[Map]
+  def getOrCreateMap(mapId: Int): Map
   def createMapFor(mappack: Mappack): Future[Map]
 }

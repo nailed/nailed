@@ -1,6 +1,7 @@
 package jk_5.nailed.server.world
 
-import jk_5.nailed.api.world
+import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.world.{World => NWorld, WorldProvider => NWorldProvider}
 import jk_5.nailed.server.world.void.{ChunkProviderVoid, WorldChunkManagerVoid}
 import net.minecraft.world.WorldProvider
 import net.minecraft.world.biome.{BiomeGenBase, WorldChunkManager, WorldChunkManagerHell}
@@ -12,15 +13,20 @@ import net.minecraft.world.gen._
  *
  * @author jk-5
  */
-class DelegatingWorldProvider(private val wrapped: world.WorldProvider) extends WorldProvider {
+class DelegatingWorldProvider(val wrapped: NWorldProvider) extends WorldProvider {
 
   private var dimId: Int = _
+  private var world: NWorld = _
+  private var map: Map = _
 
   override def getDimensionName = "DIM" + wrapped.getId
 
   override def setDimension(dimensionId: Int){
     dimId = dimensionId
     wrapped.setId(dimensionId)
+    //TODO: fix this
+    //this.world = NailedDimensionManager.getWorld(dimensionId)
+    //this.map = this.world.getMap.orNull
     super.setDimension(dimensionId)
   }
 

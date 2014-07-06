@@ -3,6 +3,7 @@ package jk_5.nailed.server.world
 import java.util
 
 import jk_5.nailed.api
+import jk_5.nailed.api.world.WorldContext
 import jk_5.nailed.api.{Server, world}
 import jk_5.nailed.server.NailedEventFactory
 import jk_5.nailed.server.map.NailedMapLoader
@@ -31,7 +32,7 @@ object NailedDimensionManager {
   private val logger = LogManager.getLogger
 
   if(!defaultsRegistered){
-    this.registerDimension(0, NailedDefaultWorldProviders.getVoidProvider)
+    //this.registerDimension(0, NailedDefaultWorldProviders.getVoidProvider)
 
     this.dimensionMap.set(1)
 
@@ -82,11 +83,12 @@ object NailedDimensionManager {
     MinecraftServer.getServer.worldServers = builder.toArray
   }
 
-  def initWorld(dimension: Int){
+  def initWorld(dimension: Int, ctx: WorldContext){
     if(!this.dimensions.contains(dimension) && !this.customProviders.containsKey(dimension)) throw new IllegalArgumentException("Provider type for dimension %d does not exist!".format(dimension))
-    val mcserver = this.getVanillaWorld(0).func_73046_m()
-    val map = NailedMapLoader.getMap(dimension)
-    val saveHandler = mcserver.getActiveAnvilConverter.getSaveLoader(map.getSaveFolderName, true)
+    val mcserver = MinecraftServer.getServer
+    val map = NailedMapLoader.getOrCreateMap(dimension)
+    val name = (if(ctx.name == null) "map_" /*+ (if(map.getMappack != null) map.getMappack.getId + "_" else "")*/ + map.getId.toString else ctx.name) + (if(ctx.subName != null) "/" + ctx.subName else "")
+    val saveHandler = mcserver.getActiveAnvilConverter.getSaveLoader(name, true)
     val worldInfo = saveHandler.loadWorldInfo()
 
     val worldSettings = if(worldInfo == null){
@@ -99,7 +101,7 @@ object NailedDimensionManager {
       new WorldSettings(worldInfo)
     }
 
-    val world = new WorldServer(mcserver, saveHandler, map.getSaveFolderName, dimension, worldSettings, mcserver.theProfiler)
+    val world = new WorldServer(mcserver, saveHandler, name, dimension, worldSettings, mcserver.theProfiler)
     world.addWorldAccess(new WorldManager(mcserver, world))
     NailedEventFactory.fireWorldLoad(world)
     world.getWorldInfo.setGameType(mcserver.getGameType)

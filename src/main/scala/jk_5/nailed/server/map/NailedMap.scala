@@ -12,11 +12,15 @@ import jk_5.nailed.api.world.World
 class NailedMap(private val id: Int, private val mappack: Mappack = null) extends Map {
 
   override def getId = this.id
-  override def getWorlds: Array[World] = new Array[World](0)
-  override def getSaveFolderName: String = "map_" + (if(mappack == null) "" else mappack.getId + "_") + id
+  override def getWorlds: Array[World] = NailedMapLoader.getWorldsForMap(this) match {
+    case Some(s) => s.toArray
+    case None => new Array[World](0)
+  }
   override def getMappack = this.mappack
 
   def addWorld(world: World){
-
+    NailedMapLoader.addWorldToMap(world, this)
   }
+
+  override def toString = s"NailedMap{id=$id,mappack=$mappack}"
 }

@@ -3,7 +3,6 @@ package jk_5.nailed.server.tweaker
 import java.io.File
 import java.util
 
-import jk_5.nailed.api.plugin.PluginClassLoader
 import net.minecraft.launchwrapper.{ITweaker, Launch, LaunchClassLoader}
 import org.apache.logging.log4j.LogManager
 
@@ -32,7 +31,6 @@ class NailedTweaker extends ITweaker {
   }
 
   override def injectIntoClassLoader(classLoader: LaunchClassLoader){
-    PluginClassLoader.register()
     classLoader.addClassLoaderExclusion("scala.")
     classLoader.addTransformerExclusion("jk_5.nailed.server.tweaker.transformer.")
     classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.EventSubscribtionTransformer")

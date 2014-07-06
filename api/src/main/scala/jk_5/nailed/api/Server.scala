@@ -8,7 +8,7 @@ import jk_5.nailed.api.map.MapLoader
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.api.scheduler.Scheduler
-import jk_5.nailed.api.world.{DefaultWorldProviders, World, WorldProvider}
+import jk_5.nailed.api.world.{DefaultWorldProviders, World, WorldContext, WorldProvider}
 import org.apache.commons.lang3.Validate
 
 /**
@@ -94,7 +94,7 @@ trait Server {
 
   def getDefaultWorldProviders: DefaultWorldProviders
 
-  def createNewWorld(provider: WorldProvider): World
+  def createNewWorld(provider: WorldProvider, ctx: WorldContext): World
 
   def getMapLoader: MapLoader
 }

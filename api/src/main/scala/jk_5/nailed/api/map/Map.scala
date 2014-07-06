@@ -12,6 +12,5 @@ trait Map {
 
   def getId: Int
   def getWorlds: Array[World]
-  def getSaveFolderName: String
   def getMappack: Mappack
 }

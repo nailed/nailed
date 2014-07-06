@@ -5,6 +5,7 @@ import java.io.File
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.plugin.PluginManager
+import jk_5.nailed.api.world.WorldContext
 import jk_5.nailed.server.NailedEventFactory.DummyInternalListenerPlugin
 import jk_5.nailed.server.chat.ChatComponentConverter._
 import jk_5.nailed.server.map.NailedMapLoader
@@ -62,7 +63,7 @@ object NailedServer
     //this.createNewWorld(this.getDefaultWorldProviders.getEndProvider)
     //this.createNewWorld(this.getDefaultWorldProviders.getNetherProvider)
     //this.createNewWorld(this.getDefaultWorldProviders.getOverworldProvider)
-    this.createNewWorld(this.getDefaultWorldProviders.getVoidProvider)
+    this.createNewWorld(this.getDefaultWorldProviders.getVoidProvider, new WorldContext(null, "DIM0"))
     //this.createNewWorld(this.getDefaultWorldProviders.getFlatProvider("5x1"))
   }
 }

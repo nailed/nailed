@@ -1,5 +1,6 @@
 package jk_5.nailed.api.world
 
+import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.player.Player
 
 /**
@@ -29,4 +30,19 @@ trait World {
    * @return the player list
    */
   def getPlayers: List[Player]
+
+  /**
+   * What kind of type is this world?
+   *  -1 for nether
+   *   0 for overworld
+   *   1 for end
+   *
+   * Defaults to 0 (overworld)
+   *
+   * @return the world type
+   */
+  def getType: Int
+
+  def setMap(map: Map)
+  def getMap: Option[Map]
 }
