@@ -1,5 +1,7 @@
 package jk_5.nailed.server
 
+import java.util
+
 import jk_5.eventbus.Event
 import jk_5.nailed.api.event._
 import jk_5.nailed.api.plugin.Plugin
@@ -11,6 +13,9 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.world.{World, WorldServer}
+
+import scala.collection.convert.wrapAsJava._
+import scala.collection.mutable
 
 /**
  * No description given
@@ -64,6 +69,19 @@ object NailedEventFactory {
     }
     if(wrapped == null) return -1
     if(NailedServer.getPluginManager.dispatchCommand(wrapped, input, null)) 1 else -1
+  }
+
+  def fireTabCompletion(sender: ICommandSender, input: String): util.List[String] = {
+    val wrapped = sender match {
+      case p: EntityPlayerMP => NailedServer.getPlayer(p.getGameProfile.getId).orNull
+      /*case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
+      case r: RConConsoleSource => new RConCommandSender(r)*/
+      case s: MinecraftServer => this.serverCommandSender
+      case _ => null
+    }
+    if(wrapped == null) return null
+    val ret = mutable.ListBuffer[String]()
+    if(NailedServer.getPluginManager.dispatchCommand(wrapped, input, ret)) ret else null
   }
 
   def fireWorldLoad(world: World){

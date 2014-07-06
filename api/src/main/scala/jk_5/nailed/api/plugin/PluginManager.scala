@@ -100,7 +100,7 @@ class PluginManager(private val server: Server) {
     }catch{
       case e: Exception =>
         sender.sendMessage(new ComponentBuilder("An internal error occurred whilst executing this command, please check the console log for details.").color(ChatColor.red).create())
-        logger.warn("Error in dispatching command", e)
+        logger.warn("Error while dispatching command", e)
     }
     true
   }

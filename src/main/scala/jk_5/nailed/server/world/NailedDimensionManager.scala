@@ -32,10 +32,7 @@ object NailedDimensionManager {
   private val logger = LogManager.getLogger
 
   if(!defaultsRegistered){
-    //this.registerDimension(0, NailedDefaultWorldProviders.getVoidProvider)
-
     this.dimensionMap.set(1)
-
     defaultsRegistered = true
   }
 
