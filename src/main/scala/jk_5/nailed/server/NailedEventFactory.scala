@@ -28,8 +28,14 @@ object NailedEventFactory {
 
   NailedServer.getPluginManager.registerListener(NailedInternalPlugin, NailedServer)
 
-  def firePreWorldTick(server: MinecraftServer, world: WorldServer) = fireEvent(new WorldPreTickEvent(world))
-  def firePostWorldTick(server: MinecraftServer, world: WorldServer) = fireEvent(new WorldPostTickEvent(world))
+  def firePreWorldTick(server: MinecraftServer, world: WorldServer) = {
+    fireEvent(new WorldPreTickEvent(NailedServer.getWorld(world.provider.dimensionId)))
+  }
+
+  def firePostWorldTick(server: MinecraftServer, world: WorldServer) = {
+    fireEvent(new WorldPostTickEvent(NailedServer.getWorld(world.provider.dimensionId)))
+  }
+
   def firePreServerTick(server: MinecraftServer) = fireEvent(preTickEvent)
   def firePostServerTick(server: MinecraftServer) = fireEvent(postTickEvent)
 
@@ -88,5 +94,10 @@ object NailedEventFactory {
     player.netHandler = null
     val e = this.fireEvent(new PlayerLeaveServerEvent(player))
     //NailedServer.broadcastMessage(e.leaveMessage)
+  }
+
+  def firePlayerChat(playerEntity: EntityPlayerMP, message: String): String = {
+    val e = this.fireEvent(new PlayerChatEvent(NailedServer.getPlayerFromEntity(playerEntity), message))
+    if(e.isCanceled) null else e.message
   }
 }

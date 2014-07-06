@@ -32,6 +32,6 @@
 +    }
 +
 +    public String getSaveFolder() {
-+        return "DIM" + this.field_76574_g;
++        return null;//"DIM" + this.dimensionId;
 +    }
  }

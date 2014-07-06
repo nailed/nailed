@@ -18,7 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.0.2"
+        classpath "jk_5.nailed.mcp:mcp:1.0.3-SNAPSHOT"
     }
 }
 
@@ -39,4 +39,15 @@ dependencies {
     nailed 'org.scala-lang:scala-library:2.11.1'
     nailed 'net.minecraft:launchwrapper:1.9'
     nailed 'jk_5:EventBus:1.0'
+}
+
+task apiJar(type: Jar) {
+    from sourceSets.api.output
+    from sourceSets.api.allSource
+    classifier = "api"
+}
+
+artifacts {
+    archives jar
+    archives apiJar
 }

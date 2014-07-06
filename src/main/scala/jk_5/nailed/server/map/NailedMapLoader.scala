@@ -38,7 +38,7 @@ object NailedMapLoader extends MapLoader {
   override def getLobby: Map = {
     if(this.lobby == null){
       //TODO: this is not correct!
-      this.lobby = new NailedMap(this.lobbyMappack)
+      this.lobby = new NailedMap(nextMapId.getAndIncrement, this.lobbyMappack)
     }
     this.lobby
   }

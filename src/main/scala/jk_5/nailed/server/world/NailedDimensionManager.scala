@@ -83,14 +83,23 @@ object NailedDimensionManager {
   }
 
   def initWorld(dimension: Int){
-    val overworld = this.getVanillaWorld(0)
-    if(overworld == null) throw new RuntimeException("Cannot Hotload Dim: Overworld is not Loaded!")
     if(!this.dimensions.contains(dimension) && !this.customProviders.containsKey(dimension)) throw new IllegalArgumentException("Provider type for dimension %d does not exist!".format(dimension))
-    val mcserver = overworld.func_73046_m()
-    val savehandler = overworld.getSaveHandler
-    val worldSettings = new WorldSettings(overworld.getWorldInfo)
+    val mcserver = this.getVanillaWorld(0).func_73046_m()
     val map = NailedMapLoader.getMap(dimension)
-    val world = new WorldServer(mcserver, MinecraftServer.getServer.getActiveAnvilConverter.getSaveLoader(map.getSaveFolderName, true), map.getSaveFolderName, dimension, worldSettings, mcserver.theProfiler)
+    val saveHandler = mcserver.getActiveAnvilConverter.getSaveLoader(map.getSaveFolderName, true)
+    val worldInfo = saveHandler.loadWorldInfo()
+
+    val worldSettings = if(worldInfo == null){
+      //TODO: populate this from the mappack that may or may not exist
+      //Arguments: seed, gameType, enable structures, hardcore mode, worldType
+      val r = new WorldSettings(0, WorldSettings.GameType.ADVENTURE, false, false, WorldType.DEFAULT)
+      r.func_82750_a("") //Generator settings (for flat)
+      r
+    }else{
+      new WorldSettings(worldInfo)
+    }
+
+    val world = new WorldServer(mcserver, saveHandler, map.getSaveFolderName, dimension, worldSettings, mcserver.theProfiler)
     world.addWorldAccess(new WorldManager(mcserver, world))
     NailedEventFactory.fireWorldLoad(world)
     world.getWorldInfo.setGameType(mcserver.getGameType)
