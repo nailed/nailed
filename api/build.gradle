@@ -21,7 +21,7 @@ dependencies {
     compile 'org.scala-lang:scala-library:2.11.1'
     compile 'jk_5:EventBus:1.0'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
-    compile 'io.netty:netty-all:4.0.10.Final'
+    compile 'io.netty:netty-all:4.0.21.Final'
     compile 'com.google.guava:guava:15.0'
     compile 'org.apache.commons:commons-lang3:3.1'
     compile 'com.google.code.gson:gson:2.2.4'
