@@ -1,0 +1,97 @@
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'maven'
+
+group = 'jk_5.nailed'
+version = '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name 'reening'
+        url 'http://maven.reening.nl'
+    }
+}
+
+configurations {
+    deployer
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.1'
+    compile 'jk_5:EventBus:1.0'
+    compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
+    compile 'io.netty:netty-all:4.0.10.Final'
+    compile 'com.google.guava:guava:15.0'
+    compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'com.google.code.gson:gson:2.2.4'
+
+    deployer 'org.apache.maven.wagon:wagon-ssh:2.6'
+}
+
+jar {
+    from sourceSets.main.output
+    from sourceSets.main.allSource
+    baseName = "nailed-api"
+
+    manifest {
+        attributes "Implementation-Version": project.version
+        attributes "Implementation-Title": "jk_5.nailed.api"
+        attributes "Implementation-Vendor": "jk_5"
+        attributes "Specification-Version": project.version
+        attributes "Specification-Title": "The api for nailed, the PVP server framework for Minecraft"
+        attributes "Specification-Vendor": "jk-5"
+    }
+}
+
+uploadArchives {
+    if (project.hasProperty("deploymaven")) {
+        repositories.mavenDeployer {
+            configuration = configurations.deployer
+            repository(url: project.deploymaven.url) {
+                authentication(userName: project.deploymaven.username, password: project.deploymaven.password)
+            }
+            pom {
+                groupId = 'jk_5.nailed'
+                artifactId = 'nailed-api'
+            }
+            pom.project {
+                description = 'The API for Nailed, the Minecraft PvP server framework'
+                url = 'https://github.com/nailed/nailed'
+
+                scm {
+                    url 'https://github.com/nailed/nailed'
+                    connection 'scm:git:git://github.com/nailed/nailed.git'
+                    developerConnection 'scm:git:git@github.com:nailed/nailed.git'
+                }
+
+                issueManagement {
+                    system 'github'
+                    url 'https://github.com/nailed/nailed/issues'
+                }
+
+                developers {
+                    developer {
+                        id = 'jk-5'
+                        name = 'jk-5'
+                        roles {
+                            role 'developer'
+                            role 'packager'
+                        }
+                    }
+                    developer {
+                        id = 'mattashii'
+                        name = 'mattashii'
+                        roles {
+                            role 'contributor'
+                        }
+                    }
+                }
+            }
+        }
+    }else{
+        repositories{
+            mavenLocal()
+        }
+    }
+}

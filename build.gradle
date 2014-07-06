@@ -25,6 +25,7 @@ buildscript {
 apply plugin: "java"
 apply plugin: "scala"
 apply plugin: "idea"
+apply plugin: "maven"
 apply plugin: "nailed-mcp"
 
 group = "jk_5.nailed"
@@ -36,18 +37,17 @@ nailedMCP {
 }
 
 dependencies {
-    nailed 'org.scala-lang:scala-library:2.11.1'
     nailed 'net.minecraft:launchwrapper:1.9'
-    nailed 'jk_5:EventBus:1.0'
+
+    compile project(':api')
 }
 
-task apiJar(type: Jar) {
-    from sourceSets.api.output
-    from sourceSets.api.allSource
-    classifier = "api"
-}
-
-artifacts {
-    archives jar
-    archives apiJar
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        expand 'version': project.version
+        include 'internalplugin.json'
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'internalplugin.json'
+    }
 }

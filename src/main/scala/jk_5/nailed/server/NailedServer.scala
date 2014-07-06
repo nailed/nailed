@@ -5,7 +5,7 @@ import java.io.File
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.plugin.PluginManager
-import jk_5.nailed.internalplugin.NailedInternalPlugin
+import jk_5.nailed.server.NailedEventFactory.DummyInternalListenerPlugin
 import jk_5.nailed.server.chat.ChatComponentConverter._
 import jk_5.nailed.server.map.NailedMapLoader
 import jk_5.nailed.server.player.PlayerRegistry
@@ -39,7 +39,7 @@ object NailedServer
   override def getScheduler = NailedScheduler
   override def getMapLoader = NailedMapLoader
 
-  NailedServer.getPluginManager.registerListener(NailedInternalPlugin, NailedScheduler)
+  NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedScheduler)
 
   override def broadcastMessage(message: BaseComponent){
     MinecraftServer.getServer.getConfigurationManager.sendChatMsg(message)

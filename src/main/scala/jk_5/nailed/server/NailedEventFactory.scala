@@ -2,7 +2,7 @@ package jk_5.nailed.server
 
 import jk_5.eventbus.Event
 import jk_5.nailed.api.event._
-import jk_5.nailed.internalplugin.NailedInternalPlugin
+import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
 import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.command.ICommandSender
@@ -19,6 +19,8 @@ import net.minecraft.world.{World, WorldServer}
  */
 object NailedEventFactory {
 
+  object DummyInternalListenerPlugin extends Plugin
+
   private var serverCommandSender: ConsoleCommandSender = _
 
   private val preTickEvent = new ServerPreTickEvent
@@ -26,7 +28,7 @@ object NailedEventFactory {
 
   def fireEvent[T <: Event](event: T): T = NailedServer.getPluginManager.callEvent(event)
 
-  NailedServer.getPluginManager.registerListener(NailedInternalPlugin, NailedServer)
+  NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedServer)
 
   def firePreWorldTick(server: MinecraftServer, world: WorldServer) = {
     fireEvent(new WorldPreTickEvent(NailedServer.getWorld(world.provider.dimensionId)))

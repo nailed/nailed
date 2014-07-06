@@ -8,7 +8,7 @@ import jk_5.nailed.internalplugin.command.CommandGoto
  *
  * @author jk-5
  */
-object NailedInternalPlugin extends Plugin {
+class NailedInternalPlugin extends Plugin {
 
   override def onLoad(){
     this.getPluginManager.registerCommand(this, CommandGoto)
