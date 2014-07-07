@@ -7,6 +7,7 @@ import jk_5.nailed.api.event._
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
 import jk_5.nailed.server.player.NailedPlayer
+import jk_5.nailed.server.world.BossBar
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayerMP
@@ -61,7 +62,9 @@ object NailedEventFactory {
 
   def fireCommand(sender: ICommandSender, input: String): Int = {
     val wrapped = sender match {
-      case p: EntityPlayerMP => NailedServer.getPlayer(p.getGameProfile.getId).orNull
+      case p: EntityPlayerMP =>
+        p.playerNetServerHandler.sendPacket(BossBar.getUpdatePacket(input, input.length))
+        NailedServer.getPlayer(p.getGameProfile.getId).orNull
       /*case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
       case r: RConConsoleSource => new RConCommandSender(r)*/
       case s: MinecraftServer => this.serverCommandSender
@@ -103,17 +106,18 @@ object NailedEventFactory {
     player.world = NailedServer.getWorld(playerEntity.dimension)
     player.netHandler = playerEntity.playerNetServerHandler
     val e = this.fireEvent(new PlayerJoinServerEvent(player))
-    //NailedServer.broadcastMessage(e.joinMessage)
+    NailedServer.broadcastMessage(e.joinMessage)
   }
 
   def firePlayerLeft(playerEntity: EntityPlayerMP){
     val player = NailedServer.getPlayerFromEntity(playerEntity).asInstanceOf[NailedPlayer]
+    player.netHandler.sendPacket(BossBar.getDestroyPacket)
     player.entity = null
     player.isOnline = false
     player.world = null
     player.netHandler = null
     val e = this.fireEvent(new PlayerLeaveServerEvent(player))
-    //NailedServer.broadcastMessage(e.leaveMessage)
+    NailedServer.broadcastMessage(e.leaveMessage)
   }
 
   def firePlayerChat(playerEntity: EntityPlayerMP, message: String): String = {

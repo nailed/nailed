@@ -49,6 +49,7 @@ processResources {
         include 'directorymappackloaderplugin.json'
     }
     from(sourceSets.main.resources.srcDirs) {
+        exclude 'internalplugin.json'
         exclude 'directorymappackloaderplugin.json'
     }
 }

@@ -6,6 +6,8 @@ import jk_5.eventbus.EventHandler
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.event.{PlayerJoinServerEvent, PlayerLeaveServerEvent}
 import jk_5.nailed.api.player.Player
+import jk_5.nailed.api.util.Location
+import jk_5.nailed.server.world.BossBar
 import net.minecraft.entity.player.EntityPlayerMP
 import org.apache.logging.log4j.LogManager
 
@@ -53,6 +55,10 @@ trait PlayerRegistry extends Server {
   def onPlayerJoin(event: PlayerJoinServerEvent){
     this.onlinePlayers += event.player.asInstanceOf[NailedPlayer]
     logger.info("Player " + event.player.getName + " logged in")
+
+    val player = event.player.asInstanceOf[NailedPlayer]
+    val loc = new Location(player.getWorld, player.entity.posX, 200, player.entity.posZ)
+    player.netHandler.sendPacket(BossBar.getSpawnPacket("HI FAGGOTS!", loc))
   }
 
   @EventHandler
