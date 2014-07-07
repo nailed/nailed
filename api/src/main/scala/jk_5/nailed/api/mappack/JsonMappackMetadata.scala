@@ -18,7 +18,7 @@ class JsonMappackMetadata(json: JsonObject) extends MappackMetadata {
       new JsonMappackWorld(obj.get("name").getAsString, obj)
     }else if(e.isJsonPrimitive){
       val prim = e.getAsJsonPrimitive
-      new JsonMappackWorld(prim.getAsString, null)
+      new JsonMappackWorld(prim.getAsString, new JsonObject)
     }else throw new JsonParseException("Invalid object type in worlds array: " + e.toString)
   }.toArray
 }

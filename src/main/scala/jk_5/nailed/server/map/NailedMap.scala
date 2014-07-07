@@ -1,5 +1,7 @@
 package jk_5.nailed.server.map
 
+import java.io.File
+
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.world.World
@@ -9,7 +11,7 @@ import jk_5.nailed.api.world.World
  *
  * @author jk-5
  */
-class NailedMap(private val id: Int, private val mappack: Mappack = null) extends Map {
+class NailedMap(private val id: Int, private val mappack: Mappack = null, private val baseDir: File) extends Map {
 
   override def getId = this.id
   override def getWorlds: Array[World] = NailedMapLoader.getWorldsForMap(this) match {
@@ -18,7 +20,7 @@ class NailedMap(private val id: Int, private val mappack: Mappack = null) extend
   }
   override def getMappack = this.mappack
 
-  def addWorld(world: World){
+  override def addWorld(world: World){
     NailedMapLoader.addWorldToMap(world, this)
   }
 

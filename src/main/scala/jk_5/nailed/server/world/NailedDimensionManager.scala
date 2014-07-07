@@ -6,7 +6,6 @@ import jk_5.nailed.api
 import jk_5.nailed.api.world.WorldContext
 import jk_5.nailed.api.{Server, world}
 import jk_5.nailed.server.NailedEventFactory
-import jk_5.nailed.server.map.NailedMapLoader
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world._
 import org.apache.logging.log4j.LogManager
@@ -61,10 +60,11 @@ object NailedDimensionManager {
 
   def setWorld(id: Int, world: WorldServer){
     if(world != null){
+      val nworld = new NailedWorld(world)
       this.vanillaWorlds.put(id, world)
-      this.worlds.put(id, new NailedWorld(world))
+      this.worlds.put(id, nworld)
       MinecraftServer.getServer.worldTickTimes.put(id, new Array[Long](100))
-      logger.info(s"Loading dimension $id (${world.getWorldInfo.getWorldName}) (${world.func_73046_m()})")
+      logger.info(s"Loading dimension $id (${world.getWorldInfo.getWorldName}) (${nworld.toString})")
     }else{
       this.vanillaWorlds.remove(id)
       this.worlds.remove(id)
@@ -83,8 +83,7 @@ object NailedDimensionManager {
   def initWorld(dimension: Int, ctx: WorldContext){
     if(!this.dimensions.contains(dimension) && !this.customProviders.containsKey(dimension)) throw new IllegalArgumentException("Provider type for dimension %d does not exist!".format(dimension))
     val mcserver = MinecraftServer.getServer
-    val map = NailedMapLoader.getOrCreateMap(dimension)
-    val name = (if(ctx.name == null) "map_" /*+ (if(map.getMappack != null) map.getMappack.getId + "_" else "")*/ + map.getId.toString else ctx.name) + (if(ctx.subName != null) "/" + ctx.subName else "")
+    val name = ctx.name + "/" + ctx.subName
     val saveHandler = mcserver.getActiveAnvilConverter.getSaveLoader(name, true)
     val worldInfo = saveHandler.loadWorldInfo()
 

@@ -12,6 +12,7 @@ import jk_5.eventbus.{Event, EventBus}
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TabExecutor}
 import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.api.player.Player
 import org.apache.commons.lang3.Validate
 import org.apache.logging.log4j.LogManager
 
@@ -86,7 +87,7 @@ class PluginManager(private val server: Server) {
   def dispatchCommand(sender: CommandSender, line: String, tabResults: mutable.ListBuffer[String]): Boolean = {
     val split = argsSplit.split(line)
     if(split.length == 0) return false
-    val commandName = split(0)/*.substring(1)*/.toLowerCase
+    val commandName = if(sender.isInstanceOf[Player]) split(0).substring(1).toLowerCase else split(0).toLowerCase
     val command = commandMap.get(commandName)
     if(command.isEmpty) return false
     val args = util.Arrays.copyOfRange(split, 1, split.length)

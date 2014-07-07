@@ -7,4 +7,6 @@ package jk_5.nailed.api.mappack
  */
 trait MappackWorld {
   def name: String
+  def generator: String
+  def dimension: Int
 }

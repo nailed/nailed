@@ -13,4 +13,5 @@ trait Map {
   def getId: Int
   def getWorlds: Array[World]
   def getMappack: Mappack
+  def addWorld(world: World)
 }
