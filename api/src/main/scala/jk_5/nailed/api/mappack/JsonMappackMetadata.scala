@@ -12,7 +12,7 @@ import scala.collection.convert.wrapAsScala._
 class JsonMappackMetadata(json: JsonObject) extends MappackMetadata {
 
   override val name = json.get("name").getAsString
-  override val worlds = json.getAsJsonArray("worlds").map{e =>
+  override val worlds: Array[MappackWorld] = json.getAsJsonArray("worlds").map{e =>
     if(e.isJsonObject){
       val obj = e.getAsJsonObject
       new JsonMappackWorld(obj.get("name").getAsString, obj)

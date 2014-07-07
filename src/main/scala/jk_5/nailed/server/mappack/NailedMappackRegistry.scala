@@ -1,7 +1,7 @@
 package jk_5.nailed.server.mappack
 
 import jk_5.nailed.api.Server
-import jk_5.nailed.api.event.MappackRegisteredEvent
+import jk_5.nailed.api.event.{MappackRegisteredEvent, MappackUnregisteredEvent}
 import jk_5.nailed.api.mappack.{Mappack, MappackRegistry}
 import jk_5.nailed.server.NailedServer
 
@@ -26,8 +26,19 @@ object NailedMappackRegistry extends MappackRegistry {
 
   override def getByName(name: String): Option[Mappack] = this.mappacks.get(name)
 
-  override def getByType[T <: Mappack](cl: Class[T]): Array[T] = {
-    this.mappacks.filter(c => cl.isAssignableFrom(c._2.getClass)).toArray.asInstanceOf[Array[T]]
+  override def getByType[T <: Mappack](cl: Class[T])(implicit mf : Manifest[T]): Array[T] = {
+    this.mappacks.collect({
+      case special if mf.runtimeClass.isAssignableFrom(special.getClass) => special
+    }).asInstanceOf[Traversable[T]].toArray
+  }
+
+  override def unregister(mappack: Mappack): Boolean = {
+    if(!this.mappacks.exists(p => p._1 == mappack.getId && p._2 == mappack)) false
+    else{
+      this.mappacks.remove(mappack.getId)
+      NailedServer.getPluginManager.callEvent(new MappackUnregisteredEvent(mappack))
+      true
+    }
   }
 }
 

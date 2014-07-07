@@ -46,8 +46,9 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         expand 'version': project.version
         include 'internalplugin.json'
+        include 'directorymappackloaderplugin.json'
     }
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'internalplugin.json'
+        exclude 'directorymappackloaderplugin.json'
     }
 }

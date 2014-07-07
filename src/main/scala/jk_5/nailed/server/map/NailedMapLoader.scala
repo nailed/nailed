@@ -69,7 +69,11 @@ object NailedMapLoader extends MapLoader {
     val id = nextMapId.getAndIncrement
     val finishPromise = new DefaultPromise[Void](NailedScheduler.executor.next())
     NailedScheduler.submit(new Runnable(){
-      override def run() = lobbyMappack.prepareWorld(new File(mapsDir, "lobby"), finishPromise)
+      override def run(){
+        val dir = new File(mapsDir, "lobby")
+        dir.mkdir()
+        lobbyMappack.prepareWorld(dir, finishPromise)
+      }
     })
     finishPromise.get()
     val map = new NailedMap(id, lobbyMappack)
@@ -112,7 +116,11 @@ object NailedMapLoader extends MapLoader {
     })
     NailedScheduler.submit(new Runnable(){
       //TODO: don't use these fixed savedirs
-      override def run() = mappack.prepareWorld(new File(mapsDir, "map_" + mappack.getId + "_" + id), finishPromise)
+      override def run(){
+        val dir = new File(mapsDir, "map_" + mappack.getId + "_" + id)
+        dir.mkdir()
+        mappack.prepareWorld(dir, finishPromise)
+      }
     })
     allDonePromise
   }

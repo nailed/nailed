@@ -33,5 +33,7 @@ trait MappackRegistry {
    * @tparam T the type of the mappack class, which is the same type as will be returned
    * @return an array of all the mappacks with the given type
    */
-  def getByType[T <: Mappack](cl: Class[T]): Array[T]
+  def getByType[T <: Mappack](cl: Class[T])(implicit mf: Manifest[T]): Array[T]
+
+  def unregister(mappack: Mappack): Boolean
 }

@@ -10,3 +10,4 @@ import jk_5.nailed.api.mappack.Mappack
  */
 class MappackEvent(val mappack: Mappack) extends Event
 case class MappackRegisteredEvent(private val _mappack: Mappack) extends MappackEvent(_mappack)
+case class MappackUnregisteredEvent(private val _mappack: Mappack) extends MappackEvent(_mappack)
