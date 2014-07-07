@@ -1,0 +1,22 @@
+--- ../src-base/minecraft/net/minecraft/entity/player/EntityPlayerMP.java
++++ ../src-work/minecraft/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -130,18 +130,11 @@
+         super(p_i45285_2_, p_i45285_3_);
+         p_i45285_4_.field_73090_b = this;
+         this.field_71134_c = p_i45285_4_;
+-        ChunkCoordinates chunkcoordinates = p_i45285_2_.func_72861_E();
++        ChunkCoordinates chunkcoordinates = p_i45285_2_.field_73011_w.getSpawnPoint();
+         int i = chunkcoordinates.field_71574_a;
+         int j = chunkcoordinates.field_71573_c;
+         int k = chunkcoordinates.field_71572_b;
+ 
+-        if (!p_i45285_2_.field_73011_w.field_76576_e && p_i45285_2_.func_72912_H().func_76077_q() != WorldSettings.GameType.ADVENTURE) {
+-            int l = Math.max(5, p_i45285_1_.func_82357_ak() - 6);
+-            i += this.field_70146_Z.nextInt(l * 2) - l;
+-            j += this.field_70146_Z.nextInt(l * 2) - l;
+-            k = p_i45285_2_.func_72825_h(i, j);
+-        }
+-
+         this.field_71133_b = p_i45285_1_;
+         this.field_147103_bO = p_i45285_1_.func_71203_ab().func_152602_a(this);
+         this.field_70138_W = 0.0F;

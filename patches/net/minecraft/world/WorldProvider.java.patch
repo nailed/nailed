@@ -1,15 +1,17 @@
 --- ../src-base/minecraft/net/minecraft/world/WorldProvider.java
 +++ ../src-work/minecraft/net/minecraft/world/WorldProvider.java
-@@ -10,6 +10,8 @@
+@@ -9,7 +9,10 @@
+ import net.minecraft.world.gen.ChunkProviderFlat;
  import net.minecraft.world.gen.ChunkProviderGenerate;
  import net.minecraft.world.gen.FlatGeneratorInfo;
++import net.minecraft.world.storage.WorldInfo;
  
 +import jk_5.nailed.server.world.NailedDimensionManager;
 +
  public abstract class WorldProvider {
      public static final float[] field_111203_a = new float[] {1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
      public World field_76579_a;
-@@ -88,7 +90,7 @@
+@@ -88,7 +91,7 @@
      }
  
      public static WorldProvider func_76570_a(int p_76570_0_) {
@@ -18,7 +20,7 @@
      }
  
      public ChunkCoordinates func_76554_h() {
-@@ -100,4 +102,12 @@
+@@ -100,4 +103,17 @@
      }
  
      public abstract String func_80007_l();
@@ -29,5 +31,10 @@
 +
 +    public void setDimension(int dimensionId){
 +        this.field_76574_g = dimensionId;
++    }
++
++    public ChunkCoordinates getSpawnPoint(){
++        WorldInfo info = this.field_76579_a.field_72986_A;
++        return new ChunkCoordinates(info.func_76079_c(), info.func_76075_d(), info.func_76074_e());
 +    }
  }

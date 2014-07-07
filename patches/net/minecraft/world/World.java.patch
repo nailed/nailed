@@ -1,0 +1,11 @@
+--- ../src-base/minecraft/net/minecraft/world/World.java
++++ ../src-work/minecraft/net/minecraft/world/World.java
+@@ -2428,7 +2428,7 @@
+     }
+ 
+     public ChunkCoordinates func_72861_E() {
+-        return new ChunkCoordinates(this.field_72986_A.func_76079_c(), this.field_72986_A.func_76075_d(), this.field_72986_A.func_76074_e());
++        return this.field_73011_w.getSpawnPoint();
+     }
+ 
+     public void func_72950_A(int p_72950_1_, int p_72950_2_, int p_72950_3_) {

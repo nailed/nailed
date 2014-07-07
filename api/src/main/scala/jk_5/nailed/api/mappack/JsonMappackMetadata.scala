@@ -21,4 +21,10 @@ class JsonMappackMetadata(json: JsonObject) extends MappackMetadata {
       new JsonMappackWorld(prim.getAsString, new JsonObject)
     }else throw new JsonParseException("Invalid object type in worlds array: " + e.toString)
   }.toArray
+
+  for(world <- worlds){
+    if(worlds.count(_.name == world.name) != 1){
+      throw new RuntimeException("There are more than 1 worlds with the same name ('" + world.name + "')") //TODO
+    }
+  }
 }
