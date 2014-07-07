@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/command/CommandHandler.java
 +++ ../src-work/minecraft/net/minecraft/command/CommandHandler.java
-@@ -6,14 +6,18 @@
+@@ -6,14 +6,21 @@
  import java.util.Iterator;
  import java.util.List;
  import java.util.Map;
@@ -17,12 +17,15 @@
 -import org.apache.logging.log4j.LogManager;
 -import org.apache.logging.log4j.Logger;
  
++import jk_5.nailed.api.Server$;
 +import jk_5.nailed.server.NailedEventFactory;
++
++import scala.collection.mutable.ListBuffer;
 +
  public class CommandHandler implements ICommandManager {
      private static final Logger field_147175_a = LogManager.getLogger();
      private final Map field_71562_a = new HashMap();
-@@ -23,6 +27,11 @@
+@@ -23,6 +30,11 @@
      public int func_71556_a(ICommandSender p_71556_1_, String p_71556_2_) {
          p_71556_2_ = p_71556_2_.trim();
  
@@ -34,3 +37,15 @@
          if (p_71556_2_.startsWith("/")) {
              p_71556_2_ = p_71556_2_.substring(1);
          }
+@@ -130,6 +142,11 @@
+         String[] astring = p_71558_2_.split(" ", -1);
+         String s1 = astring[0];
+ 
++        //Nailed start
++        List<String> ret = NailedEventFactory.fireTabCompletion(p_71558_1_, p_71558_2_);
++        if(ret != null) return ret;
++        //Nailed end
++
+         if (astring.length == 1) {
+             ArrayList arraylist = new ArrayList();
+             Iterator iterator = this.field_71562_a.entrySet().iterator();

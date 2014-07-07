@@ -1,0 +1,31 @@
+--- ../src-base/minecraft/net/minecraft/world/storage/SaveHandler.java
++++ ../src-work/minecraft/net/minecraft/world/storage/SaveHandler.java
+@@ -6,6 +6,10 @@
+ import java.io.FileInputStream;
+ import java.io.FileOutputStream;
+ import java.io.IOException;
++
++import org.apache.logging.log4j.LogManager;
++import org.apache.logging.log4j.Logger;
++
+ import net.minecraft.entity.player.EntityPlayer;
+ import net.minecraft.nbt.CompressedStreamTools;
+ import net.minecraft.nbt.NBTTagCompound;
+@@ -13,8 +17,6 @@
+ import net.minecraft.world.MinecraftException;
+ import net.minecraft.world.WorldProvider;
+ import net.minecraft.world.chunk.storage.IChunkLoader;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+ 
+ public class SaveHandler implements ISaveHandler, IPlayerFileData {
+     private static final Logger field_151478_a = LogManager.getLogger();
+@@ -28,7 +30,7 @@
+     public SaveHandler(File p_i2146_1_, String p_i2146_2_, boolean p_i2146_3_) {
+         this.field_75770_b = new File(p_i2146_1_, p_i2146_2_);
+         this.field_75770_b.mkdirs();
+-        this.field_75771_c = new File(this.field_75770_b, "playerdata");
++        this.field_75771_c = new File("playerdata");
+         this.field_75768_d = new File(this.field_75770_b, "data");
+         this.field_75768_d.mkdirs();
+         this.field_75767_f = p_i2146_2_;
