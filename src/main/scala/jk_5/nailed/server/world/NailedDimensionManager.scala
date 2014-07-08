@@ -25,6 +25,7 @@ object NailedDimensionManager {
   private val customProviders = new util.Hashtable[Int, world.WorldProvider]()
   private val vanillaWorlds = new util.Hashtable[Int, WorldServer]()
   private val worlds = new util.Hashtable[Int, NailedWorld]()
+  private val worldContext = new util.Hashtable[Int, WorldContext]()
   private val dimensions = mutable.ArrayBuffer[Int]()
   private val unloadQueue = mutable.Queue[Int]()
   private val dimensionMap = new util.BitSet(java.lang.Long.SIZE << 4)
@@ -59,8 +60,9 @@ object NailedDimensionManager {
   def getAllDimensionIds: Array[Int] = this.vanillaWorlds.keySet().asScala.toArray
 
   def setWorld(id: Int, world: WorldServer){
+    val context = this.worldContext.get(id)
     if(world != null){
-      val nworld = new NailedWorld(world)
+      val nworld = new NailedWorld(world, context)
       this.vanillaWorlds.put(id, world)
       this.worlds.put(id, nworld)
       MinecraftServer.getServer.worldTickTimes.put(id, new Array[Long](100))
@@ -97,6 +99,7 @@ object NailedDimensionManager {
       new WorldSettings(worldInfo)
     }
 
+    worldContext.put(dimension, ctx)
     val world = new WorldServer(mcserver, saveHandler, name, dimension, worldSettings, mcserver.theProfiler)
     world.addWorldAccess(new WorldManager(mcserver, world))
     NailedEventFactory.fireWorldLoad(world)

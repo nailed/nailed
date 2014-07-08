@@ -1,6 +1,7 @@
 package jk_5.nailed.api.world
 
 import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.mappack.MappackWorld
 import jk_5.nailed.api.player.Player
 
 /**
@@ -45,4 +46,6 @@ trait World {
 
   def setMap(map: Map)
   def getMap: Option[Map]
+
+  def getConfig: MappackWorld
 }

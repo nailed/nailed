@@ -1,11 +1,29 @@
 --- ../src-base/minecraft/net/minecraft/world/World.java
 +++ ../src-work/minecraft/net/minecraft/world/World.java
-@@ -2428,7 +2428,7 @@
+@@ -10,6 +10,7 @@
+ import java.util.Set;
+ import java.util.UUID;
+ import java.util.concurrent.Callable;
++
+ import net.minecraft.block.Block;
+ import net.minecraft.block.BlockHopper;
+ import net.minecraft.block.BlockLiquid;
+@@ -49,6 +50,8 @@
+ import net.minecraft.world.storage.MapStorage;
+ import net.minecraft.world.storage.WorldInfo;
+ 
++import jk_5.nailed.api.util.Location;
++
+ public abstract class World implements IBlockAccess {
+     public boolean field_72999_e;
+     public List field_72996_f = new ArrayList();
+@@ -2428,7 +2431,8 @@
      }
  
      public ChunkCoordinates func_72861_E() {
 -        return new ChunkCoordinates(this.field_72986_A.func_76079_c(), this.field_72986_A.func_76075_d(), this.field_72986_A.func_76074_e());
-+        return this.field_73011_w.getSpawnPoint();
++        Location spawn = this.field_73011_w.getSpawnPoint();
++        return new ChunkCoordinates(spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ());
      }
  
      public void func_72950_A(int p_72950_1_, int p_72950_2_, int p_72950_3_) {

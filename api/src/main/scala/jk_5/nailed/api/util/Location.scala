@@ -1,5 +1,6 @@
 package jk_5.nailed.api.util
 
+import com.google.gson.JsonObject
 import jk_5.nailed.api.world.World
 
 /**
@@ -7,6 +8,16 @@ import jk_5.nailed.api.world.World
  *
  * @author jk-5
  */
+object Location {
+  def read(json: JsonObject) = new Location(
+    null,
+    if(json.has("x")) json.get("x").getAsDouble else 0,
+    if(json.has("y")) json.get("y").getAsDouble else 64,
+    if(json.has("z")) json.get("z").getAsDouble else 0,
+    if(json.has("yaw")) json.get("yaw").getAsFloat else 0,
+    if(json.has("pitch")) json.get("pitch").getAsFloat else 0
+  )
+}
 case class Location (
   private var world: World,
   private var x: Double,

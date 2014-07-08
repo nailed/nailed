@@ -120,7 +120,7 @@ object NailedMapLoader extends MapLoader {
         override def setId(id: Int) = this.id = id
         override def getTypeId = w.dimension
       }
-      map.addWorld(NailedServer.createNewWorld(provider, new WorldContext(saveDir, w.name)))
+      map.addWorld(NailedServer.createNewWorld(provider, new WorldContext(saveDir, w.name, w)))
     }
   }
 

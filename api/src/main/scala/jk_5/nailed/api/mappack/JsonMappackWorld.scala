@@ -1,6 +1,7 @@
 package jk_5.nailed.api.mappack
 
 import com.google.gson.JsonObject
+import jk_5.nailed.api.util.Location
 
 /**
  * No description given
@@ -15,4 +16,5 @@ class JsonMappackWorld(override val name: String, json: JsonObject) extends Mapp
     case "end" => 1
     case e => throw new RuntimeException("Unknown world generator type '"  + e + "'")
   }
+  override val spawnPoint = Location.read(if(json.has("spawnpoint")) json.getAsJsonObject("spawnpoint") else new JsonObject)
 }

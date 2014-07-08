@@ -1,8 +1,9 @@
 package jk_5.nailed.server.world
 
 import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.mappack.MappackWorld
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.world.{World, WorldProvider}
+import jk_5.nailed.api.world.{World, WorldContext, WorldProvider}
 import net.minecraft.world.WorldServer
 
 /**
@@ -10,7 +11,7 @@ import net.minecraft.world.WorldServer
  *
  * @author jk-5
  */
-class NailedWorld(var wrapped: WorldServer) extends World {
+class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) extends World {
 
   private var map: Option[Map] = None
 
@@ -29,6 +30,7 @@ class NailedWorld(var wrapped: WorldServer) extends World {
 
   override def setMap(map: Map) = this.map = Some(map)
   override def getMap = this.map
+  override def getConfig: MappackWorld = if(this.context == null) null else this.context.config
 
   override def toString = s"NailedWorld{id=$getDimensionId,name=$getName,type=$getType}"
 }

@@ -3,7 +3,6 @@ package jk_5.nailed.server.world
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.world.{World => NWorld, WorldProvider => NWorldProvider}
 import jk_5.nailed.server.world.void.{ChunkProviderVoid, WorldChunkManagerVoid}
-import net.minecraft.util.ChunkCoordinates
 import net.minecraft.world.WorldProvider
 import net.minecraft.world.biome.{BiomeGenBase, WorldChunkManager, WorldChunkManagerHell}
 import net.minecraft.world.chunk.IChunkProvider
@@ -53,5 +52,5 @@ class DelegatingWorldProvider(val wrapped: NWorldProvider) extends WorldProvider
     case _ => throw new IllegalArgumentException("Unknown world type " + wrapped.getType)
   }
 
-  override def getSpawnPoint = new ChunkCoordinates(0, 64, 0)
+  override def getSpawnPoint = this.world.getConfig.spawnPoint
 }
