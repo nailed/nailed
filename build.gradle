@@ -53,7 +53,7 @@ dependencies {
 
 packageServer.manifest {
     attributes 'TweakClass': 'jk_5.nailed.server.tweaker.NailedTweaker'
-    attributes 'MainClass': 'jk_5.nailed.deploader.DepLoader'
+    attributes 'Main-Class': 'jk_5.nailed.deploader.DepLoader'
 }
 
 //If only i knew how to add scala sources with the gradle API.
