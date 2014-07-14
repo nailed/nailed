@@ -18,7 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.0.3"
+        classpath "jk_5.nailed.mcp:mcp:1.1.0-SNAPSHOT"
     }
 }
 
@@ -36,10 +36,39 @@ nailedMCP {
     mainClass = "net.minecraft.server.MinecraftServer"
 }
 
+configurations {
+    deployer
+}
+
 dependencies {
     nailed 'net.minecraft:launchwrapper:1.9'
+    nailed 'org.scala-lang:scala-library:2.11.1'
+    nailed 'org.ow2.asm:asm-debug-all:4.1'
+    nailed 'jk_5:EventBus:1.0'
 
     compile project(':api')
+
+    deployer 'org.apache.maven.wagon:wagon-ssh:2.6'
+}
+
+jar.manifest {
+    attributes 'TweakClass': 'jk_5.nailed.server.tweaker.NailedTweaker'
+    attributes 'MainClass': 'jk_5.nailed.deploader.DepLoader'
+}
+
+//If only i knew how to add scala sources with the gradle API.
+//If you know, please open an issue or message me (jk-5) on irc
+sourceSets {
+    main {
+        scala {
+            srcDir 'src/main/scala'
+            srcDir 'minecraft/Nailed/src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+            srcDir 'minecraft/Nailed/src/main/resources'
+        }
+    }
 }
 
 processResources {
@@ -51,5 +80,53 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'internalplugin.json'
         exclude 'directorymappackloaderplugin.json'
+    }
+}
+
+uploadArchives {
+    if (project.hasProperty("deploymaven")) {
+        repositories.mavenDeployer {
+            configuration = configurations.deployer
+            repository(url: project.deploymaven.url) {
+                authentication(userName: project.deploymaven.username, password: project.deploymaven.password)
+            }
+            pom.project {
+                description = 'Nailed, the Minecraft PvP server framework'
+                url = 'https://github.com/nailed/nailed'
+
+                scm {
+                    url 'https://github.com/nailed/nailed'
+                    connection 'scm:git:git://github.com/nailed/nailed.git'
+                    developerConnection 'scm:git:git@github.com:nailed/nailed.git'
+                }
+
+                issueManagement {
+                    system 'github'
+                    url 'https://github.com/nailed/nailed/issues'
+                }
+
+                developers {
+                    developer {
+                        id = 'jk-5'
+                        name = 'jk-5'
+                        roles {
+                            role 'developer'
+                            role 'packager'
+                        }
+                    }
+                    developer {
+                        id = 'mattashii'
+                        name = 'mattashii'
+                        roles {
+                            role 'contributor'
+                        }
+                    }
+                }
+            }
+        }
+    }else{
+        repositories{
+            mavenLocal()
+        }
     }
 }

@@ -44,6 +44,22 @@ jar {
     }
 }
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task scaladocJar(type: Jar, dependsOn: scaladoc) {
+    classifier = 'scaladoc'
+    from 'build/docs/scaladoc'
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives scaladocJar
+}
+
 uploadArchives {
     if (project.hasProperty("deploymaven")) {
         repositories.mavenDeployer {
