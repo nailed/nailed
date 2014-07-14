@@ -51,7 +51,7 @@ dependencies {
     deployer 'org.apache.maven.wagon:wagon-ssh:2.6'
 }
 
-jar.manifest {
+packageServer.manifest {
     attributes 'TweakClass': 'jk_5.nailed.server.tweaker.NailedTweaker'
     attributes 'MainClass': 'jk_5.nailed.deploader.DepLoader'
 }
