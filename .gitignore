@@ -7,4 +7,5 @@ runtime
 *.iws
 .idea
 !src/main/*
+out
 

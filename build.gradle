@@ -45,6 +45,8 @@ dependencies {
     nailed 'org.scala-lang:scala-library:2.11.1'
     nailed 'org.ow2.asm:asm-debug-all:4.1'
     nailed 'jk_5:EventBus:1.0'
+    nailed 'lzma:lzma:0.0.1'
+    nailed 'com.nothome:javaxdelta:2.0.1'
 
     compile project(':api')
 
