@@ -1,6 +1,16 @@
 --- ../src-base/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
 +++ ../src-work/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -11,6 +11,10 @@
+@@ -1,9 +1,7 @@
+ package net.minecraft.server.dedicated;
+ 
+-import java.io.BufferedReader;
+ import java.io.File;
+ import java.io.IOException;
+-import java.io.InputStreamReader;
+ import java.net.InetAddress;
+ import java.net.Proxy;
+ import java.util.ArrayList;
+@@ -11,6 +9,10 @@
  import java.util.List;
  import java.util.Random;
  import java.util.concurrent.Callable;
@@ -11,7 +21,7 @@
  import net.minecraft.command.ICommandSender;
  import net.minecraft.command.ServerCommand;
  import net.minecraft.crash.CrashReport;
-@@ -23,7 +27,6 @@
+@@ -23,7 +25,6 @@
  import net.minecraft.server.ServerEula;
  import net.minecraft.server.gui.MinecraftServerGui;
  import net.minecraft.server.management.PreYggdrasilConverter;
@@ -19,7 +29,7 @@
  import net.minecraft.util.ChunkCoordinates;
  import net.minecraft.util.CryptManager;
  import net.minecraft.util.MathHelper;
-@@ -31,9 +34,9 @@
+@@ -31,9 +32,10 @@
  import net.minecraft.world.World;
  import net.minecraft.world.WorldSettings;
  import net.minecraft.world.WorldType;
@@ -27,11 +37,12 @@
 -import org.apache.logging.log4j.Logger;
  
 +import jk_5.nailed.server.NailedEventFactory;
++import jk_5.nailed.server.console.CommandReaderThread;
 +
  public class DedicatedServer extends MinecraftServer implements IServer {
      private static final Logger field_155771_h = LogManager.getLogger();
      private final List field_71341_l = Collections.synchronizedList(new ArrayList());
-@@ -45,6 +48,7 @@
+@@ -45,6 +47,7 @@
      private WorldSettings.GameType field_71337_q;
      private boolean field_71335_s;
      private static final String __OBFID = "CL_00001784";
@@ -39,7 +50,31 @@
  
      public DedicatedServer(File p_i1508_1_) {
          super(p_i1508_1_, Proxy.NO_PROXY);
-@@ -92,6 +96,8 @@
+@@ -69,29 +72,16 @@
+     }
+ 
+     protected boolean func_71197_b() throws IOException {
+-        Thread thread = new Thread("Server console handler") {
+-            private static final String __OBFID = "CL_00001786";
+-            public void run() {
+-                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(System.in));
+-                String s4;
++        CommandReaderThread.start();
+ 
+-                try {
+-                    while (!DedicatedServer.this.func_71241_aa() && DedicatedServer.this.func_71278_l() && (s4 = bufferedreader.readLine()) != null) {
+-                        DedicatedServer.this.func_71331_a(s4, DedicatedServer.this);
+-                    }
+-                } catch (IOException ioexception1) {
+-                    DedicatedServer.field_155771_h.error("Exception handling console input", ioexception1);
+-                }
+-            }
+-        };
+-        thread.setDaemon(true);
+-        thread.start();
+         field_155771_h.info("Starting minecraft server version 1.7.10");
+ 
+         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
              field_155771_h.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
          }
  
@@ -48,7 +83,7 @@
          field_155771_h.info("Loading properties");
          this.field_71340_o = new PropertyManager(new File("server.properties"));
          this.field_154332_n = new ServerEula(new File("eula.txt"));
-@@ -202,6 +208,7 @@
+@@ -202,6 +192,7 @@
                  this.func_71191_d((this.func_71207_Z() + 8) / 16 * 16);
                  this.func_71191_d(MathHelper.func_76125_a(this.func_71207_Z(), 64, 256));
                  this.field_71340_o.func_73667_a("max-build-height", Integer.valueOf(this.func_71207_Z()));
@@ -56,7 +91,7 @@
                  field_155771_h.info("Preparing level \"" + this.func_71270_I() + "\"");
                  this.func_71247_a(this.func_71270_I(), this.func_71270_I(), k, worldtype, s2);
                  long i1 = System.nanoTime() - j;
-@@ -220,6 +227,8 @@
+@@ -220,6 +211,8 @@
                      this.field_71339_n.func_72602_a();
                  }
  

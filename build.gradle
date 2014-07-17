@@ -47,6 +47,8 @@ dependencies {
     nailed 'jk_5:EventBus:1.0'
     nailed 'lzma:lzma:0.0.1'
     nailed 'com.nothome:javaxdelta:2.0.1'
+    nailed 'jline:jline:2.12'
+    nailed 'org.fusesource.jansi:jansi:1.11'
 
     compile project(':api')
 

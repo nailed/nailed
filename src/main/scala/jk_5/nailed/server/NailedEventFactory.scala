@@ -6,7 +6,9 @@ import jk_5.eventbus.Event
 import jk_5.nailed.api.event._
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
+import jk_5.nailed.server.console.CommandReaderThread
 import jk_5.nailed.server.player.NailedPlayer
+import jk_5.nailed.server.tweaker.NailedTweaker
 import jk_5.nailed.server.world.BossBar
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity
@@ -14,8 +16,9 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.world.{World, WorldServer}
+import org.apache.logging.log4j.LogManager
 
-import scala.collection.convert.wrapAsJava._
+import scala.collection.convert.wrapAll._
 import scala.collection.mutable
 
 /**
@@ -31,6 +34,8 @@ object NailedEventFactory {
 
   private val preTickEvent = new ServerPreTickEvent
   private val postTickEvent = new ServerPreTickEvent
+
+  private val logger = LogManager.getLogger
 
   def fireEvent[T <: Event](event: T): T = NailedServer.getPluginManager.callEvent(event)
 
@@ -123,5 +128,11 @@ object NailedEventFactory {
   def firePlayerChat(playerEntity: EntityPlayerMP, message: String): String = {
     val e = this.fireEvent(new PlayerChatEvent(NailedServer.getPlayerFromEntity(playerEntity), message))
     if(e.isCanceled) null else e.message
+  }
+
+  def initLogging(server: DedicatedServer){
+    CommandReaderThread.server = server
+    CommandReaderThread.reader = NailedTweaker.consoleReader
+    CommandReaderThread.start()
   }
 }
