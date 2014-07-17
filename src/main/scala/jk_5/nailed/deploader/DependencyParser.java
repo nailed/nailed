@@ -62,15 +62,12 @@ public class DependencyParser {
         PrintWriter p = new PrintWriter(new File("start.sh"));
         p.println("#! /bin/sh");
         p.print("java -Xmx1g -Xms1g -XX:PermSize=128m -server -Djava.awt.headless=true -cp ");
-        boolean first = true;
+        p.print(DependencyParser.class.getProtectionDomain().getCodeSource().getLocation().getPath());
         for(MavenDependency dep : dependencies){
-            if(!first) p.print(':');
+            p.print(':');
             p.print(dep.getLibraryLocation(libDir).getPath());
-            first = false;
         }
 
-        p.print(':');
-        p.print(DependencyParser.class.getProtectionDomain().getCodeSource().getLocation().getPath());
         p.print(" net.minecraft.launchwrapper.Launch --tweakClass jk_5.nailed.server.tweaker.NailedTweaker");
         p.println();
 

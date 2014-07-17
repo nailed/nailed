@@ -3,6 +3,7 @@ package jk_5.nailed.server.console
 import java.io.{IOException, OutputStream}
 
 import com.google.common.base.Charsets
+import com.mojang.util.QueueLogAppender
 import jk_5.nailed.server.tweaker.NailedTweaker
 import jline.console.ConsoleReader
 
@@ -18,12 +19,10 @@ object TerminalWriterThread extends Thread {
 
   var reader: ConsoleReader = _
   var output: OutputStream = _
-  var queue: java.util.concurrent.BlockingQueue[String] = _
 
   override def run(){
-    queue.clear()
     while(true){
-      val msg = queue.take()
+      val msg = QueueLogAppender.getNextLogEvent("TerminalConsole")
       if(msg != null){
         try{
           if(NailedTweaker.useJline){

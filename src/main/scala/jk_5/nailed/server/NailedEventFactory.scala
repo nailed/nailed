@@ -6,9 +6,7 @@ import jk_5.eventbus.Event
 import jk_5.nailed.api.event._
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
-import jk_5.nailed.server.console.CommandReaderThread
 import jk_5.nailed.server.player.NailedPlayer
-import jk_5.nailed.server.tweaker.NailedTweaker
 import jk_5.nailed.server.world.BossBar
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity
@@ -30,7 +28,7 @@ object NailedEventFactory {
 
   object DummyInternalListenerPlugin extends Plugin
 
-  private var serverCommandSender: ConsoleCommandSender = _
+  var serverCommandSender: ConsoleCommandSender = _
 
   private val preTickEvent = new ServerPreTickEvent
   private val postTickEvent = new ServerPreTickEvent
@@ -128,11 +126,5 @@ object NailedEventFactory {
   def firePlayerChat(playerEntity: EntityPlayerMP, message: String): String = {
     val e = this.fireEvent(new PlayerChatEvent(NailedServer.getPlayerFromEntity(playerEntity), message))
     if(e.isCanceled) null else e.message
-  }
-
-  def initLogging(server: DedicatedServer){
-    CommandReaderThread.server = server
-    CommandReaderThread.reader = NailedTweaker.consoleReader
-    CommandReaderThread.start()
   }
 }
