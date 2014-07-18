@@ -5,6 +5,7 @@ import java.io.{File, FileReader}
 import com.google.gson.JsonParser
 import io.netty.util.concurrent.Promise
 import jk_5.nailed.api.mappack.{JsonMappackMetadata, Mappack}
+import org.apache.commons.io.FileUtils
 
 /**
  * No description given
@@ -21,6 +22,9 @@ class DirectoryMappack(private val dir: File) extends Mappack {
     obj
   })
   override def prepareWorld(destinationDirectory: File, promise: Promise[Void]){
+    val original = new File(dir, "worlds")
+    destinationDirectory.mkdir()
+    FileUtils.copyDirectory(original, destinationDirectory)
     promise.setSuccess(null)
   }
 
