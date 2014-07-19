@@ -93,6 +93,7 @@ object NailedMapLoader extends MapLoader {
               val map = new NailedMap(id, mappack, new File(mapsDir, "map_" + id))
               addMap(map)
               loadMappackWorlds(map, mappack, "map_" + id)
+              allDonePromise.setSuccess(map)
             }
           })
         }else{
