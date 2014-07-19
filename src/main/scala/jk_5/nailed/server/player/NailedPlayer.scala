@@ -40,7 +40,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def isBanned: Boolean = false
 
   override def teleportTo(world: World){
-    Teleporter.teleportPlayer(this, new TeleportOptions(new Location(world, 0, 64, 0)))
+    Teleporter.teleportPlayer(this, new TeleportOptions(if(world.getConfig != null) {val s = world.getConfig.spawnPoint; s.setWorld(world); s} else new Location(world, 0, 64, 0)))
   }
 
   def getEntity = this.entity

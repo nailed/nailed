@@ -42,13 +42,8 @@ object NailedMapLoader extends MapLoader {
   override def getMap(mapId: Int) = this.maps.get(mapId)
   override def getOrCreateMap(mapId: Int): Map = {
     this.maps.get(mapId) match {
-      case Some(map) =>
-        map
-      case None =>
-        throw new RuntimeException("No map exists for mapid " + mapId)
-        //val m = new NailedMap(nextMapId.getAndIncrement)
-        //this.addMap(m)
-        //m
+      case Some(map) => map
+      case None => throw new RuntimeException("No map exists for mapid " + mapId)
     }
   }
 
