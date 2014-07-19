@@ -9,7 +9,7 @@ import jk_5.nailed.api.plugin.Command
  *
  * @author jk-5
  */
-object CommandGamerule extends Command("gamerule") {
+object CommandGamerule extends Command("gamerule") with TabExecutor {
 
   override def execute(sender: CommandSender, args: Array[String]){
     sender match {
@@ -41,5 +41,15 @@ object CommandGamerule extends Command("gamerule") {
         }
       case _ => sender.sendMessage(new ComponentBuilder(s"You can't change gamerules, because you are not in a world").color(ChatColor.red).createFlat())
     }
+  }
+
+  override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = sender match {
+    case s: WorldCommandSender =>
+      args.length match {
+        case 1 => getOptions(args, s.getWorld.getGameRules.list)
+        case 2 => getOptions(args, "true", "false")
+        case _ => null
+      }
+    case _ => null
   }
 }
