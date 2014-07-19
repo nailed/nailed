@@ -194,19 +194,25 @@
              if (this.field_71307_n.func_76468_d()) {
                  this.field_71307_n.func_76470_e();
              }
-@@ -439,6 +415,7 @@
+@@ -448,6 +424,9 @@
+         }
  
-     protected void func_71217_p() {
-         long i = System.nanoTime();
+         this.field_71304_b.func_76320_a("root");
++        this.field_71304_b.func_76320_a("Nailed:ServerPreTickEvent");
 +        NailedEventFactory.firePreServerTick(this);
-         ++this.field_71315_w;
++        this.field_71304_b.func_76319_b();
+         this.func_71190_q();
  
-         if (this.field_71295_T) {
-@@ -486,17 +463,19 @@
+         if (i - this.field_147142_T >= 5000000000L) {
+@@ -485,18 +464,23 @@
+         }
  
          this.field_71304_b.func_76319_b();
-         this.field_71304_b.func_76319_b();
++        this.field_71304_b.func_76320_a("Nailed:ServerPostTickEvent");
 +        NailedEventFactory.firePostServerTick(this);
++
+         this.field_71304_b.func_76319_b();
++        this.field_71304_b.func_76319_b();
      }
  
      public void func_71190_q() {
@@ -226,7 +232,7 @@
                  this.field_71304_b.func_76320_a(worldserver.func_72912_H().func_76065_j());
                  this.field_71304_b.func_76320_a("pools");
                  this.field_71304_b.func_76319_b();
-@@ -508,6 +487,7 @@
+@@ -508,6 +492,7 @@
                  }
  
                  this.field_71304_b.func_76320_a("tick");
@@ -234,7 +240,7 @@
                  CrashReport crashreport;
  
                  try {
-@@ -526,6 +506,7 @@
+@@ -526,6 +511,7 @@
                      throw new ReportedException(crashreport);
                  }
  
@@ -242,7 +248,7 @@
                  this.field_71304_b.func_76319_b();
                  this.field_71304_b.func_76320_a("tracker");
                  worldserver.func_73039_n().func_72788_a();
-@@ -533,16 +514,18 @@
+@@ -533,16 +519,18 @@
                  this.field_71304_b.func_76319_b();
              }
  
@@ -263,7 +269,7 @@
              ((IUpdatePlayerListBox)this.field_71322_p.get(i)).func_73660_a();
          }
  
-@@ -559,7 +542,7 @@
+@@ -559,7 +547,7 @@
  
      public static void main(String[] p_main_0_) {
          Bootstrap.func_151354_b();
@@ -272,7 +278,7 @@
          try {
              boolean flag = true;
              String s = null;
-@@ -666,7 +649,12 @@
+@@ -666,7 +654,12 @@
      }
  
      public WorldServer func_71218_a(int p_71218_1_) {
@@ -286,7 +292,7 @@
      }
  
      public String func_71277_t() {
-@@ -726,7 +714,7 @@
+@@ -726,7 +719,7 @@
      }
  
      public String getServerModName() {
@@ -295,7 +301,7 @@
      }
  
      public CrashReport func_71230_b(CrashReport p_71230_1_) {
-@@ -908,6 +896,7 @@
+@@ -908,6 +901,7 @@
              WorldServer worldserver = this.field_71305_c[i];
  
              if (worldserver != null) {
