@@ -12,13 +12,14 @@ import scala.collection.convert.wrapAsScala._
 class JsonMappackMetadata(json: JsonObject) extends MappackMetadata {
 
   override val name = json.get("name").getAsString
+  val defaultProperties = new JsonMappackWorld(null, if(json.has("defaultProperties")) json.getAsJsonObject("defaultProperties") else new JsonObject, DefaultMappackWorldProperties)
   override val worlds: Array[MappackWorld] = json.getAsJsonArray("worlds").map{e =>
     if(e.isJsonObject){
       val obj = e.getAsJsonObject
-      new JsonMappackWorld(obj.get("name").getAsString, obj)
+      new JsonMappackWorld(obj.get("name").getAsString, obj, defaultProperties)
     }else if(e.isJsonPrimitive){
       val prim = e.getAsJsonPrimitive
-      new JsonMappackWorld(prim.getAsString, new JsonObject)
+      new JsonMappackWorld(prim.getAsString, new JsonObject, defaultProperties)
     }else throw new JsonParseException("Invalid object type in worlds array: " + e.toString)
   }.toArray
 
