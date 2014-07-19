@@ -2,8 +2,10 @@ package jk_5.nailed.server.world
 
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.mappack.MappackWorld
+import jk_5.nailed.api.mappack.gamerule.DefaultGameRules
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.world.{World, WorldContext, WorldProvider}
+import jk_5.nailed.server.map.gamerule.WrappedEditableGameRules
 import net.minecraft.world.WorldServer
 
 /**
@@ -20,6 +22,8 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
     case _ => None
   }
 
+  override val getGameRules = if(this.context != null && this.context.config != null) new WrappedEditableGameRules(context.config.gameRules) else new WrappedEditableGameRules(DefaultGameRules)
+
   override def getDimensionId = wrapped.provider.dimensionId
   override def getName = "world_" + getDimensionId
   override def getPlayers = List[Player]()
@@ -32,5 +36,5 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
   override def getMap = this.map
   override def getConfig: MappackWorld = if(this.context == null) null else this.context.config
 
-  override def toString = s"NailedWorld{id=$getDimensionId,name=$getName,type=$getType}"
+  override def toString = s"NailedWorld{id=$getDimensionId,name=$getName,type=$getType,gameRules=$getGameRules}"
 }

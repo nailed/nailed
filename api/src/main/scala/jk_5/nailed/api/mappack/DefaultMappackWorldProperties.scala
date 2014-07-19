@@ -1,5 +1,6 @@
 package jk_5.nailed.api.mappack
 
+import jk_5.nailed.api.mappack.gamerule.DefaultGameRules
 import jk_5.nailed.api.util.Location
 
 /**
@@ -13,4 +14,5 @@ object DefaultMappackWorldProperties extends MappackWorld {
   override val generator = "void"
   override val spawnPoint = new Location(null, 0, 64, 0, 0, 0)
   override val dimension = 0
+  override val gameRules = DefaultGameRules
 }

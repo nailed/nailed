@@ -1,5 +1,6 @@
 package jk_5.nailed.api.mappack
 
+import jk_5.nailed.api.mappack.gamerule.GameRules
 import jk_5.nailed.api.util.Location
 
 /**
@@ -12,4 +13,5 @@ trait MappackWorld {
   def generator: String
   def dimension: Int
   def spawnPoint: Location
+  def gameRules: GameRules
 }

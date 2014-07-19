@@ -2,7 +2,7 @@ package jk_5.nailed.api.player
 
 import java.util.UUID
 
-import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.api.command.{CommandSender, WorldCommandSender}
 import jk_5.nailed.api.world.World
 
 /**
@@ -10,7 +10,7 @@ import jk_5.nailed.api.world.World
  *
  * @author jk-5
  */
-trait Player extends CommandSender with OfflinePlayer {
+trait Player extends CommandSender with OfflinePlayer with WorldCommandSender {
 
   /**
    * Returns the name of this player

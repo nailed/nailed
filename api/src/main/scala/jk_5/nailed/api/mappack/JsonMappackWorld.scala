@@ -1,6 +1,7 @@
 package jk_5.nailed.api.mappack
 
 import com.google.gson.JsonObject
+import jk_5.nailed.api.mappack.gamerule.ImmutableJsonGameRules
 import jk_5.nailed.api.util.Location
 import org.apache.commons.lang3.Validate
 
@@ -20,4 +21,5 @@ class JsonMappackWorld(override val name: String, json: JsonObject, parent: Mapp
     case e => throw new RuntimeException("Unknown world generator type '"  + e + "'")
   } else parent.dimension
   override val spawnPoint = if(json.has("spawnpoint")) Location.read(json.getAsJsonObject("spawnpoint")) else parent.spawnPoint
+  override val gameRules = new ImmutableJsonGameRules(if(json.has("gamerules")) json.getAsJsonObject("gamerules") else new JsonObject, parent.gameRules)
 }
