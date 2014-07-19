@@ -17,7 +17,7 @@ object CommandGoto extends Command("goto") with TabExecutor {
       //  case 0 => sender.sendMessage(new TextComponent(""))
       //}
       //  p.teleportTo(Server.getInstance.getWorld(Integer.parseInt(args(0))))
-      case _ => sender.sendMessage(new ComponentBuilder("You can't teleport to other worlds because you are not a player").color(ChatColor.red).createFlat())
+      case _ => sender.sendMessage(new ComponentBuilder("You can't teleport to other worlds because you are not a player").color(ChatColor.RED).create())
     }
   }
 

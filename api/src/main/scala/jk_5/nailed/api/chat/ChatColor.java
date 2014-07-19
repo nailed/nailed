@@ -141,6 +141,10 @@ public enum ChatColor {
         return toString;
     }
 
+    public char getCode() {
+        return code;
+    }
+
     /**
      * Strips the given message of all color codes
      *

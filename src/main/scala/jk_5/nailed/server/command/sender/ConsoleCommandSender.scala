@@ -1,6 +1,6 @@
 package jk_5.nailed.server.command.sender
 
-import jk_5.nailed.api.chat.BaseComponent
+import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
 import jk_5.nailed.api.command.CommandSender
 import net.minecraft.server.dedicated.DedicatedServer
 import org.apache.logging.log4j.LogManager
@@ -41,12 +41,12 @@ class ConsoleCommandSender(val wrapped: DedicatedServer) extends CommandSender {
    *
    * @param messages the message to send
    */
-  override def sendMessage(messages: BaseComponent*) = messages.foreach(m => logger.info(m.toPlainText))
+  override def sendMessage(messages: BaseComponent*) = logger.info(new TextComponent(messages: _*).toPlainText)
 
   /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
-  override def sendMessage(messages: Array[BaseComponent]) = messages.foreach(m => logger.info(m.toPlainText))
+  override def sendMessage(messages: Array[BaseComponent]) = logger.info(new TextComponent(messages: _*).toPlainText)
 }

@@ -29,15 +29,15 @@ object CommandTps extends Command("tps") with TabExecutor {
     }
   }
 
-  private def getComponent(prefix: String, tickTime: Double, tps: Double): BaseComponent = {
+  private def getComponent(prefix: String, tickTime: Double, tps: Double): Array[BaseComponent] = {
     val builder = new ComponentBuilder(prefix + ": ")
     builder.append("TPS: " + timeFormatter.format(tps))
-    if(tps != 20) builder.color(ChatColor.red)
+    if(tps != 20) builder.color(ChatColor.RED)
     builder.append(" Tick Time: " + timeFormatter.format(tickTime) + "ms")
-    if(tickTime > 45) builder.color(ChatColor.red) else if(tickTime > 35) builder.color(ChatColor.gold)
+    if(tickTime > 45) builder.color(ChatColor.RED) else if(tickTime > 35) builder.color(ChatColor.GOLD)
     val percent = (tps / 20) * 100
     builder.append(" (" + timeFormatter.format(percent) + "%)")
-    builder.createFlat()
+    builder.create()
   }
 
   private def mean(values: Array[Long]) = {

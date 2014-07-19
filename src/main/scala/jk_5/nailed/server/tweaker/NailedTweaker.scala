@@ -119,7 +119,8 @@ class NailedTweaker extends ITweaker {
       val f = cl.getDeclaredField("QUEUES")
       f.setAccessible(true)
       val q = f.get(null).asInstanceOf[util.Map[String, util.concurrent.BlockingQueue[String]]]
-      q.get("TerminalConsole").clear()
+      val m = q.get("TerminalConsole")
+      if(m != null) m.clear() //TODO: when this is null, log4j didn't initialize our appender
     }
 
     //Are we running in a terminal? If we are not, disable jline
