@@ -1,15 +1,26 @@
 --- ../src-base/minecraft/net/minecraft/server/management/ServerConfigurationManager.java
 +++ ../src-work/minecraft/net/minecraft/server/management/ServerConfigurationManager.java
-@@ -59,6 +59,8 @@
+@@ -59,6 +59,9 @@
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;
  
 +import jk_5.nailed.server.NailedEventFactory;
++import jk_5.nailed.server.world.DelegatingWorldProvider;
 +
  public abstract class ServerConfigurationManager {
      public static final File field_152613_a = new File("banned-players.json");
      public static final File field_152614_b = new File("banned-ips.json");
-@@ -123,16 +125,7 @@
+@@ -114,7 +117,8 @@
+         ChunkCoordinates chunkcoordinates = worldserver.func_72861_E();
+         this.func_72381_a(p_72355_2_, (EntityPlayerMP)null, worldserver);
+         NetHandlerPlayServer nethandlerplayserver = new NetHandlerPlayServer(this.field_72400_f, p_72355_1_, p_72355_2_);
+-        nethandlerplayserver.func_147359_a(new S01PacketJoinGame(p_72355_2_.func_145782_y(), p_72355_2_.field_71134_c.func_73081_b(), worldserver.func_72912_H().func_76093_s(), worldserver.field_73011_w.field_76574_g, worldserver.field_73013_u, this.func_72352_l(), worldserver.func_72912_H().func_76067_t()));
++        int dimid = (worldserver.field_73011_w instanceof DelegatingWorldProvider) ? ((DelegatingWorldProvider) worldserver.field_73011_w).wrapped().getTypeId() : 0;
++        nethandlerplayserver.func_147359_a(new S01PacketJoinGame(p_72355_2_.func_145782_y(), p_72355_2_.field_71134_c.func_73081_b(), worldserver.func_72912_H().func_76093_s(), dimid, worldserver.field_73013_u, this.func_72352_l(), worldserver.func_72912_H().func_76067_t()));
+         nethandlerplayserver.func_147359_a(new S3FPacketCustomPayload("MC|Brand", this.func_72365_p().getServerModName().getBytes(Charsets.UTF_8)));
+         nethandlerplayserver.func_147359_a(new S05PacketSpawnPosition(chunkcoordinates.field_71574_a, chunkcoordinates.field_71572_b, chunkcoordinates.field_71573_c));
+         nethandlerplayserver.func_147359_a(new S39PacketPlayerAbilities(p_72355_2_.field_71075_bZ));
+@@ -123,16 +127,7 @@
          p_72355_2_.func_147099_x().func_150884_b(p_72355_2_);
          this.func_96456_a((ServerScoreboard)worldserver.func_96441_U(), p_72355_2_);
          this.field_72400_f.func_147132_au();
@@ -26,7 +37,7 @@
          this.func_72377_c(p_72355_2_);
          nethandlerplayserver.func_147364_a(p_72355_2_.field_70165_t, p_72355_2_.field_70163_u, p_72355_2_.field_70161_v, p_72355_2_.field_70177_z, p_72355_2_.field_70125_A);
          this.func_72354_b(p_72355_2_, worldserver);
-@@ -160,6 +153,8 @@
+@@ -160,6 +155,8 @@
                  entity.field_98038_p = false;
              }
          }
