@@ -40,6 +40,7 @@ object NailedServer
   override def getPluginManager = this.pluginManager
   override def getScheduler = NailedScheduler
   override def getMapLoader = NailedMapLoader
+  override def getConsoleCommandSender = NailedEventFactory.serverCommandSender
 
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedScheduler)
 

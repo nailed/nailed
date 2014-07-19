@@ -4,6 +4,7 @@ import java.io.File
 import java.util.UUID
 
 import jk_5.nailed.api.chat.BaseComponent
+import jk_5.nailed.api.command.CommandSender
 import jk_5.nailed.api.map.MapLoader
 import jk_5.nailed.api.mappack.MappackRegistry
 import jk_5.nailed.api.player.Player
@@ -100,4 +101,6 @@ trait Server {
   def getMapLoader: MapLoader
 
   def getMappackRegistry: MappackRegistry
+
+  def getConsoleCommandSender: CommandSender
 }
