@@ -31,7 +31,7 @@ object NailedEventFactory {
   var serverCommandSender: ConsoleCommandSender = _
 
   private val preTickEvent = new ServerPreTickEvent
-  private val postTickEvent = new ServerPreTickEvent
+  private val postTickEvent = new ServerPostTickEvent
 
   private val logger = LogManager.getLogger
 
