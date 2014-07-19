@@ -48,8 +48,8 @@ object CommandGamerule extends Command("gamerule") with TabExecutor {
       args.length match {
         case 1 => getOptions(args, s.getWorld.getGameRules.list)
         case 2 => getOptions(args, "true", "false")
-        case _ => null
+        case _ => List()
       }
-    case _ => null
+    case _ => List()
   }
 }

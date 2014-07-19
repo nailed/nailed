@@ -12,7 +12,7 @@ import jk_5.nailed.api.plugin.Command
  *
  * @author jk-5
  */
-object CommandLoadmap extends Command("loadmap") {
+object CommandLoadmap extends Command("loadmap") with TabExecutor {
 
   override def execute(sender: CommandSender, args: Array[String]) = args.length match {
     case 1 =>
@@ -32,5 +32,11 @@ object CommandLoadmap extends Command("loadmap") {
         })
       }
     case _ => sender.sendMessage(new ComponentBuilder("Usage: /loadmap <mappack>").color(ChatColor.red).createFlat())
+  }
+
+  override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = {
+    if(args.length == 1){
+      getOptions(args, Server.getInstance.getMappackRegistry.getAllIds)
+    }else List()
   }
 }

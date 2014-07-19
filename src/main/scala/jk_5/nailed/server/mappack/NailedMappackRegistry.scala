@@ -32,6 +32,9 @@ object NailedMappackRegistry extends MappackRegistry {
     }).asInstanceOf[Traversable[T]].toArray
   }
 
+  override def getAll: Array[Mappack] = this.mappacks.values.toArray
+  override def getAllIds: Array[String] = this.getAll.map(_.getId)
+
   override def unregister(mappack: Mappack): Boolean = {
     if(!this.mappacks.exists(p => p._1 == mappack.getId && p._2 == mappack)) false
     else{

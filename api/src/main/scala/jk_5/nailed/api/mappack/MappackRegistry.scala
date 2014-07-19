@@ -35,5 +35,8 @@ trait MappackRegistry {
    */
   def getByType[T <: Mappack](cl: Class[T])(implicit mf: Manifest[T]): Array[T]
 
+  def getAll: Array[Mappack]
+  def getAllIds: Array[String]
+
   def unregister(mappack: Mappack): Boolean
 }

@@ -2,7 +2,7 @@ package jk_5.nailed.plugin.internal.command
 
 import java.text.DecimalFormat
 
-import jk_5.nailed.api.chat.{BaseComponent, ChatColor, ComponentBuilder}
+import jk_5.nailed.api.chat.{BaseComponent, ChatColor, ComponentBuilder, TabExecutor}
 import jk_5.nailed.api.command.CommandSender
 import jk_5.nailed.api.plugin.Command
 import jk_5.nailed.server.world.NailedDimensionManager
@@ -13,7 +13,7 @@ import net.minecraft.server.MinecraftServer
  *
  * @author jk-5
  */
-object CommandTps extends Command("tps") {
+object CommandTps extends Command("tps") with TabExecutor {
 
   final val timeFormatter = new DecimalFormat("########0.000")
 
@@ -45,4 +45,6 @@ object CommandTps extends Command("tps") {
     for(v <- values) sum += v
     sum / values.length
   }
+
+  override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = List()
 }
