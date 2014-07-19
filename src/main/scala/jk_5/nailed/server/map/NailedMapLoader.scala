@@ -60,6 +60,11 @@ object NailedMapLoader extends MapLoader {
   }
 
   def createLobbyMap(): Map = {
+    if(lobbyMappack == null){
+      logger.warn("A lobby mappack was not registered yet, but we need it now. Setting it to a default void mappack")
+      this.setLobbyMappack(DummyLobbyMappack)
+    }
+
     val id = nextMapId.getAndIncrement
     val finishPromise = new DefaultPromise[Void](NailedScheduler.executor.next())
     val baseDir = new File(mapsDir, "lobby")
