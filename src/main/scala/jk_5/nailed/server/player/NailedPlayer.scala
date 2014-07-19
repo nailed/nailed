@@ -7,11 +7,10 @@ import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.teleport.TeleportOptions
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
-import jk_5.nailed.server.chat.ChatComponentConverter._
+import jk_5.nailed.server.packet.NailedS02PacketChat
 import jk_5.nailed.server.teleport.Teleporter
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.NetHandlerPlayServer
-import net.minecraft.network.play.server.S02PacketChat
 
 /**
  * No description given
@@ -30,9 +29,9 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def getDisplayName = this.displayName
   override def getUniqueId = this.uuid
   override def hasPermission(permission: String) = true //TODO
-  override def sendMessage(message: BaseComponent) = this.netHandler.sendPacket(new S02PacketChat(message))
-  override def sendMessage(messages: BaseComponent*) = messages.foreach(m => this.netHandler.sendPacket(new S02PacketChat(m)))
-  override def sendMessage(messages: Array[BaseComponent]) = messages.foreach(m => this.netHandler.sendPacket(new S02PacketChat(m)))
+  override def sendMessage(message: BaseComponent) = this.netHandler.sendPacket(new NailedS02PacketChat(message))
+  override def sendMessage(messages: BaseComponent*) = this.netHandler.sendPacket(new NailedS02PacketChat(messages: _*))
+  override def sendMessage(messages: Array[BaseComponent]) = this.netHandler.sendPacket(new NailedS02PacketChat(messages: _*))
   override def getPlayer = this
   override def getLastPlayed: Long = 0
   override def hasPlayedBefore: Boolean = false

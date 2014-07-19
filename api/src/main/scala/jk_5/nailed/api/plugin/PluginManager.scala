@@ -10,8 +10,8 @@ import com.google.common.collect.{ArrayListMultimap, Multimap}
 import com.google.gson.Gson
 import jk_5.eventbus.{Event, EventBus}
 import jk_5.nailed.api.Server
-import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TabExecutor}
-import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
+import jk_5.nailed.api.command.{CommandSender, TabExecutor}
 import jk_5.nailed.api.player.Player
 import org.apache.commons.lang3.Validate
 import org.apache.logging.log4j.LogManager

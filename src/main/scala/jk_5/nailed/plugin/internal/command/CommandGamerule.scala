@@ -1,7 +1,7 @@
 package jk_5.nailed.plugin.internal.command
 
 import jk_5.nailed.api.chat._
-import jk_5.nailed.api.command.{CommandSender, WorldCommandSender}
+import jk_5.nailed.api.command.{CommandSender, TabExecutor, WorldCommandSender}
 import jk_5.nailed.api.plugin.Command
 
 /**
@@ -23,7 +23,7 @@ object CommandGamerule extends Command("gamerule") with TabExecutor {
               if (!first) builder.append(", ").event(null: HoverEvent) else first = false
               builder.append(rule).color(ChatColor.reset).event(new HoverEvent(HoverEventAction.SHOW_TEXT, new TextComponent(rule + " = " + gameRules(rule))))
             }
-            sender.sendMessage(builder.createFlat())
+            sender.sendMessage(builder.create())
           case 1 =>
             if(!gameRules.ruleExists(args(0))){
               sender.sendMessage(new ComponentBuilder(s"Gamerule '${args(0)}' does not exist").color(ChatColor.red).createFlat())

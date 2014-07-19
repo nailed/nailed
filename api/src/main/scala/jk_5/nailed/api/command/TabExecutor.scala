@@ -1,6 +1,4 @@
-package jk_5.nailed.api.chat
-
-import jk_5.nailed.api.command.CommandSender
+package jk_5.nailed.api.command
 
 /**
  * No description given
