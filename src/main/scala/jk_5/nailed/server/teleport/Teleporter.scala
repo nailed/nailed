@@ -4,6 +4,7 @@ import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.teleport.TeleportOptions
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
+import jk_5.nailed.server.NailedServer
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedWorld
 import net.minecraft.entity.player.EntityPlayerMP
@@ -117,6 +118,10 @@ object Teleporter {
     destWorld.updateEntityWithOptionalForce(entity, false)
     entity match {
       case p: EntityPlayerMP if changingworlds =>
+        NailedServer.getPlayer(p.getGameProfile.getId) match {
+          case Some(pl) => pl.asInstanceOf[NailedPlayer].world = location.getWorld
+          case None =>
+        }
         p.theItemInWorldManager.setWorld(destWorld)
         p.mcServer.getConfigurationManager.updateTimeAndWeatherForPlayer(p, destWorld)
         p.mcServer.getConfigurationManager.syncPlayerInventory(p)
