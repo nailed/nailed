@@ -89,6 +89,8 @@ trait Server {
    * @param message the message to broadcast
    */
   def broadcastMessage(message: BaseComponent)
+  def broadcastMessage(message: BaseComponent*)
+  def broadcastMessage(message: Array[BaseComponent])
 
   def getScheduler: Scheduler
 

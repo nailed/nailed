@@ -3,7 +3,7 @@ package jk_5.nailed.server
 import java.io.File
 
 import jk_5.nailed.api.Server
-import jk_5.nailed.api.chat.BaseComponent
+import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.server.NailedEventFactory.DummyInternalListenerPlugin
 import jk_5.nailed.server.map.NailedMapLoader
@@ -50,6 +50,18 @@ object NailedServer
   override def broadcastMessage(message: BaseComponent){
     logger.info(message.toPlainText) //TODO: format this before jline prints it out
     MinecraftServer.getServer.getConfigurationManager.sendPacketToAllPlayers(new S02PacketChat(message))
+  }
+
+  override def broadcastMessage(message: BaseComponent*){
+    val msg = new TextComponent(message: _*)
+    logger.info(msg.toPlainText) //TODO: format this before jline prints it out
+    MinecraftServer.getServer.getConfigurationManager.sendPacketToAllPlayers(new S02PacketChat(msg))
+  }
+
+  override def broadcastMessage(message: Array[BaseComponent]){
+    val msg = new TextComponent(message: _*)
+    logger.info(msg.toPlainText) //TODO: format this before jline prints it out
+    MinecraftServer.getServer.getConfigurationManager.sendPacketToAllPlayers(new S02PacketChat(msg))
   }
 
   def register(){
