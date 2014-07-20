@@ -108,6 +108,8 @@ object NailedEventFactory {
     player.isOnline = true
     player.world = NailedServer.getWorld(playerEntity.dimension)
     player.netHandler = playerEntity.playerNetServerHandler
+    player.world.onPlayerJoined(player)
+    player.world.getMap.foreach(_.onPlayerJoined(player))
     val e = this.fireEvent(new PlayerJoinServerEvent(player))
     NailedServer.broadcastMessage(e.joinMessage)
   }
@@ -115,6 +117,8 @@ object NailedEventFactory {
   def firePlayerLeft(playerEntity: EntityPlayerMP){
     val player = NailedServer.getPlayerFromEntity(playerEntity).asInstanceOf[NailedPlayer]
     player.netHandler.sendPacket(BossBar.getDestroyPacket)
+    player.world.onPlayerLeft(player)
+    player.world.getMap.foreach(_.onPlayerLeft(player))
     player.entity = null
     player.isOnline = false
     player.world = null

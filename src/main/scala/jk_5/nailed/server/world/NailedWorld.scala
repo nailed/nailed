@@ -36,5 +36,13 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
   override def getMap = this.map
   override def getConfig: MappackWorld = if(this.context == null) null else this.context.config
 
+  override def onPlayerJoined(player: Player){
+    println("Player " + player.toString + " joined world " + this.toString)
+  }
+
+  override def onPlayerLeft(player: Player){
+    println("Player " + player.toString + " left world " + this.toString)
+  }
+
   override def toString = s"NailedWorld{id=$getDimensionId,name=$getName,type=$getType,gameRules=$getGameRules}"
 }

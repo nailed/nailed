@@ -51,4 +51,7 @@ trait World {
   def getConfig: MappackWorld
 
   def getGameRules: EditableGameRules
+
+  def onPlayerJoined(player: Player)
+  def onPlayerLeft(player: Player)
 }

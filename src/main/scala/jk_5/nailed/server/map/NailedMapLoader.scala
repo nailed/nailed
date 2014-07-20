@@ -4,7 +4,9 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 
 import io.netty.util.concurrent.{DefaultPromise, Future, FutureListener}
+import jk_5.eventbus.EventHandler
 import jk_5.nailed.api
+import jk_5.nailed.api.event.TeleportEventEnd
 import jk_5.nailed.api.map.{Map, MapLoader, MappackLoadingFailedException}
 import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.world.{WorldContext, WorldProvider}
@@ -139,4 +141,27 @@ object NailedMapLoader extends MapLoader {
   }
 
   def getWorldsForMap(map: Map) = this.mapWorlds.get(map)
+
+  @EventHandler
+  def onPlayerTeleported(event: TeleportEventEnd){
+    val oldWorld = event.oldWorld
+    val newWorld = event.newWorld
+    val oldMap = oldWorld.getMap
+    val newMap = newWorld.getMap
+    if(oldWorld != newWorld){
+      oldWorld.onPlayerLeft(event.entity)
+      newWorld.onPlayerJoined(event.entity)
+    }
+    if(oldMap.isDefined || newMap.isDefined){
+      if(oldMap.isDefined && newMap.isDefined){
+        if(oldMap.get != newMap.get){
+          oldMap.get.onPlayerLeft(event.entity)
+          newMap.get.onPlayerJoined(event.entity)
+        }
+      }else{
+        if(oldMap.isDefined) oldMap.get.onPlayerLeft(event.entity)
+        if(newMap.isDefined) newMap.get.onPlayerJoined(event.entity)
+      }
+    }
+  }
 }

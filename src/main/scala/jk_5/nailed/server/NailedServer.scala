@@ -45,6 +45,7 @@ object NailedServer
   override def getConsoleCommandSender = NailedEventFactory.serverCommandSender
 
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedScheduler)
+  NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedMapLoader)
 
   override def broadcastMessage(message: BaseComponent){
     logger.info(message.toPlainText) //TODO: format this before jline prints it out
@@ -64,11 +65,5 @@ object NailedServer
 
   def load(server: DedicatedServer){
     this.pluginManager.enablePlugins()
-
-    //this.createNewWorld(this.getDefaultWorldProviders.getEndProvider)
-    //this.createNewWorld(this.getDefaultWorldProviders.getNetherProvider)
-    //this.createNewWorld(this.getDefaultWorldProviders.getOverworldProvider)
-    //this.createNewWorld(this.getDefaultWorldProviders.getVoidProvider, new WorldContext(null, "DIM0"))
-    //this.createNewWorld(this.getDefaultWorldProviders.getFlatProvider("5x1"))
   }
 }

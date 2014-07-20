@@ -1,10 +1,10 @@
 package jk_5.nailed.server.teleport
 
+import jk_5.nailed.api.Server
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.teleport.TeleportOptions
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
-import jk_5.nailed.server.NailedServer
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedWorld
 import net.minecraft.entity.player.EntityPlayerMP
@@ -45,9 +45,15 @@ object Teleporter {
     var entity = ent
     val dimension = destinationWorld.getDimensionId
     val destWorld = destinationWorld.asInstanceOf[NailedWorld].wrapped
-    /*if(!TeleportEventFactory.isTeleportAllowed(currentWorld, destinationWorld, entity, options)){
-      return false
-    }*/
+
+    val player = ent match {
+      case p: EntityPlayerMP => Server.getInstance.getPlayer(p.getGameProfile.getId)
+      case _ => None
+    }
+
+    if(player.isDefined && !TeleportEventFactory.isTeleportAllowed(currentWorld, destinationWorld, player.get, options)){
+      return entity
+    }
     var mount = entity.ridingEntity
     if(entity.ridingEntity != null){
       entity.mountEntity(null)
@@ -57,7 +63,7 @@ object Teleporter {
     val mY = entity.motionY
     val mZ = entity.motionZ
     val changingworlds = entity.worldObj != destWorld
-    //TeleportEventFactory.onLinkStart(currentWorld, destinationWorld, entity, options)
+    if(player.isDefined) TeleportEventFactory.onLinkStart(currentWorld, destinationWorld, player.get, options)
     entity.worldObj.updateEntityWithOptionalForce(entity, false)
     entity match {
       case p: EntityPlayerMP =>
@@ -84,7 +90,7 @@ object Teleporter {
     if(changingworlds){
       removeEntityFromWorld(entity.worldObj, entity)
     }
-    //TeleportEventFactory.onExitWorld(currentMap, destMap, entity, options);
+    if(player.isDefined) TeleportEventFactory.onExitWorld(currentWorld, destinationWorld, player.get, options)
 
     entity.setLocationAndAngles(location.getX, location.getX, location.getZ, location.getYaw, location.getPitch)
     destWorld.theChunkProviderServer.loadChunk(location.getBlockX >> 4, location.getBlockZ >> 4)
@@ -104,7 +110,7 @@ object Teleporter {
       entity.setWorld(destWorld)
     }
     entity.setLocationAndAngles(location.getX, location.getY, location.getZ, location.getYaw, location.getPitch)
-    //TeleportEventFactory.onEnterWorld(currentMap, destMap, entity, options)
+    if(player.isDefined) TeleportEventFactory.onEnterWorld(currentWorld, destinationWorld, player.get, options)
     destWorld.updateEntityWithOptionalForce(entity, false)
     entity.setLocationAndAngles(location.getX, location.getY, location.getZ, location.getYaw, location.getPitch)
     entity match {
@@ -118,10 +124,7 @@ object Teleporter {
     destWorld.updateEntityWithOptionalForce(entity, false)
     entity match {
       case p: EntityPlayerMP if changingworlds =>
-        NailedServer.getPlayer(p.getGameProfile.getId) match {
-          case Some(pl) => pl.asInstanceOf[NailedPlayer].world = location.getWorld
-          case None =>
-        }
+        if(player.isDefined) player.get.asInstanceOf[NailedPlayer].world = location.getWorld
         p.theItemInWorldManager.setWorld(destWorld)
         p.mcServer.getConfigurationManager.updateTimeAndWeatherForPlayer(p, destWorld)
         p.mcServer.getConfigurationManager.syncPlayerInventory(p)
@@ -132,7 +135,7 @@ object Teleporter {
       case _ =>
     }
     entity.setLocationAndAngles(location.getX, location.getY, location.getZ, location.getYaw, location.getPitch)
-    //TeleportEventFactory.onLinkEnd(currentMap, destMap, entity, options);
+    if(player.isDefined) TeleportEventFactory.onEnd(currentWorld, destinationWorld, player.get, options)
     /*if(options.isMaintainMomentum()){
       entity.motionX = mX;
       entity.motionY = mY;
