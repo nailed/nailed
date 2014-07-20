@@ -2,8 +2,7 @@ package jk_5.nailed.api.mappack
 
 import com.google.gson.JsonObject
 import jk_5.nailed.api.mappack.gamerule.ImmutableJsonGameRules
-import jk_5.nailed.api.util.Location
-import org.apache.commons.lang3.Validate
+import jk_5.nailed.api.util.{Checks, Location}
 
 /**
  * No description given
@@ -11,7 +10,7 @@ import org.apache.commons.lang3.Validate
  * @author jk-5
  */
 class JsonMappackWorld(override val name: String, json: JsonObject, parent: MappackWorld = DefaultMappackWorldProperties) extends MappackWorld {
-  Validate.notNull(parent, "parent may not be null")
+  Checks.notNull(parent, "parent may not be null")
 
   override val generator = if(json.has("generator")) json.get("generator").getAsString else parent.generator
   override val dimension = if(json.has("dimension")) json.get("dimension").getAsString  match {

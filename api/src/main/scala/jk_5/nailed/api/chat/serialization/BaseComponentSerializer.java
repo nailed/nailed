@@ -3,7 +3,6 @@ package jk_5.nailed.api.chat.serialization;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import com.google.common.base.Preconditions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -12,6 +11,7 @@ import jk_5.nailed.api.chat.BaseComponent;
 import jk_5.nailed.api.chat.ChatColor;
 import jk_5.nailed.api.chat.ClickEvent;
 import jk_5.nailed.api.chat.HoverEvent;
+import jk_5.nailed.api.util.Checks;
 
 public class BaseComponentSerializer {
 
@@ -67,7 +67,7 @@ public class BaseComponentSerializer {
             ComponentSerializer.serializedComponents.set(new HashSet<BaseComponent>());
         }
         try{
-            Preconditions.checkArgument(!ComponentSerializer.serializedComponents.get().contains(component), "Component loop");
+            Checks.check(!ComponentSerializer.serializedComponents.get().contains(component), "Component loop");
             ComponentSerializer.serializedComponents.get().add(component);
             if(component.getColorRaw() != null){
                 object.addProperty("color", component.getColorRaw().getName());

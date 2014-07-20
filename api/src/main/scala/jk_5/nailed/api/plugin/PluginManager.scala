@@ -13,7 +13,7 @@ import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command.{CommandSender, TabExecutor}
 import jk_5.nailed.api.player.Player
-import org.apache.commons.lang3.Validate
+import jk_5.nailed.api.util.Checks
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.mutable
@@ -128,8 +128,8 @@ class PluginManager(private val server: Server) {
    * @param folder the folder to search for plugins in
    */
   def discoverPlugins(folder: File){
-    Validate.notNull(folder, "folder")
-    Validate.validState(folder.isDirectory, "Must load from a directory")
+    Checks.notNull(folder, "folder")
+    Checks.check(folder.isDirectory, "Must load from a directory")
 
     for(file <- folder.listFiles()){
       if(file.isFile && file.getName.endsWith(".jar")){
@@ -137,7 +137,7 @@ class PluginManager(private val server: Server) {
         try{
           jar = new JarFile(file)
           val pdf = jar.getJarEntry("plugin.json")
-          Validate.notNull(pdf, "Plugin must have a plugin.json file")
+          Checks.notNull(pdf, "Plugin must have a plugin.json file")
 
           var is: InputStream = null
           try{
@@ -279,7 +279,7 @@ class PluginManager(private val server: Server) {
    * @return the called event
    */
   def callEvent[T <: Event](event: T): T = {
-    Validate.notNull(event, "event")
+    Checks.notNull(event, "event")
     val start = System.nanoTime()
     eventBus.post(event)
     val elapsed = start - System.nanoTime()

@@ -10,8 +10,8 @@ import jk_5.nailed.api.mappack.MappackRegistry
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.api.scheduler.Scheduler
+import jk_5.nailed.api.util.Checks
 import jk_5.nailed.api.world.{DefaultWorldProviders, World, WorldContext, WorldProvider}
-import org.apache.commons.lang3.Validate
 
 /**
  * No description given
@@ -28,8 +28,8 @@ object Server {
    * @param instance the new instance to set
    */
   def setInstance(instance: Server){
-    Validate.notNull(instance, "instance")
-    Validate.validState(this.instance == null, "Instance is already set")
+    Checks.notNull(instance, "instance")
+    Checks.check(this.instance == null, "Instance is already set")
     this.instance = instance
   }
 
