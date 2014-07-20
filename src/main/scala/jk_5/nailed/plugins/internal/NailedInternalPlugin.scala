@@ -1,7 +1,7 @@
-package jk_5.nailed.plugin.internal
+package jk_5.nailed.plugins.internal
 
 import jk_5.nailed.api.plugin.Plugin
-import jk_5.nailed.plugin.internal.command.{CommandGamerule, CommandGoto, CommandLoadmap, CommandTps}
+import jk_5.nailed.plugins.internal.command.{CommandGamerule, CommandGoto, CommandLoadmap, CommandTps}
 
 /**
  * No description given

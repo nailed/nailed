@@ -1,4 +1,4 @@
-package jk_5.nailed.plugin.internal.command
+package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}

@@ -1,6 +1,6 @@
 {
     "name": "Nailed",
-    "main": "jk_5.nailed.plugin.internal.NailedInternalPlugin",
+    "main": "jk_5.nailed.plugins.internal.NailedInternalPlugin",
     "version": "${version}",
     "author": "jk-5",
     "description": ""

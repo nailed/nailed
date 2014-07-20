@@ -1,4 +1,4 @@
-package jk_5.nailed.plugin.internal.command
+package jk_5.nailed.plugins.internal.command
 
 import io.netty.util.concurrent.{Future, FutureListener}
 import jk_5.nailed.api.Server

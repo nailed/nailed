@@ -1,4 +1,4 @@
-package jk_5.nailed.plugin.directorymappackloader
+package jk_5.nailed.plugins.directorymappackloader
 
 import java.io.File
 

@@ -1,4 +1,4 @@
-package jk_5.nailed.plugin.internal.command
+package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.chat._
 import jk_5.nailed.api.command.{CommandSender, TabExecutor, WorldCommandSender}
