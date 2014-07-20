@@ -27,6 +27,7 @@ object NailedTweaker {
   var deobf = false
   var useJline = true
   var useConsole = true
+  var acceptEula = true
   var consoleReader: ConsoleReader = null
   lazy val classLoader = Launch.classLoader
 }
@@ -42,6 +43,7 @@ class NailedTweaker extends ITweaker {
 
     parser.accepts("nojline", "Disables jline and emulates the vanilla console")
     parser.accepts("noconsole", "Disables the console")
+    parser.accepts("accept-eula", "Accept the EULA, so you don't need to change the eula.txt file")
 
     val options = try{
       parser.parse(args.toArray(new Array[String](args.size())): _*)
@@ -65,6 +67,10 @@ class NailedTweaker extends ITweaker {
 
     if(options.has("noconsole")){
       NailedTweaker.useConsole = false
+    }
+
+    if(options.has("accept-eula")){
+      NailedTweaker.acceptEula = true
     }
 
     //Step 3 - Read configuration
