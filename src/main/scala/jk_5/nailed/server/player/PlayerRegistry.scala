@@ -54,7 +54,7 @@ trait PlayerRegistry extends Server {
   @EventHandler
   def onPlayerJoin(event: PlayerJoinServerEvent){
     this.onlinePlayers += event.player.asInstanceOf[NailedPlayer]
-    logger.info("Player " + event.player.getName + " logged in")
+    //logger.info("Player " + event.player.getName + " logged in")
 
     val player = event.player.asInstanceOf[NailedPlayer]
     val loc = new Location(player.getWorld, player.entity.posX, 200, player.entity.posZ)
@@ -64,6 +64,6 @@ trait PlayerRegistry extends Server {
   @EventHandler
   def onPlayerLeave(event: PlayerLeaveServerEvent){
     this.onlinePlayers -= event.player.asInstanceOf[NailedPlayer]
-    logger.info("Player " + event.player.getName + " logged out")
+    //logger.info("Player " + event.player.getName + " logged out")
   }
 }
