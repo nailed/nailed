@@ -2,8 +2,10 @@ package jk_5.nailed.server
 
 import java.io.File
 
+import jk_5.eventbus.EventHandler
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
+import jk_5.nailed.api.event.{BlockBreakEvent, BlockPlaceEvent}
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.server.NailedEventFactory.DummyInternalListenerPlugin
 import jk_5.nailed.server.map.NailedMapLoader
@@ -78,5 +80,13 @@ object NailedServer
 
   def load(server: DedicatedServer){
     this.pluginManager.enablePlugins()
+  }
+
+  @EventHandler def onBlockPlace(event: BlockPlaceEvent){
+    event.setCanceled(true)
+  }
+
+  @EventHandler def onBlockBreak(event: BlockBreakEvent){
+    event.setCanceled(true)
   }
 }

@@ -148,7 +148,13 @@ object NailedEventFactory {
       case 4 => xC -= 1
       case 5 => xC += 1
     }
-    fireEvent(new BlockPlaceEvent(xC, yC, zC, NailedDimensionManager.getWorld(world.provider.dimensionId), Server.getInstance.getPlayer(player.getGameProfile.getId).get)).isCanceled
+    val canceled = fireEvent(new BlockPlaceEvent(xC, yC, zC, NailedDimensionManager.getWorld(world.provider.dimensionId), Server.getInstance.getPlayer(player.getGameProfile.getId).get)).isCanceled
+    if(canceled){
+      //Send the slot content to the client because the client decreses the stack size by 1 when it places a block
+      val playerMP = player.asInstanceOf[EntityPlayerMP]
+      playerMP.sendContainerAndContentsToPlayer(playerMP.inventoryContainer, playerMP.inventoryContainer.getInventory)
+      true
+    }else false
   }
 
   def fireOnBlockBroken(world: World, gameType: GameType, playerEntity: EntityPlayerMP, x: Int, y: Int, z: Int): Boolean = {
