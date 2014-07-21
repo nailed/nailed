@@ -20,15 +20,14 @@ class DirectoryMappackLoaderPlugin extends Plugin {
     this.getLogger.info((if(wasLoaded) "Rel" else "L") + "oading directory mappacks...")
     if(!mappacksDir.exists()) mappacksDir.mkdir()
     var i = 0
-    if(!wasLoaded){
-      wasLoaded = true
+    if(wasLoaded){
       val existing = this.getServer.getMappackRegistry.getByType(classOf[DirectoryMappack])
       for(m <- existing){
         this.getServer.getMappackRegistry.unregister(m)
         i += 1
       }
       this.getLogger.info(s"Unloaded $i DirectoryMappacks")
-    }
+    }else wasLoaded = true
     i = 0
     for(file <- mappacksDir.listFiles()){
       if(file.isDirectory){
