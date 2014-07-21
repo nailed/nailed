@@ -1,0 +1,7 @@
+{
+    "name": "Nailed - QRMap",
+    "main": "jk_5.nailed.plugins.qrmap.MapPlugin",
+    "version": "${version}",
+    "author": "jk-5",
+    "description": ""
+}

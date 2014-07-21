@@ -41,7 +41,7 @@ class PluginManager(private val server: Server) {
     v.setAccessible(true)
     v
   }
-  private final val internalPlugins = "internalplugin.json,directorymappackloaderplugin.json"
+  private final val internalPlugins = "internalplugin.json,directorymappackloaderplugin.json,mapplugin.json"
 
   /**
    * Register a command so that it may be executed.
