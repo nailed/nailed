@@ -7,5 +7,7 @@ package jk_5.nailed.api.mappack
  */
 trait MappackMetadata {
   def name: String
+  def version: String
+  def authors: Array[MappackAuthor]
   def worlds: Array[MappackWorld]
 }
