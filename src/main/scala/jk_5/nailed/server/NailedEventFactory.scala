@@ -3,15 +3,23 @@ package jk_5.nailed.server
 import java.util
 
 import jk_5.eventbus.Event
+import jk_5.nailed.api.Server
 import jk_5.nailed.api.event._
+import jk_5.nailed.api.material.Material
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
 import jk_5.nailed.server.player.NailedPlayer
+import jk_5.nailed.server.world.NailedDimensionManager
+import net.minecraft.block.Block
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
+import net.minecraft.init.Blocks
+import net.minecraft.item.{ItemStack, ItemSword}
+import net.minecraft.network.play.server.S23PacketBlockChange
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
+import net.minecraft.world.WorldSettings.GameType
 import net.minecraft.world.{World, WorldServer}
 import org.apache.logging.log4j.LogManager
 
@@ -126,5 +134,59 @@ object NailedEventFactory {
   def firePlayerChat(playerEntity: EntityPlayerMP, message: String): String = {
     val e = this.fireEvent(new PlayerChatEvent(NailedServer.getPlayerFromEntity(playerEntity), message))
     if(e.isCanceled) null else e.message
+  }
+
+  def fireOnRightClick(player: EntityPlayer, world: World, is: ItemStack, x: Int, y: Int, z: Int, side: Int, bX: Float, bY: Float, bZ: Float): Boolean = {
+    var xC = x
+    var yC = y
+    var zC = z
+    side match {
+      case 0 => yC -= 1
+      case 1 => yC += 1
+      case 2 => zC -= 1
+      case 3 => zC += 1
+      case 4 => xC -= 1
+      case 5 => xC += 1
+    }
+    fireEvent(new BlockPlaceEvent(xC, yC, zC, NailedDimensionManager.getWorld(world.provider.dimensionId), Server.getInstance.getPlayer(player.getGameProfile.getId).get)).isCanceled
+  }
+
+  def fireOnBlockBroken(world: World, gameType: GameType, playerEntity: EntityPlayerMP, x: Int, y: Int, z: Int): Boolean = {
+    var preCancel = false
+    if(gameType.isAdventure && !playerEntity.isCurrentToolAdventureModeExempt(x, y, z)){
+      preCancel = true
+    }else if(gameType.isCreative && playerEntity.getHeldItem != null && playerEntity.getHeldItem.getItem.isInstanceOf[ItemSword]){
+      preCancel = true
+    }
+
+    // Tell client the block is gone immediately then process events
+    if(world.getTileEntity(x, y, z) == null){
+      val packet = new S23PacketBlockChange(x, y, z, world)
+      packet.field_148883_d = Blocks.air
+      packet.field_148884_e = 0
+      playerEntity.playerNetServerHandler.sendPacket(packet)
+    }
+
+    //Post the block break event
+    val player = Server.getInstance.getPlayer(playerEntity.getGameProfile.getId).get
+    val block = world.getBlock(x, y, z)
+    val meta = world.getBlockMetadata(x, y, z)
+    val event = new BlockBreakEvent(x, y, z, NailedDimensionManager.getWorld(world.provider.dimensionId), Material.getMaterial(Block.getIdFromBlock(block)), meta.toByte, player)
+    event.setCanceled(preCancel)
+    fireEvent(event)
+
+    if(event.isCanceled){
+      //Let the client know the block still exists
+      playerEntity.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world))
+      //Also update the TileEntity
+      val tile = world.getTileEntity(x, y, z)
+      if(tile != null){
+        val desc = tile.getDescriptionPacket
+        if(desc != null){
+          playerEntity.playerNetServerHandler.sendPacket(desc)
+        }
+      }
+      true
+    }else false
   }
 }
