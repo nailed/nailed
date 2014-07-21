@@ -21,6 +21,7 @@ trait PlayerRegistry extends Server {
   private val players = mutable.ArrayBuffer[NailedPlayer]()
   private val onlinePlayers = mutable.ArrayBuffer[NailedPlayer]()
   private val playersById = mutable.HashMap[UUID, NailedPlayer]()
+  private val playersByName = mutable.HashMap[String, NailedPlayer]()
   private val logger = LogManager.getLogger
 
   /**
@@ -31,6 +32,8 @@ trait PlayerRegistry extends Server {
    */
   override def getPlayer(id: UUID): Option[Player] = this.playersById.get(id)
 
+  override def getPlayerByName(name: String): Option[Player] = this.playersByName.get(name)
+
   def getPlayerFromEntity(entity: EntityPlayerMP): Player = this.getPlayer(entity.getGameProfile.getId).get
 
   def getOrCreatePlayer(entity: EntityPlayerMP): Player = this.getPlayer(entity.getGameProfile.getId) match {
@@ -39,6 +42,7 @@ trait PlayerRegistry extends Server {
       val player = new NailedPlayer(entity.getGameProfile.getId, entity.getGameProfile.getName)
       this.players += player
       this.playersById.put(entity.getGameProfile.getId, player)
+      this.playersByName.put(entity.getGameProfile.getName, player)
       player
   }
 

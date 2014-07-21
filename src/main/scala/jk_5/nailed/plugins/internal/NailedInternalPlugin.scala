@@ -1,7 +1,7 @@
 package jk_5.nailed.plugins.internal
 
 import jk_5.nailed.api.plugin.Plugin
-import jk_5.nailed.plugins.internal.command.{CommandGamerule, CommandGoto, CommandLoadmap, CommandTps}
+import jk_5.nailed.plugins.internal.command._
 
 /**
  * No description given
@@ -15,5 +15,6 @@ class NailedInternalPlugin extends Plugin {
     this.getPluginManager.registerCommand(this, CommandTps)
     this.getPluginManager.registerCommand(this, CommandGamerule)
     this.getPluginManager.registerCommand(this, CommandLoadmap)
+    this.getPluginManager.registerCommand(this, CommandTeam)
   }
 }

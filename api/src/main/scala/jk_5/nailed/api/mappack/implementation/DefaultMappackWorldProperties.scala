@@ -1,5 +1,6 @@
-package jk_5.nailed.api.mappack
+package jk_5.nailed.api.mappack.implementation
 
+import jk_5.nailed.api.mappack.MappackWorld
 import jk_5.nailed.api.mappack.gamerule.DefaultGameRules
 import jk_5.nailed.api.util.Location
 

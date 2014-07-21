@@ -10,4 +10,5 @@ trait MappackMetadata {
   def version: String
   def authors: Array[MappackAuthor]
   def worlds: Array[MappackWorld]
+  def teams: Array[MappackTeam]
 }

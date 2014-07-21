@@ -77,6 +77,14 @@ trait Server {
   def getPlayer(id: UUID): Option[Player]
 
   /**
+   * Gets the player with the given username.
+   *
+   * @param name Username of the player to retrieve
+   * @return Some(player) if a player was found, None otherwise
+   */
+  def getPlayerByName(name: String): Option[Player]
+
+  /**
    * Gets all currently online players
    *
    * @return an array containing all online players

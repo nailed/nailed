@@ -1,6 +1,7 @@
-package jk_5.nailed.api.mappack
+package jk_5.nailed.api.mappack.implementation
 
-import com.google.gson.{JsonObject, JsonParseException}
+import com.google.gson.{JsonObject, JsonPrimitive}
+import jk_5.nailed.api.mappack._
 
 import scala.collection.convert.wrapAsScala._
 
@@ -25,14 +26,16 @@ class JsonMappackMetadata(json: JsonObject) extends MappackMetadata {
   }.toArray
 
   val defaultProperties = new JsonMappackWorld(null, if(json.has("defaultProperties")) json.getAsJsonObject("defaultProperties") else new JsonObject, DefaultMappackWorldProperties)
-  override val worlds: Array[MappackWorld] = json.getAsJsonArray("worlds").map{e =>
-    if(e.isJsonObject){
-      val obj = e.getAsJsonObject
-      new JsonMappackWorld(obj.get("name").getAsString, obj, defaultProperties)
-    }else if(e.isJsonPrimitive){
-      val prim = e.getAsJsonPrimitive
-      new JsonMappackWorld(prim.getAsString, new JsonObject, defaultProperties)
-    }else throw new JsonParseException("Invalid object type in worlds array: " + e.toString)
+
+  override val worlds: Array[MappackWorld] = json.getAsJsonArray("worlds").map {
+    case e: JsonObject => new JsonMappackWorld(e.get("name").getAsString, e, defaultProperties)
+    case e: JsonPrimitive => new JsonMappackWorld(e.getAsString, new JsonObject, defaultProperties)
+    case e => throw new MappackConfigurationException("Invalid object type in worlds array: " + e.toString)
+  }.toArray
+
+  override val teams: Array[MappackTeam] = if(!json.has("teams")) new Array[MappackTeam](0) else json.getAsJsonArray("teams").map{
+    case e: JsonObject => new JsonMappackTeam(e)
+    case e => throw new MappackConfigurationException("Invalid object type in teams array: " + e.toString)
   }.toArray
 
   for(world <- worlds){

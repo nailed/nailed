@@ -3,6 +3,7 @@ package jk_5.nailed.server.player
 import java.util.UUID
 
 import jk_5.nailed.api.chat.BaseComponent
+import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.teleport.TeleportOptions
 import jk_5.nailed.api.util.Location
@@ -21,6 +22,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   var entity: EntityPlayerMP = _
   var world: World = _
+  var map: Map = _
   private var displayName: String = this.name
   var netHandler: NetHandlerPlayServer = _
   var isOnline: Boolean = false
@@ -44,5 +46,8 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   def getEntity = this.entity
   def getWorld = this.world
+  def getMap = this.map
   def getLocation = new Location(this.world, entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch)
+
+  override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline}"
 }

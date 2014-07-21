@@ -1,4 +1,6 @@
-package jk_5.nailed.api.mappack
+package jk_5.nailed.api.mappack.implementation
+
+import jk_5.nailed.api.mappack.MappackAuthor
 
 /**
  * No description given

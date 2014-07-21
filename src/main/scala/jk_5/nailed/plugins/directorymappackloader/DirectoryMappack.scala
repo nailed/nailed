@@ -4,7 +4,8 @@ import java.io.{File, FileReader}
 
 import com.google.gson.JsonParser
 import io.netty.util.concurrent.Promise
-import jk_5.nailed.api.mappack.{JsonMappackMetadata, Mappack}
+import jk_5.nailed.api.mappack.Mappack
+import jk_5.nailed.api.mappack.implementation.JsonMappackMetadata
 import org.apache.commons.io.FileUtils
 
 /**

@@ -1,6 +1,7 @@
-package jk_5.nailed.api.mappack
+package jk_5.nailed.api.mappack.implementation
 
 import com.google.gson.JsonObject
+import jk_5.nailed.api.mappack.MappackWorld
 import jk_5.nailed.api.mappack.gamerule.ImmutableJsonGameRules
 import jk_5.nailed.api.util.{Checks, Location}
 

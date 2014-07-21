@@ -124,7 +124,11 @@ object Teleporter {
     destWorld.updateEntityWithOptionalForce(entity, false)
     entity match {
       case p: EntityPlayerMP if changingworlds =>
-        if(player.isDefined) player.get.asInstanceOf[NailedPlayer].world = location.getWorld
+        if(player.isDefined){
+          val pl = player.get.asInstanceOf[NailedPlayer]
+          pl.world = location.getWorld
+          pl.map = pl.world.getMap.orNull
+        }
         p.theItemInWorldManager.setWorld(destWorld)
         p.mcServer.getConfigurationManager.updateTimeAndWeatherForPlayer(p, destWorld)
         p.mcServer.getConfigurationManager.syncPlayerInventory(p)

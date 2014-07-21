@@ -1,6 +1,10 @@
 package jk_5.nailed.plugins.internal
 
 import jk_5.nailed.api.Server
+import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
+import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.player.Player
 
 import scala.collection.mutable
 
@@ -23,6 +27,15 @@ package object command {
     ret.toList
   }
 
+  def caseInsensitiveMatch(in: String)(m: (String) => Unit) = m(in.toLowerCase)
+
+  //TODO: proper player selector
+  def getTargetPlayer(sender: CommandSender, target: String): Option[Player] = {
+    val pl = Server.getInstance.getPlayerByName(target)
+    if(pl.isEmpty) sender.sendMessage(new ComponentBuilder("Player not found").color(ChatColor.RED).create())
+    pl
+  }
+
   @inline def getUsernameOptions(args: Array[String]): List[String] = getOptions(args, Server.getInstance.getOnlinePlayers.map(_.getName))
-  //@inline def getUsernameOptions(args: Array[String], map: Map): List[String] = getOptions(args, map.getPlayers.map(_.getUsername))
+  @inline def getUsernameOptions(args: Array[String], map: Map): List[String] = getOptions(args, map.getPlayers.map(_.getName))
 }
