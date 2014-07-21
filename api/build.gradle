@@ -3,7 +3,7 @@ apply plugin: 'scala'
 apply plugin: 'maven'
 
 group = 'jk_5.nailed'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ configurations {
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.1'
-    compile 'jk_5:EventBus:1.0'
+    compile 'jk_5:EventBus:1.0.2'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
     compile 'io.netty:netty-all:4.0.21.Final'
     compile 'com.google.guava:guava:15.0'
