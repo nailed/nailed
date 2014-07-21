@@ -1,6 +1,9 @@
 package jk_5.nailed.server.world
 
+import jk_5.eventbus.EventHandler
+import jk_5.nailed.api.event.{PlayerJoinServerEvent, PlayerLeaveServerEvent, TeleportEventEnterWorld, TeleportEventExitWorld}
 import jk_5.nailed.api.util.Location
+import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.entity.DataWatcher
 import net.minecraft.network.play.server.{S0FPacketSpawnMob, S13PacketDestroyEntities, S1CPacketEntityMetadata}
 
@@ -37,12 +40,30 @@ object BossBar {
 
   private def getWatcher(text: String, health: Int): DataWatcher = {
     val watcher = new DataWatcher(null)
-
     watcher.addObject(0, 0x20.toByte) //Flags. 0x20 = invisible
     watcher.addObject(6, health.toFloat)
     watcher.addObject(10, text); //Entity name
     watcher.addObject(11, 1.toByte); //Show name, 1 = show, 0 = don't show
-
     watcher
+  }
+
+  @EventHandler
+  def onPlayerJoinServer(event: PlayerJoinServerEvent){
+    event.player.asInstanceOf[NailedPlayer].getEntity.playerNetServerHandler.sendPacket(this.getSpawnPacket("test", event.player.getLocation.add(0, 64, 0)))
+  }
+
+  @EventHandler
+  def onPlayerLeaveServer(event: PlayerLeaveServerEvent){
+    event.player.asInstanceOf[NailedPlayer].getEntity.playerNetServerHandler.sendPacket(this.getDestroyPacket)
+  }
+
+  @EventHandler
+  def onPlayerJoinWorld(event: TeleportEventEnterWorld){
+    event.entity.asInstanceOf[NailedPlayer].getEntity.playerNetServerHandler.sendPacket(this.getSpawnPacket("test", event.entity.getLocation.add(0, 64, 0)))
+  }
+
+  @EventHandler
+  def onPlayerExitWorld(event: TeleportEventExitWorld){
+    event.entity.asInstanceOf[NailedPlayer].getEntity.playerNetServerHandler.sendPacket(this.getDestroyPacket)
   }
 }

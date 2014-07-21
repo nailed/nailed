@@ -44,4 +44,5 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   def getEntity = this.entity
   def getWorld = this.world
+  def getLocation = new Location(this.world, entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch)
 }

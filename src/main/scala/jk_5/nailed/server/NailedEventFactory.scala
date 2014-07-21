@@ -6,14 +6,11 @@ import jk_5.eventbus.Event
 import jk_5.nailed.api.event._
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
-import jk_5.nailed.server.player.NailedPlayer
-import jk_5.nailed.server.world.BossBar
 import net.minecraft.command.ICommandSender
-import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
-import net.minecraft.world.{World, WorldServer}
+import net.minecraft.world.WorldServer
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.convert.wrapAll._
@@ -65,9 +62,7 @@ object NailedEventFactory {
 
   def fireCommand(sender: ICommandSender, input: String): Int = {
     val wrapped = sender match {
-      case p: EntityPlayerMP =>
-        p.playerNetServerHandler.sendPacket(BossBar.getUpdatePacket(input, input.length))
-        NailedServer.getPlayer(p.getGameProfile.getId).orNull
+      case p: EntityPlayerMP => NailedServer.getPlayer(p.getGameProfile.getId).orNull
       /*case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
       case r: RConConsoleSource => new RConCommandSender(r)*/
       case s: MinecraftServer => this.serverCommandSender
@@ -116,7 +111,6 @@ object NailedEventFactory {
 
   def firePlayerLeft(playerEntity: EntityPlayerMP){
     val player = NailedServer.getPlayerFromEntity(playerEntity).asInstanceOf[NailedPlayer]
-    player.netHandler.sendPacket(BossBar.getDestroyPacket)
     player.world.onPlayerLeft(player)
     player.world.getMap.foreach(_.onPlayerLeft(player))
     player.entity = null

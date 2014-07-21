@@ -11,7 +11,7 @@ import jk_5.nailed.server.mappack.MappackRegistryTrait
 import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
-import jk_5.nailed.server.world.{DimensionManagerTrait, WorldProviders}
+import jk_5.nailed.server.world.{BossBar, DimensionManagerTrait, WorldProviders}
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
@@ -46,6 +46,7 @@ object NailedServer
 
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedScheduler)
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedMapLoader)
+  NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, BossBar)
 
   override def broadcastMessage(message: BaseComponent){
     logger.info(message.toPlainText) //TODO: format this before jline prints it out

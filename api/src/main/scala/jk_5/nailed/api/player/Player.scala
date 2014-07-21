@@ -3,6 +3,7 @@ package jk_5.nailed.api.player
 import java.util.UUID
 
 import jk_5.nailed.api.command.{CommandSender, WorldCommandSender}
+import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
 
 /**
@@ -43,4 +44,6 @@ trait Player extends CommandSender with OfflinePlayer with WorldCommandSender {
   def teleportTo(world: World)
 
   def getWorld: World
+
+  def getLocation: Location
 }
