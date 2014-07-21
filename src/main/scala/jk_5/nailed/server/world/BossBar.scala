@@ -54,7 +54,7 @@ object BossBar {
 
   @EventHandler
   def onPlayerLeaveServer(event: PlayerLeaveServerEvent){
-    event.player.asInstanceOf[NailedPlayer].getEntity.playerNetServerHandler.sendPacket(this.getDestroyPacket)
+
   }
 
   @EventHandler

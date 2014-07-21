@@ -17,6 +17,16 @@ configurations {
     deployer
 }
 
+compileJava {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+}
+
+compileScala {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+}
+
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.1'
     compile 'jk_5:EventBus:1.0.2'

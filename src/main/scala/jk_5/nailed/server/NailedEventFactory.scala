@@ -6,11 +6,13 @@ import jk_5.eventbus.Event
 import jk_5.nailed.api.event._
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
+import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.command.ICommandSender
+import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
-import net.minecraft.world.WorldServer
+import net.minecraft.world.{World, WorldServer}
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.convert.wrapAll._
