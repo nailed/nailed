@@ -7,6 +7,7 @@ import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.world.World
+import jk_5.nailed.server.scoreboard.MapScoreboardManager
 
 import scala.collection.mutable
 
@@ -15,36 +16,39 @@ import scala.collection.mutable
  *
  * @author jk-5
  */
-class NailedMap(private val id: Int, private val mappack: Mappack = null, private val baseDir: File) extends Map with TeamManager {
+class NailedMap(override val id: Int, override val mappack: Mappack = null, private val baseDir: File) extends Map with TeamManager {
 
-  private val players = mutable.HashSet[Player]()
+  private val playerSet = mutable.HashSet[Player]()
+  override val getScoreboardManager = new MapScoreboardManager(this)
 
-  override def getId = this.id
-  override def getWorlds: Array[World] = NailedMapLoader.getWorldsForMap(this) match {
+  this.init() //Init the TeamManager
+
+  override def worlds: Array[World] = NailedMapLoader.getWorldsForMap(this) match {
     case Some(s) => s.toArray
     case None => new Array[World](0)
   }
-  override def getMappack = this.mappack
 
   override def addWorld(world: World){
     NailedMapLoader.addWorldToMap(world, this)
   }
 
   override def onPlayerJoined(player: Player){
-    players += player
-    //println("Player " + player.toString + " joined map " + this.toString)
+    playerSet += player
+    getScoreboardManager.onPlayerJoined(player)
+    this.playerJoined(player)
   }
 
   override def onPlayerLeft(player: Player){
-    players -= player
-    //println("Player " + player.toString + " left map " + this.toString)
+    playerSet -= player
+    getScoreboardManager.onPlayerLeft(player)
+    this.playerLeft(player)
   }
 
-  override def broadcastChatMessage(message: BaseComponent) = players.foreach(_.sendMessage(message))
-  override def broadcastChatMessage(message: BaseComponent*) = players.foreach(_.sendMessage(message: _*))
-  override def broadcastChatMessage(message: Array[BaseComponent]) = players.foreach(_.sendMessage(message))
+  override def broadcastChatMessage(message: BaseComponent) = playerSet.foreach(_.sendMessage(message))
+  override def broadcastChatMessage(message: BaseComponent*) = playerSet.foreach(_.sendMessage(message: _*))
+  override def broadcastChatMessage(message: Array[BaseComponent]) = playerSet.foreach(_.sendMessage(message))
 
-  override def getPlayers = this.players.toArray
+  override def players = this.playerSet.toArray
 
   override def toString = s"NailedMap{id=$id,mappack=$mappack}"
 }

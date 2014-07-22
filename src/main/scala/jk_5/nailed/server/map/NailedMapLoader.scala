@@ -50,8 +50,8 @@ object NailedMapLoader extends MapLoader {
   }
 
   def addMap(map: NailedMap): NailedMap = {
-    if(map.getId == 0) this.lobby = map
-    this.maps.put(map.getId, map)
+    if(map.id == 0) this.lobby = map
+    this.maps.put(map.id, map)
     logger.info("Registered {}", map.toString)
     map
   }

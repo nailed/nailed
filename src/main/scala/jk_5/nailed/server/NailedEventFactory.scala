@@ -116,17 +116,19 @@ object NailedEventFactory {
     player.netHandler = playerEntity.playerNetServerHandler
     player.world.onPlayerJoined(player)
     player.world.getMap.foreach(_.onPlayerJoined(player))
+    player.getScoreboardManager.onJoinedServer()
     val e = this.fireEvent(new PlayerJoinServerEvent(player))
     NailedServer.broadcastMessage(e.joinMessage)
   }
 
   def firePlayerLeft(playerEntity: EntityPlayerMP){
     val player = NailedServer.getPlayerFromEntity(playerEntity).asInstanceOf[NailedPlayer]
+    player.isOnline = false
     val e = this.fireEvent(new PlayerLeaveServerEvent(player))
+    player.getScoreboardManager.onLeftServer()
     player.world.onPlayerLeft(player)
     player.world.getMap.foreach(_.onPlayerLeft(player))
     player.entity = null
-    player.isOnline = false
     player.world = null
     player.map = null
     player.netHandler = null
@@ -134,7 +136,8 @@ object NailedEventFactory {
   }
 
   def firePlayerChat(playerEntity: EntityPlayerMP, message: String): String = {
-    val e = this.fireEvent(new PlayerChatEvent(NailedServer.getPlayerFromEntity(playerEntity), message))
+    val player = NailedServer.getPlayerFromEntity(playerEntity)
+    val e = this.fireEvent(new PlayerChatEvent(player, message))
     if(e.isCanceled) null else e.message
   }
 
@@ -152,7 +155,7 @@ object NailedEventFactory {
     }
     val canceled = fireEvent(new BlockPlaceEvent(xC, yC, zC, NailedDimensionManager.getWorld(world.provider.dimensionId), Server.getInstance.getPlayer(player.getGameProfile.getId).get)).isCanceled
     if(canceled){
-      //Send the slot content to the client because the client decreses the stack size by 1 when it places a block
+      //Send the slot content to the client because the client decreases the stack size by 1 when it places a block
       val playerMP = player.asInstanceOf[EntityPlayerMP]
       playerMP.sendContainerAndContentsToPlayer(playerMP.inventoryContainer, playerMP.inventoryContainer.getInventory)
       true

@@ -3,6 +3,7 @@ package jk_5.nailed.api.map
 import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.player.Player
+import jk_5.nailed.api.scoreboard.ScoreboardManager
 import jk_5.nailed.api.team.Team
 import jk_5.nailed.api.world.World
 
@@ -13,9 +14,9 @@ import jk_5.nailed.api.world.World
  */
 trait Map {
 
-  def getId: Int
-  def getWorlds: Array[World]
-  def getMappack: Mappack
+  def id: Int
+  def worlds: Array[World]
+  def mappack: Mappack
   def addWorld(world: World)
 
   def onPlayerJoined(player: Player)
@@ -30,5 +31,7 @@ trait Map {
   def broadcastChatMessage(message: BaseComponent*)
   def broadcastChatMessage(message: Array[BaseComponent])
 
-  def getPlayers: Array[Player]
+  def players: Array[Player]
+
+  def getScoreboardManager: ScoreboardManager
 }

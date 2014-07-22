@@ -25,8 +25,8 @@ object CommandLoadmap extends Command("loadmap") with TabExecutor {
           override def operationComplete(future: Future[Map]){
             val builder = new ComponentBuilder("Map ").color(ChatColor.GREEN)
               .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Array[BaseComponent](new TextComponent("Click to go to this map"))))
-              .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/goto " + future.get().getWorlds(0).getDimensionId)) //TODO: teleport to default world
-            builder.append(future.get().getMappack.getMetadata.name).append(" was loaded")
+              .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/goto " + future.get().worlds(0).getDimensionId)) //TODO: teleport to default world
+            builder.append(future.get().mappack.getMetadata.name).append(" was loaded")
             sender.sendMessage(builder.create())
           }
         })

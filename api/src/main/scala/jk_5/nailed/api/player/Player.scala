@@ -4,6 +4,7 @@ import java.util.UUID
 
 import jk_5.nailed.api.command.{CommandSender, WorldCommandSender}
 import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.scoreboard.ScoreboardManager
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
 
@@ -48,4 +49,6 @@ trait Player extends CommandSender with OfflinePlayer with WorldCommandSender {
   def getMap: Map
 
   def getLocation: Location
+
+  def getScoreboardManager: ScoreboardManager
 }

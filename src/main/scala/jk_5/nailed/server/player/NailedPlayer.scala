@@ -8,10 +8,11 @@ import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.teleport.TeleportOptions
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
+import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
 import jk_5.nailed.server.teleport.Teleporter
 import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.network.NetHandlerPlayServer
 import net.minecraft.network.play.server.S02PacketChat
+import net.minecraft.network.{NetHandlerPlayServer, Packet}
 
 /**
  * No description given
@@ -26,6 +27,8 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   private var displayName: String = this.name
   var netHandler: NetHandlerPlayServer = _
   var isOnline: Boolean = false
+
+  override val getScoreboardManager = new PlayerScoreboardManager(this)
 
   override def getName = this.name
   override def getDisplayName = this.displayName
@@ -48,6 +51,8 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   def getWorld = this.world
   def getMap = this.map
   def getLocation = new Location(this.world, entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch)
+
+  def sendPacket(packet: Packet) = if(this.netHandler != null) this.netHandler.sendPacket(packet)
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline}"
 }

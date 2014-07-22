@@ -37,5 +37,5 @@ package object command {
   }
 
   @inline def getUsernameOptions(args: Array[String]): List[String] = getOptions(args, Server.getInstance.getOnlinePlayers.map(_.getName))
-  @inline def getUsernameOptions(args: Array[String], map: Map): List[String] = getOptions(args, map.getPlayers.map(_.getName))
+  @inline def getUsernameOptions(args: Array[String], map: Map): List[String] = getOptions(args, map.players.map(_.getName))
 }
