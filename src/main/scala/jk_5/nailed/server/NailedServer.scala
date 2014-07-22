@@ -14,9 +14,11 @@ import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
 import jk_5.nailed.server.world.{BossBar, DimensionManagerTrait, WorldProviders}
+import jk_5.nailed.tileentity.TileEntityStatEmitter
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
+import net.minecraft.tileentity.TileEntity
 import org.apache.logging.log4j.LogManager
 
 /**
@@ -49,6 +51,8 @@ object NailedServer
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedScheduler)
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedMapLoader)
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, BossBar)
+
+  TileEntity.addMapping(classOf[TileEntityStatEmitter], "Nailed:StatEmitter")
 
   override def broadcastMessage(message: BaseComponent){
     logger.info(message.toPlainText) //TODO: format this before jline prints it out
@@ -83,10 +87,10 @@ object NailedServer
   }
 
   @EventHandler def onBlockPlace(event: BlockPlaceEvent){
-    event.setCanceled(true)
+    //event.setCanceled(true)
   }
 
   @EventHandler def onBlockBreak(event: BlockBreakEvent){
-    event.setCanceled(true)
+    //event.setCanceled(true)
   }
 }

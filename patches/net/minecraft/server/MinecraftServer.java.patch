@@ -128,7 +128,7 @@
 -            worldsettings = new WorldSettings(worldinfo);
 -        }
 +        NailedMap map = (NailedMap) NailedMapLoader.createLobbyMap();
-+        NailedWorld world = (NailedWorld) map.getWorlds()[0];
++        NailedWorld world = (NailedWorld) map.worlds()[0];
  
 -        if (this.field_71289_N) {
 -            worldsettings.func_77159_a();

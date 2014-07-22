@@ -4,19 +4,21 @@ import java.util
 
 import jk_5.eventbus.Event
 import jk_5.nailed.api.Server
+import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.event._
 import jk_5.nailed.api.material.Material
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedDimensionManager
+import jk_5.nailed.tileentity.TileEntityStatEmitter
 import net.minecraft.block.Block
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.init.Blocks
 import net.minecraft.item.{ItemStack, ItemSword}
-import net.minecraft.network.play.server.S23PacketBlockChange
+import net.minecraft.network.play.server.{S02PacketChat, S23PacketBlockChange}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.world.WorldSettings.GameType
@@ -154,12 +156,30 @@ object NailedEventFactory {
       case 5 => xC += 1
     }
     val canceled = fireEvent(new BlockPlaceEvent(xC, yC, zC, NailedDimensionManager.getWorld(world.provider.dimensionId), Server.getInstance.getPlayer(player.getGameProfile.getId).get)).isCanceled
-    if(canceled){
+    val ret = if(canceled){
       //Send the slot content to the client because the client decreases the stack size by 1 when it places a block
       val playerMP = player.asInstanceOf[EntityPlayerMP]
       playerMP.sendContainerAndContentsToPlayer(playerMP.inventoryContainer, playerMP.inventoryContainer.getInventory)
       true
     }else false
+
+    if(is.getTagCompound != null && is.getTagCompound.getBoolean("IsStatemitter")){
+      //It is an stat emitter
+      val p = player.asInstanceOf[EntityPlayerMP]
+      if(!p.theItemInWorldManager.getGameType.isCreative){
+        val c = new ComponentBuilder("You must be in creative mode to use Stat Emitters!").color(ChatColor.RED).create()
+        p.playerNetServerHandler.sendPacket(new S02PacketChat(c: _*))
+        p.sendContainerAndContentsToPlayer(p.inventoryContainer, p.inventoryContainer.getInventory)
+        return true
+      }
+      world.setBlock(xC, yC, zC, Blocks.command_block, 8, 3)
+      if(is.getTagCompound.hasKey("Content")){
+        val t = world.getTileEntity(xC, yC, zC).asInstanceOf[TileEntityStatEmitter]
+        t.content = is.getTagCompound.getString("Content")
+      }
+      return true
+    }
+    ret
   }
 
   def fireOnBlockBroken(world: World, gameType: GameType, playerEntity: EntityPlayerMP, x: Int, y: Int, z: Int): Boolean = {
