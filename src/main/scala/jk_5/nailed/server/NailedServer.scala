@@ -15,6 +15,7 @@ import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
 import jk_5.nailed.server.world.{BossBar, DimensionManagerTrait, WorldProviders}
 import jk_5.nailed.tileentity.TileEntityStatEmitter
+import net.minecraft.command.CommandBase
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
@@ -76,6 +77,8 @@ object NailedServer
   }
 
   def preLoad(server: DedicatedServer){
+    CommandBase.setAdminCommander(null) //Don't spam my log with stupid messages
+
     this.pluginsFolder.mkdir()
     this.pluginManager.discoverClasspathPlugins()
     this.pluginManager.discoverPlugins(this.pluginsFolder)

@@ -26,7 +26,7 @@ object NailedMappackRegistry extends MappackRegistry {
 
   override def getByName(name: String): Option[Mappack] = this.mappacks.get(name)
 
-  override def getByType[T <: Mappack](cl: Class[T])(implicit mf : Manifest[T]): Array[T] = {
+  override def getByType[T <: Mappack](cl: Class[T])(implicit mf: Manifest[T]): Array[T] = {
     this.mappacks.collect({
       case special if mf.runtimeClass.isAssignableFrom(special.getClass) => special
       case _ =>
