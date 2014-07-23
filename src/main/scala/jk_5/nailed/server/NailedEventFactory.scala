@@ -3,12 +3,16 @@ package jk_5.nailed.server
 import java.util
 
 import jk_5.eventbus.Event
+import jk_5.nailed.api
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.event._
+import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.Material
+import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
+import jk_5.nailed.server.event.{PlayerRightClickItemEvent, PlayerThrowItemEvent}
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedDimensionManager
 import jk_5.nailed.tileentity.TileEntityStatEmitter
@@ -219,5 +223,19 @@ object NailedEventFactory {
       }
       true
     }else false
+  }
+
+  def firePlayerDropStack(player: EntityPlayerMP, fullStack: Boolean): Boolean = {
+    //Return false to cancel
+    !fireEvent(new PlayerThrowItemEvent(player, player.getCurrentEquippedItem)).isCanceled
+  }
+
+  def firePlayerLeftWorld(player: Player, world: api.world.World) = fireEvent(new PlayerLeaveWorldEvent(player, world))
+  def firePlayerJoinWorld(player: Player, world: api.world.World) = fireEvent(new PlayerJoinWorldEvent(player, world))
+  def firePlayerLeftMap(player: Player, world: Map) = fireEvent(new PlayerLeaveMapEvent(player, world))
+  def firePlayerJoinMap(player: Player, world: Map) = fireEvent(new PlayerJoinMapEvent(player, world))
+
+  def fireOnItemRightClick(player: EntityPlayer, world: World, stack: ItemStack): Boolean = {
+    fireEvent(new PlayerRightClickItemEvent(player, stack)).isCanceled
   }
 }

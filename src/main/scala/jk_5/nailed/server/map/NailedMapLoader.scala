@@ -10,8 +10,8 @@ import jk_5.nailed.api.event.TeleportEventEnd
 import jk_5.nailed.api.map.{Map, MapLoader, MappackLoadingFailedException}
 import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.world.{WorldContext, WorldProvider}
-import jk_5.nailed.server.NailedServer
 import jk_5.nailed.server.scheduler.NailedScheduler
+import jk_5.nailed.server.{NailedEventFactory, NailedServer}
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.mutable
@@ -150,17 +150,27 @@ object NailedMapLoader extends MapLoader {
     val newMap = newWorld.getMap
     if(oldWorld != newWorld){
       oldWorld.onPlayerLeft(event.entity)
+      NailedEventFactory.firePlayerLeftWorld(event.entity, event.oldWorld)
       newWorld.onPlayerJoined(event.entity)
+      NailedEventFactory.firePlayerJoinWorld(event.entity, event.newWorld)
     }
     if(oldMap.isDefined || newMap.isDefined){
       if(oldMap.isDefined && newMap.isDefined){
         if(oldMap.get != newMap.get){
           oldMap.get.onPlayerLeft(event.entity)
+          NailedEventFactory.firePlayerLeftMap(event.entity, oldMap.get)
           newMap.get.onPlayerJoined(event.entity)
+          NailedEventFactory.firePlayerJoinMap(event.entity, newMap.get)
         }
       }else{
-        if(oldMap.isDefined) oldMap.get.onPlayerLeft(event.entity)
-        if(newMap.isDefined) newMap.get.onPlayerJoined(event.entity)
+        if(oldMap.isDefined){
+          oldMap.get.onPlayerLeft(event.entity)
+          NailedEventFactory.firePlayerLeftMap(event.entity, oldMap.get)
+        }
+        if(newMap.isDefined){
+          newMap.get.onPlayerJoined(event.entity)
+          NailedEventFactory.firePlayerJoinMap(event.entity, newMap.get)
+        }
       }
     }
   }

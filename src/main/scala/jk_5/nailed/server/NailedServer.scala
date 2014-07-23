@@ -14,6 +14,7 @@ import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
 import jk_5.nailed.server.world.{BossBar, DimensionManagerTrait, WorldProviders}
+import jk_5.nailed.server.worlditems.WorldItemEventHandler
 import jk_5.nailed.tileentity.TileEntityStatEmitter
 import net.minecraft.command.CommandBase
 import net.minecraft.network.play.server.S02PacketChat
@@ -52,6 +53,7 @@ object NailedServer
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedScheduler)
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, NailedMapLoader)
   NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, BossBar)
+  NailedServer.getPluginManager.registerListener(DummyInternalListenerPlugin, WorldItemEventHandler)
 
   TileEntity.addMapping(classOf[TileEntityStatEmitter], "Nailed:StatEmitter")
 

@@ -2,6 +2,7 @@ package jk_5.nailed.api.mappack.implementation
 
 import com.google.gson.{JsonObject, JsonPrimitive}
 import jk_5.nailed.api.mappack._
+import jk_5.nailed.api.mappack.tutorial.Tutorial
 
 import scala.collection.convert.wrapAsScala._
 
@@ -38,9 +39,11 @@ class JsonMappackMetadata(json: JsonObject) extends MappackMetadata {
     case e => throw new MappackConfigurationException("Invalid object type in teams array: " + e.toString)
   }.toArray
 
+  override def tutorial: Tutorial = if(json.has("tutorial")) new JsonTutorial(json.getAsJsonObject("tutorial")) else null
+
   for(world <- worlds){
     if(worlds.count(_.name == world.name) != 1){
-      throw new MappackConfigurationException("There are more than 1 worlds with the same name ('" + world.name + "')") //TODO
+      throw new MappackConfigurationException("There are more than 1 worlds with the same name ('" + world.name + "')")
     }
   }
 }

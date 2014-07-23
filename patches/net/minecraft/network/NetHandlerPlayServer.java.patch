@@ -43,6 +43,18 @@
  public class NetHandlerPlayServer implements INetHandlerPlayServer {
      private static final Logger field_147370_c = LogManager.getLogger();
      public final NetworkManager field_147371_a;
+@@ -356,9 +362,9 @@
+         this.field_147369_b.func_143004_u();
+ 
+         if (p_147345_1_.func_149506_g() == 4) {
+-            this.field_147369_b.func_71040_bB(false);
++            if(NailedEventFactory.firePlayerDropStack(this.field_147369_b, false)) this.field_147369_b.func_71040_bB(false);
+         } else if (p_147345_1_.func_149506_g() == 3) {
+-            this.field_147369_b.func_71040_bB(true);
++            if(NailedEventFactory.firePlayerDropStack(this.field_147369_b, true)) this.field_147369_b.func_71040_bB(true);
+         } else if (p_147345_1_.func_149506_g() == 5) {
+             this.field_147369_b.func_71034_by();
+         } else {
 @@ -499,9 +505,7 @@
      public void func_147231_a(IChatComponent p_147231_1_) {
          field_147370_c.info(this.field_147369_b.func_70005_c_() + " lost connection: " + p_147231_1_);

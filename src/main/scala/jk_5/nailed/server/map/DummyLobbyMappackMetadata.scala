@@ -1,6 +1,7 @@
 package jk_5.nailed.server.map
 
 import jk_5.nailed.api.mappack.implementation.DefaultMappackWorldProperties
+import jk_5.nailed.api.mappack.tutorial.{Tutorial, TutorialStage}
 import jk_5.nailed.api.mappack.{MappackAuthor, MappackMetadata, MappackTeam, MappackWorld}
 
 /**
@@ -14,4 +15,7 @@ object DummyLobbyMappackMetadata extends MappackMetadata {
   override val version = "1.0.0"
   override val authors = new Array[MappackAuthor](0)
   override val teams = new Array[MappackTeam](0)
+  override val tutorial = new Tutorial{
+    override val stages = new Array[TutorialStage](0)
+  }
 }

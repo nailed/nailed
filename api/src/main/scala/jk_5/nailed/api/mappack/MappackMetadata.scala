@@ -1,5 +1,7 @@
 package jk_5.nailed.api.mappack
 
+import jk_5.nailed.api.mappack.tutorial.Tutorial
+
 /**
  * No description given
  *
@@ -11,4 +13,5 @@ trait MappackMetadata {
   def authors: Array[MappackAuthor]
   def worlds: Array[MappackWorld]
   def teams: Array[MappackTeam]
+  def tutorial: Tutorial
 }

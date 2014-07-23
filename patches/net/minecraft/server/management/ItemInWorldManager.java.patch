@@ -27,3 +27,11 @@
          } else {
              Block block = this.field_73092_a.func_147439_a(p_73084_1_, p_73084_2_, p_73084_3_);
              int l = this.field_73092_a.func_72805_g(p_73084_1_, p_73084_2_, p_73084_3_);
+@@ -211,6 +210,7 @@
+     }
+ 
+     public boolean func_73085_a(EntityPlayer p_73085_1_, World p_73085_2_, ItemStack p_73085_3_) {
++        if(NailedEventFactory.fireOnItemRightClick(p_73085_1_, p_73085_2_, p_73085_3_)) return false;
+         int i = p_73085_3_.field_77994_a;
+         int j = p_73085_3_.func_77960_j();
+         ItemStack itemstack1 = p_73085_3_.func_77957_a(p_73085_2_, p_73085_1_);
