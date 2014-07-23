@@ -29,6 +29,7 @@ object NailedMappackRegistry extends MappackRegistry {
   override def getByType[T <: Mappack](cl: Class[T])(implicit mf : Manifest[T]): Array[T] = {
     this.mappacks.collect({
       case special if mf.runtimeClass.isAssignableFrom(special.getClass) => special
+      case _ =>
     }).asInstanceOf[Traversable[T]].toArray
   }
 
