@@ -2,6 +2,7 @@ package jk_5.nailed.plugins.directorymappackloader
 
 import java.io.File
 
+import jk_5.nailed.api.mappack.MappackConfigurationException
 import jk_5.nailed.api.plugin.Plugin
 
 /**
@@ -33,14 +34,18 @@ class DirectoryMappackLoaderPlugin extends Plugin {
       if(file.isDirectory){
         val mappackInfoFile = new File(file, "mappack.json")
         if(mappackInfoFile.exists() && mappackInfoFile.isFile){
-          val m = new DirectoryMappack(file)
-          if(this.getServer.getMappackRegistry.register(m)){
-            i += 1
-            if(m.getId == "lobby" && this.getServer.getMapLoader.getLobbyMappack == null){
-              this.getServer.getMapLoader.setLobbyMappack(m)
+          try{
+            val m = new DirectoryMappack(file)
+            if(this.getServer.getMappackRegistry.register(m)){
+              i += 1
+              if(m.getId == "lobby"){
+                this.getServer.getMapLoader.setLobbyMappack(m)
+              }
             }
+          }catch{
+            case e: MappackConfigurationException =>
+              getLogger.warn("Configuration for mappack " + file.getName + " is invalid: " + e.getMessage)
           }
-          i += 1
         }
       }
     }
