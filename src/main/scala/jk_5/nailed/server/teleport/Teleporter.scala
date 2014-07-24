@@ -8,7 +8,7 @@ import jk_5.nailed.api.world.World
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedWorld
 import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.entity.{Entity, EntityList}
+import net.minecraft.entity.{Entity, EntityList, EntityLiving}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.play.server.{S07PacketRespawn, S1DPacketEntityEffect, S1FPacketSetExperience}
 import net.minecraft.potion.PotionEffect
@@ -150,6 +150,10 @@ object Teleporter {
         destWorld.updateEntityWithOptionalForce(entity, true)
       }
       entity.mountEntity(mount)
+    }
+    entity match {
+      case e: EntityLiving => e.setHealth(e.getMaxHealth)
+      case _ =>
     }
     entity
   }

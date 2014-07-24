@@ -19,8 +19,7 @@ import scala.collection.mutable
 object WorldItemEventHandler {
 
   //TODO:
-  // This is quick and hacky code, just to get a proof-of-concept done.
-  // A lot of these methods and events need to be moved to API
+  // Unmount before teleporting
 
   private val tutorialStage = mutable.HashMap[Player, Int]()
 

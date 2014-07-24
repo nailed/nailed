@@ -11,6 +11,7 @@ import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.Material
 import jk_5.nailed.api.player.{GameMode, Player}
 import jk_5.nailed.api.plugin.Plugin
+import jk_5.nailed.api.util.Location
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.utils.ItemStackConverter._
@@ -22,9 +23,10 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.init.Blocks
 import net.minecraft.item.{ItemStack, ItemSword}
-import net.minecraft.network.play.server.S23PacketBlockChange
+import net.minecraft.network.play.server.{S05PacketSpawnPosition, S07PacketRespawn, S1FPacketSetExperience, S23PacketBlockChange}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
+import net.minecraft.server.management.ItemInWorldManager
 import net.minecraft.world.WorldSettings.GameType
 import net.minecraft.world.{World, WorldServer}
 import org.apache.logging.log4j.LogManager
@@ -236,5 +238,68 @@ object NailedEventFactory {
 
   def fireOnItemRightClick(player: EntityPlayer, world: World, stack: ItemStack): Boolean = {
     fireEvent(new PlayerRightClickItemEvent(NailedServer.getPlayerFromEntity(player.asInstanceOf[EntityPlayerMP]), stack)).isCanceled
+  }
+
+  def onPlayerRespawn(ent: EntityPlayerMP){
+    val server = MinecraftServer.getServer
+    val player = NailedServer.getPlayerFromEntity(ent).asInstanceOf[NailedPlayer]
+    val destWorld = NailedDimensionManager.getWorld(ent.dimension)
+    val currentWorld = NailedDimensionManager.getWorld(ent.dimension)
+    val destMap = destWorld.getMap
+    val currentMap = currentWorld.getMap
+
+    currentWorld.wrapped.getEntityTracker.removePlayerFromTrackers(ent)
+    currentWorld.wrapped.getEntityTracker.removeEntityFromAllTrackingPlayers(ent)
+    currentWorld.wrapped.getPlayerManager.removePlayer(ent)
+    server.getConfigurationManager.playerEntityList.remove(ent)
+    currentWorld.wrapped.removePlayerEntityDangerously(ent) //Force the entity to be removed from it's current dimension
+
+    val mappack = if(destMap.isDefined) destMap.get.mappack else null
+    val pos = if(mappack == null) new Location(destWorld, 0, 64, 0) else {val l = new Location(destWorld.getConfig.spawnPoint); l.setWorld(destWorld); l}
+
+    //TODO: implement gamemanager
+    /*if(destMap.getGameManager().isGameRunning()){
+      if(player.getSpawnpoint() != null){
+        pos = player.getSpawnpoint();
+      }else if(player.getTeam() instanceof TeamUndefined){
+        if(mappack != null && mappack.getMappackMetadata().isChoosingRandomSpawnpointAtRespawn()){
+          List<Location> spawnpoints = mappack.getMappackMetadata().getRandomSpawnpoints();
+          pos = spawnpoints.get(NailedAPI.getMapLoader().getRandomSpawnpointSelector().nextInt(spawnpoints.size()));
+        }
+      }else{
+        if(player.getTeam().shouldOverrideDefaultSpawnpoint()){
+          pos = player.getTeam().getSpawnpoint();
+        }
+      }
+    }*/
+
+    ent.dimension = destWorld.getDimensionId
+
+    val worldManager = new ItemInWorldManager(destWorld.wrapped)
+
+    val newPlayer = new EntityPlayerMP(server, destWorld.wrapped, ent.getGameProfile, worldManager)
+    newPlayer.playerNetServerHandler = ent.playerNetServerHandler
+    newPlayer.clonePlayer(ent, false)
+    newPlayer.dimension = destWorld.getDimensionId
+    newPlayer.setEntityId(ent.getEntityId)
+
+    worldManager.setGameType(ent.theItemInWorldManager.getGameType)
+    worldManager.initializeGameType(destWorld.wrapped.getWorldInfo.getGameType)
+
+    newPlayer.setLocationAndAngles(pos.getX, pos.getY, pos.getZ, pos.getYaw, pos.getPitch)
+    destWorld.wrapped.theChunkProviderServer.loadChunk(newPlayer.posX.toInt >> 4, newPlayer.posZ.toInt >> 4)
+
+    player.sendPacket(new S07PacketRespawn(destWorld.getConfig.dimension, destWorld.wrapped.difficultySetting, destWorld.wrapped.getWorldInfo.getTerrainType, worldManager.getGameType))
+    player.netHandler.setPlayerLocation(pos.getX, pos.getY, pos.getZ, pos.getYaw, pos.getPitch)
+    player.sendPacket(new S05PacketSpawnPosition(pos.getBlockX, pos.getBlockY, pos.getBlockZ))
+    player.sendPacket(new S1FPacketSetExperience(newPlayer.experience, newPlayer.experienceTotal, newPlayer.experienceLevel))
+    server.getConfigurationManager.updateTimeAndWeatherForPlayer(newPlayer, destWorld.wrapped)
+    destWorld.wrapped.getPlayerManager.addPlayer(newPlayer)
+    destWorld.wrapped.spawnEntityInWorld(newPlayer)
+    server.getConfigurationManager.playerEntityList.asInstanceOf[java.util.List[EntityPlayer]].add(newPlayer)
+    newPlayer.addSelfToInternalCraftingInventory()
+    newPlayer.setHealth(newPlayer.getHealth)
+
+    //TODO: respawn event
   }
 }
