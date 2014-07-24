@@ -4,7 +4,7 @@ import java.util.UUID
 
 import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.map.Map
-import jk_5.nailed.api.player.Player
+import jk_5.nailed.api.player.{GameMode, Player}
 import jk_5.nailed.api.teleport.TeleportOptions
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
@@ -13,6 +13,7 @@ import jk_5.nailed.server.teleport.Teleporter
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.network.{NetHandlerPlayServer, Packet}
+import net.minecraft.world.WorldSettings.GameType
 
 /**
  * No description given
@@ -54,5 +55,18 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   def sendPacket(packet: Packet) = if(this.netHandler != null) this.netHandler.sendPacket(packet)
 
-  override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline}"
+  override def getGameMode: GameMode = getEntity.theItemInWorldManager.getGameType match {
+    case GameType.SURVIVAL => GameMode.SURVIVAL
+    case GameType.CREATIVE => GameMode.CREATIVE
+    case GameType.ADVENTURE => GameMode.ADVENTURE
+    case e => throw new IllegalStateException("Player has unknown game mode " + e.getName + " " + e.getID)
+  }
+
+  override def setGameMode(gm: GameMode): Unit = getEntity.theItemInWorldManager.setGameType(gm match {
+    case GameMode.SURVIVAL => GameType.SURVIVAL
+    case GameMode.CREATIVE => GameType.CREATIVE
+    case GameMode.ADVENTURE => GameType.ADVENTURE
+  })
+
+  override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode}"
 }

@@ -51,4 +51,7 @@ trait Player extends CommandSender with OfflinePlayer with WorldCommandSender {
   def getLocation: Location
 
   def getScoreboardManager: ScoreboardManager
+
+  def getGameMode: GameMode
+  def setGameMode(gm: GameMode)
 }
