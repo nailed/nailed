@@ -28,6 +28,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   private var displayName: String = this.name
   var netHandler: NetHandlerPlayServer = _
   var isOnline: Boolean = false
+  var isAllowedToFly: Boolean = false
 
   override val getScoreboardManager = new PlayerScoreboardManager(this)
 
@@ -67,6 +68,13 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     case GameMode.CREATIVE => GameType.CREATIVE
     case GameMode.ADVENTURE => GameType.ADVENTURE
   })
+
+  override def setAllowedToFly(allowed: Boolean){
+    this.isAllowedToFly = allowed
+    this.getEntity.capabilities.allowFlying = allowed
+    this.getEntity.capabilities.isFlying = allowed
+    this.getEntity.sendPlayerAbilities()
+  }
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode}"
 }

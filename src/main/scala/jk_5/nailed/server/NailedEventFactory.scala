@@ -12,8 +12,8 @@ import jk_5.nailed.api.material.Material
 import jk_5.nailed.api.player.{GameMode, Player}
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
-import jk_5.nailed.server.event.{PlayerRightClickItemEvent, PlayerThrowItemEvent}
 import jk_5.nailed.server.player.NailedPlayer
+import jk_5.nailed.server.utils.ItemStackConverter._
 import jk_5.nailed.server.world.NailedDimensionManager
 import jk_5.nailed.tileentity.TileEntityStatEmitter
 import net.minecraft.block.Block
@@ -169,7 +169,7 @@ object NailedEventFactory {
 
     if(!ret) return true
 
-    //TODO: allow to do this in an event listener
+    //TODO: allow to do this in an event handler
     if(is.getTagCompound != null && is.getTagCompound.getBoolean("IsStatemitter")){
       if(player.getGameMode != GameMode.CREATIVE){
         player.sendMessage(new ComponentBuilder("You must be in creative mode to use Stat Emitters!").color(ChatColor.RED).create())
@@ -226,7 +226,7 @@ object NailedEventFactory {
 
   def firePlayerDropStack(player: EntityPlayerMP, fullStack: Boolean): Boolean = {
     //Return false to cancel
-    !fireEvent(new PlayerThrowItemEvent(player, player.getCurrentEquippedItem)).isCanceled
+    !fireEvent(new PlayerThrowItemEvent(NailedServer.getPlayerFromEntity(player), player.getCurrentEquippedItem)).isCanceled
   }
 
   def firePlayerLeftWorld(player: Player, world: api.world.World) = fireEvent(new PlayerLeaveWorldEvent(player, world))
@@ -235,6 +235,6 @@ object NailedEventFactory {
   def firePlayerJoinMap(player: Player, world: Map) = fireEvent(new PlayerJoinMapEvent(player, world))
 
   def fireOnItemRightClick(player: EntityPlayer, world: World, stack: ItemStack): Boolean = {
-    fireEvent(new PlayerRightClickItemEvent(player, stack)).isCanceled
+    fireEvent(new PlayerRightClickItemEvent(NailedServer.getPlayerFromEntity(player.asInstanceOf[EntityPlayerMP]), stack)).isCanceled
   }
 }

@@ -54,4 +54,7 @@ trait Player extends CommandSender with OfflinePlayer with WorldCommandSender {
 
   def getGameMode: GameMode
   def setGameMode(gm: GameMode)
+
+  def isAllowedToFly: Boolean
+  def setAllowedToFly(allowed: Boolean)
 }

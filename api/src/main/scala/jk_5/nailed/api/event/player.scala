@@ -4,6 +4,7 @@ import jk_5.eventbus.Event
 import jk_5.eventbus.Event.Cancelable
 import jk_5.nailed.api.chat._
 import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.material.ItemStack
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.world.World
 
@@ -24,3 +25,5 @@ case class PlayerJoinMapEvent(private val _player: Player, map: Map) extends Pla
 case class PlayerLeaveMapEvent(private val _player: Player, map: Map) extends PlayerEvent(_player)
 case class PlayerJoinWorldEvent(private val _player: Player, world: World) extends PlayerEvent(_player)
 case class PlayerLeaveWorldEvent(private val _player: Player, world: World) extends PlayerEvent(_player)
+@Cancelable case class PlayerThrowItemEvent(private val _player: Player, stack: ItemStack) extends PlayerEvent(_player)
+@Cancelable case class PlayerRightClickItemEvent(private val _player: Player, stack: ItemStack) extends PlayerEvent(_player)
