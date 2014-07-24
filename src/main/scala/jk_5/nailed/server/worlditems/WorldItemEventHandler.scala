@@ -9,10 +9,10 @@ import jk_5.nailed.server.NailedServer
 import jk_5.nailed.server.event.{PlayerRightClickItemEvent, PlayerThrowItemEvent}
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.teleport.Teleporter
+import jk_5.nailed.server.utils.NBTUtils
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList, NBTTagString}
 
 /**
  * No description given
@@ -29,15 +29,9 @@ object WorldItemEventHandler {
   def onPlayerJoinMap(event: PlayerJoinMapEvent){
     if(event.map.mappack.getMetadata.tutorial != null){
       val is = new ItemStack(Items.emerald)
-      val tag = new NBTTagCompound
-      tag.setString("WorldItemType", "Tutorial")
-      val list = new NBTTagList
-      val display = new NBTTagCompound
-      list.appendTag(new NBTTagString(ChatColor.RESET.toString + ChatColor.GRAY.toString + "Right click to start a tutorial"))
-      display.setTag("Lore", list)
-      tag.setTag("display", display)
-      is.setTagCompound(tag)
-      is.setStackDisplayName(ChatColor.RESET.toString + ChatColor.GOLD.toString + "Tutorial")
+      NBTUtils.addLore(is, ChatColor.RESET.toString + ChatColor.GRAY.toString + "Right click to start a tutorial")
+      NBTUtils.setDisplayName(is, ChatColor.RESET.toString + ChatColor.GOLD.toString + "Tutorial")
+      NBTUtils.getItemNBT(is).setString("WorldItemType", "Tutorial")
       event.player.asInstanceOf[NailedPlayer].getEntity.inventory.setInventorySlotContents(0, is)
     }
   }

@@ -9,7 +9,7 @@ import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.event._
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.Material
-import jk_5.nailed.api.player.Player
+import jk_5.nailed.api.player.{GameMode, Player}
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
 import jk_5.nailed.server.event.{PlayerRightClickItemEvent, PlayerThrowItemEvent}
@@ -22,7 +22,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.init.Blocks
 import net.minecraft.item.{ItemStack, ItemSword}
-import net.minecraft.network.play.server.{S02PacketChat, S23PacketBlockChange}
+import net.minecraft.network.play.server.S23PacketBlockChange
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.world.WorldSettings.GameType
@@ -147,7 +147,8 @@ object NailedEventFactory {
     if(e.isCanceled) null else e.message
   }
 
-  def fireOnRightClick(player: EntityPlayer, world: World, is: ItemStack, x: Int, y: Int, z: Int, side: Int, bX: Float, bY: Float, bZ: Float): Boolean = {
+  def fireOnRightClick(playerEntity: EntityPlayer, world: World, is: ItemStack, x: Int, y: Int, z: Int, side: Int, bX: Float, bY: Float, bZ: Float): Boolean = {
+    val player = NailedServer.getPlayerFromEntity(playerEntity.asInstanceOf[EntityPlayerMP]).asInstanceOf[NailedPlayer]
     var xC = x
     var yC = y
     var zC = z
@@ -159,27 +160,25 @@ object NailedEventFactory {
       case 4 => xC -= 1
       case 5 => xC += 1
     }
-    val canceled = fireEvent(new BlockPlaceEvent(xC, yC, zC, NailedDimensionManager.getWorld(world.provider.dimensionId), Server.getInstance.getPlayer(player.getGameProfile.getId).get)).isCanceled
+    val canceled = fireEvent(new BlockPlaceEvent(xC, yC, zC, NailedDimensionManager.getWorld(world.provider.dimensionId), player)).isCanceled
     val ret = if(canceled){
       //Send the slot content to the client because the client decreases the stack size by 1 when it places a block
-      val playerMP = player.asInstanceOf[EntityPlayerMP]
-      playerMP.sendContainerAndContentsToPlayer(playerMP.inventoryContainer, playerMP.inventoryContainer.getInventory)
+      player.getEntity.sendContainerAndContentsToPlayer(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
       true
     }else false
 
+    if(!ret) return true
+
+    //TODO: allow to do this in an event listener
     if(is.getTagCompound != null && is.getTagCompound.getBoolean("IsStatemitter")){
-      //It is an stat emitter
-      val p = player.asInstanceOf[EntityPlayerMP]
-      if(!p.theItemInWorldManager.getGameType.isCreative){
-        val c = new ComponentBuilder("You must be in creative mode to use Stat Emitters!").color(ChatColor.RED).create()
-        p.playerNetServerHandler.sendPacket(new S02PacketChat(c: _*))
-        p.sendContainerAndContentsToPlayer(p.inventoryContainer, p.inventoryContainer.getInventory)
+      if(player.getGameMode != GameMode.CREATIVE){
+        player.sendMessage(new ComponentBuilder("You must be in creative mode to use Stat Emitters!").color(ChatColor.RED).create())
+        player.getEntity.sendContainerAndContentsToPlayer(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
         return true
       }
       world.setBlock(xC, yC, zC, Blocks.command_block, 8, 3)
       if(is.getTagCompound.hasKey("Content")){
-        val t = world.getTileEntity(xC, yC, zC).asInstanceOf[TileEntityStatEmitter]
-        t.content = is.getTagCompound.getString("Content")
+        world.getTileEntity(xC, yC, zC).asInstanceOf[TileEntityStatEmitter].content = is.getTagCompound.getString("Content")
       }
       return true
     }
