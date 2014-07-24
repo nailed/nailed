@@ -407,7 +407,7 @@ public enum Material {
     }
 
     /**
-     * Gets the new style ID (name) for this Naterial
+     * Gets the new style ID (name) for this Material
      *
      * @return ID of this material
      */

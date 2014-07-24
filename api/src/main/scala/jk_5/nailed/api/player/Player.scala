@@ -4,6 +4,7 @@ import java.util.UUID
 
 import jk_5.nailed.api.command.{CommandSender, WorldCommandSender}
 import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.material.ItemStack
 import jk_5.nailed.api.scoreboard.ScoreboardManager
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
@@ -57,4 +58,10 @@ trait Player extends CommandSender with OfflinePlayer with WorldCommandSender {
 
   def isAllowedToFly: Boolean
   def setAllowedToFly(allowed: Boolean)
+
+  def getInventorySize: Int
+  def getInventorySlotContent(slot: Int): ItemStack
+  def setInventorySlot(slot: Int, stack: ItemStack)
+  def addToInventory(stack: ItemStack)
+  def iterateInventory(p: ItemStack => Unit)
 }

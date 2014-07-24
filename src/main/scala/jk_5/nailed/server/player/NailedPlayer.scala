@@ -4,12 +4,14 @@ import java.util.UUID
 
 import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.material.ItemStack
 import jk_5.nailed.api.player.{GameMode, Player}
 import jk_5.nailed.api.teleport.TeleportOptions
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
 import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
 import jk_5.nailed.server.teleport.Teleporter
+import jk_5.nailed.server.utils.ItemStackConverter
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.network.{NetHandlerPlayServer, Packet}
@@ -74,6 +76,23 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     this.getEntity.capabilities.allowFlying = allowed
     this.getEntity.capabilities.isFlying = allowed
     this.getEntity.sendPlayerAbilities()
+  }
+
+  override def getInventorySize: Int = this.getEntity.inventory.getSizeInventory
+  override def getInventorySlotContent(slot: Int): ItemStack = ItemStackConverter.toNailed(this.getEntity.inventory.getStackInSlot(slot)) //TODO: maybe save inventories in our system instead the vanilla one
+  override def setInventorySlot(slot: Int, stack: ItemStack){
+    this.getEntity.inventory.setInventorySlotContents(slot, ItemStackConverter.toVanilla(stack))
+    this.getEntity.sendContainerAndContentsToPlayer(this.getEntity.inventoryContainer, this.getEntity.inventoryContainer.getInventory)
+
+  }
+
+  override def addToInventory(stack: ItemStack){
+    this.getEntity.inventory.addItemStackToInventory(ItemStackConverter.toVanilla(stack))
+    this.getEntity.sendContainerAndContentsToPlayer(this.getEntity.inventoryContainer, this.getEntity.inventoryContainer.getInventory)
+  }
+
+  override def iterateInventory(p: ItemStack => Unit){
+    for(i <- 0 until this.getInventorySize) p(getInventorySlotContent(i))
   }
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode}"
