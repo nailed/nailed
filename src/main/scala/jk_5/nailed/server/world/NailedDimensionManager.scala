@@ -31,6 +31,8 @@ object NailedDimensionManager {
   private val dimensionMap = new util.BitSet(java.lang.Long.SIZE << 4)
   private val logger = LogManager.getLogger
 
+  private var vanillaWorldIdArray = new Array[Int](0)
+
   if(!defaultsRegistered){
     this.dimensionMap.set(1)
     defaultsRegistered = true
@@ -57,18 +59,20 @@ object NailedDimensionManager {
 
   def isDimensionRegistered(dim: Int) = dimensions.contains(dim)
 
-  def getAllDimensionIds: Array[Int] = this.vanillaWorlds.keySet().asScala.toArray
+  def getAllDimensionIds: Array[Int] = this.vanillaWorldIdArray
 
   def setWorld(id: Int, world: WorldServer){
     val context = this.worldContext.get(id)
     if(world != null){
       val nworld = new NailedWorld(world, context)
       this.vanillaWorlds.put(id, world)
+      this.vanillaWorldIdArray = this.vanillaWorlds.keySet().asScala.toArray
       this.worlds.put(id, nworld)
       MinecraftServer.getServer.worldTickTimes.put(id, new Array[Long](100))
       logger.info(s"Loading dimension $id (${world.getWorldInfo.getWorldName}) (${nworld.toString})")
     }else{
       this.vanillaWorlds.remove(id)
+      this.vanillaWorldIdArray = this.vanillaWorlds.keySet().asScala.toArray
       this.worlds.remove(id)
       MinecraftServer.getServer.worldTickTimes.remove(id)
       logger.info(s"Unloading dimension $id")
