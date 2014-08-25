@@ -300,6 +300,8 @@ object NailedEventFactory {
     newPlayer.addSelfToInternalCraftingInventory()
     newPlayer.setHealth(newPlayer.getHealth)
 
+    player.netHandler.playerEntity = newPlayer
+
     //TODO: respawn event
   }
 }
