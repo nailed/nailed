@@ -15,28 +15,18 @@
  * this program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package jk_5.nailed.plugins.directorymappackloader
+package jk_5.nailed.server.mappack.metadata.xml
 
-import java.io.File
+import jk_5.nailed.api.mappack.tutorial.{Tutorial, TutorialStage}
+import org.jdom2.Element
 
-import io.netty.util.concurrent.Promise
-import jk_5.nailed.api.mappack.{Mappack, MappackMetadata}
-import org.apache.commons.io.FileUtils
+import scala.collection.convert.wrapAsScala._
 
 /**
  * No description given
  *
  * @author jk-5
  */
-class DirectoryMappack(private val dir: File, override val getMetadata: MappackMetadata) extends Mappack {
-
-  override val getId = dir.getName
-  override def prepareWorld(destinationDirectory: File, promise: Promise[Void]){
-    val original = new File(dir, "worlds")
-    destinationDirectory.mkdir()
-    FileUtils.copyDirectory(original, destinationDirectory)
-    promise.setSuccess(null)
-  }
-
-  override def toString = s"DirectoryMappack{id=$getId,metadata=$getMetadata,dir=$dir}"
+class XmlTutorial(element: Element) extends Tutorial {
+  override val stages: Array[TutorialStage] = if(element.getChild("stages", element.getNamespace) == null) new Array[TutorialStage](0) else element.getChild("stages", element.getNamespace).getChildren.map(e => new XmlTutorialStage(e)).toArray
 }

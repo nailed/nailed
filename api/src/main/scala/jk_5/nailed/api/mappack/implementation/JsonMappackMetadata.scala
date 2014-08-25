@@ -17,7 +17,9 @@
 
 package jk_5.nailed.api.mappack.implementation
 
-import com.google.gson.{JsonObject, JsonPrimitive}
+import java.io.{File, FileReader}
+
+import com.google.gson.{JsonObject, JsonParser, JsonPrimitive}
 import jk_5.nailed.api.mappack._
 import jk_5.nailed.api.mappack.tutorial.Tutorial
 
@@ -28,6 +30,16 @@ import scala.collection.convert.wrapAsScala._
  *
  * @author jk-5
  */
+object JsonMappackMetadata {
+
+  def fromFile(file: File): JsonMappackMetadata = {
+    val reader = new FileReader(file)
+    val obj = new JsonParser().parse(reader).getAsJsonObject
+    reader.close()
+    new JsonMappackMetadata(obj)
+  }
+}
+
 class JsonMappackMetadata(json: JsonObject) extends MappackMetadata {
   if(!json.has("name")) throw new MappackConfigurationException("Mappack does not have a name")
   if(!json.has("version")) throw new MappackConfigurationException("Mappack does not have a version")

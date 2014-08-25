@@ -1,0 +1,328 @@
+<?xml version="1.0"?>
+<!--
+  ~ Nailed, a Minecraft PvP server framework
+  ~ Copyright (C) jk-5 <http://github.com/jk-5/>
+  ~ Copyright (C) Nailed team and contributors <http://github.com/nailed/>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the MIT License.
+  ~
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  ~ for more details.
+  ~
+  ~ You should have received a copy of the MIT License along with
+  ~ this program. If not, see <http://opensource.org/licenses/MIT/>.
+  -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://nailed.jk-5.tk/GameConfig/1.0.0" xmlns="http://nailed.jk-5.tk/GameConfig/1.0.0">
+    <xs:element name="game" type="GameModel">
+        <xs:annotation>
+            <xs:documentation source="version">1.0.0</xs:documentation>
+            <xs:documentation source="description">
+                The &lt;code&gt;&amp;lt;game&amp;gt;&lt;/code&gt; element is the root of the game description.
+                The following table lists all of the possible child elements
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="GameModel">
+        <xs:all>
+            <xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Declares the name of the game this config file conforms to</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="version" minOccurs="1" maxOccurs="1" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Declares the version config file</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="objective" minOccurs="0" maxOccurs="1" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Gives a short description of the objective of the game</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="authors" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Declares the authors of the game</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="author" minOccurs="1" maxOccurs="unbounded" type="Author">
+                            <xs:annotation>
+                                <xs:documentation source="version">1.0.0</xs:documentation>
+                                <xs:documentation source="description">Defines the properties of this author</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="default-world-properties" minOccurs="0" maxOccurs="1" type="InheritableWorld">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">If you are creating more than 1 world, you can put all properties both worlds have in common in this element</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="worlds" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Declares all the worlds in the game</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="world" minOccurs="1" maxOccurs="unbounded" type="World"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="tutorial" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Declares information about tutorial stages</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="stages" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="stage" minOccurs="1" maxOccurs="unbounded" type="TutorialStage"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="teams" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Declares the teams that need to be set up for this game</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="team" minOccurs="1" maxOccurs="unbounded" type="Team"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="Author">
+        <xs:all>
+            <xs:element name="name" minOccurs="1" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the name of this author</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="role" minOccurs="1" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the role of this author</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="Location">
+        <xs:annotation>
+            <xs:documentation source="version">1.0.0</xs:documentation>
+            <xs:documentation source="description">Defines the name of this author</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="x" type="xs:double" default="0">
+            <xs:annotation>
+                <xs:documentation source="version">1.0.0</xs:documentation>
+                <xs:documentation source="description">Defines the x coordinate of this location</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="y" type="xs:double" default="64">
+            <xs:annotation>
+                <xs:documentation source="version">1.0.0</xs:documentation>
+                <xs:documentation source="description">Defines the y coordinate of this location</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="z" type="xs:double" default="0">
+            <xs:annotation>
+                <xs:documentation source="version">1.0.0</xs:documentation>
+                <xs:documentation source="description">Defines the z coordinate of this location</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="yaw" type="xs:float" default="0">
+            <xs:annotation>
+                <xs:documentation source="version">1.0.0</xs:documentation>
+                <xs:documentation source="description">Defines the yaw the player will face when they teleport to this location</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="pitch" type="xs:float" default="0">
+            <xs:annotation>
+                <xs:documentation source="version">1.0.0</xs:documentation>
+                <xs:documentation source="description">Defines the pitch the player will face when they teleport to this location</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="world" type="xs:string" default="default">
+            <xs:annotation>
+                <xs:documentation source="version">1.0.0</xs:documentation>
+                <xs:documentation source="description">Defines the name of the mappack world this location is in</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="InheritableWorld">
+        <xs:all>
+            <xs:element name="spawnpoint" minOccurs="0" maxOccurs="1" type="Location">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the location a player will be teleported to when they join this world</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="difficulty" minOccurs="0" maxOccurs="1" type="xs:string" default="easy">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">
+                        Defines the difficulty of this world
+                        Possible values:
+                        - peaceful: no hostile mobs will be spawned
+                        - easy: hostile mobs enabled. They are easy
+                        - normal: hostile mobs enabled. Default value
+                        - hard: hostile mobs enabled. They are hard
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="gamemode" minOccurs="0" maxOccurs="1" type="xs:string" default="adventure">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">
+                        Defines the gameMode of this world
+                        Possible values: survival, creative, adventure
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="gamerules" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:any processContents="lax" namespace="##any">
+                            <xs:annotation>
+                                <xs:documentation source="version">1.0.0</xs:documentation>
+                                <xs:documentation source="description">Defines any gamerule key</xs:documentation>
+                            </xs:annotation>
+                        </xs:any>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="generator" minOccurs="0" maxOccurs="1" type="xs:string" default="void">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the generator type of this world. Custom types can be registered by plugins</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="World">
+        <xs:all>
+            <xs:element name="spawnpoint" minOccurs="0" maxOccurs="1" type="Location">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the location a player will be teleported to when they join this world</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="difficulty" minOccurs="0" maxOccurs="1" type="xs:string" default="normal">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">
+                        Defines the difficulty of this world
+                        Possible values:
+                        - peaceful: no hostile mobs will be spawned
+                        - easy: hostile mobs enabled. They are easy
+                        - normal: hostile mobs enabled. Default value
+                        - hard: hostile mobs enabled. They are hard
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="gamemode" minOccurs="0" maxOccurs="1" type="xs:string" default="adventure">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">
+                        Defines the gameMode of this world
+                        Possible values: survival, creative, adventure
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="gamerules" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:any processContents="lax" namespace="##any">
+                            <xs:annotation>
+                                <xs:documentation source="version">1.0.0</xs:documentation>
+                                <xs:documentation source="description">Defines any gamerule key</xs:documentation>
+                            </xs:annotation>
+                        </xs:any>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="generator" minOccurs="0" maxOccurs="1" type="xs:string" default="void">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the generator type of this world. Custom types can be registered by plugins</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="name" minOccurs="1" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the internal name of this world</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="dimension" minOccurs="0" maxOccurs="1" type="xs:string" default="overworld">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">
+                        Defines the dimension of this world (only visual)
+                        Valid values:
+                        - overworld (default value)
+                        - nether
+                        - end
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="default" type="xs:boolean" default="false">
+            <xs:annotation>
+                <xs:documentation source="version">1.0.0</xs:documentation>
+                <xs:documentation source="description">If this is true, this will be the default world of the mappack. All players joining the map will be teleported to this world</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="TutorialStage">
+        <xs:all>
+            <xs:element name="title" minOccurs="1" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the title of this tutorial stage</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="teleport" minOccurs="0" type="Location">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the location the player will be teleported to</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="messages" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines additional messages that will be displayed to the player</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="message" minOccurs="1" maxOccurs="unbounded" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="Team">
+        <xs:all>
+            <xs:element name="id" minOccurs="1" type="xs:string"/>
+            <xs:element name="name" minOccurs="1" type="xs:string"/>
+            <xs:element name="color" minOccurs="1" type="xs:string"/>
+        </xs:all>
+    </xs:complexType>
+</xs:schema>

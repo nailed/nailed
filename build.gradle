@@ -50,6 +50,7 @@ dependencies {
     nailed 'jline:jline:2.12'
     nailed 'org.fusesource.jansi:jansi:1.11'
     nailed 'org.mozilla:rhino:1.7R4'
+    nailed 'org.jdom:jdom2:2.0.5'
 
     compile project(':api')
 
@@ -60,6 +61,23 @@ packageServer.manifest {
     attributes 'TweakClass': 'jk_5.nailed.server.tweaker.NailedTweaker'
     attributes 'Main-Class': 'jk_5.nailed.deploader.DepLoader'
 }
+
+/*
+ * Nailed, a Minecraft PvP server framework
+ * Copyright (C) jk-5 <http://github.com/jk-5/>
+ * Copyright (C) Nailed team and contributors <http://github.com/nailed/>
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the MIT License.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
+ *
+ * You should have received a copy of the MIT License along with
+ * this program. If not, see <http://opensource.org/licenses/MIT/>.
+ */
 
 //If only i knew how to add scala sources with the gradle API.
 //If you know, please open an issue or message me (jk-5) on irc

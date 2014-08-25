@@ -19,8 +19,10 @@ package jk_5.nailed.plugins.directorymappackloader
 
 import java.io.File
 
-import jk_5.nailed.api.mappack.MappackConfigurationException
+import jk_5.nailed.api.mappack.implementation.JsonMappackMetadata
+import jk_5.nailed.api.mappack.{MappackConfigurationException, MappackMetadata}
 import jk_5.nailed.api.plugin.Plugin
+import jk_5.nailed.server.mappack.metadata.xml.XmlMappackMetadata
 
 /**
  * No description given
@@ -49,20 +51,30 @@ class DirectoryMappackLoaderPlugin extends Plugin {
     i = 0
     for(file <- mappacksDir.listFiles()){
       if(file.isDirectory){
-        val mappackInfoFile = new File(file, "mappack.json")
-        if(mappackInfoFile.exists() && mappackInfoFile.isFile){
-          try{
-            val m = new DirectoryMappack(file)
-            if(this.getServer.getMappackRegistry.register(m)){
+        val jsonMappackMetadata = new File(file, "mappack.json")
+        val xmlMappackMetadata = new File(file, "game.xml")
+
+        try{
+          val metadata: MappackMetadata = if(xmlMappackMetadata.exists() && xmlMappackMetadata.isFile){
+            getLogger.trace("Attempting to load xml mappack " + file.getName)
+            XmlMappackMetadata.fromFile(xmlMappackMetadata)
+          }else if(jsonMappackMetadata.exists() && jsonMappackMetadata.isFile){
+            getLogger.trace("Attempting to load json mappack " + file.getName)
+            JsonMappackMetadata.fromFile(jsonMappackMetadata)
+          }else null
+
+          if(metadata != null){
+            val mappack = new DirectoryMappack(file, metadata)
+            if(this.getServer.getMappackRegistry.register(mappack)){
               i += 1
-              if(m.getId == "lobby"){
-                this.getServer.getMapLoader.setLobbyMappack(m)
+              if(mappack.getId == "lobby"){
+                this.getServer.getMapLoader.setLobbyMappack(mappack)
               }
             }
-          }catch{
-            case e: MappackConfigurationException =>
-              getLogger.warn("Configuration for mappack " + file.getName + " is invalid: " + e.getMessage)
           }
+        }catch{
+          case e: MappackConfigurationException =>
+            getLogger.warn("Configuration for mappack " + file.getName + " is invalid: " + e.getMessage)
         }
       }
     }
