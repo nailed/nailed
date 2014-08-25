@@ -169,7 +169,7 @@ object NailedEventFactory {
       true
     }else false
 
-    if(!ret) return true
+    if(ret) return true
 
     //TODO: allow to do this in an event handler
     if(is.getTagCompound != null && is.getTagCompound.getBoolean("IsStatemitter")){
