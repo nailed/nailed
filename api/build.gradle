@@ -1,3 +1,20 @@
+/*
+ * Nailed, a Minecraft PvP server framework
+ * Copyright (C) jk-5 <http://github.com/jk-5/>
+ * Copyright (C) Nailed team and contributors <http://github.com/nailed/>
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the MIT License.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
+ *
+ * You should have received a copy of the MIT License along with
+ * this program. If not, see <http://opensource.org/licenses/MIT/>.
+ */
+
 apply plugin: 'java'
 apply plugin: 'scala'
 apply plugin: 'maven'
@@ -6,11 +23,8 @@ group = 'jk_5.nailed'
 version = '1.0.1-SNAPSHOT'
 
 repositories {
+    mavenLocal()
     mavenCentral()
-    maven {
-        name 'reening'
-        url 'http://maven.reening.nl'
-    }
 }
 
 configurations {
@@ -29,7 +43,7 @@ compileScala {
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.1'
-    compile 'jk_5:EventBus:1.0.2'
+    compile 'jk_5.eventbus:EventBus:2.0.0'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
     compile 'io.netty:netty-all:4.0.21.Final'
     compile 'com.google.guava:guava:15.0'

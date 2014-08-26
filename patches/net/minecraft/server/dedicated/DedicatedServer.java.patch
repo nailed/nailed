@@ -21,7 +21,7 @@
  import net.minecraft.command.ICommandSender;
  import net.minecraft.command.ServerCommand;
  import net.minecraft.crash.CrashReport;
-@@ -23,17 +24,17 @@
+@@ -23,17 +24,18 @@
  import net.minecraft.server.ServerEula;
  import net.minecraft.server.gui.MinecraftServerGui;
  import net.minecraft.server.management.PreYggdrasilConverter;
@@ -37,13 +37,14 @@
 -import org.apache.logging.log4j.Logger;
  
 +import jk_5.nailed.server.NailedEventFactory;
++import jk_5.nailed.server.config.MinecraftConfig;
 +import jk_5.nailed.server.console.CommandReaderThread;
 +import jk_5.nailed.server.tweaker.NailedTweaker;
 +
  public class DedicatedServer extends MinecraftServer implements IServer {
      private static final Logger field_155771_h = LogManager.getLogger();
      private final List field_71341_l = Collections.synchronizedList(new ArrayList());
-@@ -45,6 +46,7 @@
+@@ -45,6 +47,7 @@
      private WorldSettings.GameType field_71337_q;
      private boolean field_71335_s;
      private static final String __OBFID = "CL_00001784";
@@ -51,7 +52,7 @@
  
      public DedicatedServer(File p_i1508_1_) {
          super(p_i1508_1_, Proxy.NO_PROXY);
-@@ -69,34 +71,21 @@
+@@ -69,34 +72,22 @@
      }
  
      protected boolean func_71197_b() throws IOException {
@@ -82,7 +83,9 @@
 +        NailedEventFactory.fireServerStartBeforeConfig(this);
 +
          field_155771_h.info("Loading properties");
-         this.field_71340_o = new PropertyManager(new File("server.properties"));
+-        this.field_71340_o = new PropertyManager(new File("server.properties"));
++        //this.settings = new PropertyManager(new File("server.properties"));
++        this.field_71340_o = new MinecraftConfig();
          this.field_154332_n = new ServerEula(new File("eula.txt"));
  
 -        if (!this.field_154332_n.func_154346_a()) {
@@ -90,7 +93,7 @@
              field_155771_h.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
              this.field_154332_n.func_154348_b();
              return false;
-@@ -108,24 +97,25 @@
+@@ -108,24 +99,25 @@
                  this.func_71189_e(this.field_71340_o.func_73671_a("server-ip", ""));
              }
  
@@ -127,7 +130,21 @@
              field_155771_h.info("Default game type: " + this.field_71337_q);
              InetAddress inetaddress = null;
  
-@@ -167,13 +157,14 @@
+@@ -157,9 +149,10 @@
+                 field_155771_h.warn("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
+             }
+ 
+-            if (this.func_152368_aE()) {
+-                this.func_152358_ax().func_152658_c();
+-            }
++            //Nailed: disable the yggdrasil converter. we don't need it
++            //if (this.func_152368_aE()) {
++            //    this.func_152358_ax().func_152658_c();
++            //}
+ 
+             if (!PreYggdrasilConverter.func_152714_a(this.field_71340_o)) {
+                 return false;
+@@ -167,13 +160,14 @@
                  this.func_152361_a(new DedicatedPlayerList(this));
                  long j = System.nanoTime();
  
@@ -147,7 +164,7 @@
                  long k = (new Random()).nextLong();
  
                  if (s.length() > 0) {
-@@ -188,22 +179,21 @@
+@@ -188,22 +182,21 @@
                      }
                  }
  
@@ -176,7 +193,7 @@
                  long i1 = System.nanoTime() - j;
                  String s3 = String.format("%.3fs", new Object[] {Double.valueOf((double)i1 / 1.0E9D)});
                  field_155771_h.info("Done (" + s3 + ")! For help, type \"help\" or \"?\"");
-@@ -220,6 +210,8 @@
+@@ -220,6 +213,8 @@
                      this.field_71339_n.func_72602_a();
                  }
  
@@ -185,7 +202,7 @@
                  return true;
              }
          }
-@@ -234,11 +226,11 @@
+@@ -234,11 +229,11 @@
      }
  
      public EnumDifficulty func_147135_j() {
@@ -199,7 +216,7 @@
      }
  
      protected void func_71228_a(CrashReport p_71228_1_) {}
-@@ -271,11 +263,11 @@
+@@ -271,11 +266,11 @@
      }
  
      public boolean func_71255_r() {
@@ -213,7 +230,7 @@
      }
  
      public void func_70000_a(PlayerUsageSnooper p_70000_1_) {
-@@ -346,11 +338,11 @@
+@@ -346,11 +341,11 @@
      }
  
      public boolean func_82356_Z() {
