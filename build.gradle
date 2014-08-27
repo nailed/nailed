@@ -19,7 +19,7 @@ buildscript {
         }*/
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.1.0-SNAPSHOT"
+        classpath "jk_5.nailed.mcp:mcp:1.1.1-SNAPSHOT"
     }
 }
 

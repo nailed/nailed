@@ -15,7 +15,7 @@
  * this program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package jk_5.nailed.tileentity
+package jk_5.nailed.server.tileentity
 
 import jk_5.nailed.api.stat.StatBlock
 import net.minecraft.command.server.CommandBlockLogic

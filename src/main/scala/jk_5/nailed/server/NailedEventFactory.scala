@@ -31,9 +31,9 @@ import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
 import jk_5.nailed.server.player.NailedPlayer
+import jk_5.nailed.server.tileentity.TileEntityStatEmitter
 import jk_5.nailed.server.utils.ItemStackConverter._
 import jk_5.nailed.server.world.NailedDimensionManager
-import jk_5.nailed.tileentity.TileEntityStatEmitter
 import net.minecraft.block.Block
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity

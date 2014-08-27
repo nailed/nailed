@@ -29,10 +29,10 @@ import jk_5.nailed.server.map.NailedMapLoader
 import jk_5.nailed.server.mappack.MappackRegistryTrait
 import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
+import jk_5.nailed.server.tileentity.TileEntityStatEmitter
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
 import jk_5.nailed.server.world.{BossBar, DimensionManagerTrait, WorldProviders}
 import jk_5.nailed.server.worlditems.WorldItemEventHandler
-import jk_5.nailed.tileentity.TileEntityStatEmitter
 import net.minecraft.command.CommandBase
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.server.MinecraftServer
