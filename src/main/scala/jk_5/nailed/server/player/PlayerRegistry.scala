@@ -22,7 +22,6 @@ import java.util.UUID
 import jk_5.eventbus.EventHandler
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.event.{PlayerJoinServerEvent, PlayerLeaveServerEvent}
-import jk_5.nailed.api.player.Player
 import net.minecraft.entity.player.EntityPlayerMP
 import org.apache.logging.log4j.LogManager
 
@@ -36,7 +35,7 @@ import scala.collection.mutable
 trait PlayerRegistry extends Server {
 
   private val players = mutable.ArrayBuffer[NailedPlayer]()
-  private val onlinePlayers = mutable.ArrayBuffer[NailedPlayer]()
+  private var onlinePlayers = new Array[NailedPlayer](0)
   private val playersById = mutable.HashMap[UUID, NailedPlayer]()
   private val playersByName = mutable.HashMap[String, NailedPlayer]()
   private val logger = LogManager.getLogger
@@ -47,13 +46,14 @@ trait PlayerRegistry extends Server {
    * @param id UUID of the player to retrieve
    * @return Some(player) if a player was found, None otherwise
    */
-  override def getPlayer(id: UUID): Option[Player] = this.playersById.get(id)
+  override def getPlayer(id: UUID) = this.playersById.get(id)
 
-  override def getPlayerByName(name: String): Option[Player] = this.playersByName.get(name)
+  @deprecated("Use the new uuid replacement", "mc1.8")
+  override def getPlayerByName(name: String) = this.playersByName.get(name)
 
-  def getPlayerFromEntity(entity: EntityPlayerMP): Player = this.getPlayer(entity.getGameProfile.getId).get
+  def getPlayerFromEntity(entity: EntityPlayerMP) = this.getPlayer(entity.getGameProfile.getId).get
 
-  def getOrCreatePlayer(entity: EntityPlayerMP): Player = this.getPlayer(entity.getGameProfile.getId) match {
+  def getOrCreatePlayer(entity: EntityPlayerMP) = this.getPlayer(entity.getGameProfile.getId) match {
     case Some(player) => player
     case None =>
       val player = new NailedPlayer(entity.getGameProfile.getId, entity.getGameProfile.getName)
@@ -68,15 +68,15 @@ trait PlayerRegistry extends Server {
    *
    * @return an array containing all online players
    */
-  override def getOnlinePlayers: Array[Player] = this.onlinePlayers.toArray
+  override def getOnlinePlayers: Array[NailedPlayer] = this.onlinePlayers
 
   @EventHandler
   def onPlayerJoin(event: PlayerJoinServerEvent){
-    this.onlinePlayers += event.player.asInstanceOf[NailedPlayer]
+    this.onlinePlayers = Array[NailedPlayer](this.onlinePlayers: _*, event.player.asInstanceOf[NailedPlayer])
   }
 
   @EventHandler
   def onPlayerLeave(event: PlayerLeaveServerEvent){
-    this.onlinePlayers -= event.player.asInstanceOf[NailedPlayer]
+    this.onlinePlayers = this.onlinePlayers.filter(p => p != event.player)
   }
 }
