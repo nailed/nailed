@@ -34,5 +34,6 @@ class NailedInternalPlugin extends Plugin {
     this.getPluginManager.registerCommand(this, CommandLoadmap)
     this.getPluginManager.registerCommand(this, CommandTeam)
     this.getPluginManager.registerCommand(this, CommandStatemitter)
+    this.getPluginManager.registerCommand(this, CommandGamemode)
   }
 }
