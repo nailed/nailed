@@ -144,12 +144,16 @@ object NailedEventFactory {
     player.getScoreboardManager.onJoinedServer()
     val e = this.fireEvent(new PlayerJoinServerEvent(player))
     NailedServer.broadcastMessage(e.joinMessage)
+    if(player.map != null) this.firePlayerJoinMap(player, player.map)
+    this.firePlayerJoinWorld(player, player.world)
   }
 
   def firePlayerLeft(playerEntity: EntityPlayerMP){
     val player = NailedServer.getPlayerFromEntity(playerEntity).asInstanceOf[NailedPlayer]
     player.isOnline = false
     val e = this.fireEvent(new PlayerLeaveServerEvent(player))
+    if(player.map != null) this.firePlayerLeftMap(player, player.map)
+    this.firePlayerLeftWorld(player, player.world)
     player.getScoreboardManager.onLeftServer()
     player.world.onPlayerLeft(player)
     player.world.getMap.foreach(_.onPlayerLeft(player))
