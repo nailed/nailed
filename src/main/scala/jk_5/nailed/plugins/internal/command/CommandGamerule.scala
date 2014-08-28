@@ -38,7 +38,7 @@ object CommandGamerule extends Command("gamerule") with TabExecutor {
             var first = true
             for (rule <- gameRules.list) {
               if (!first) builder.append(", ").event(null: HoverEvent) else first = false
-              builder.append(rule).color(ChatColor.RESET).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Array[BaseComponent](new TextComponent(rule + " = " + gameRules(rule)))))
+              builder.append(rule).color(ChatColor.RESET).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(rule + " = " + gameRules(rule))))
             }
             sender.sendMessage(builder.create())
           case 1 =>

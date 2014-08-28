@@ -32,10 +32,28 @@ import jk_5.nailed.api.world.World
  */
 class PlayerEvent(val player: Player) extends Event
 case class PlayerJoinServerEvent(private val _player: Player) extends PlayerEvent(_player){
-  var joinMessage: BaseComponent = new TextComponent(new ComponentBuilder(this.player.getDisplayName).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Array[BaseComponent](new TextComponent(this.player.getUniqueId.toString)))).append(" joined the server").color(ChatColor.YELLOW).create(): _*)
+  var joinMessage: BaseComponent = {
+    val base = new TextComponent("")
+    val name = new TextComponent(this.player.getDisplayName)
+    name.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(this.player.getUniqueId.toString)))
+    val joined = new TextComponent(" joined the server")
+    joined.setColor(ChatColor.YELLOW)
+    base.addExtra(name)
+    base.addExtra(joined)
+    base
+  }
 }
 case class PlayerLeaveServerEvent(private val _player: Player) extends PlayerEvent(_player){
-  var leaveMessage: BaseComponent = new TextComponent(new ComponentBuilder(this.player.getDisplayName).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Array[BaseComponent](new TextComponent(this.player.getUniqueId.toString)))).append(" left the server").color(ChatColor.YELLOW).create(): _*)
+  var leaveMessage: BaseComponent = {
+    val base = new TextComponent("")
+    val name = new TextComponent(this.player.getDisplayName)
+    name.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(this.player.getUniqueId.toString)))
+    val left = new TextComponent(" left the server")
+    left.setColor(ChatColor.YELLOW)
+    base.addExtra(name)
+    base.addExtra(left)
+    base
+  }
 }
 @Cancelable case class PlayerChatEvent(private val _player: Player, var message: String) extends PlayerEvent(_player)
 case class PlayerJoinMapEvent(private val _player: Player, map: Map) extends PlayerEvent(_player)

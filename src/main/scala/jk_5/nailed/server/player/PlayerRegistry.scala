@@ -22,6 +22,7 @@ import java.util.UUID
 import jk_5.eventbus.EventHandler
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.event.{PlayerJoinServerEvent, PlayerLeaveServerEvent}
+import jk_5.nailed.api.player.Player
 import net.minecraft.entity.player.EntityPlayerMP
 import org.apache.logging.log4j.LogManager
 
@@ -68,11 +69,14 @@ trait PlayerRegistry extends Server {
    *
    * @return an array containing all online players
    */
-  override def getOnlinePlayers: Array[NailedPlayer] = this.onlinePlayers
+  override def getOnlinePlayers: Array[Player] = this.onlinePlayers.asInstanceOf[Array[Player]]
 
   @EventHandler
   def onPlayerJoin(event: PlayerJoinServerEvent){
-    this.onlinePlayers = Array[NailedPlayer](this.onlinePlayers: _*, event.player.asInstanceOf[NailedPlayer])
+    val b = mutable.ArrayBuffer[NailedPlayer]()
+    b ++= this.onlinePlayers
+    b += event.player.asInstanceOf[NailedPlayer]
+    this.onlinePlayers = b.toArray
   }
 
   @EventHandler

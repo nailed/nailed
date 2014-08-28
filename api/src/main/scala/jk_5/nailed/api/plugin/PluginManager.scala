@@ -29,7 +29,6 @@ import jk_5.eventbus.{Event, EventBus}
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command.{CommandSender, TabExecutor}
-import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.Checks
 import org.apache.logging.log4j.LogManager
 
@@ -102,16 +101,29 @@ class PluginManager(private val server: Server) {
 
   def dispatchCommand(sender: CommandSender, line: String): Boolean = dispatchCommand(sender, line, null)
   def dispatchCommand(sender: CommandSender, line: String, tabResults: mutable.ListBuffer[String]): Boolean = {
-    val split = argsSplit.split(line)
+    val split = argsSplit.split(line, -1)
+    val isCompleteRequest = tabResults != null
     if(split.length == 0) return false
-    val commandName = if(sender.isInstanceOf[Player]) split(0).substring(1).toLowerCase else split(0).toLowerCase
+    val commandName = /*if(sender.isInstanceOf[Player]) split(0).substring(1).toLowerCase else*/ split(0).toLowerCase
     val command = commandMap.get(commandName)
-    if(command.isEmpty) return false
+    if(isCompleteRequest && command.isEmpty){
+      if(split.length == 1){
+        val cmd = commandMap.filter(c => c._1.startsWith(split(0)))
+        if(cmd.size > 0){
+          tabResults ++= cmd.keySet
+          return true
+        }else{
+          return false
+        }
+      }else{
+        return false
+      }
+    }
     val args = util.Arrays.copyOfRange(split, 1, split.length)
     try{
-      if(tabResults == null){
+      if(!isCompleteRequest){
         command.get.execute(sender, args)
-      }else command match {
+      }else command.get match {
         case t: TabExecutor =>
           tabResults ++= t.onTabComplete(sender, args)
         case _ =>
