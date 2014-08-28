@@ -29,6 +29,7 @@ import jk_5.eventbus.{Event, EventBus}
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command.{CommandSender, TabExecutor}
+import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.Checks
 import org.apache.logging.log4j.LogManager
 
@@ -104,7 +105,7 @@ class PluginManager(private val server: Server) {
     val split = argsSplit.split(line, -1)
     val isCompleteRequest = tabResults != null
     if(split.length == 0) return false
-    val commandName = split(0).toLowerCase
+    val commandName = if(sender.isInstanceOf[Player] && !isCompleteRequest) split(0).substring(1).toLowerCase else split(0).toLowerCase
     val command = commandMap.get(commandName)
     if(command.isEmpty){
       if(isCompleteRequest && split.length == 1){

@@ -82,7 +82,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     case e => throw new IllegalStateException("Player has unknown game mode " + e.getName + " " + e.getID)
   }
 
-  override def setGameMode(gm: GameMode): Unit = getEntity.theItemInWorldManager.setGameType(gm match {
+  override def setGameMode(gm: GameMode): Unit = getEntity.setGameType(gm match {
     case GameMode.SURVIVAL => GameType.SURVIVAL
     case GameMode.CREATIVE => GameType.CREATIVE
     case GameMode.ADVENTURE => GameType.ADVENTURE
