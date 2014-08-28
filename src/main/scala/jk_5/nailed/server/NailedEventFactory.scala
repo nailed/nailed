@@ -167,7 +167,7 @@ object NailedEventFactory {
   }
 
   def fireOnRightClick(playerEntity: EntityPlayer, world: World, is: ItemStack, x: Int, y: Int, z: Int, side: Int, bX: Float, bY: Float, bZ: Float): Boolean = {
-    val player = NailedServer.getPlayerFromEntity(playerEntity.asInstanceOf[EntityPlayerMP]).asInstanceOf[NailedPlayer]
+    val player = NailedServer.getPlayerFromEntity(playerEntity.asInstanceOf[EntityPlayerMP])
     var xC = x
     var yC = y
     var zC = z

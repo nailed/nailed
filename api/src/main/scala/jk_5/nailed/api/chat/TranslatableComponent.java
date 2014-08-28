@@ -140,11 +140,8 @@ public class TranslatableComponent extends BaseComponent {
 
     @Override
     protected void toLegacyText(StringBuilder builder) {
-        String trans = locales.getString(translate);
-        if(trans == null){
-            addFormat(builder);
-            builder.append(translate);
-        }else{
+        try{
+            String trans = locales.getString(translate);
             Matcher matcher = format.matcher(trans);
             int position = 0;
             int i = 0;
@@ -173,6 +170,9 @@ public class TranslatableComponent extends BaseComponent {
                 addFormat(builder);
                 builder.append(trans.substring(position, trans.length()));
             }
+        }catch(MissingResourceException e){
+            addFormat(builder);
+            builder.append(translate);
         }
         super.toLegacyText(builder);
     }

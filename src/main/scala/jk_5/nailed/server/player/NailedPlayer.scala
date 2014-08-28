@@ -100,7 +100,6 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def setInventorySlot(slot: Int, stack: ItemStack){
     this.getEntity.inventory.setInventorySlotContents(slot, ItemStackConverter.toVanilla(stack))
     this.getEntity.sendContainerAndContentsToPlayer(this.getEntity.inventoryContainer, this.getEntity.inventoryContainer.getInventory)
-
   }
 
   override def addToInventory(stack: ItemStack){
