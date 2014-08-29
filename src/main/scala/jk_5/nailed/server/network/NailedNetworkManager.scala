@@ -42,7 +42,7 @@ import scala.collection.mutable
  */
 object NailedNetworkManager {
 
-  private val disableEpoll = NailedServer.config.getBoolean("netty.disable-epoll")
+  private val disableEpoll = NailedServer.config.getBoolean("network.disable-epoll")
   private val epollSupported = Epoll.isAvailable
   private val endpoints = mutable.ArrayBuffer[Channel]()
   private[network] val networkManagers = util.Collections.synchronizedList(new util.ArrayList[NetworkManager]())
@@ -73,7 +73,15 @@ object NailedNetworkManager {
   }
 
   def startEndpoints(){
-    for(endpoint <- NailedServer.config.getStringList("endpoints")){
+    logger.info("Starting server listeners")
+    if(epollSupported && disableEpoll){
+      logger.info("Epoll transport is supported, but disabled in the config. Falling back to NIO transport")
+    }else if(epollSupported){
+      logger.info("Epoll transport is supported and will be used")
+    }else{
+      logger.info("Epoll transport is not supported. Falling back to NIO transport")
+    }
+    for(endpoint <- NailedServer.config.getStringList("network.endpoints")){
       val parts = endpoint.split(":", 2)
       if(parts.length != 2){
         logger.error(s"Invalid configuration: Server endpoint $endpoint does not specify a port. Ignoring it")
