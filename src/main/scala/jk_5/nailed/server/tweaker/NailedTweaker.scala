@@ -20,6 +20,7 @@ package jk_5.nailed.server.tweaker
 import java.io.{File, IOException, PrintStream}
 import java.util
 
+import io.netty.util.internal.logging.InternalLoggerFactory
 import jk_5.nailed.server.console.{Autocompleter, LoggerOutputStream, TerminalWriterThread}
 import jk_5.nailed.server.tweaker.patcher.BinPatchManager
 import jk_5.nailed.server.tweaker.remapping.NameRemapper
@@ -101,6 +102,8 @@ class NailedTweaker extends ITweaker {
 
     BinPatchManager.setup()
     NameRemapper.init()
+
+    InternalLoggerFactory.getInstance("INITLOGGER") //Force netty's logger to initialize
   }
 
   override def injectIntoClassLoader(classLoader: LaunchClassLoader){

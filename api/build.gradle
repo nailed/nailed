@@ -17,6 +17,8 @@
 
 
 
+
+
 apply plugin: 'java'
 apply plugin: 'scala'
 apply plugin: 'maven'
@@ -46,7 +48,7 @@ compileScala {
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.1'
     compile 'jk_5.eventbus:EventBus:2.0.0'
-    compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
+    compile 'org.apache.logging.log4j:log4j-api:2.0.2'
     compile 'io.netty:netty-all:4.0.23.Final'
     compile 'com.google.guava:guava:15.0'
     compile 'com.google.code.gson:gson:2.2.4'
