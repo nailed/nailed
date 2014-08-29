@@ -18,19 +18,56 @@
 
 <Configuration status="WARN" packages="com.mojang">
     <Appenders>
-        <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
-        </Console>
-        <Queue name="TerminalConsole">
-            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
-        </Queue>
-        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
-            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-                <OnStartupTriggeringPolicy />
-            </Policies>
-        </RollingRandomAccessFile>
+        <Routing name="WINDOWS_COMPAT">
+            <Routes pattern="$${ctx:plugin}">
+                <Route>
+                    <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT">
+                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%X{plugin}]: %msg%n" />
+                    </Console>
+                </Route>
+                <Route key="$${ctx:plugin}">
+                    <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT">
+                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
+                    </Console>
+                </Route>
+            </Routes>
+        </Routing>
+        <Routing name="TerminalConsole">
+            <Routes pattern="$${ctx:plugin}">
+                <Route>
+                    <Queue name="TerminalConsole">
+                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%X{plugin}]: %msg%n" />
+                    </Queue>
+                </Route>
+                <Route key="$${ctx:plugin}">
+                    <Queue name="TerminalConsole">
+                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
+                    </Queue>
+                </Route>
+            </Routes>
+        </Routing>
+        <Routing name="File">
+            <Routes pattern="$${ctx:plugin}">
+                <Route>
+                    <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%X{plugin}]: %msg%n" />
+                        <Policies>
+                            <TimeBasedTriggeringPolicy />
+                            <OnStartupTriggeringPolicy />
+                        </Policies>
+                    </RollingRandomAccessFile>
+                </Route>
+                <Route key="$${ctx:plugin}">
+                    <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
+                        <Policies>
+                            <TimeBasedTriggeringPolicy />
+                            <OnStartupTriggeringPolicy />
+                        </Policies>
+                    </RollingRandomAccessFile>
+                </Route>
+            </Routes>
+        </Routing>
         <RandomAccessFile name="NettyLog" fileName="logs/netty.log">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
         </RandomAccessFile>

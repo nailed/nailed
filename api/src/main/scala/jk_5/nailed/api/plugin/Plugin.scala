@@ -20,7 +20,7 @@ package jk_5.nailed.api.plugin
 import java.io.{File, InputStream}
 
 import jk_5.nailed.api.Server
-import org.apache.logging.log4j.{LogManager, Logger}
+import jk_5.nailed.api.plugin.logging.{Logger, LoggerFactory}
 
 /**
  * Represents any Plugin that may be loaded at runtime to enhance existing
@@ -76,7 +76,7 @@ abstract class Plugin {
     this.server = server
     this.description = description
     this.file = description.getFile
-    this.logger = LogManager.getLogger("Plugin: " + getDescription.getName)
+    this.logger = LoggerFactory.getLogger(this)
   }
 
   def getDescription = this.description
