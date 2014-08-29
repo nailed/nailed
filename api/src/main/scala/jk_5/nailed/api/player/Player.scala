@@ -19,6 +19,7 @@ package jk_5.nailed.api.player
 
 import java.util.UUID
 
+import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.command.{CommandSender, WorldCommandSender}
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.ItemStack
@@ -81,4 +82,8 @@ trait Player extends CommandSender with OfflinePlayer with WorldCommandSender {
   def setInventorySlot(slot: Int, stack: ItemStack)
   def addToInventory(stack: ItemStack)
   def iterateInventory(p: ItemStack => Unit)
+
+  def kick(reason: String)
+
+  def getDescriptionComponent: BaseComponent
 }

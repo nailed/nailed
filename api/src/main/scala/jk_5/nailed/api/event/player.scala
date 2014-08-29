@@ -34,11 +34,9 @@ class PlayerEvent(val player: Player) extends Event
 case class PlayerJoinServerEvent(private val _player: Player) extends PlayerEvent(_player){
   var joinMessage: BaseComponent = {
     val base = new TextComponent("")
-    val name = new TextComponent(this.player.getDisplayName)
-    name.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(this.player.getUniqueId.toString)))
     val joined = new TextComponent(" joined the server")
     joined.setColor(ChatColor.YELLOW)
-    base.addExtra(name)
+    base.addExtra(player.getDescriptionComponent)
     base.addExtra(joined)
     base
   }
@@ -46,11 +44,9 @@ case class PlayerJoinServerEvent(private val _player: Player) extends PlayerEven
 case class PlayerLeaveServerEvent(private val _player: Player) extends PlayerEvent(_player){
   var leaveMessage: BaseComponent = {
     val base = new TextComponent("")
-    val name = new TextComponent(this.player.getDisplayName)
-    name.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(this.player.getUniqueId.toString)))
     val left = new TextComponent(" left the server")
     left.setColor(ChatColor.YELLOW)
-    base.addExtra(name)
+    base.addExtra(player.getDescriptionComponent)
     base.addExtra(left)
     base
   }

@@ -61,4 +61,6 @@ trait CommandSender {
    * @return whether they have this node
    */
   def hasPermission(permission: String): Boolean
+
+  def getDescriptionComponent: BaseComponent
 }

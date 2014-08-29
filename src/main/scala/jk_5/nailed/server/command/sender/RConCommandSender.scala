@@ -63,4 +63,6 @@ class RConCommandSender(val wrapped: RConConsoleSource) extends CommandSender {
    * @param messages the message to send
    */
   override def sendMessage(messages: Array[BaseComponent]): Unit = ???
+
+  override def getDescriptionComponent: BaseComponent = ???
 }

@@ -19,7 +19,7 @@ package jk_5.nailed.server.player
 
 import java.util.UUID
 
-import jk_5.nailed.api.chat.BaseComponent
+import jk_5.nailed.api.chat.{BaseComponent, ClickEvent, HoverEvent, TextComponent}
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.ItemStack
 import jk_5.nailed.api.player.{GameMode, Player}
@@ -109,6 +109,17 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   override def iterateInventory(p: ItemStack => Unit){
     for(i <- 0 until this.getInventorySize) p(getInventorySlotContent(i))
+  }
+
+  override def kick(reason: String){
+    this.netHandler.kickPlayerFromServer(reason)
+  }
+
+  override def getDescriptionComponent: BaseComponent = {
+    val c = new TextComponent(this.getDisplayName)
+    c.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(this.getUniqueId.toString)))
+    c.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + this.getName + " "))
+    c
   }
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode,eid=${getEntity.getEntityId}}"

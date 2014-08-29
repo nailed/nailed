@@ -66,4 +66,6 @@ class ConsoleCommandSender(val wrapped: DedicatedServer) extends CommandSender {
    * @param messages the message to send
    */
   override def sendMessage(messages: Array[BaseComponent]) = logger.info(new TextComponent(messages: _*).toPlainText)
+
+  override def getDescriptionComponent: BaseComponent = new TextComponent(this.getName)
 }
