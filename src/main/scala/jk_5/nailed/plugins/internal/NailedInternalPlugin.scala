@@ -39,6 +39,7 @@ class NailedInternalPlugin extends Plugin {
     this.getPluginManager.registerCommand(this, CommandWeather)
     this.getPluginManager.registerCommand(this, CommandToggleDownfall)
     this.getPluginManager.registerCommand(this, CommandKick)
+    this.getPluginManager.registerCommand(this, CommandHelp)
     this.getPluginManager.registerCommand(this, new RemovedCommand("defaultgamemode"))
     this.getPluginManager.registerCommand(this, new RemovedCommand("debug"))
     this.getPluginManager.registerCommand(this, new RemovedCommand("setworldspawn"))

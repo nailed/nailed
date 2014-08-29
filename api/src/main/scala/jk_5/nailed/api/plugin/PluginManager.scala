@@ -48,6 +48,7 @@ class PluginManager(private val server: Server) {
   private val toLoad = mutable.HashMap[String, PluginDescription]()
   private val commandMap = mutable.HashMap[String, Command]()
   private val commandsByPlugin: Multimap[Plugin, Command] = ArrayListMultimap.create()
+  private val commands = mutable.HashSet[Command]()
   private val listenersByPlugin: Multimap[Plugin, Any] = ArrayListMultimap.create()
   private val argsSplit = Pattern.compile(" ")
   private val logger = LogManager.getLogger
@@ -70,6 +71,7 @@ class PluginManager(private val server: Server) {
     commandMap.put(command.getName.toLowerCase, command)
     command.getAliases.foreach(a => commandMap.put(a.toLowerCase, command))
     commandsByPlugin.put(plugin, command)
+    commands += command
   }
 
   /**
@@ -82,6 +84,7 @@ class PluginManager(private val server: Server) {
     commandMap.foreach(e => if(e._2 == command) removals += e._1)
     removals.foreach(commandMap.remove)
     commandsByPlugin.values().remove(command)
+    commands.remove(command)
   }
 
   /**
@@ -96,6 +99,7 @@ class PluginManager(private val server: Server) {
       val removals = mutable.ArrayBuffer[String]()
       commandMap.foreach(e => if(e._2 == c) removals += e._1)
       removals.foreach(commandMap.remove)
+      commands.remove(c)
       it.remove()
     }
   }
@@ -331,4 +335,6 @@ class PluginManager(private val server: Server) {
       it.remove()
     }
   }
+
+  def getAllCommands: Array[Command] = this.commands.toArray
 }
