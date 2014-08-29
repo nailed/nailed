@@ -71,4 +71,10 @@ trait World {
 
   def onPlayerJoined(player: Player)
   def onPlayerLeft(player: Player)
+
+  def getTime: Int
+  def setTime(time: Int)
+
+  def getWeather: WeatherType
+  def setWeather(weather: WeatherType)
 }

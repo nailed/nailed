@@ -21,7 +21,7 @@ import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.mappack.MappackWorld
 import jk_5.nailed.api.mappack.gamerule.{DefaultGameRules, EditableGameRules}
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.world.{World, WorldContext, WorldProvider}
+import jk_5.nailed.api.world.{WeatherType, World, WorldContext, WorldProvider}
 import jk_5.nailed.server.map.gamerule.WrappedEditableGameRules
 import net.minecraft.world.WorldServer
 
@@ -59,6 +59,32 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
 
   override def onPlayerLeft(player: Player){
     println("Player " + player.toString + " left world " + this.toString)
+  }
+
+  override def getTime = this.wrapped.getWorldTime.toInt
+  override def setTime(time: Int) = this.wrapped.setWorldTime(time)
+
+  override def getWeather: WeatherType = {
+    val rain = this.wrapped.isRaining
+    val thunder = this.wrapped.isThundering
+
+    if(!rain && !thunder) WeatherType.DRY
+    else if(!thunder) WeatherType.RAIN
+    else WeatherType.THUNDER
+  }
+  override def setWeather(weather: WeatherType) = weather match {
+    case WeatherType.DRY =>
+      this.wrapped.getWorldInfo.setRaining(false)
+      this.wrapped.getWorldInfo.setRainTime(0)
+      this.wrapped.getWorldInfo.setThundering(false)
+      this.wrapped.getWorldInfo.setThunderTime(0)
+    case WeatherType.RAIN =>
+      this.wrapped.getWorldInfo.setRaining(true)
+      this.wrapped.getWorldInfo.setThundering(false)
+      this.wrapped.getWorldInfo.setThunderTime(0)
+    case WeatherType.THUNDER =>
+      this.wrapped.getWorldInfo.setRaining(true)
+      this.wrapped.getWorldInfo.setThundering(true)
   }
 
   override def toString = s"NailedWorld{id=$getDimensionId,name=$getName,type=$getType,gameRules=$getGameRules}"

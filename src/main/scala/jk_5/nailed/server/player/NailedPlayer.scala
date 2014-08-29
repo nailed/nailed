@@ -111,5 +111,5 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     for(i <- 0 until this.getInventorySize) p(getInventorySlotContent(i))
   }
 
-  override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode}"
+  override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode,eid=${getEntity.getEntityId}}"
 }

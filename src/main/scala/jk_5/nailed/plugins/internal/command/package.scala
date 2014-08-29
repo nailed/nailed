@@ -55,4 +55,23 @@ package object command {
 
   @inline def getUsernameOptions(args: Array[String]): List[String] = getOptions(args, Server.getInstance.getOnlinePlayers.map(_.getName))
   @inline def getUsernameOptions(args: Array[String], map: Map): List[String] = getOptions(args, map.players.map(_.getName))
+
+  def parseInt(sender: CommandSender, input: String, min: Int = Int.MinValue, max: Int = Int.MaxValue): Option[Int] = {
+    try{
+      val int = input.toInt
+      if(int > max){
+        sender.sendMessage(new ComponentBuilder("Number " + input + " is bigger than the maximum (" + max + ")").color(ChatColor.RED).create())
+        None
+      }else if(int < min){
+        sender.sendMessage(new ComponentBuilder("Number " + input + " is smaller than the minimum (" + min + ")").color(ChatColor.RED).create())
+        None
+      }else{
+        Some(int)
+      }
+    }catch{
+      case _: NumberFormatException =>
+        sender.sendMessage(new ComponentBuilder("Entered value " + input + " is not a valid number").color(ChatColor.RED).create())
+        None
+    }
+  }
 }
