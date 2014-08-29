@@ -21,7 +21,7 @@
  import net.minecraft.command.ICommandSender;
  import net.minecraft.command.ServerCommand;
  import net.minecraft.crash.CrashReport;
-@@ -23,17 +24,18 @@
+@@ -23,17 +24,19 @@
  import net.minecraft.server.ServerEula;
  import net.minecraft.server.gui.MinecraftServerGui;
  import net.minecraft.server.management.PreYggdrasilConverter;
@@ -39,12 +39,13 @@
 +import jk_5.nailed.server.NailedEventFactory;
 +import jk_5.nailed.server.config.MinecraftConfig;
 +import jk_5.nailed.server.console.CommandReaderThread;
++import jk_5.nailed.server.network.NailedNetworkManager;
 +import jk_5.nailed.server.tweaker.NailedTweaker;
 +
  public class DedicatedServer extends MinecraftServer implements IServer {
      private static final Logger field_155771_h = LogManager.getLogger();
      private final List field_71341_l = Collections.synchronizedList(new ArrayList());
-@@ -45,6 +47,7 @@
+@@ -45,6 +48,7 @@
      private WorldSettings.GameType field_71337_q;
      private boolean field_71335_s;
      private static final String __OBFID = "CL_00001784";
@@ -52,7 +53,7 @@
  
      public DedicatedServer(File p_i1508_1_) {
          super(p_i1508_1_, Proxy.NO_PROXY);
-@@ -69,34 +72,22 @@
+@@ -69,86 +73,77 @@
      }
  
      protected boolean func_71197_b() throws IOException {
@@ -93,8 +94,14 @@
              field_155771_h.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
              this.field_154332_n.func_154348_b();
              return false;
-@@ -108,24 +99,25 @@
-                 this.func_71189_e(this.field_71340_o.func_73671_a("server-ip", ""));
+         } else {
+             if (this.func_71264_H()) {
+-                this.func_71189_e("127.0.0.1");
++                //this.setHostname("127.0.0.1");
+             } else {
+                 this.func_71229_d(this.field_71340_o.func_73670_a("online-mode", true));
+-                this.func_71189_e(this.field_71340_o.func_73671_a("server-ip", ""));
++                //this.setHostname(this.settings.getStringProperty("server-ip", ""));
              }
  
 -            this.func_71251_e(this.field_71340_o.func_73670_a("spawn-animals", true));
@@ -126,11 +133,45 @@
 -            int i = this.field_71340_o.func_73669_a("gamemode", WorldSettings.GameType.SURVIVAL.func_77148_a());
 -            this.field_71337_q = WorldSettings.func_77161_a(i);
 +            this.field_71338_p = true;
-+            this.field_71337_q = WorldSettings.GameType.ADVENTURE;
++            this.field_71337_q = WorldSettings.GameType.ADVENTURE; //Nailed: set to ADVENTURE default
              field_155771_h.info("Default game type: " + this.field_71337_q);
              InetAddress inetaddress = null;
  
-@@ -157,9 +149,10 @@
+-            if (this.func_71211_k().length() > 0) {
+-                inetaddress = InetAddress.getByName(this.func_71211_k());
++            /*if (this.getServerHostname().length() > 0) {
++                inetaddress = InetAddress.getByName(this.getServerHostname());
+             }
+ 
+-            if (this.func_71215_F() < 0) {
+-                this.func_71208_b(this.field_71340_o.func_73669_a("server-port", 25565));
+-            }
++            if (this.getServerPort() < 0) {
++                this.setServerPort(this.settings.getIntProperty("server-port", 25565));
++            }*/
+ 
+             field_155771_h.info("Generating keypair");
+             this.func_71253_a(CryptManager.func_75891_b());
+-            field_155771_h.info("Starting Minecraft server on " + (this.func_71211_k().length() == 0 ? "*" : this.func_71211_k()) + ":" + this.func_71215_F());
++            //field_155771_h.info("Starting Minecraft server on " + (this.getServerHostname().length() == 0 ? "*" : this.getServerHostname()) + ":" + this.getServerPort());
+ 
+-            try {
+-                this.func_147137_ag().func_151265_a(inetaddress, this.func_71215_F());
++            //Nailed: redirect this to our own network system
++            NailedNetworkManager.startEndpoints();
++            /*try {
++                this.func_147137_ag().addLanEndpoint(inetaddress, this.getServerPort());
+             } catch (IOException ioexception) {
+                 field_155771_h.warn("**** FAILED TO BIND TO PORT!");
+                 field_155771_h.warn("The exception was: {}", new Object[] {ioexception.toString()});
+                 field_155771_h.warn("Perhaps a server is already running on that port?");
+                 return false;
+-            }
++            }*/
+ 
+             if (!this.func_71266_T()) {
+                 field_155771_h.warn("**** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!");
+@@ -157,9 +152,10 @@
                  field_155771_h.warn("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
              }
  
@@ -144,7 +185,7 @@
  
              if (!PreYggdrasilConverter.func_152714_a(this.field_71340_o)) {
                  return false;
-@@ -167,13 +160,14 @@
+@@ -167,13 +163,14 @@
                  this.func_152361_a(new DedicatedPlayerList(this));
                  long j = System.nanoTime();
  
@@ -164,7 +205,7 @@
                  long k = (new Random()).nextLong();
  
                  if (s.length() > 0) {
-@@ -188,22 +182,21 @@
+@@ -188,22 +185,21 @@
                      }
                  }
  
@@ -193,7 +234,7 @@
                  long i1 = System.nanoTime() - j;
                  String s3 = String.format("%.3fs", new Object[] {Double.valueOf((double)i1 / 1.0E9D)});
                  field_155771_h.info("Done (" + s3 + ")! For help, type \"help\" or \"?\"");
-@@ -220,6 +213,8 @@
+@@ -220,6 +216,8 @@
                      this.field_71339_n.func_72602_a();
                  }
  
@@ -202,7 +243,7 @@
                  return true;
              }
          }
-@@ -234,11 +229,11 @@
+@@ -234,11 +232,11 @@
      }
  
      public EnumDifficulty func_147135_j() {
@@ -216,7 +257,7 @@
      }
  
      protected void func_71228_a(CrashReport p_71228_1_) {}
-@@ -271,11 +266,11 @@
+@@ -271,11 +269,11 @@
      }
  
      public boolean func_71255_r() {
@@ -230,7 +271,7 @@
      }
  
      public void func_70000_a(PlayerUsageSnooper p_70000_1_) {
-@@ -346,11 +341,11 @@
+@@ -346,11 +344,11 @@
      }
  
      public boolean func_82356_Z() {

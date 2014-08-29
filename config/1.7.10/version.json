@@ -5,7 +5,7 @@
     "commons-logging:commons-logging:1.1.3",
     "org.apache.httpcomponents:httpcore:4.3.2",
     "net.sf.trove4j:trove4j:3.0.3",
-    "io.netty:netty-all:4.0.21.Final",
+    "io.netty:netty-all:4.0.23.Final",
     "com.google.guava:guava:15.0",
     "org.apache.commons:commons-lang3:3.1",
     "commons-io:commons-io:2.4",

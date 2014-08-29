@@ -56,6 +56,7 @@ object NailedServer
   private val pluginsFolder = new File(NailedTweaker.gameDir, "plugins")
   private val pluginManager = new PluginManager(this)
   private val logger = LogManager.getLogger
+  val config = Settings.load()
 
   Server.setInstance(this)
 
