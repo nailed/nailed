@@ -89,6 +89,21 @@ package object command {
     }
   }
 
+  def parseFloat(sender: CommandSender, input: String, min: Float = Float.MinValue, max: Float = Float.MaxValue): Float = {
+    try{
+      val int = input.toFloat
+      if(int > max){
+        throw new CommandException("Number " + input + " is bigger than the maximum (" + max + ")")
+      }else if(int < min){
+        throw new CommandException("Number " + input + " is smaller than the minimum (" + min + ")")
+      }else{
+        int
+      }
+    }catch{
+      case _: NumberFormatException => throw new CommandException("Entered value " + input + " is not a valid number")
+    }
+  }
+
   def parseIntWithDefault(input: String, default: Int): Int = {
     try{
       input.toInt
