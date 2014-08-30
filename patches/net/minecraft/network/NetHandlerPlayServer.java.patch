@@ -43,6 +43,15 @@
  public class NetHandlerPlayServer implements INetHandlerPlayServer {
      private static final Logger field_147370_c = LogManager.getLogger();
      public final NetworkManager field_147371_a;
+@@ -319,7 +325,7 @@
+ 
+                 AxisAlignedBB axisalignedbb = this.field_147369_b.field_70121_D.func_72329_c().func_72314_b((double)f3, (double)f3, (double)f3).func_72321_a(0.0D, -0.55D, 0.0D);
+ 
+-                if (!this.field_147367_d.func_71231_X() && !this.field_147369_b.field_71134_c.func_73083_d() && !worldserver.func_72829_c(axisalignedbb)) {
++                if (!this.field_147367_d.func_71231_X() && !this.field_147369_b.field_71075_bZ.field_75101_c && !worldserver.func_72829_c(axisalignedbb)) {
+                     if (d11 >= -0.03125D) {
+                         ++this.field_147365_f;
+ 
 @@ -356,9 +362,9 @@
          this.field_147369_b.func_143004_u();
  
