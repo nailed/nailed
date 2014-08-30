@@ -31,6 +31,7 @@ import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.tileentity.TileEntityStatEmitter
 import jk_5.nailed.server.tweaker.{NailedTweaker, NailedVersion}
+import jk_5.nailed.server.utils.NailedPlayerSelector
 import jk_5.nailed.server.world.{BossBar, DimensionManagerTrait, WorldProviders}
 import jk_5.nailed.server.worlditems.WorldItemEventHandler
 import net.minecraft.command.CommandBase
@@ -108,6 +109,8 @@ object NailedServer
   def load(server: DedicatedServer){
     this.pluginManager.enablePlugins()
   }
+
+  override def getPlayerSelector = NailedPlayerSelector
 
   @EventHandler def onBlockPlace(event: BlockPlaceEvent){
     //event.setCanceled(true)

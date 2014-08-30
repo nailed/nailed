@@ -34,7 +34,7 @@ object CommandLoadmap extends Command("loadmap") with TabExecutor {
     case 1 =>
       val mappack = Server.getInstance.getMappackRegistry.getByName(args(0))
       if(mappack.isEmpty){
-        sender.sendMessage(new ComponentBuilder("Unknown mappack " + args(0)).color(ChatColor.RED).create())
+        throw new CommandException("Unknown mappack " + args(0))
       }else{
         val future = Server.getInstance.getMapLoader.createMapFor(mappack.get)
         future.addListener(new FutureListener[Map] {
@@ -47,12 +47,11 @@ object CommandLoadmap extends Command("loadmap") with TabExecutor {
           }
         })
       }
-    case _ => sender.sendMessage(new ComponentBuilder("Usage: /loadmap <mappack>").color(ChatColor.RED).create())
+    case _ => throw new CommandUsageException("Usage: /loadmap <mappack>")
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = {
-    if(args.length == 1){
-      getOptions(args, Server.getInstance.getMappackRegistry.getAllIds)
-    }else List()
+    if(args.length == 1) autocomplete(args, Server.getInstance.getMappackRegistry.getAllIds)
+    else List()
   }
 }

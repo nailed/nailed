@@ -42,6 +42,10 @@ public enum GameMode {
         return id;
     }
 
+    public static GameMode byId(int id){
+        return BY_ID.get(id);
+    }
+
     static {
         for(GameMode gm : values()){
             BY_ID.put(gm.getId(), gm);

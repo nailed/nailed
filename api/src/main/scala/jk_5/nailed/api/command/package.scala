@@ -44,12 +44,18 @@ package object command {
   }
 
   def caseInsensitiveMatch(in: String)(m: (String) => Unit) = m(in.toLowerCase)
+  def caseInsensitiveMatchWithResult[T](in: String)(m: (String) => T): T = m(in.toLowerCase)
 
-  //TODO: proper player selector
-  def getTargetPlayer(sender: CommandSender, target: String): Option[Player] = {
-    val pl = Server.getInstance.getPlayerByName(target)
-    if(pl.isEmpty) throw new PlayerNotFoundException(target)
-    pl
+  def getPlayer(sender: CommandSender, target: String): Option[Player] = {
+    val p = getPlayers(sender, target)
+    if(p.length == 0) None else Some(p(0))
+  }
+
+  def getPlayers(sender: CommandSender, pattern: String): Array[Player] = {
+    sender match {
+      case p: Player => Server.getInstance.getPlayerSelector.matchPlayers(pattern, p.getLocation)
+      case _ => throw new CommandException("Only players can use selectors (this is being changed)")
+    }
   }
 
   @inline def autocompleteUsername(args: Array[String]): List[String] = autocomplete(args, Server.getInstance.getOnlinePlayers.map(_.getName))
@@ -70,14 +76,17 @@ package object command {
     }
   }
 
-  def senderPlayerOrArgument(sender: CommandSender, args: Array[String], index: Int): Player = sender match {
-    case player: Player => player
-    case _ =>
-      if(args.length > index){
-        val p = Server.getInstance.getPlayerByName(args(index))
-        if(p.isDefined) p.get else throw new PlayerNotFoundException(args(index))
-      }else{
-        throw new CommandException("You are not a player")
-      }
+  def parseIntWithDefault(input: String, default: Int): Int = {
+    try{
+      input.toInt
+    }catch{
+      case _: NumberFormatException => default
+    }
+  }
+
+  def senderOrMatches(sender: CommandSender, args: Array[String], index: Int): Array[Player] = sender match {
+    case player: Player => Array(player)
+    case _ if args.length > index => getPlayers(sender, args(index))
+    case _ => throw new NotAPlayerException
   }
 }

@@ -27,8 +27,7 @@ import jk_5.nailed.api.command._
 object CommandHeal extends Command("heal") with TabExecutor {
 
   override def execute(sender: CommandSender, args: Array[String]){
-    val p = senderPlayerOrArgument(sender, args, 0)
-    p.setHealth(p.getMaxHealth)
+    senderOrMatches(sender, args, 0).foreach(_.heal())
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match{

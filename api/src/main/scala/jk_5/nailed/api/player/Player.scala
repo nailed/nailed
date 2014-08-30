@@ -20,7 +20,7 @@ package jk_5.nailed.api.player
 import java.util.UUID
 
 import jk_5.nailed.api.chat.BaseComponent
-import jk_5.nailed.api.command.{CommandSender, WorldCommandSender}
+import jk_5.nailed.api.command.{CommandSender, LocationCommandSender, WorldCommandSender}
 import jk_5.nailed.api.entity.Damageable
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.ItemStack
@@ -33,7 +33,13 @@ import jk_5.nailed.api.world.World
  *
  * @author jk-5
  */
-trait Player extends CommandSender with OfflinePlayer with WorldCommandSender with Damageable {
+trait Player
+  extends CommandSender
+  with OfflinePlayer
+  with WorldCommandSender
+  with LocationCommandSender
+  with Damageable
+{
 
   /**
    * Returns the name of this player

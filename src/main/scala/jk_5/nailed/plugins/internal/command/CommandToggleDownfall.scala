@@ -37,6 +37,6 @@ object CommandToggleDownfall extends Command("toggledownfall") {
         c.getWorld.setWeather(WeatherType.RAIN)
         sender.sendMessage(new ComponentBuilder("Weather changed to raining").color(ChatColor.GREEN).create())
       }
-    case _ => sender.sendMessage(new ComponentBuilder("You are not in a world").color(ChatColor.RED).create())
+    case _ => throw new NoWorldException
   }
 }

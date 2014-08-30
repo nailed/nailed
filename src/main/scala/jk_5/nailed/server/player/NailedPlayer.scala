@@ -151,6 +151,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   }
 
   override def resetMaxHealth() = setMaxHealth(entity.getMaxHealth)
+  override def heal() = setHealth(getMaxHealth)
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode,eid=${getEntity.getEntityId}}"
 }

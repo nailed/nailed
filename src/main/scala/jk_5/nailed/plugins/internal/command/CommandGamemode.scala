@@ -17,7 +17,6 @@
 
 package jk_5.nailed.plugins.internal.command
 
-import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command._
 import jk_5.nailed.api.player.{GameMode, Player}
 
@@ -31,23 +30,15 @@ object CommandGamemode extends Command("gamemode", "gm") with TabExecutor {
   override def execute(sender: CommandSender, args: Array[String]){
     if(args.length == 0) sender match {
       case p: Player => toggleGamemode(p)
-      case _ => sender.sendMessage(new ComponentBuilder("You are not a player").color(ChatColor.RED).create())
-    }else if(args.length == 1) sender match {
-      case p: Player =>
-        val mode = fromString(args(0))
-        if(mode.isEmpty){
-          sender.sendMessage(new ComponentBuilder("Unknown gamemode").color(ChatColor.RED).create())
-        }else{
-          p.setGameMode(mode.get)
-        }
-      case _ => sender.sendMessage(new ComponentBuilder("You are not a player").color(ChatColor.RED).create())
-    }else if(args.length == 2){
-      val players = getTargetPlayer(sender, args(1)) //TODO: player selector
+      case _ => throw new CommandUsageException("/gamemode <mode> <player>")
+    }else if(args.length == 1 || args.length == 2){
       val newmode = fromString(args(0))
-      if(newmode.isEmpty){
-        sender.sendMessage(new ComponentBuilder("Unknown gamemode").color(ChatColor.RED).create())
+      senderOrMatches(sender, args, 1).foreach(_.setGameMode(newmode))
+    }else{
+      if(sender.isInstanceOf[Player]){
+        throw new CommandUsageException("/gamemode [mode] [player]")
       }else{
-        players.get.setGameMode(newmode.get) //TODO: multiple players with the selector
+        throw new CommandUsageException("/gamemode <mode> <player>")
       }
     }
   }
@@ -58,11 +49,12 @@ object CommandGamemode extends Command("gamemode", "gm") with TabExecutor {
     case _ => List()
   }
 
-  def fromString(s: String) =
-    if(s.equalsIgnoreCase("survival") || s.equalsIgnoreCase("s") || s == "0") Some(GameMode.SURVIVAL)
-    else if(s.equalsIgnoreCase("creative") || s.equalsIgnoreCase("c") || s == "1") Some(GameMode.CREATIVE)
-    else if(s.equalsIgnoreCase("adventure") || s.equalsIgnoreCase("a") || s == "2") Some(GameMode.ADVENTURE)
-    else None
+  def fromString(s: String) = caseInsensitiveMatchWithResult(s){
+    case "0" | "s" | "survival" => GameMode.SURVIVAL
+    case "1" | "c" | "creative" => GameMode.CREATIVE
+    case "2" | "a" | "adventure" => GameMode.ADVENTURE
+    case _ => throw new CommandException(s"Unknown gamemode '$s'")
+  }
 
   def toggleGamemode(p: Player) = p.setGameMode(if(p.getGameMode == GameMode.SURVIVAL) GameMode.CREATIVE else GameMode.SURVIVAL)
 }

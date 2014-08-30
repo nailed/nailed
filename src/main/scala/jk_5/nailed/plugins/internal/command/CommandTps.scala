@@ -29,7 +29,7 @@ import net.minecraft.server.MinecraftServer
  *
  * @author jk-5
  */
-object CommandTps extends Command("tps") with TabExecutor {
+object CommandTps extends Command("tps") {
 
   final val timeFormatter = new DecimalFormat("########0.000")
 
@@ -61,6 +61,4 @@ object CommandTps extends Command("tps") with TabExecutor {
     for(v <- values) sum += v
     sum / values.length
   }
-
-  override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = List()
 }

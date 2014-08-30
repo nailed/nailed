@@ -33,7 +33,7 @@ object CommandKick extends Command("kick") with TabExecutor {
       sender.sendMessage(new ComponentBuilder("Usage: /kick <player> [reason]").color(ChatColor.RED).create())
       return
     }
-    val target = Server.getInstance.getPlayerByName(args(0))
+    val target = getPlayer(sender, args(0))
     val reason = if(args.length > 1){
       val newArray = new Array[String](args.length - 1)
       System.arraycopy(args, 1, newArray, 0, newArray.length)
@@ -41,8 +41,7 @@ object CommandKick extends Command("kick") with TabExecutor {
     }else "No reason given"
 
     if(target.isEmpty){
-      sender.sendMessage(new ComponentBuilder("Player " + args(0) + " is not online").color(ChatColor.RED).create())
-      return
+      throw new CommandException("Player " + args(0) + " is not online")
     }
 
     target.get.kick("Kicked by " + sender.getName + ". Reason: " + reason)

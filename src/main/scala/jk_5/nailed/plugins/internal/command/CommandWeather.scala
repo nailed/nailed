@@ -46,7 +46,7 @@ object CommandWeather extends Command("weather") with TabExecutor {
       }else{
         sender.sendMessage(new ComponentBuilder("Current weather in world " + c.getWorld.getName + ": " + c.getWorld.getWeather.name().toLowerCase).color(ChatColor.GREEN).create())
       }
-    case _ => sender.sendMessage(new ComponentBuilder("You are not in a world").color(ChatColor.RED).create())
+    case _ => throw new NoWorldException
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match {

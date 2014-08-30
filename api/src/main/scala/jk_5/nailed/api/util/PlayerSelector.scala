@@ -15,17 +15,16 @@
  * this program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package jk_5.nailed.api.command
+package jk_5.nailed.api.util
+
+import jk_5.nailed.api.player.Player
 
 /**
  * No description given
  *
  * @author jk-5
  */
-class CommandException(message: String) extends RuntimeException(message){
-  override def fillInStackTrace(): Throwable = this
+trait PlayerSelector {
+  def matchPlayers(pattern: String, base: Location): Array[Player]
+  def matchesMultiplePlayers(pattern: String): Boolean
 }
-class CommandUsageException(usage: String) extends CommandException("Usage: " + usage)
-class PlayerNotFoundException(name: String) extends CommandException("Player " + name + " could not be found")
-class NotAPlayerException extends CommandException("You are not a player")
-class NoWorldException extends CommandException("You are not in a world")

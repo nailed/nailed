@@ -70,4 +70,9 @@ trait Damageable {
    * Resets the max health to the original amount.
    */
   def resetMaxHealth()
+
+  /**
+   * Heals this entity to their maximum amount of health
+   */
+  def heal()
 }

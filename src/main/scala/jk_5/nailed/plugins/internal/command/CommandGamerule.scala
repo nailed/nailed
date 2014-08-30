@@ -41,21 +41,17 @@ object CommandGamerule extends Command("gamerule") with TabExecutor {
             }
             sender.sendMessage(builder.create())
           case 1 =>
-            if(!gameRules.ruleExists(args(0))){
-              sender.sendMessage(new ComponentBuilder(s"Gamerule '${args(0)}' does not exist").color(ChatColor.RED).create())
-            }else{
-              sender.sendMessage(new TextComponent(args(0) + " = " + gameRules(args(0))))
-            }
+            if(!gameRules.ruleExists(args(0))) throw new CommandException(s"Gamerule '${args(0)}' does not exist")
+            else sender.sendMessage(new TextComponent(args(0) + " = " + gameRules(args(0))))
           case 2 =>
-            if(!gameRules.ruleExists(args(0))){
-              sender.sendMessage(new ComponentBuilder(s"Gamerule '${args(0)}' does not exist").color(ChatColor.RED).create())
-            }else{
+            if(!gameRules.ruleExists(args(0))) throw new CommandException(s"Gamerule '${args(0)}' does not exist")
+            else{
               gameRules(args(0)) = args(1)
               sender.sendMessage(new ComponentBuilder("Gamerule " + args(0) + " changed to " + args(1)).color(ChatColor.GREEN).create())
             }
-          case _ => sender.sendMessage(new ComponentBuilder(s"Usage: /gamerule <name> [value]").color(ChatColor.RED).create())
+          case _ => throw new CommandUsageException(s"/gamerule <name> [value]")
         }
-      case _ => sender.sendMessage(new ComponentBuilder(s"You can't change gamerules, because you are not in a world").color(ChatColor.RED).create())
+      case _ => throw new NoWorldException
     }
   }
 

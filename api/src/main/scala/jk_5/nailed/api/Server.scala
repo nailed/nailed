@@ -27,7 +27,7 @@ import jk_5.nailed.api.mappack.MappackRegistry
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.api.scheduler.Scheduler
-import jk_5.nailed.api.util.Checks
+import jk_5.nailed.api.util.{Checks, PlayerSelector}
 import jk_5.nailed.api.world.{DefaultWorldProviders, World, WorldContext, WorldProvider}
 
 /**
@@ -130,4 +130,6 @@ trait Server {
   def getMappackRegistry: MappackRegistry
 
   def getConsoleCommandSender: CommandSender
+
+  def getPlayerSelector: PlayerSelector
 }

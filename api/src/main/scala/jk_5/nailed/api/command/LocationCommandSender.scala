@@ -17,15 +17,13 @@
 
 package jk_5.nailed.api.command
 
+import jk_5.nailed.api.util.Location
+
 /**
  * No description given
  *
  * @author jk-5
  */
-class CommandException(message: String) extends RuntimeException(message){
-  override def fillInStackTrace(): Throwable = this
+trait LocationCommandSender extends CommandSender {
+  def getLocation: Location
 }
-class CommandUsageException(usage: String) extends CommandException("Usage: " + usage)
-class PlayerNotFoundException(name: String) extends CommandException("Player " + name + " could not be found")
-class NotAPlayerException extends CommandException("You are not a player")
-class NoWorldException extends CommandException("You are not in a world")
