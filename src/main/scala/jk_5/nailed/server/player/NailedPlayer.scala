@@ -157,12 +157,14 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def addInstantPotionEffect(effect: Potion) = addInstantPotionEffect(effect, 1)
   override def addInstantPotionEffect(effect: Potion, level: Int){
     Checks.check(effect.isInstant, "Potion is not instant")
+    Checks.check(level > 0, "Level should be > 0")
     this.entity.addPotionEffect(new PotionEffect(effect.getId, 1, level - 1))
   }
   override def addPotionEffect(effect: Potion, seconds: Int) = addPotionEffect(effect, seconds, 1)
-  override def addPotionEffect(effect: Potion, seconds: Int, level: Int) = addPotionEffect(effect, seconds, seconds, ambient = false)
+  override def addPotionEffect(effect: Potion, seconds: Int, level: Int) = addPotionEffect(effect, seconds, level, ambient = false)
   override def addPotionEffect(effect: Potion, seconds: Int, level: Int, ambient: Boolean){
     Checks.check(!effect.isInstant, "Potion is instant")
+    Checks.check(level > 0, "Level should be > 0")
     this.entity.addPotionEffect(new PotionEffect(effect.getId, seconds * 20, level - 1, ambient))
   }
   override def addInfinitePotionEffect(effect: Potion) = addPotionEffect(effect, 1000000)

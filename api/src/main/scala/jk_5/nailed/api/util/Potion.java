@@ -35,7 +35,7 @@ public enum Potion {
     STRENGTH(5, false, false),
     INSTANT_HEALTH(6, false, true),
     HARMING(7, true, true),
-    JUMPBOOST(8, false, false),
+    JUMP_BOOST(8, false, false),
     CONFUSION(9, true, false),
     REGENERATION(10, false, false),
     RESISTANCE(11, false, false),
@@ -43,14 +43,14 @@ public enum Potion {
     WATER_BREATHING(13, false, false),
     INVISIBILITY(14, false, false),
     BLINDNESS(15, true, false),
-    NIGHTVISION(16, false, false),
+    NIGHT_VISION(16, false, false),
     HUNGER(17, true, false),
     WEAKNESS(18, true, false),
     POISON(19, true, false),
     WITHER(20, true, false),
     HEALTH_BOOST(21, false, false),
     ABSORPTION(22, false, false),
-    STATURATION(23, false, false);
+    SATURATION(23, false, false);
 
     private static final Map<Integer, Potion> BY_ID = new HashMap<Integer, Potion>();
     private static final Map<String, Potion> BY_NAME = new HashMap<String, Potion>();
