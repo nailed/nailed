@@ -17,18 +17,22 @@
 
 package jk_5.nailed.plugins.internal.command
 
-import jk_5.nailed.api.command.CommandSender
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 
 /**
  * No description given
  *
  * @author jk-5
  */
-object CommandHeal extends Command("heal") {
+object CommandHeal extends Command("heal") with TabExecutor {
 
   override def execute(sender: CommandSender, args: Array[String]){
     val p = senderPlayerOrArgument(sender, args, 0)
     p.setHealth(p.getMaxHealth)
+  }
+
+  override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match{
+    case 1 => autocompleteUsername(args)
+    case _ => List()
   }
 }

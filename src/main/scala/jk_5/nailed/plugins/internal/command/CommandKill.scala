@@ -17,17 +17,21 @@
 
 package jk_5.nailed.plugins.internal.command
 
-import jk_5.nailed.api.command.CommandSender
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 
 /**
  * No description given
  *
  * @author jk-5
  */
-object CommandKill extends Command("kill") {
+object CommandKill extends Command("kill") with TabExecutor {
 
   override def execute(sender: CommandSender, args: Array[String]){
     senderPlayerOrArgument(sender, args, 0).setHealth(0)
+  }
+
+  override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match {
+    case 1 => autocompleteUsername(args)
+    case _ =>
   }
 }

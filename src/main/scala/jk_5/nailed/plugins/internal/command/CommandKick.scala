@@ -19,8 +19,7 @@ package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TextComponent}
-import jk_5.nailed.api.command.{CommandSender, TabExecutor}
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 
 /**
  * No description given
@@ -64,5 +63,5 @@ object CommandKick extends Command("kick") with TabExecutor {
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] =
-    if(args.length == 1) getUsernameOptions(args) else List()
+    if(args.length == 1) autocompleteUsername(args) else List()
 }

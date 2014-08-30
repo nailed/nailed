@@ -18,8 +18,7 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
-import jk_5.nailed.api.command.{CommandSender, WorldCommandSender}
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 import jk_5.nailed.api.world.WeatherType
 
 /**

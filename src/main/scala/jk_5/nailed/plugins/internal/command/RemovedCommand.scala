@@ -17,9 +17,8 @@
 
 package jk_5.nailed.plugins.internal.command
 
-import jk_5.nailed.api.chat.{ChatColor, TextComponent}
-import jk_5.nailed.api.command.CommandSender
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
+import jk_5.nailed.api.command._
 
 /**
  * No description given
@@ -29,9 +28,6 @@ import jk_5.nailed.api.plugin.Command
 class RemovedCommand(name: String) extends Command(name) {
 
   override def execute(sender: CommandSender, args: Array[String]){
-    //val c = new TranslatableComponent("commands.generic.notFound")
-    val c = new TextComponent("Unknown command. Try /help for a list of commands")
-    c.setColor(ChatColor.RED)
-    sender.sendMessage(c)
+    sender.sendMessage(new ComponentBuilder("Unknown command. Try /help for a list of commands").color(ChatColor.RED).create())
   }
 }

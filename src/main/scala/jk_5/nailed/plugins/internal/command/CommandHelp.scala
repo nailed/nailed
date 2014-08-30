@@ -19,8 +19,7 @@ package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ClickEvent, ComponentBuilder, TextComponent}
-import jk_5.nailed.api.command.CommandSender
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 
 /**
  * No description given

@@ -18,9 +18,8 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
-import jk_5.nailed.api.command.{CommandSender, TabExecutor}
+import jk_5.nailed.api.command._
 import jk_5.nailed.api.player.{GameMode, Player}
-import jk_5.nailed.api.plugin.Command
 
 /**
  * No description given
@@ -54,8 +53,8 @@ object CommandGamemode extends Command("gamemode", "gm") with TabExecutor {
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match {
-    case 1 => getOptions(args, "survival", "creative", "adventure")
-    case 2 => getUsernameOptions(args)
+    case 1 => autocomplete(args, "survival", "creative", "adventure")
+    case 2 => autocompleteUsername(args)
     case _ => List()
   }
 

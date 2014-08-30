@@ -18,8 +18,7 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.chat._
-import jk_5.nailed.api.command.{CommandSender, TabExecutor, WorldCommandSender}
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 
 /**
  * No description given
@@ -63,8 +62,8 @@ object CommandGamerule extends Command("gamerule") with TabExecutor {
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = sender match {
     case s: WorldCommandSender =>
       args.length match {
-        case 1 => getOptions(args, s.getWorld.getGameRules.list)
-        case 2 => getOptions(args, "true", "false")
+        case 1 => autocomplete(args, s.getWorld.getGameRules.list)
+        case 2 => autocomplete(args, "true", "false")
         case _ => List()
       }
     case _ => List()

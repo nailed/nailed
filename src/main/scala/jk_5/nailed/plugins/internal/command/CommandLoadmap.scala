@@ -20,9 +20,8 @@ package jk_5.nailed.plugins.internal.command
 import io.netty.util.concurrent.{Future, FutureListener}
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat._
-import jk_5.nailed.api.command.{CommandSender, TabExecutor}
+import jk_5.nailed.api.command._
 import jk_5.nailed.api.map.Map
-import jk_5.nailed.api.plugin.Command
 
 /**
  * No description given

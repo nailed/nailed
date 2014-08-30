@@ -20,8 +20,7 @@ package jk_5.nailed.plugins.internal.command
 import java.text.DecimalFormat
 
 import jk_5.nailed.api.chat.{BaseComponent, ChatColor, ComponentBuilder}
-import jk_5.nailed.api.command.{CommandSender, TabExecutor}
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 import jk_5.nailed.server.world.NailedDimensionManager
 import net.minecraft.server.MinecraftServer
 

@@ -19,9 +19,8 @@ package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
-import jk_5.nailed.api.command.{CommandSender, TabExecutor}
+import jk_5.nailed.api.command._
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.plugin.Command
 
 /**
  * No description given
@@ -41,7 +40,7 @@ object CommandGoto extends Command("goto") with TabExecutor {
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match {
-    case 1 => getOptions(args, "map", "world")
+    case 1 => autocomplete(args, "map", "world")
     case _ => List()
   }
 }

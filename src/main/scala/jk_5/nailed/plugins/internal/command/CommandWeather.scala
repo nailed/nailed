@@ -18,8 +18,7 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
-import jk_5.nailed.api.command.{CommandSender, TabExecutor, WorldCommandSender}
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 import jk_5.nailed.api.world.WeatherType
 
 /**
@@ -51,7 +50,7 @@ object CommandWeather extends Command("weather") with TabExecutor {
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match {
-    case 1 => getOptions(args, "clear", "rain", "thunder")
+    case 1 => autocomplete(args, "clear", "rain", "thunder")
     case _ => List()
   }
 }

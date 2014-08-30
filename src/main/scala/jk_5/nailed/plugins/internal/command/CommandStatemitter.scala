@@ -18,8 +18,7 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.chat.ChatColor
-import jk_5.nailed.api.command.CommandSender
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.utils.NBTUtils
 import net.minecraft.init.Blocks

@@ -18,8 +18,7 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
-import jk_5.nailed.api.command.{CommandSender, TabExecutor, WorldCommandSender}
-import jk_5.nailed.api.plugin.Command
+import jk_5.nailed.api.command._
 import jk_5.nailed.server.NailedServer
 
 /**
@@ -63,7 +62,7 @@ object CommandTime extends Command("time") with TabExecutor {
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] =
-    if(args.length == 1) getOptions(args, "set")
-    else if(args.length == 2) getOptions(args, "day", "night")
+    if(args.length == 1) autocomplete(args, "set")
+    else if(args.length == 2) autocomplete(args, "day", "night")
     else null
 }
