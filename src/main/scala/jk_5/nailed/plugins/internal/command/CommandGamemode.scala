@@ -56,5 +56,5 @@ object CommandGamemode extends Command("gamemode", "gm") with TabExecutor {
     case _ => throw new CommandException(s"Unknown gamemode '$s'")
   }
 
-  def toggleGamemode(p: Player) = p.setGameMode(if(p.getGameMode == GameMode.SURVIVAL) GameMode.CREATIVE else GameMode.SURVIVAL)
+  def toggleGamemode(p: Player) = p.setGameMode(if(p.getGameMode == GameMode.SURVIVAL || p.getGameMode == GameMode.ADVENTURE) GameMode.CREATIVE else GameMode.SURVIVAL)
 }

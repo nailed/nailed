@@ -43,6 +43,19 @@ package object command {
     ret.toList
   }
 
+  @inline def autocomplete(args: Array[String], options: java.lang.Iterable[String]): List[String] = {
+    val last = args(args.length - 1)
+    val ret = mutable.ListBuffer[String]()
+    val it = options.iterator()
+    while(it.hasNext){
+      val v  = it.next()
+      if(v.regionMatches(true, 0, last, 0, last.length)){
+        ret += v
+      }
+    }
+    ret.toList
+  }
+
   def caseInsensitiveMatch(in: String)(m: (String) => Unit) = m(in.toLowerCase)
   def caseInsensitiveMatchWithResult[T](in: String)(m: (String) => T): T = m(in.toLowerCase)
 

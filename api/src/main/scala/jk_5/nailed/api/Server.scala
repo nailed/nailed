@@ -132,4 +132,6 @@ trait Server {
   def getConsoleCommandSender: CommandSender
 
   def getPlayerSelector: PlayerSelector
+
+  def isAsync: Boolean
 }

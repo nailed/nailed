@@ -106,6 +106,7 @@ class PluginManager(private val server: Server) {
 
   def dispatchCommand(sender: CommandSender, line: String): Boolean = dispatchCommand(sender, line, null)
   def dispatchCommand(sender: CommandSender, line: String, tabResults: mutable.ListBuffer[String]): Boolean = {
+    //if(Server.getInstance.isAsync) throw new IllegalStateException("Async command dispatch")
     val split = argsSplit.split(line, -1)
     val isCompleteRequest = tabResults != null
     if(split.length == 0) return false

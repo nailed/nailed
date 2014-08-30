@@ -25,7 +25,7 @@ import jk_5.nailed.api.entity.Damageable
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.ItemStack
 import jk_5.nailed.api.scoreboard.ScoreboardManager
-import jk_5.nailed.api.util.Location
+import jk_5.nailed.api.util.{Location, Potion}
 import jk_5.nailed.api.world.World
 
 /**
@@ -93,4 +93,15 @@ trait Player
   def kick(reason: String)
 
   def getDescriptionComponent: BaseComponent
+
+  def addInstantPotionEffect(effect: Potion)
+  def addInstantPotionEffect(effect: Potion, level: Int)
+  def addPotionEffect(effect: Potion, seconds: Int)
+  def addPotionEffect(effect: Potion, seconds: Int, level: Int)
+  def addPotionEffect(effect: Potion, seconds: Int, level: Int, ambient: Boolean)
+  def addInfinitePotionEffect(effect: Potion)
+  def addInfinitePotionEffect(effect: Potion, level: Int)
+  def addInfinitePotionEffect(effect: Potion, level: Int, ambient: Boolean)
+  def clearPotionEffects()
+  def clearPotionEffect(effect: Potion)
 }

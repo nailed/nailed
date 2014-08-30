@@ -58,6 +58,7 @@ object NailedServer
   private val pluginManager = new PluginManager(this)
   private val logger = LogManager.getLogger
   val config = Settings.load()
+  private var mainThread: Thread = _
 
   Server.setInstance(this)
 
@@ -100,6 +101,7 @@ object NailedServer
   def preLoad(server: DedicatedServer){
     CommandBase.setAdminCommander(null) //Don't spam my log with stupid messages
 
+    this.mainThread = Thread.currentThread()
     this.pluginsFolder.mkdir()
     this.pluginManager.discoverClasspathPlugins()
     this.pluginManager.discoverPlugins(this.pluginsFolder)
@@ -111,6 +113,7 @@ object NailedServer
   }
 
   override def getPlayerSelector = NailedPlayerSelector
+  override def isAsync = Thread.currentThread() != mainThread
 
   @EventHandler def onBlockPlace(event: BlockPlaceEvent){
     //event.setCanceled(true)

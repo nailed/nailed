@@ -24,7 +24,7 @@ import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.ItemStack
 import jk_5.nailed.api.player.{GameMode, Player}
 import jk_5.nailed.api.teleport.TeleportOptions
-import jk_5.nailed.api.util.{Checks, Location}
+import jk_5.nailed.api.util.{Checks, Location, Potion}
 import jk_5.nailed.api.world.World
 import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
 import jk_5.nailed.server.teleport.Teleporter
@@ -33,6 +33,7 @@ import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.network.{NetHandlerPlayServer, Packet}
+import net.minecraft.potion.PotionEffect
 import net.minecraft.util.DamageSource
 import net.minecraft.world.WorldSettings.GameType
 
@@ -152,6 +153,24 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   override def resetMaxHealth() = setMaxHealth(entity.getMaxHealth)
   override def heal() = setHealth(getMaxHealth)
+
+  override def addInstantPotionEffect(effect: Potion) = addInstantPotionEffect(effect, 1)
+  override def addInstantPotionEffect(effect: Potion, level: Int){
+    Checks.check(effect.isInstant, "Potion is not instant")
+    this.entity.addPotionEffect(new PotionEffect(effect.getId, 1, level - 1))
+  }
+  override def addPotionEffect(effect: Potion, seconds: Int) = addPotionEffect(effect, seconds, 1)
+  override def addPotionEffect(effect: Potion, seconds: Int, level: Int) = addPotionEffect(effect, seconds, seconds, ambient = false)
+  override def addPotionEffect(effect: Potion, seconds: Int, level: Int, ambient: Boolean){
+    Checks.check(!effect.isInstant, "Potion is instant")
+    this.entity.addPotionEffect(new PotionEffect(effect.getId, seconds * 20, level - 1, ambient))
+  }
+  override def addInfinitePotionEffect(effect: Potion) = addPotionEffect(effect, 1000000)
+  override def addInfinitePotionEffect(effect: Potion, level: Int) = addPotionEffect(effect, 1000000, level)
+  override def addInfinitePotionEffect(effect: Potion, level: Int, ambient: Boolean) = addPotionEffect(effect, 1000000, level, ambient)
+
+  override def clearPotionEffects() = entity.clearActivePotions()
+  override def clearPotionEffect(effect: Potion) = entity.removePotionEffect(effect.getId)
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode,eid=${getEntity.getEntityId}}"
 }
