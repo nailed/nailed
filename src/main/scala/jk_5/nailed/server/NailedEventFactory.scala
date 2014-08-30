@@ -263,7 +263,7 @@ object NailedEventFactory {
 
   def onPlayerRespawn(ent: EntityPlayerMP){
     val server = MinecraftServer.getServer
-    val player = NailedServer.getPlayerFromEntity(ent).asInstanceOf[NailedPlayer]
+    val player = NailedServer.getPlayerFromEntity(ent)
     val destWorld = NailedDimensionManager.getWorld(ent.dimension)
     val currentWorld = NailedDimensionManager.getWorld(ent.dimension)
     val destMap = destWorld.getMap
@@ -322,6 +322,7 @@ object NailedEventFactory {
     newPlayer.setHealth(newPlayer.getHealth)
 
     player.netHandler.playerEntity = newPlayer
+    player.entity = newPlayer
 
     //TODO: respawn event
   }
