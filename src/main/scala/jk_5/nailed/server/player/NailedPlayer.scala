@@ -24,14 +24,16 @@ import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.ItemStack
 import jk_5.nailed.api.player.{GameMode, Player}
 import jk_5.nailed.api.teleport.TeleportOptions
-import jk_5.nailed.api.util.Location
+import jk_5.nailed.api.util.{Checks, Location}
 import jk_5.nailed.api.world.World
 import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
 import jk_5.nailed.server.teleport.Teleporter
 import jk_5.nailed.server.utils.ItemStackConverter
+import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.network.{NetHandlerPlayServer, Packet}
+import net.minecraft.util.DamageSource
 import net.minecraft.world.WorldSettings.GameType
 
 /**
@@ -121,6 +123,34 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     c.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + this.getName + " "))
     c
   }
+
+  override def setHealth(health: Float){
+    if(health < 0 || health > getMaxHealth){
+      throw new IllegalArgumentException("Health must be between 0 and " + getMaxHealth)
+    }
+
+    if(health == 0){
+      entity.onDeath(DamageSource.generic)
+    }
+
+    entity.setHealth(health)
+  }
+
+  override def damage(amount: Float): Unit = entity.attackEntityFrom(DamageSource.generic, amount)
+  override def getHealth: Float = Math.min(Math.max(0, getEntity.getHealth), getMaxHealth)
+  override def getMaxHealth = getEntity.getMaxHealth
+
+  override def setMaxHealth(health: Float){
+    Checks.check(health > 0, "Max health must be greater than 0")
+
+    entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(health)
+
+    if(getHealth > health){
+      setHealth(health)
+    }
+  }
+
+  override def resetMaxHealth() = setMaxHealth(entity.getMaxHealth)
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode,eid=${getEntity.getEntityId}}"
 }

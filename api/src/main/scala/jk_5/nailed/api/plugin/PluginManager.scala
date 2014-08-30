@@ -28,7 +28,7 @@ import com.google.gson.Gson
 import jk_5.eventbus.{Event, EventBus}
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
-import jk_5.nailed.api.command.{CommandSender, TabExecutor}
+import jk_5.nailed.api.command.{CommandException, CommandSender, TabExecutor}
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.Checks
 import org.apache.logging.log4j.LogManager
@@ -125,15 +125,17 @@ class PluginManager(private val server: Server) {
       }
     }
     val args = util.Arrays.copyOfRange(split, 1, split.length)
-    try{
-      if(!isCompleteRequest){
+    try {
+      if (!isCompleteRequest) {
         command.get.execute(sender, args)
-      }else command.get match {
+      } else command.get match {
         case t: TabExecutor =>
           tabResults ++= t.onTabComplete(sender, args)
         case _ =>
       }
     }catch{
+      case e: CommandException =>
+        sender.sendMessage(new ComponentBuilder(e.getMessage).color(ChatColor.RED).create())
       case e: Exception =>
         sender.sendMessage(new ComponentBuilder("An internal error occurred whilst executing this command, please check the console log for details.").color(ChatColor.RED).create())
         logger.warn("Error while dispatching command", e)

@@ -34,10 +34,7 @@ object CommandHelp extends Command("help", "?") {
       .filter(c => !c.isInstanceOf[RemovedCommand])
       .sortBy(_.getName)
     val pages = (commands.size - 1) / 7
-    val page = if(args.length == 0) 0 else{
-      val p = parseInt(sender, args(0), 1, pages + 1)
-      if(p.isEmpty) 0 else p.get - 1
-    }
+    val page = if(args.length == 0) 0 else parseInt(sender, args(0), 1, pages + 1) - 1
 
     //TODO: /help commandName - give help about the command
 

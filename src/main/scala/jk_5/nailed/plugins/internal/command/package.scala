@@ -18,7 +18,6 @@
 package jk_5.nailed.plugins.internal
 
 import jk_5.nailed.api.Server
-import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command.CommandSender
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.player.Player
@@ -31,6 +30,10 @@ import scala.collection.mutable
  * @author jk-5
  */
 package object command {
+
+  type CommandException = jk_5.nailed.api.command.CommandException
+  type CommandUsageException = jk_5.nailed.api.command.CommandUsageException
+  type PlayerNotFoundException = jk_5.nailed.api.command.PlayerNotFoundException
 
   @inline def getOptions(args: Array[String], options: String*): List[String] = {
     val last = args(args.length - 1)
@@ -49,29 +52,36 @@ package object command {
   //TODO: proper player selector
   def getTargetPlayer(sender: CommandSender, target: String): Option[Player] = {
     val pl = Server.getInstance.getPlayerByName(target)
-    if(pl.isEmpty) sender.sendMessage(new ComponentBuilder("Player not found").color(ChatColor.RED).create())
+    if(pl.isEmpty) throw new PlayerNotFoundException(target)
     pl
   }
 
   @inline def getUsernameOptions(args: Array[String]): List[String] = getOptions(args, Server.getInstance.getOnlinePlayers.map(_.getName))
   @inline def getUsernameOptions(args: Array[String], map: Map): List[String] = getOptions(args, map.players.map(_.getName))
 
-  def parseInt(sender: CommandSender, input: String, min: Int = Int.MinValue, max: Int = Int.MaxValue): Option[Int] = {
+  def parseInt(sender: CommandSender, input: String, min: Int = Int.MinValue, max: Int = Int.MaxValue): Int = {
     try{
       val int = input.toInt
       if(int > max){
-        sender.sendMessage(new ComponentBuilder("Number " + input + " is bigger than the maximum (" + max + ")").color(ChatColor.RED).create())
-        None
+        throw new CommandException("Number " + input + " is bigger than the maximum (" + max + ")")
       }else if(int < min){
-        sender.sendMessage(new ComponentBuilder("Number " + input + " is smaller than the minimum (" + min + ")").color(ChatColor.RED).create())
-        None
+        throw new CommandException("Number " + input + " is smaller than the minimum (" + min + ")")
       }else{
-        Some(int)
+        int
       }
     }catch{
-      case _: NumberFormatException =>
-        sender.sendMessage(new ComponentBuilder("Entered value " + input + " is not a valid number").color(ChatColor.RED).create())
-        None
+      case _: NumberFormatException => throw new CommandException("Entered value " + input + " is not a valid number")
     }
+  }
+
+  def senderPlayerOrArgument(sender: CommandSender, args: Array[String], index: Int): Player = sender match {
+    case player: Player => player
+    case _ =>
+      if(args.length > index){
+        val p = Server.getInstance.getPlayerByName(args(index))
+        if(p.isDefined) p.get else throw new PlayerNotFoundException(args(index))
+      }else{
+        throw new CommandException("You are not a player")
+      }
   }
 }

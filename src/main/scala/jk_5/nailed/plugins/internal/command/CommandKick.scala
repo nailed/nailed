@@ -21,7 +21,6 @@ import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TextComponent}
 import jk_5.nailed.api.command.{CommandSender, TabExecutor}
 import jk_5.nailed.api.plugin.Command
-import jk_5.nailed.server.NailedServer
 
 /**
  * No description given
@@ -35,7 +34,7 @@ object CommandKick extends Command("kick") with TabExecutor {
       sender.sendMessage(new ComponentBuilder("Usage: /kick <player> [reason]").color(ChatColor.RED).create())
       return
     }
-    val target = NailedServer.getPlayerByName(args(0))
+    val target = Server.getInstance.getPlayerByName(args(0))
     val reason = if(args.length > 1){
       val newArray = new Array[String](args.length - 1)
       System.arraycopy(args, 1, newArray, 0, newArray.length)

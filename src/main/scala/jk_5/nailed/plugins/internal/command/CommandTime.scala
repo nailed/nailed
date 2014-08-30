@@ -40,22 +40,19 @@ object CommandTime extends Command("time") with TabExecutor {
                 case "night" => c.getWorld.setTime(18000)
                 case t =>
                   val r = parseInt(sender, args(1), 0, 23999)
-                  if(r.isDefined){
-                    c.getWorld.setTime(r.get)
-                    sender.sendMessage(new ComponentBuilder("Set time in world " + c.getWorld.getName + " to " + r.get).color(ChatColor.GREEN).create())
-                  }
+                  c.getWorld.setTime(r)
+                  sender.sendMessage(new ComponentBuilder("Set time in world " + c.getWorld.getName + " to " + r).color(ChatColor.GREEN).create())
               }
             }else{
-              sender.sendMessage(new ComponentBuilder("Usage: /time [set] [day|night|0-23999]").color(ChatColor.RED).create())
+              throw new CommandUsageException("/time [set] [day|night|0-23999]")
             }
           case _ =>
             val number = parseInt(sender, args(0))
-            if(number.isEmpty) return
-            val world = NailedServer.getWorld(number.get)
+            val world = NailedServer.getWorld(number)
             if(world != null){
               sender.sendMessage(new ComponentBuilder("Current time in world " + world.getName + ": " + world.getTime).color(ChatColor.GREEN).create())
             }else{
-              sender.sendMessage(new ComponentBuilder("Was not able to find the world with id " + number.get).color(ChatColor.RED).create())
+              sender.sendMessage(new ComponentBuilder("Was not able to find the world with id " + number).color(ChatColor.RED).create())
             }
         }
       }else{
