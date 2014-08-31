@@ -34,4 +34,5 @@ trait MappackWorld {
   def gameRules: GameRules
   def resourcepack: String
   def difficulty: Difficulty
+  def disableFood: Boolean
 }

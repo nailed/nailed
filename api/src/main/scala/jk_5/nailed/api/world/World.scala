@@ -77,4 +77,7 @@ trait World {
 
   def getWeather: WeatherType
   def setWeather(weather: WeatherType)
+
+  def getDifficulty: Difficulty
+  def setDifficulty(difficulty: Difficulty)
 }

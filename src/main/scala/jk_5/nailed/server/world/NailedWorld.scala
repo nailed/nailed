@@ -40,13 +40,8 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
   }
 
   this.getConfig match {
-    case c: MappackWorld =>
-      this.wrapped.difficultySetting = EnumDifficulty.getDifficultyEnum(c.difficulty.getId)
-      c.difficulty match {
-        case Difficulty.HARD | Difficulty.NORMAL | Difficulty.EASY => wrapped.setAllowedSpawnTypes(true, true)
-        case Difficulty.PEACEFUL => wrapped.setAllowedSpawnTypes(false, true)
-      }
-    case null | _ =>
+    case c: MappackWorld => setDifficulty(c.difficulty)
+    case _ =>
   }
 
   override val getGameRules: EditableGameRules = if(this.context != null && this.context.config != null) new WrappedEditableGameRules(context.config.gameRules) else new WrappedEditableGameRules(DefaultGameRules)
@@ -100,6 +95,15 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
     case WeatherType.THUNDER =>
       this.wrapped.getWorldInfo.setRaining(true)
       this.wrapped.getWorldInfo.setThundering(true)
+  }
+
+  override def getDifficulty = Difficulty.byId(wrapped.difficultySetting.getDifficultyId)
+  override def setDifficulty(difficulty: Difficulty){
+    this.wrapped.difficultySetting = EnumDifficulty.getDifficultyEnum(difficulty.getId)
+    difficulty match {
+      case Difficulty.HARD | Difficulty.NORMAL | Difficulty.EASY => wrapped.setAllowedSpawnTypes(true, true)
+      case Difficulty.PEACEFUL => wrapped.setAllowedSpawnTypes(false, true)
+    }
   }
 
   override def toString = s"NailedWorld{id=$getDimensionId,name=$getName,type=$getType,gameRules=$getGameRules}"

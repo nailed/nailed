@@ -154,6 +154,10 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   override def resetMaxHealth() = setMaxHealth(entity.getMaxHealth)
   override def heal() = setHealth(getMaxHealth)
+  override def heal(amount: Int){
+    Checks.check(amount > 0, "Amount must be greater than 0")
+    setHealth(getHealth + amount)
+  }
 
   override def addInstantPotionEffect(effect: Potion) = addInstantPotionEffect(effect, 1)
   override def addInstantPotionEffect(effect: Potion, level: Int){

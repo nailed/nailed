@@ -36,4 +36,5 @@ object DefaultMappackWorldProperties extends MappackWorld {
   override val gameRules = DefaultGameRules
   override val resourcepack = ""
   override val difficulty = Difficulty.PEACEFUL
+  override val disableFood = true
 }

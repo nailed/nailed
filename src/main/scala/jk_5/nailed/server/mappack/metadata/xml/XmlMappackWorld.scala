@@ -54,4 +54,5 @@ class XmlMappackWorld(override val name: String, element: Element, parent: Mappa
   override val gameRules = new ImmutableXmlGameRules(if(element.getChild("gamerules", element.getNamespace) != null) element.getChild("gamerules", element.getNamespace) else new Element("dummy", element.getNamespace), parent.gameRules)
   override val resourcepack = if(element.getChild("resourcepack", element.getNamespace) != null) element.getChild("resourcepack", element.getNamespace).getText else parent.resourcepack
   override val difficulty = if(element.getChild("difficulty", element.getNamespace) != null) Difficulty.byName(element.getChild("difficulty", element.getNamespace).getText) else parent.difficulty
+  override val disableFood = if(element.getChild("disableFood", element.getNamespace) != null) element.getChild("disableFood", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableFood
 }

@@ -75,4 +75,9 @@ trait Damageable {
    * Heals this entity to their maximum amount of health
    */
   def heal()
+
+  /**
+   * Heals this entity with the amount of half hearts
+   */
+  def heal(amount: Int)
 }

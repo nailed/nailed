@@ -42,4 +42,5 @@ class JsonMappackWorld(override val name: String, json: JsonObject, parent: Mapp
   override val gameRules = new ImmutableJsonGameRules(if(json.has("gamerules")) json.getAsJsonObject("gamerules") else new JsonObject, parent.gameRules)
   override val resourcepack = if(json.has("resourcepack")) json.get("resourcepack").getAsString else parent.resourcepack
   override val difficulty = if(json.has("difficulty")) Difficulty.byName(json.get("difficulty").getAsString) else parent.difficulty
+  override val disableFood = if(json.has("disableFood")) json.get("difficulty").getAsBoolean else parent.disableFood
 }
