@@ -18,7 +18,7 @@
 
 <Configuration status="WARN" packages="com.mojang">
     <Appenders>
-        <Routing name="WINDOWS_COMPAT">
+        <!--<Routing name="WINDOWS_COMPAT">
             <Routes pattern="$${ctx:plugin}">
                 <Route>
                     <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT">
@@ -31,7 +31,7 @@
                     </Console>
                 </Route>
             </Routes>
-        </Routing>
+        </Routing>-->
         <Routing name="TerminalConsole">
             <Routes pattern="$${ctx:plugin}">
                 <Route>
@@ -75,7 +75,7 @@
     <Loggers>
         <Logger level="all" name="io.netty">
             <AppenderRef ref="NettyLog"/>
-            <AppenderRef ref="WINDOWS_COMPAT" level="WARN"/>
+            <!--<AppenderRef ref="WINDOWS_COMPAT" level="WARN"/>-->
             <AppenderRef ref="File" level="WARN"/>
             <AppenderRef ref="TerminalConsole" level="WARN"/>
         </Logger>
@@ -83,7 +83,7 @@
             <filters>
                 <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL" />
             </filters>
-            <AppenderRef ref="WINDOWS_COMPAT" level="INFO"/>
+            <!--<AppenderRef ref="WINDOWS_COMPAT" level="INFO"/>-->
             <AppenderRef ref="File"/>
             <AppenderRef ref="TerminalConsole" level="INFO"/>
         </Root>
