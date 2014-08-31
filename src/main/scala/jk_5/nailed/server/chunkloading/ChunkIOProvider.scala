@@ -55,7 +55,7 @@ class ChunkIOProvider extends AsynchronousExecutor.CallBackProvider[QueuedChunk,
   override def callStage2(queuedChunk: QueuedChunk, chunk: Chunk){
     if(chunk == null){
       //If the async loading failed, just do it synchronously (which may generate a new chunk)
-      queuedChunk.provider.loadChunk(queuedChunk.x, queuedChunk.z)
+      queuedChunk.provider.originalLoadChunk(queuedChunk.x, queuedChunk.z)
       return
     }
 
