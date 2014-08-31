@@ -35,4 +35,7 @@ trait MappackWorld {
   def resourcepack: String
   def difficulty: Difficulty
   def disableFood: Boolean
+  def disableDamage: Boolean
+  def disableBlockBreaking: Boolean
+  def disableBlockPlacement: Boolean
 }

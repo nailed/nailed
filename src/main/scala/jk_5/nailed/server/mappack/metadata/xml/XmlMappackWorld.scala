@@ -55,4 +55,7 @@ class XmlMappackWorld(override val name: String, element: Element, parent: Mappa
   override val resourcepack = if(element.getChild("resourcepack", element.getNamespace) != null) element.getChild("resourcepack", element.getNamespace).getText else parent.resourcepack
   override val difficulty = if(element.getChild("difficulty", element.getNamespace) != null) Difficulty.byName(element.getChild("difficulty", element.getNamespace).getText) else parent.difficulty
   override val disableFood = if(element.getChild("disableFood", element.getNamespace) != null) element.getChild("disableFood", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableFood
+  override val disableDamage = if(element.getChild("disableDamage", element.getNamespace) != null) element.getChild("disableDamage", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableDamage
+  override val disableBlockBreaking = if(element.getChild("disableBlockBreaking", element.getNamespace) != null) element.getChild("disableBlockBreaking", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableBlockBreaking
+  override val disableBlockPlacement = if(element.getChild("disableBlockPlacement", element.getNamespace) != null) element.getChild("disableBlockPlacement", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableBlockPlacement
 }

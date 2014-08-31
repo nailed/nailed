@@ -30,20 +30,22 @@ import jk_5.nailed.api.player.{GameMode, Player}
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.server.command.sender.ConsoleCommandSender
+import jk_5.nailed.server.event.{EntityDamageEvent, EntityFallEvent}
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.tileentity.TileEntityStatEmitter
 import jk_5.nailed.server.utils.ItemStackConverter._
 import jk_5.nailed.server.world.NailedDimensionManager
 import net.minecraft.block.Block
 import net.minecraft.command.ICommandSender
-import net.minecraft.entity.Entity
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.init.Blocks
 import net.minecraft.item.{ItemStack, ItemSword}
 import net.minecraft.network.play.server.{S05PacketSpawnPosition, S07PacketRespawn, S1FPacketSetExperience, S23PacketBlockChange}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.server.management.ItemInWorldManager
+import net.minecraft.util.DamageSource
 import net.minecraft.world.WorldSettings.GameType
 import net.minecraft.world.{World, WorldServer}
 import org.apache.logging.log4j.LogManager
@@ -323,5 +325,15 @@ object NailedEventFactory {
     player.entity = newPlayer
 
     //TODO: respawn event
+  }
+
+  def onLivingFall(entity: EntityLivingBase, distance: Float): Float = {
+    val event = new EntityFallEvent(entity, distance) //TODO: api event
+    if(fireEvent(event).isCanceled) 0 else event.distance
+  }
+
+  def onEntityDamage(entity: EntityLivingBase, source: DamageSource, amount: Float): Float = {
+    val event = new EntityDamageEvent(entity, source, amount) //TODO: api event
+    if(fireEvent(event).isCanceled) 0 else event.amount
   }
 }

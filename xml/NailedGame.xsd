@@ -215,6 +215,48 @@
                     <xs:documentation source="description">Defines the generator type of this world. Custom types can be registered by plugins</xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="dimension" minOccurs="0" maxOccurs="1" type="xs:string" default="overworld">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">
+                        Defines the dimension of this world (only visual)
+                        Valid values:
+                        - overworld (default value)
+                        - nether
+                        - end
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="resourcepack" minOccurs="0" maxOccurs="1" type="xs:anyURI" default="">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines a resourcepack url to load on the client</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableFood" minOccurs="0" maxOccurs="1" type="xs:boolean" default="true">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Disable food depletion</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableDamage" minOccurs="0" maxOccurs="1" type="xs:boolean" default="true">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Disable all player damage</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableBlockBreaking" minOccurs="0" maxOccurs="1" type="xs:boolean" default="false">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Disables all player block breaking</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableBlockPlacement" minOccurs="0" maxOccurs="1" type="xs:boolean" default="false">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Disables all player block placement</xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:all>
     </xs:complexType>
     <xs:complexType name="World">
@@ -287,6 +329,30 @@
                 <xs:annotation>
                     <xs:documentation source="version">1.0.0</xs:documentation>
                     <xs:documentation source="description">Defines a resourcepack url to load on the client</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableFood" minOccurs="0" maxOccurs="1" type="xs:boolean" default="true">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Disable food depletion</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableDamage" minOccurs="0" maxOccurs="1" type="xs:boolean" default="true">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Disable all player damage</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableBlockBreaking" minOccurs="0" maxOccurs="1" type="xs:boolean" default="false">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Disables all player block breaking</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableBlockPlacement" minOccurs="0" maxOccurs="1" type="xs:boolean" default="false">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Disables all player block placement</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:all>

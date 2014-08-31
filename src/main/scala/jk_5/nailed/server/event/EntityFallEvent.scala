@@ -15,29 +15,15 @@
  * this program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package jk_5.nailed.api.mappack.implementation
+package jk_5.nailed.server.event
 
-import jk_5.nailed.api.mappack.MappackWorld
-import jk_5.nailed.api.mappack.gamerule.DefaultGameRules
-import jk_5.nailed.api.util.Location
-import jk_5.nailed.api.world.Difficulty
+import jk_5.eventbus.Event
+import jk_5.eventbus.Event.Cancelable
+import net.minecraft.entity.EntityLivingBase
 
 /**
  * No description given
  *
  * @author jk-5
  */
-object DefaultMappackWorldProperties extends MappackWorld {
-
-  override val name = null
-  override val generator = "void"
-  override val spawnPoint = new Location(null, 0, 64, 0, 0, 0)
-  override val dimension = 0
-  override val gameRules = DefaultGameRules
-  override val resourcepack = ""
-  override val difficulty = Difficulty.PEACEFUL
-  override val disableFood = true
-  override val disableDamage = true
-  override val disableBlockBreaking = false
-  override val disableBlockPlacement = false
-}
+@Cancelable case class EntityFallEvent(entity: EntityLivingBase, var distance: Float) extends Event

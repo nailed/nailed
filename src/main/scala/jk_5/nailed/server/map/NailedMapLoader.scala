@@ -23,12 +23,15 @@ import java.util.concurrent.atomic.AtomicInteger
 import io.netty.util.concurrent.{DefaultPromise, Future, FutureListener}
 import jk_5.eventbus.EventHandler
 import jk_5.nailed.api
-import jk_5.nailed.api.event.TeleportEventEnd
+import jk_5.nailed.api.event.{BlockBreakEvent, BlockPlaceEvent, TeleportEventEnd}
 import jk_5.nailed.api.map.{Map, MapLoader, MappackLoadingFailedException}
 import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.world.{WorldContext, WorldProvider}
+import jk_5.nailed.server.event.{EntityDamageEvent, EntityFallEvent}
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.{NailedEventFactory, NailedServer}
+import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.util.DamageSource
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.mutable
@@ -189,6 +192,45 @@ object NailedMapLoader extends MapLoader {
           NailedEventFactory.firePlayerJoinMap(event.entity, newMap.get)
         }
       }
+    }
+  }
+
+  @EventHandler
+  def onEntityFall(event: EntityFallEvent){
+    event.entity match {
+      case e: EntityPlayerMP =>
+        val world = NailedServer.getPlayerFromEntity(e).getWorld
+        if(world.getConfig != null && world.getConfig.disableDamage){
+          event.setCanceled(true)
+        }
+      case _ =>
+    }
+  }
+
+  @EventHandler
+  def onEntityDamage(event: EntityDamageEvent){
+    if(event.source == DamageSource.outOfWorld) return
+    event.entity match {
+      case e: EntityPlayerMP =>
+        val world = NailedServer.getPlayerFromEntity(e).getWorld
+        if(world.getConfig != null && world.getConfig.disableDamage){
+          event.setCanceled(true)
+        }
+      case _ =>
+    }
+  }
+
+  @EventHandler
+  def onBlockPlace(event: BlockPlaceEvent){
+    if(event.world.getConfig != null && event.world.getConfig.disableBlockPlacement){
+      event.setCanceled(true)
+    }
+  }
+
+  @EventHandler
+  def onBlockBreak(event: BlockBreakEvent){
+    if(event.world.getConfig != null && event.world.getConfig.disableBlockBreaking){
+      event.setCanceled(true)
     }
   }
 }

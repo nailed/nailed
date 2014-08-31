@@ -62,8 +62,6 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
     println("Player " + player.toString + " joined world " + this.toString)
     if(this.getConfig.resourcepack != null){
       player.loadResourcePack(this.getConfig.resourcepack)
-    }else{
-      player.loadResourcePack("")
     }
   }
 
