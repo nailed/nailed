@@ -60,9 +60,15 @@ class MinecraftConfig extends PropertyManager(null) {
     Thread.dumpStack()
   }
 
+  private def remap(key: String): String = key match {
+    case "enable-query" => "query.enabled"
+    case "enable-rcon" => "rcon.enabled"
+    case k => k
+  }
+
   override def getPropertiesFile = null
-  override def getStringProperty(key: String, default: String) = config.getString(key)
-  override def getIntProperty(key: String, default: Int) = config.getInt(key)
-  override def getBooleanProperty(key: String, default: Boolean) = config.getBoolean(key)
+  override def getStringProperty(key: String, default: String) = config.getString(remap(key))
+  override def getIntProperty(key: String, default: Int) = config.getInt(remap(key))
+  override def getBooleanProperty(key: String, default: Boolean) = config.getBoolean(remap(key))
   override def setProperty(key: String, value: scala.Any){}
 }

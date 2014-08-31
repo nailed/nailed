@@ -87,7 +87,8 @@
 +    //private final NetworkSystem field_147144_o;
      private final ServerStatusResponse field_147147_p = new ServerStatusResponse();
      private final Random field_147146_q = new Random();
-     private String field_71320_r;
+-    private String field_71320_r;
++    private String field_71320_r = "0.0.0.0";
      private int field_71319_s = -1;
 -    public WorldServer[] field_71305_c;
 +    public WorldServer[] field_71305_c = new WorldServer[0];
