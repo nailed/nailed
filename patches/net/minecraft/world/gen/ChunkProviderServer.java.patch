@@ -1,0 +1,79 @@
+--- ../src-base/minecraft/net/minecraft/world/gen/ChunkProviderServer.java
++++ ../src-work/minecraft/net/minecraft/world/gen/ChunkProviderServer.java
+@@ -1,6 +1,5 @@
+ package net.minecraft.world.gen;
+ 
+-import com.google.common.collect.Lists;
+ import java.io.IOException;
+ import java.util.ArrayList;
+ import java.util.Collections;
+@@ -8,6 +7,12 @@
+ import java.util.List;
+ import java.util.Set;
+ import java.util.concurrent.ConcurrentHashMap;
++
++import com.google.common.collect.Lists;
++
++import org.apache.logging.log4j.LogManager;
++import org.apache.logging.log4j.Logger;
++
+ import net.minecraft.crash.CrashReport;
+ import net.minecraft.crash.CrashReportCategory;
+ import net.minecraft.entity.EnumCreatureType;
+@@ -23,10 +28,11 @@
+ import net.minecraft.world.chunk.Chunk;
+ import net.minecraft.world.chunk.EmptyChunk;
+ import net.minecraft.world.chunk.IChunkProvider;
++import net.minecraft.world.chunk.storage.AnvilChunkLoader;
+ import net.minecraft.world.chunk.storage.IChunkLoader;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+ 
++import jk_5.nailed.server.chunkloading.ChunkIOExecutor;
++
+ public class ChunkProviderServer implements IChunkProvider {
+     private static final Logger field_147417_b = LogManager.getLogger();
+     private Set field_73248_b = Collections.newSetFromMap(new ConcurrentHashMap());
+@@ -78,7 +84,41 @@
+         }
+     }
+ 
+-    public Chunk func_73158_c(int p_73158_1_, int p_73158_2_) {
++    public Chunk func_73158_c(int p_73158_1_, int p_73158_2_){
++        return loadChunk(p_73158_1_, p_73158_2_, null);
++    }
++
++    public Chunk loadChunk(int par1, int par2, Runnable runnable){
++        long k = ChunkCoordIntPair.func_77272_a(par1, par2);
++        this.field_73248_b.remove(k);
++        Chunk chunk = (Chunk) this.field_73244_f.func_76164_a(k);
++        AnvilChunkLoader loader = null;
++
++        if(this.field_73247_e instanceof AnvilChunkLoader){
++            loader = (AnvilChunkLoader) this.field_73247_e;
++        }
++
++        //We can only use the queue for already generated chunks
++        if(chunk == null && loader != null && loader.chunkExists(this.field_73251_h, par1, par2)){
++            if(runnable != null){
++                ChunkIOExecutor.queueChunkLoad(this.field_73251_h, loader, this, par1, par2, runnable);
++                return null;
++            }else{
++                chunk = ChunkIOExecutor.syncChunkLoad(this.field_73251_h, loader, this, par1, par2);
++            }
++        }else if(chunk == null){
++            chunk = this.originalLoadChunk(par1, par2);
++        }
++
++        // If we didn't load the chunk async and have a callback run it now
++        if(runnable != null){
++            runnable.run();
++        }
++
++        return chunk;
++    }
++
++    public Chunk originalLoadChunk(int p_73158_1_, int p_73158_2_) {
+         long k = ChunkCoordIntPair.func_77272_a(p_73158_1_, p_73158_2_);
+         this.field_73248_b.remove(Long.valueOf(k));
+         Chunk chunk = (Chunk)this.field_73244_f.func_76164_a(k);

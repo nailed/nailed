@@ -1,0 +1,11 @@
+--- ../src-base/minecraft/net/minecraft/entity/player/EntityPlayer.java
++++ ../src-work/minecraft/net/minecraft/entity/player/EntityPlayer.java
+@@ -76,7 +76,7 @@
+     private InventoryEnderChest field_71078_a = new InventoryEnderChest();
+     public Container field_71069_bz;
+     public Container field_71070_bA;
+-    protected FoodStats field_71100_bB = new FoodStats();
++    protected FoodStats field_71100_bB = new jk_5.nailed.server.utils.NailedFoodStats();
+     protected int field_71101_bC;
+     public float field_71107_bF;
+     public float field_71109_bG;

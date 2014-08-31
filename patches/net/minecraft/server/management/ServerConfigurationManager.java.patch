@@ -39,7 +39,7 @@
  import net.minecraft.util.IChatComponent;
  import net.minecraft.util.MathHelper;
  import net.minecraft.world.World;
-@@ -56,9 +59,10 @@
+@@ -56,9 +59,11 @@
  import net.minecraft.world.WorldSettings;
  import net.minecraft.world.demo.DemoWorldManager;
  import net.minecraft.world.storage.IPlayerFileData;
@@ -47,12 +47,13 @@
 -import org.apache.logging.log4j.Logger;
  
 +import jk_5.nailed.server.NailedEventFactory;
++import jk_5.nailed.server.chunkloading.ChunkIOExecutor;
 +import jk_5.nailed.server.world.DelegatingWorldProvider;
 +
  public abstract class ServerConfigurationManager {
      public static final File field_152613_a = new File("banned-players.json");
      public static final File field_152614_b = new File("banned-ips.json");
-@@ -114,7 +118,8 @@
+@@ -114,7 +119,8 @@
          ChunkCoordinates chunkcoordinates = worldserver.func_72861_E();
          this.func_72381_a(p_72355_2_, (EntityPlayerMP)null, worldserver);
          NetHandlerPlayServer nethandlerplayserver = new NetHandlerPlayServer(this.field_72400_f, p_72355_1_, p_72355_2_);
@@ -62,7 +63,7 @@
          nethandlerplayserver.func_147359_a(new S3FPacketCustomPayload("MC|Brand", this.func_72365_p().getServerModName().getBytes(Charsets.UTF_8)));
          nethandlerplayserver.func_147359_a(new S05PacketSpawnPosition(chunkcoordinates.field_71574_a, chunkcoordinates.field_71572_b, chunkcoordinates.field_71573_c));
          nethandlerplayserver.func_147359_a(new S39PacketPlayerAbilities(p_72355_2_.field_71075_bZ));
-@@ -123,16 +128,7 @@
+@@ -123,16 +129,7 @@
          p_72355_2_.func_147099_x().func_150884_b(p_72355_2_);
          this.func_96456_a((ServerScoreboard)worldserver.func_96441_U(), p_72355_2_);
          this.field_72400_f.func_147132_au();
@@ -79,7 +80,7 @@
          this.func_72377_c(p_72355_2_);
          nethandlerplayserver.func_147364_a(p_72355_2_.field_70165_t, p_72355_2_.field_70163_u, p_72355_2_.field_70161_v, p_72355_2_.field_70177_z, p_72355_2_.field_70125_A);
          this.func_72354_b(p_72355_2_, worldserver);
-@@ -160,6 +156,8 @@
+@@ -160,6 +157,8 @@
                  entity.field_98038_p = false;
              }
          }
@@ -88,7 +89,23 @@
      }
  
      protected void func_96456_a(ServerScoreboard p_96456_1_, EntityPlayerMP p_96456_2_) {
-@@ -366,7 +364,8 @@
+@@ -235,6 +234,7 @@
+         this.func_148540_a(new S38PacketPlayerListItem(p_72377_1_.func_70005_c_(), true, 1000));
+         this.field_72404_b.add(p_72377_1_);
+         WorldServer worldserver = this.field_72400_f.func_71218_a(p_72377_1_.field_71093_bK);
++        ChunkIOExecutor.adjustPoolSize(this.func_72394_k());
+         worldserver.func_72838_d(p_72377_1_);
+         this.func_72375_a(p_72377_1_, (WorldServer)null);
+ 
+@@ -262,6 +262,7 @@
+         worldserver.func_73040_p().func_72695_c(p_72367_1_);
+         this.field_72404_b.remove(p_72367_1_);
+         this.field_148547_k.remove(p_72367_1_.func_110124_au());
++        ChunkIOExecutor.adjustPoolSize(this.func_72394_k());
+         this.func_148540_a(new S38PacketPlayerListItem(p_72367_1_.func_70005_c_(), false, 9999));
+     }
+ 
+@@ -366,7 +367,8 @@
              entityplayermp1.func_70107_b(entityplayermp1.field_70165_t, entityplayermp1.field_70163_u + 1.0D, entityplayermp1.field_70161_v);
          }
  
