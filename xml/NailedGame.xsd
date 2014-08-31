@@ -283,6 +283,12 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="resourcepack" minOccurs="0" maxOccurs="1" type="xs:anyURI" default="">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines a resourcepack url to load on the client</xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:all>
         <xs:attribute name="default" type="xs:boolean" default="false">
             <xs:annotation>

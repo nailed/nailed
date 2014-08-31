@@ -108,9 +108,9 @@ object NailedDimensionManager {
     val mcserver = MinecraftServer.getServer
     val name = ctx.name + "/" + ctx.subName
     val saveHandler = mcserver.getActiveAnvilConverter.getSaveLoader(name, true)
-    val worldInfo = saveHandler.loadWorldInfo()
+    val worldInfo = saveHandler.loadWorldInfo() //Attempt to load level.dat
 
-    val worldSettings = if(worldInfo == null){
+    val worldSettings = if(worldInfo == null){ //If the level.dat does not exist, create a new one
       //TODO: populate this from the mappack that may or may not exist
       //Arguments: seed, gameType, enable structures, hardcore mode, worldType
       val r = new WorldSettings(0, WorldSettings.GameType.ADVENTURE, false, false, WorldType.DEFAULT)
@@ -125,7 +125,6 @@ object NailedDimensionManager {
     world.addWorldAccess(new WorldManager(mcserver, world))
     NailedEventFactory.fireWorldLoad(world)
     world.getWorldInfo.setGameType(mcserver.getGameType)
-    MinecraftServer.getServer.func_147139_a(EnumDifficulty.PEACEFUL)
   }
 
   def getVanillaWorld(dimension: Int) = this.vanillaWorlds.get(dimension)

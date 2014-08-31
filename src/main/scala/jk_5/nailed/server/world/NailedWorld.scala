@@ -21,9 +21,9 @@ import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.mappack.MappackWorld
 import jk_5.nailed.api.mappack.gamerule.{DefaultGameRules, EditableGameRules}
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.world.{WeatherType, World, WorldContext, WorldProvider}
+import jk_5.nailed.api.world._
 import jk_5.nailed.server.map.gamerule.WrappedEditableGameRules
-import net.minecraft.world.WorldServer
+import net.minecraft.world.{EnumDifficulty, WorldServer}
 
 /**
  * No description given
@@ -37,6 +37,16 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
   private val provider: Option[WorldProvider] = wrapped.provider match {
     case p: DelegatingWorldProvider => Some(p.wrapped)
     case _ => None
+  }
+
+  this.getConfig match {
+    case c: MappackWorld =>
+      this.wrapped.difficultySetting = EnumDifficulty.getDifficultyEnum(c.difficulty.getId)
+      c.difficulty match {
+        case Difficulty.HARD | Difficulty.NORMAL | Difficulty.EASY => wrapped.setAllowedSpawnTypes(true, true)
+        case Difficulty.PEACEFUL => wrapped.setAllowedSpawnTypes(false, true)
+      }
+    case null | _ =>
   }
 
   override val getGameRules: EditableGameRules = if(this.context != null && this.context.config != null) new WrappedEditableGameRules(context.config.gameRules) else new WrappedEditableGameRules(DefaultGameRules)
@@ -55,6 +65,11 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
 
   override def onPlayerJoined(player: Player){
     println("Player " + player.toString + " joined world " + this.toString)
+    if(this.getConfig.resourcepack != null){
+      player.loadResourcePack(this.getConfig.resourcepack)
+    }else{
+      player.loadResourcePack("")
+    }
   }
 
   override def onPlayerLeft(player: Player){

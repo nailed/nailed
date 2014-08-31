@@ -19,6 +19,7 @@ package jk_5.nailed.api.mappack
 
 import jk_5.nailed.api.mappack.gamerule.GameRules
 import jk_5.nailed.api.util.Location
+import jk_5.nailed.api.world.Difficulty
 
 /**
  * No description given
@@ -31,4 +32,6 @@ trait MappackWorld {
   def dimension: Int
   def spawnPoint: Location
   def gameRules: GameRules
+  def resourcepack: String
+  def difficulty: Difficulty
 }

@@ -267,13 +267,12 @@ object NailedEventFactory {
     val destWorld = NailedDimensionManager.getWorld(ent.dimension)
     val currentWorld = NailedDimensionManager.getWorld(ent.dimension)
     val destMap = destWorld.getMap
-    val currentMap = currentWorld.getMap
 
-    currentWorld.wrapped.getEntityTracker.removePlayerFromTrackers(ent)
-    currentWorld.wrapped.getEntityTracker.removeEntityFromAllTrackingPlayers(ent)
-    currentWorld.wrapped.getPlayerManager.removePlayer(ent)
-    server.getConfigurationManager.playerEntityList.remove(ent)
-    currentWorld.wrapped.removePlayerEntityDangerously(ent) //Force the entity to be removed from it's current dimension
+    currentWorld.wrapped.getEntityTracker.removePlayerFromTrackers(ent) //Remove from EntityTracker
+    currentWorld.wrapped.getEntityTracker.removeEntityFromAllTrackingPlayers(ent) //Notify other players of entity death
+    currentWorld.wrapped.getPlayerManager.removePlayer(ent) //Remove player's ChunkLoader
+    server.getConfigurationManager.playerEntityList.remove(ent) //Remove from the global player list
+    currentWorld.wrapped.removePlayerEntityDangerously(ent) //Force the entity to be removed from it's current world
 
     val mappack = if(destMap.isDefined) destMap.get.mappack else null
     val pos = if(mappack == null) new Location(destWorld, 0, 64, 0) else {val l = new Location(destWorld.getConfig.spawnPoint); l.setWorld(destWorld); l}
@@ -305,7 +304,6 @@ object NailedEventFactory {
     newPlayer.setEntityId(ent.getEntityId)
 
     worldManager.setGameType(ent.theItemInWorldManager.getGameType)
-    worldManager.initializeGameType(destWorld.wrapped.getWorldInfo.getGameType)
 
     newPlayer.setLocationAndAngles(pos.getX, pos.getY, pos.getZ, pos.getYaw, pos.getPitch)
     destWorld.wrapped.theChunkProviderServer.loadChunk(newPlayer.posX.toInt >> 4, newPlayer.posZ.toInt >> 4)

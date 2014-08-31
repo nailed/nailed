@@ -117,7 +117,7 @@
          this.field_152364_T = new YggdrasilAuthenticationService(p_i45281_2_, UUID.randomUUID().toString());
          this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
          this.field_152365_W = this.field_152364_T.createProfileRepository();
-@@ -159,55 +171,13 @@
+@@ -159,56 +171,13 @@
      }
  
      protected void func_71247_a(String p_71247_1_, String p_71247_2_, long p_71247_3_, WorldType p_71247_5_, String p_71247_6_) {
@@ -173,11 +173,12 @@
 -            this.field_71318_t.func_72364_a(this.field_71305_c);
 -        }
 -
+-        this.func_147139_a(this.func_147135_j());
 +        this.field_71318_t.func_72364_a(new WorldServer[]{world.wrapped()});
-         this.func_147139_a(this.func_147135_j());
          this.func_71222_d();
      }
-@@ -268,6 +238,7 @@
+ 
+@@ -268,6 +237,7 @@
      protected void func_71267_a(boolean p_71267_1_) {
          if (!this.field_71290_O) {
              WorldServer[] aworldserver = this.field_71305_c;
@@ -185,7 +186,7 @@
              int i = aworldserver.length;
  
              for (int j = 0; j < i; ++j) {
-@@ -292,9 +263,11 @@
+@@ -292,9 +262,11 @@
          if (!this.field_71290_O) {
              field_147145_h.info("Stopping server");
  
@@ -200,7 +201,7 @@
  
              if (this.field_71318_t != null) {
                  field_147145_h.info("Saving players");
-@@ -308,10 +281,17 @@
+@@ -308,10 +280,17 @@
  
                  for (int i = 0; i < this.field_71305_c.length; ++i) {
                      WorldServer worldserver = this.field_71305_c[i];
@@ -218,7 +219,7 @@
              if (this.field_71307_n.func_76468_d()) {
                  this.field_71307_n.func_76470_e();
              }
-@@ -448,6 +428,9 @@
+@@ -448,6 +427,9 @@
          }
  
          this.field_71304_b.func_76320_a("root");
@@ -228,7 +229,7 @@
          this.func_71190_q();
  
          if (i - this.field_147142_T >= 5000000000L) {
-@@ -485,18 +468,23 @@
+@@ -485,18 +467,23 @@
          }
  
          this.field_71304_b.func_76319_b();
@@ -256,7 +257,7 @@
                  this.field_71304_b.func_76320_a(worldserver.func_72912_H().func_76065_j());
                  this.field_71304_b.func_76320_a("pools");
                  this.field_71304_b.func_76319_b();
-@@ -508,6 +496,7 @@
+@@ -508,6 +495,7 @@
                  }
  
                  this.field_71304_b.func_76320_a("tick");
@@ -264,7 +265,7 @@
                  CrashReport crashreport;
  
                  try {
-@@ -526,6 +515,7 @@
+@@ -526,6 +514,7 @@
                      throw new ReportedException(crashreport);
                  }
  
@@ -272,7 +273,7 @@
                  this.field_71304_b.func_76319_b();
                  this.field_71304_b.func_76320_a("tracker");
                  worldserver.func_73039_n().func_72788_a();
-@@ -533,16 +523,20 @@
+@@ -533,16 +522,20 @@
                  this.field_71304_b.func_76319_b();
              }
  
@@ -296,7 +297,7 @@
              ((IUpdatePlayerListBox)this.field_71322_p.get(i)).func_73660_a();
          }
  
-@@ -559,7 +553,7 @@
+@@ -559,7 +552,7 @@
  
      public static void main(String[] p_main_0_) {
          Bootstrap.func_151354_b();
@@ -305,7 +306,7 @@
          try {
              boolean flag = true;
              String s = null;
-@@ -666,7 +660,12 @@
+@@ -666,7 +659,12 @@
      }
  
      public WorldServer func_71218_a(int p_71218_1_) {
@@ -319,7 +320,7 @@
      }
  
      public String func_71277_t() {
-@@ -726,7 +725,7 @@
+@@ -726,7 +724,7 @@
      }
  
      public String getServerModName() {
@@ -328,7 +329,7 @@
      }
  
      public CrashReport func_71230_b(CrashReport p_71230_1_) {
-@@ -908,6 +907,7 @@
+@@ -908,6 +906,7 @@
              WorldServer worldserver = this.field_71305_c[i];
  
              if (worldserver != null) {
@@ -336,7 +337,7 @@
                  worldserver.func_73041_k();
              }
          }
-@@ -1045,7 +1045,7 @@
+@@ -1045,7 +1044,7 @@
      }
  
      public NetworkSystem func_147137_ag() {

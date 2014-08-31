@@ -20,6 +20,7 @@ package jk_5.nailed.server.mappack.metadata.xml
 import jk_5.nailed.api.mappack.MappackWorld
 import jk_5.nailed.api.mappack.implementation.DefaultMappackWorldProperties
 import jk_5.nailed.api.util.{Checks, Location}
+import jk_5.nailed.api.world.Difficulty
 import org.jdom2.Element
 
 /**
@@ -51,4 +52,6 @@ class XmlMappackWorld(override val name: String, element: Element, parent: Mappa
   } else parent.dimension
   override val spawnPoint = if(element.getChild("spawnpoint", element.getNamespace) != null) XmlMappackWorld.readLocation(element.getChild("spawnpoint", element.getNamespace)) else parent.spawnPoint
   override val gameRules = new ImmutableXmlGameRules(if(element.getChild("gamerules", element.getNamespace) != null) element.getChild("gamerules", element.getNamespace) else new Element("dummy", element.getNamespace), parent.gameRules)
+  override val resourcepack = if(element.getChild("resourcepack", element.getNamespace) != null) element.getChild("resourcepack", element.getNamespace).getText else parent.resourcepack
+  override val difficulty = if(element.getChild("difficulty", element.getNamespace) != null) Difficulty.byName(element.getChild("difficulty", element.getNamespace).getText) else parent.difficulty
 }

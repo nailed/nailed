@@ -20,21 +20,19 @@
  import net.minecraft.block.Block;
  import net.minecraft.block.BlockEventData;
  import net.minecraft.block.material.Material;
-@@ -53,9 +58,11 @@
+@@ -53,9 +58,9 @@
  import net.minecraft.world.gen.ChunkProviderServer;
  import net.minecraft.world.gen.feature.WorldGeneratorBonusChest;
  import net.minecraft.world.storage.ISaveHandler;
 -import org.apache.logging.log4j.LogManager;
 -import org.apache.logging.log4j.Logger;
  
-+import jk_5.nailed.api.Server;
 +import jk_5.nailed.server.world.NailedDimensionManager;
-+import jk_5.nailed.server.world.NailedDimensionManager$;
 +
  public class WorldServer extends World {
      private static final Logger field_147491_a = LogManager.getLogger();
      private final MinecraftServer field_73061_a;
-@@ -105,6 +112,8 @@
+@@ -105,15 +110,13 @@
  
          scoreboardsavedata.func_96499_a(this.field_96442_D);
          ((ServerScoreboard)this.field_96442_D).func_96547_a(scoreboardsavedata);
@@ -43,3 +41,12 @@
      }
  
      public void func_72835_b() {
+         super.func_72835_b();
+ 
+-        if (this.func_72912_H().func_76093_s() && this.field_73013_u != EnumDifficulty.HARD) {
+-            this.field_73013_u = EnumDifficulty.HARD;
+-        }
+-
+         this.field_73011_w.field_76578_c.func_76938_b();
+ 
+         if (this.func_73056_e()) {

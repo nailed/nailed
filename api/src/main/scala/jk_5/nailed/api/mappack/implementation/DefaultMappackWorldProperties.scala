@@ -20,6 +20,7 @@ package jk_5.nailed.api.mappack.implementation
 import jk_5.nailed.api.mappack.MappackWorld
 import jk_5.nailed.api.mappack.gamerule.DefaultGameRules
 import jk_5.nailed.api.util.Location
+import jk_5.nailed.api.world.Difficulty
 
 /**
  * No description given
@@ -33,4 +34,6 @@ object DefaultMappackWorldProperties extends MappackWorld {
   override val spawnPoint = new Location(null, 0, 64, 0, 0, 0)
   override val dimension = 0
   override val gameRules = DefaultGameRules
+  override val resourcepack = ""
+  override val difficulty = Difficulty.PEACEFUL
 }

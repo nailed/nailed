@@ -21,6 +21,7 @@ import com.google.gson.JsonObject
 import jk_5.nailed.api.mappack.MappackWorld
 import jk_5.nailed.api.mappack.gamerule.ImmutableJsonGameRules
 import jk_5.nailed.api.util.{Checks, Location}
+import jk_5.nailed.api.world.Difficulty
 
 /**
  * No description given
@@ -39,4 +40,6 @@ class JsonMappackWorld(override val name: String, json: JsonObject, parent: Mapp
   } else parent.dimension
   override val spawnPoint = if(json.has("spawnpoint")) Location.read(json.getAsJsonObject("spawnpoint")) else parent.spawnPoint
   override val gameRules = new ImmutableJsonGameRules(if(json.has("gamerules")) json.getAsJsonObject("gamerules") else new JsonObject, parent.gameRules)
+  override val resourcepack = if(json.has("resourcepack")) json.get("resourcepack").getAsString else parent.resourcepack
+  override val difficulty = if(json.has("difficulty")) Difficulty.byName(json.get("difficulty").getAsString) else parent.difficulty
 }

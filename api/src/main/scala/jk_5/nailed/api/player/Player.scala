@@ -104,4 +104,6 @@ trait Player
   def addInfinitePotionEffect(effect: Potion, level: Int, ambient: Boolean)
   def clearPotionEffects()
   def clearPotionEffect(effect: Potion)
+
+  def loadResourcePack(url: String)
 }

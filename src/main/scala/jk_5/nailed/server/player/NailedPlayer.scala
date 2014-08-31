@@ -19,6 +19,7 @@ package jk_5.nailed.server.player
 
 import java.util.UUID
 
+import com.google.common.base.Charsets
 import jk_5.nailed.api.chat.{BaseComponent, ClickEvent, HoverEvent, TextComponent}
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.ItemStack
@@ -31,7 +32,7 @@ import jk_5.nailed.server.teleport.Teleporter
 import jk_5.nailed.server.utils.ItemStackConverter
 import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.network.play.server.S02PacketChat
+import net.minecraft.network.play.server.{S02PacketChat, S3FPacketCustomPayload}
 import net.minecraft.network.{NetHandlerPlayServer, Packet}
 import net.minecraft.potion.PotionEffect
 import net.minecraft.util.DamageSource
@@ -173,6 +174,10 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   override def clearPotionEffects() = entity.clearActivePotions()
   override def clearPotionEffect(effect: Potion) = entity.removePotionEffect(effect.getId)
+
+  override def loadResourcePack(url: String){
+    sendPacket(new S3FPacketCustomPayload("MC|RPack", url.getBytes(Charsets.UTF_8)))
+  }
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode,eid=${getEntity.getEntityId}}"
 }
