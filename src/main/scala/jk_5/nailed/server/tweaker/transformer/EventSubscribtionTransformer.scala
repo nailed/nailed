@@ -94,7 +94,7 @@ class EventSubscribtionTransformer extends IClassTransformer {
        */
       val m = new MethodNode(Opcodes.ASM4, Opcodes.ACC_PUBLIC, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), null, null)
       m.visitVarInsn(Opcodes.ALOAD, 0)
-      m.visitMethodInsn(Opcodes.INVOKESPECIAL, tsuper.getInternalName, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE))
+      m.visitMethodInsn(Opcodes.INVOKESPECIAL, tsuper.getInternalName, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), false)
       m.visitInsn(Opcodes.RETURN)
       cnode.methods.add(m)
     }
@@ -111,7 +111,7 @@ class EventSubscribtionTransformer extends IClassTransformer {
        */
       val m = new MethodNode(Opcodes.ASM4, Opcodes.ACC_PROTECTED, "setup", Type.getMethodDescriptor(Type.VOID_TYPE), null, null)
       m.visitVarInsn(Opcodes.ALOAD, 0)
-      m.visitMethodInsn(Opcodes.INVOKESPECIAL, tsuper.getInternalName, "setup", Type.getMethodDescriptor(Type.VOID_TYPE))
+      m.visitMethodInsn(Opcodes.INVOKESPECIAL, tsuper.getInternalName, "setup", Type.getMethodDescriptor(Type.VOID_TYPE), false)
       m.visitFieldInsn(Opcodes.GETSTATIC, cnode.name, "HANDLER_LIST", tlist.getDescriptor)
       val initListener = new Label
       m.visitJumpInsn(Opcodes.IFNULL, initListener)
@@ -121,8 +121,8 @@ class EventSubscribtionTransformer extends IClassTransformer {
       m.visitTypeInsn(Opcodes.NEW, tlist.getInternalName)
       m.visitInsn(Opcodes.DUP)
       m.visitVarInsn(Opcodes.ALOAD, 0)
-      m.visitMethodInsn(Opcodes.INVOKESPECIAL, tsuper.getInternalName, "getHandlerList", Type.getMethodDescriptor(tlist))
-      m.visitMethodInsn(Opcodes.INVOKESPECIAL, tlist.getInternalName, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE, tlist))
+      m.visitMethodInsn(Opcodes.INVOKESPECIAL, tsuper.getInternalName, "getHandlerList", Type.getMethodDescriptor(tlist), false)
+      m.visitMethodInsn(Opcodes.INVOKESPECIAL, tlist.getInternalName, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE, tlist), false)
       m.visitFieldInsn(Opcodes.PUTSTATIC, cnode.name, "HANDLER_LIST", tlist.getDescriptor)
       m.visitInsn(Opcodes.RETURN)
       cnode.methods.add(m)
