@@ -1,14 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
 +++ ../src-work/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -45,6 +45,7 @@
-     private WorldSettings.GameType field_71337_q;
-     private boolean field_71335_s;
-     private static final String __OBFID = "CL_00001784";
-+    public static boolean allowPlayerLogins = false;
- 
-     public DedicatedServer(File p_i1508_1_) {
-         super(p_i1508_1_, Proxy.NO_PROXY);
-@@ -69,141 +70,63 @@
+@@ -69,141 +69,63 @@
      }
  
      protected boolean func_71197_b() throws IOException {
@@ -167,16 +159,15 @@
                  long i1 = System.nanoTime() - j;
                  String s3 = String.format("%.3fs", new Object[] {Double.valueOf((double)i1 / 1.0E9D)});
                  field_155771_h.info("Done (" + s3 + ")! For help, type \"help\" or \"?\"");
-@@ -220,6 +143,8 @@
+@@ -220,6 +142,7 @@
                      this.field_71339_n.func_72602_a();
                  }
  
-+                allowPlayerLogins = true; //Delay player login until here to prevent CME's
 +                jk_5.nailed.server.NailedEventFactory.fireServerStarted(this);
                  return true;
              }
          }
-@@ -234,11 +159,11 @@
+@@ -234,11 +157,11 @@
      }
  
      public EnumDifficulty func_147135_j() {
@@ -190,7 +181,7 @@
      }
  
      protected void func_71228_a(CrashReport p_71228_1_) {}
-@@ -271,11 +196,11 @@
+@@ -271,11 +194,11 @@
      }
  
      public boolean func_71255_r() {
@@ -204,7 +195,7 @@
      }
  
      public void func_70000_a(PlayerUsageSnooper p_70000_1_) {
-@@ -346,11 +271,11 @@
+@@ -346,11 +269,11 @@
      }
  
      public boolean func_82356_Z() {
