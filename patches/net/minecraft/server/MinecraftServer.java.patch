@@ -1,23 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/server/MinecraftServer.java
 +++ ../src-work/minecraft/net/minecraft/server/MinecraftServer.java
-@@ -1,15 +1,6 @@
- package net.minecraft.server;
- 
--import com.google.common.base.Charsets;
--import com.mojang.authlib.GameProfile;
--import com.mojang.authlib.GameProfileRepository;
--import com.mojang.authlib.minecraft.MinecraftSessionService;
--import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
--import io.netty.buffer.ByteBuf;
--import io.netty.buffer.ByteBufOutputStream;
--import io.netty.buffer.Unpooled;
--import io.netty.handler.codec.base64.Base64;
--import java.awt.GraphicsEnvironment;
-+import java.awt.*;
- import java.awt.image.BufferedImage;
- import java.io.File;
- import java.io.IOException;
-@@ -20,12 +11,29 @@
+@@ -20,6 +20,7 @@
  import java.util.Arrays;
  import java.util.Collections;
  import java.util.Date;
@@ -25,66 +8,11 @@
  import java.util.Iterator;
  import java.util.List;
  import java.util.Random;
- import java.util.UUID;
- import java.util.concurrent.Callable;
- import javax.imageio.ImageIO;
-+
-+import com.google.common.base.Charsets;
-+import com.mojang.authlib.GameProfile;
-+import com.mojang.authlib.GameProfileRepository;
-+import com.mojang.authlib.minecraft.MinecraftSessionService;
-+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-+
-+import org.apache.commons.lang3.Validate;
-+import org.apache.logging.log4j.LogManager;
-+import org.apache.logging.log4j.Logger;
-+
-+import io.netty.buffer.ByteBuf;
-+import io.netty.buffer.ByteBufOutputStream;
-+import io.netty.buffer.Unpooled;
-+import io.netty.handler.codec.base64.Base64;
-+
- import net.minecraft.command.CommandBase;
- import net.minecraft.command.ICommandManager;
- import net.minecraft.command.ICommandSender;
-@@ -54,20 +62,24 @@
- import net.minecraft.world.EnumDifficulty;
- import net.minecraft.world.MinecraftException;
- import net.minecraft.world.World;
--import net.minecraft.world.WorldManager;
- import net.minecraft.world.WorldServer;
--import net.minecraft.world.WorldServerMulti;
- import net.minecraft.world.WorldSettings;
- import net.minecraft.world.WorldType;
- import net.minecraft.world.chunk.storage.AnvilSaveConverter;
--import net.minecraft.world.demo.DemoWorldServer;
- import net.minecraft.world.storage.ISaveFormat;
--import net.minecraft.world.storage.ISaveHandler;
- import net.minecraft.world.storage.WorldInfo;
--import org.apache.commons.lang3.Validate;
--import org.apache.logging.log4j.LogManager;
--import org.apache.logging.log4j.Logger;
- 
-+import jk_5.nailed.api.world.WorldContext;
-+import jk_5.nailed.server.NailedEventFactory;
-+import jk_5.nailed.server.NailedServer;
-+import jk_5.nailed.server.chunkloading.ChunkIOExecutor;
-+import jk_5.nailed.server.map.NailedMap;
-+import jk_5.nailed.server.map.NailedMapLoader;
-+import jk_5.nailed.server.network.NailedNetworkManager;
-+import jk_5.nailed.server.network.NailedNetworkManager$;
-+import jk_5.nailed.server.world.NailedDimensionManager;
-+import jk_5.nailed.server.world.NailedWorld;
-+
- public abstract class MinecraftServer implements ICommandSender, Runnable, IPlayerUsage {
-     private static final Logger field_147145_h = LogManager.getLogger();
-     public static final File field_152367_a = new File("usercache.json");
-@@ -78,12 +90,12 @@
+@@ -78,12 +79,11 @@
      private final List field_71322_p = new ArrayList();
      private final ICommandManager field_71321_q;
      public final Profiler field_71304_b = new Profiler();
 -    private final NetworkSystem field_147144_o;
-+    //private final NetworkSystem field_147144_o;
      private final ServerStatusResponse field_147147_p = new ServerStatusResponse();
      private final Random field_147146_q = new Random();
 -    private String field_71320_r;
@@ -95,36 +23,33 @@
      private ServerConfigurationManager field_71318_t;
      private boolean field_71317_u = true;
      private boolean field_71316_v;
-@@ -100,7 +112,8 @@
+@@ -100,7 +100,7 @@
      private int field_71280_D;
      private int field_143008_E = 0;
      public final long[] field_71311_j = new long[100];
 -    public long[][] field_71312_k;
-+    //public long[][] timeOfLastDimensionTick;
 +    public Hashtable<Integer, long[]> worldTickTimes = new Hashtable<Integer, long[]>();
      private KeyPair field_71292_I;
      private String field_71293_J;
      private String field_71294_K;
-@@ -124,10 +137,10 @@
+@@ -124,10 +124,9 @@
          this.field_152366_X = new PlayerProfileCache(this, field_152367_a);
          field_71309_l = this;
          this.field_110456_c = p_i45281_2_;
 -        this.field_71308_o = p_i45281_1_;
 -        this.field_147144_o = new NetworkSystem(this);
 +        this.field_71308_o = new File(p_i45281_1_, "maps");
-+        //this.field_147144_o = new NetworkSystem(this);
          this.field_71321_q = new ServerCommandManager();
 -        this.field_71310_m = new AnvilSaveConverter(p_i45281_1_);
 +        this.field_71310_m = new AnvilSaveConverter(this.field_71308_o);
          this.field_152364_T = new YggdrasilAuthenticationService(p_i45281_2_, UUID.randomUUID().toString());
          this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
          this.field_152365_W = this.field_152364_T.createProfileRepository();
-@@ -159,56 +172,13 @@
+@@ -159,56 +158,12 @@
      }
  
      protected void func_71247_a(String p_71247_1_, String p_71247_2_, long p_71247_3_, WorldType p_71247_5_, String p_71247_6_) {
 -        this.func_71237_c(p_71247_1_);
-+        //this.convertMapIfNeeded(p_71247_1_);
          this.func_71192_d("menu.loadingLevel");
 -        this.field_71305_c = new WorldServer[3];
 -        this.field_71312_k = new long[this.field_71305_c.length][100];
@@ -138,8 +63,8 @@
 -        } else {
 -            worldsettings = new WorldSettings(worldinfo);
 -        }
-+        NailedMap map = (NailedMap) NailedMapLoader.createLobbyMap();
-+        NailedWorld world = (NailedWorld) map.worlds()[0];
++        jk_5.nailed.server.map.NailedMap map = (jk_5.nailed.server.map.NailedMap) jk_5.nailed.server.map.NailedMapLoader.createLobbyMap();
++        jk_5.nailed.server.world.NailedWorld world = (jk_5.nailed.server.world.NailedWorld) map.worlds()[0];
  
 -        if (this.field_71289_N) {
 -            worldsettings.func_77159_a();
@@ -180,7 +105,7 @@
          this.func_71222_d();
      }
  
-@@ -268,6 +238,7 @@
+@@ -268,6 +223,7 @@
      protected void func_71267_a(boolean p_71267_1_) {
          if (!this.field_71290_O) {
              WorldServer[] aworldserver = this.field_71305_c;
@@ -188,26 +113,22 @@
              int i = aworldserver.length;
  
              for (int j = 0; j < i; ++j) {
-@@ -292,9 +263,11 @@
+@@ -292,9 +248,7 @@
          if (!this.field_71290_O) {
              field_147145_h.info("Stopping server");
  
 -            if (this.func_147137_ag() != null) {
 -                this.func_147137_ag().func_151268_b();
 -            }
-+            //Nailed: redirect this to our own network system
-+            //if (this.func_147137_ag() != null) {
-+            //    this.func_147137_ag().terminateEndpoints();
-+            //}
-+            NailedNetworkManager.stopEndpoints();
++            jk_5.nailed.server.network.NailedNetworkManager.stopEndpoints();
  
              if (this.field_71318_t != null) {
                  field_147145_h.info("Saving players");
-@@ -308,10 +281,17 @@
+@@ -308,10 +262,17 @@
  
                  for (int i = 0; i < this.field_71305_c.length; ++i) {
                      WorldServer worldserver = this.field_71305_c[i];
-+                    NailedEventFactory.fireWorldUnload(worldserver);
++                    jk_5.nailed.server.NailedEventFactory.fireWorldUnload(worldserver);
                      worldserver.func_73041_k();
                  }
              }
@@ -215,28 +136,28 @@
 +            WorldServer[] tmp = field_71305_c;
 +            for(WorldServer world : tmp){
 +                //Nailed: unload the worlds from our system
-+                NailedDimensionManager.setWorld(world.field_73011_w.field_76574_g, null);
++                jk_5.nailed.server.world.NailedDimensionManager.setWorld(world.field_73011_w.field_76574_g, null);
 +            }
 +
              if (this.field_71307_n.func_76468_d()) {
                  this.field_71307_n.func_76470_e();
              }
-@@ -448,6 +428,9 @@
+@@ -448,6 +409,9 @@
          }
  
          this.field_71304_b.func_76320_a("root");
 +        this.field_71304_b.func_76320_a("Nailed:ServerPreTickEvent");
-+        NailedEventFactory.firePreServerTick(this);
++        jk_5.nailed.server.NailedEventFactory.firePreServerTick(this);
 +        this.field_71304_b.func_76319_b();
          this.func_71190_q();
  
          if (i - this.field_147142_T >= 5000000000L) {
-@@ -485,18 +468,24 @@
+@@ -485,18 +449,24 @@
          }
  
          this.field_71304_b.func_76319_b();
 +        this.field_71304_b.func_76320_a("Nailed:ServerPostTickEvent");
-+        NailedEventFactory.firePostServerTick(this);
++        jk_5.nailed.server.NailedEventFactory.firePostServerTick(this);
 +
          this.field_71304_b.func_76319_b();
 +        this.field_71304_b.func_76319_b();
@@ -245,10 +166,10 @@
      public void func_71190_q() {
          this.field_71304_b.func_76320_a("levels");
 -        int i;
-+        ChunkIOExecutor.tick();
++        jk_5.nailed.server.chunkloading.ChunkIOExecutor.tick();
  
 -        for (i = 0; i < this.field_71305_c.length; ++i) {
-+        int[] ids = NailedDimensionManager.getAllDimensionIds();
++        int[] ids = jk_5.nailed.server.world.NailedDimensionManager.getAllDimensionIds();
 +        for (int x = 0; x < this.field_71305_c.length; x++) {
 +            int id = ids[x];
              long j = System.nanoTime();
@@ -256,27 +177,27 @@
 -            if (i == 0 || this.func_71255_r()) {
 -                WorldServer worldserver = this.field_71305_c[i];
 +            if (id == 0 || this.func_71255_r()) {
-+                WorldServer worldserver = NailedDimensionManager.getVanillaWorld(id);
++                WorldServer worldserver = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(id);
                  this.field_71304_b.func_76320_a(worldserver.func_72912_H().func_76065_j());
                  this.field_71304_b.func_76320_a("pools");
                  this.field_71304_b.func_76319_b();
-@@ -508,6 +497,7 @@
+@@ -508,6 +478,7 @@
                  }
  
                  this.field_71304_b.func_76320_a("tick");
-+                NailedEventFactory.firePreWorldTick(this, worldserver);
++                jk_5.nailed.server.NailedEventFactory.firePreWorldTick(this, worldserver);
                  CrashReport crashreport;
  
                  try {
-@@ -526,6 +516,7 @@
+@@ -526,6 +497,7 @@
                      throw new ReportedException(crashreport);
                  }
  
-+                NailedEventFactory.firePostWorldTick(this, worldserver);
++                jk_5.nailed.server.NailedEventFactory.firePostWorldTick(this, worldserver);
                  this.field_71304_b.func_76319_b();
                  this.field_71304_b.func_76320_a("tracker");
                  worldserver.func_73039_n().func_72788_a();
-@@ -533,16 +524,20 @@
+@@ -533,16 +505,18 @@
                  this.field_71304_b.func_76319_b();
              }
  
@@ -285,12 +206,10 @@
          }
  
 +        this.field_71304_b.func_76318_c("dimensionUnloading");
-+        NailedDimensionManager.unloadWorlds(worldTickTimes);
++        jk_5.nailed.server.world.NailedDimensionManager.unloadWorlds(worldTickTimes);
          this.field_71304_b.func_76318_c("connection");
 -        this.func_147137_ag().func_151269_c();
-+        //this.func_147137_ag().networkTick();
-+        //Nailed: redirect to our own network system
-+        NailedNetworkManager.processQueuedPackets();
++        jk_5.nailed.server.network.NailedNetworkManager.processQueuedPackets();
          this.field_71304_b.func_76318_c("players");
          this.field_71318_t.func_72374_b();
          this.field_71304_b.func_76318_c("tickables");
@@ -300,30 +219,30 @@
              ((IUpdatePlayerListBox)this.field_71322_p.get(i)).func_73660_a();
          }
  
-@@ -559,7 +554,7 @@
+@@ -559,7 +533,7 @@
  
      public static void main(String[] p_main_0_) {
          Bootstrap.func_151354_b();
 -
-+        NailedServer.register();
++        jk_5.nailed.server.NailedServer.register();
          try {
              boolean flag = true;
              String s = null;
-@@ -666,7 +661,12 @@
+@@ -666,7 +640,12 @@
      }
  
      public WorldServer func_71218_a(int p_71218_1_) {
 -        return p_71218_1_ == -1 ? this.field_71305_c[1] : (p_71218_1_ == 1 ? this.field_71305_c[2] : this.field_71305_c[0]);
-+        WorldServer world = NailedDimensionManager.getVanillaWorld(p_71218_1_);
++        WorldServer world = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(p_71218_1_);
 +        if(world == null){
-+            NailedDimensionManager.initWorld(p_71218_1_, new WorldContext(null, null, null));
-+            world = NailedDimensionManager.getVanillaWorld(p_71218_1_);
++            jk_5.nailed.server.world.NailedDimensionManager.initWorld(p_71218_1_, new jk_5.nailed.api.world.WorldContext(null, null, null));
++            world = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(p_71218_1_);
 +        }
 +        return world;
      }
  
      public String func_71277_t() {
-@@ -726,7 +726,7 @@
+@@ -726,7 +705,7 @@
      }
  
      public String getServerModName() {
@@ -332,15 +251,15 @@
      }
  
      public CrashReport func_71230_b(CrashReport p_71230_1_) {
-@@ -908,6 +908,7 @@
+@@ -908,6 +887,7 @@
              WorldServer worldserver = this.field_71305_c[i];
  
              if (worldserver != null) {
-+                NailedEventFactory.fireWorldUnload(worldserver);
++                jk_5.nailed.server.NailedEventFactory.fireWorldUnload(worldserver);
                  worldserver.func_73041_k();
              }
          }
-@@ -1045,7 +1046,7 @@
+@@ -1045,7 +1025,7 @@
      }
  
      public NetworkSystem func_147137_ag() {

@@ -1,51 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
 +++ ../src-work/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -1,16 +1,16 @@
- package net.minecraft.server.dedicated;
- 
--import java.io.BufferedReader;
- import java.io.File;
- import java.io.IOException;
--import java.io.InputStreamReader;
--import java.net.InetAddress;
- import java.net.Proxy;
- import java.util.ArrayList;
- import java.util.Collections;
- import java.util.List;
--import java.util.Random;
- import java.util.concurrent.Callable;
-+
-+import org.apache.logging.log4j.LogManager;
-+import org.apache.logging.log4j.Logger;
-+
- import net.minecraft.command.ICommandSender;
- import net.minecraft.command.ServerCommand;
- import net.minecraft.crash.CrashReport;
-@@ -23,17 +23,19 @@
- import net.minecraft.server.ServerEula;
- import net.minecraft.server.gui.MinecraftServerGui;
- import net.minecraft.server.management.PreYggdrasilConverter;
--import net.minecraft.server.management.ServerConfigurationManager;
- import net.minecraft.util.ChunkCoordinates;
- import net.minecraft.util.CryptManager;
- import net.minecraft.util.MathHelper;
- import net.minecraft.world.EnumDifficulty;
- import net.minecraft.world.World;
- import net.minecraft.world.WorldSettings;
--import net.minecraft.world.WorldType;
--import org.apache.logging.log4j.LogManager;
--import org.apache.logging.log4j.Logger;
- 
-+import jk_5.nailed.server.NailedEventFactory;
-+import jk_5.nailed.server.config.MinecraftConfig;
-+import jk_5.nailed.server.console.CommandReaderThread;
-+import jk_5.nailed.server.network.NailedNetworkManager;
-+import jk_5.nailed.server.tweaker.NailedTweaker;
-+
- public class DedicatedServer extends MinecraftServer implements IServer {
-     private static final Logger field_155771_h = LogManager.getLogger();
-     private final List field_71341_l = Collections.synchronizedList(new ArrayList());
-@@ -45,6 +47,7 @@
+@@ -45,6 +45,7 @@
      private WorldSettings.GameType field_71337_q;
      private boolean field_71335_s;
      private static final String __OBFID = "CL_00001784";
@@ -53,7 +8,7 @@
  
      public DedicatedServer(File p_i1508_1_) {
          super(p_i1508_1_, Proxy.NO_PROXY);
-@@ -69,141 +72,63 @@
+@@ -69,141 +70,63 @@
      }
  
      protected boolean func_71197_b() throws IOException {
@@ -62,7 +17,7 @@
 -            public void run() {
 -                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(System.in));
 -                String s4;
-+        CommandReaderThread.start();
++        jk_5.nailed.server.console.CommandReaderThread.start();
  
 -                try {
 -                    while (!DedicatedServer.this.func_71241_aa() && DedicatedServer.this.func_71278_l() && (s4 = bufferedreader.readLine()) != null) {
@@ -81,15 +36,15 @@
              field_155771_h.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
          }
  
-+        NailedEventFactory.fireServerStartBeforeConfig(this);
++        jk_5.nailed.server.NailedEventFactory.fireServerStartBeforeConfig(this);
 +
          field_155771_h.info("Loading properties");
 -        this.field_71340_o = new PropertyManager(new File("server.properties"));
-+        this.field_71340_o = new MinecraftConfig();
++        this.field_71340_o = new jk_5.nailed.server.config.MinecraftConfig();
          this.field_154332_n = new ServerEula(new File("eula.txt"));
  
 -        if (!this.field_154332_n.func_154346_a()) {
-+        if (!NailedTweaker.acceptEula() && !this.field_154332_n.func_154346_a()) {
++        if (!jk_5.nailed.server.tweaker.NailedTweaker.acceptEula() && !this.field_154332_n.func_154346_a()) {
              field_155771_h.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
              this.field_154332_n.func_154348_b();
              return false;
@@ -149,7 +104,7 @@
 -                field_155771_h.warn("Perhaps a server is already running on that port?");
 -                return false;
 -            }
-+            NailedNetworkManager.startEndpoints();
++            jk_5.nailed.server.network.NailedNetworkManager.startEndpoints();
  
              if (!this.func_71266_T()) {
                  field_155771_h.warn("**** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!");
@@ -207,21 +162,21 @@
 -                field_155771_h.info("Preparing level \"" + this.func_71270_I() + "\"");
 -                this.func_71247_a(this.func_71270_I(), this.func_71270_I(), k, worldtype, s2);
 +                this.func_71191_d(256);
-+                NailedEventFactory.fireStartBeforeWorldLoad(this);
++                jk_5.nailed.server.NailedEventFactory.fireStartBeforeWorldLoad(this);
 +                this.func_71247_a(this.func_71270_I(), this.func_71270_I(), 0, null, null);
                  long i1 = System.nanoTime() - j;
                  String s3 = String.format("%.3fs", new Object[] {Double.valueOf((double)i1 / 1.0E9D)});
                  field_155771_h.info("Done (" + s3 + ")! For help, type \"help\" or \"?\"");
-@@ -220,6 +145,8 @@
+@@ -220,6 +143,8 @@
                      this.field_71339_n.func_72602_a();
                  }
  
 +                allowPlayerLogins = true; //Delay player login until here to prevent CME's
-+                NailedEventFactory.fireServerStarted(this);
++                jk_5.nailed.server.NailedEventFactory.fireServerStarted(this);
                  return true;
              }
          }
-@@ -234,11 +161,11 @@
+@@ -234,11 +159,11 @@
      }
  
      public EnumDifficulty func_147135_j() {
@@ -235,7 +190,7 @@
      }
  
      protected void func_71228_a(CrashReport p_71228_1_) {}
-@@ -271,11 +198,11 @@
+@@ -271,11 +196,11 @@
      }
  
      public boolean func_71255_r() {
@@ -249,7 +204,7 @@
      }
  
      public void func_70000_a(PlayerUsageSnooper p_70000_1_) {
-@@ -346,11 +273,11 @@
+@@ -346,11 +271,11 @@
      }
  
      public boolean func_82356_Z() {

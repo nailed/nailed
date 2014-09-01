@@ -1,27 +1,22 @@
 --- ../src-base/minecraft/net/minecraft/network/play/server/S02PacketChat.java
 +++ ../src-work/minecraft/net/minecraft/network/play/server/S02PacketChat.java
-@@ -7,8 +7,12 @@
- import net.minecraft.network.play.INetHandlerPlayClient;
- import net.minecraft.util.IChatComponent;
+@@ -9,6 +9,7 @@
  
-+import jk_5.nailed.api.chat.BaseComponent;
-+import jk_5.nailed.api.chat.serialization.ComponentSerializer;
-+
  public class S02PacketChat extends Packet {
      private IChatComponent field_148919_a;
-+    private BaseComponent[] comps;
++    private jk_5.nailed.api.chat.BaseComponent[] comps;
      private boolean field_148918_b;
      private static final String __OBFID = "CL_00001289";
  
-@@ -26,12 +30,25 @@
+@@ -26,12 +27,25 @@
          this.field_148918_b = p_i45180_2_;
      }
  
-+    public S02PacketChat(BaseComponent... comps){
++    public S02PacketChat(jk_5.nailed.api.chat.BaseComponent... comps){
 +        this(true, comps);
 +    }
 +
-+    public S02PacketChat(boolean isChat, BaseComponent... comps){
++    public S02PacketChat(boolean isChat, jk_5.nailed.api.chat.BaseComponent... comps){
 +        this.comps = comps;
 +        this.field_148918_b = isChat;
 +    }
@@ -35,7 +30,7 @@
 +        if(comps == null){
 +            p_148840_1_.func_150785_a(IChatComponent.Serializer.func_150696_a(this.field_148919_a));
 +        }else{
-+            p_148840_1_.func_150785_a(ComponentSerializer.toString(this.comps));
++            p_148840_1_.func_150785_a(jk_5.nailed.api.chat.serialization.ComponentSerializer.toString(this.comps));
 +        }
      }
  

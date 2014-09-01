@@ -1,18 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/world/chunk/storage/AnvilSaveHandler.java
 +++ ../src-work/minecraft/net/minecraft/world/chunk/storage/AnvilSaveHandler.java
-@@ -1,10 +1,9 @@
- package net.minecraft.world.chunk.storage;
- 
- import java.io.File;
-+
- import net.minecraft.nbt.NBTTagCompound;
- import net.minecraft.world.WorldProvider;
--import net.minecraft.world.WorldProviderEnd;
--import net.minecraft.world.WorldProviderHell;
- import net.minecraft.world.storage.SaveHandler;
- import net.minecraft.world.storage.ThreadedFileIOBase;
- import net.minecraft.world.storage.WorldInfo;
-@@ -18,19 +17,7 @@
+@@ -18,19 +18,7 @@
  
      public IChunkLoader func_75763_a(WorldProvider p_75763_1_) {
          File file1 = this.func_75765_b();

@@ -1,36 +1,10 @@
 --- ../src-base/minecraft/net/minecraft/item/ItemStack.java
 +++ ../src-work/minecraft/net/minecraft/item/ItemStack.java
-@@ -1,9 +1,11 @@
- package net.minecraft.item;
- 
--import com.google.common.collect.HashMultimap;
--import com.google.common.collect.Multimap;
- import java.text.DecimalFormat;
- import java.util.Random;
-+
-+import com.google.common.collect.HashMultimap;
-+import com.google.common.collect.Multimap;
-+
- import net.minecraft.block.Block;
- import net.minecraft.enchantment.Enchantment;
- import net.minecraft.enchantment.EnchantmentDurability;
-@@ -23,6 +25,8 @@
- import net.minecraft.util.IChatComponent;
- import net.minecraft.world.World;
- 
-+import jk_5.nailed.server.NailedEventFactory;
-+
- public final class ItemStack {
-     public static final DecimalFormat field_111284_a = new DecimalFormat("#.###");
-     public int field_77994_a;
-@@ -87,6 +91,10 @@
+@@ -87,6 +87,7 @@
      }
  
      public boolean func_77943_a(EntityPlayer p_77943_1_, World p_77943_2_, int p_77943_3_, int p_77943_4_, int p_77943_5_, int p_77943_6_, float p_77943_7_, float p_77943_8_, float p_77943_9_) {
-+        if(NailedEventFactory.fireOnRightClick(p_77943_1_, p_77943_2_, this, p_77943_3_, p_77943_4_, p_77943_5_, p_77943_6_, p_77943_7_, p_77943_8_, p_77943_9_)){
-+            return false;
-+        }
-+
++        if(jk_5.nailed.server.NailedEventFactory.fireOnRightClick(p_77943_1_, p_77943_2_, this, p_77943_3_, p_77943_4_, p_77943_5_, p_77943_6_, p_77943_7_, p_77943_8_, p_77943_9_)) return false;
          boolean flag = this.func_77973_b().func_77648_a(this, p_77943_1_, p_77943_2_, p_77943_3_, p_77943_4_, p_77943_5_, p_77943_6_, p_77943_7_, p_77943_8_, p_77943_9_);
  
          if (flag) {

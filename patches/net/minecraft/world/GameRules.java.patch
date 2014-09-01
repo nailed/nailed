@@ -1,29 +1,10 @@
 --- ../src-base/minecraft/net/minecraft/world/GameRules.java
 +++ ../src-work/minecraft/net/minecraft/world/GameRules.java
-@@ -10,15 +10,17 @@
+@@ -10,6 +10,7 @@
      private static final String __OBFID = "CL_00000136";
  
      public GameRules() {
--        this.func_82769_a("doFireTick", "true");
--        this.func_82769_a("mobGriefing", "true");
--        this.func_82769_a("keepInventory", "false");
--        this.func_82769_a("doMobSpawning", "true");
--        this.func_82769_a("doMobLoot", "true");
--        this.func_82769_a("doTileDrops", "true");
--        this.func_82769_a("commandBlockOutput", "true");
--        this.func_82769_a("naturalRegeneration", "true");
--        this.func_82769_a("doDaylightCycle", "true");
-+        /*
-+        this.addGameRule("doFireTick", "true");
-+        this.addGameRule("mobGriefing", "true");
-+        this.addGameRule("keepInventory", "false");
-+        this.addGameRule("doMobSpawning", "true");
-+        this.addGameRule("doMobLoot", "true");
-+        this.addGameRule("doTileDrops", "true");
-+        this.addGameRule("commandBlockOutput", "true");
-+        this.addGameRule("naturalRegeneration", "true");
-+        this.addGameRule("doDaylightCycle", "true");
-+        */
-     }
- 
-     public void func_82769_a(String p_82769_1_, String p_82769_2_) {
++        if(true) return; //Nailed: don't initialize them here. See DefaultGameRules
+         this.func_82769_a("doFireTick", "true");
+         this.func_82769_a("mobGriefing", "true");
+         this.func_82769_a("keepInventory", "false");

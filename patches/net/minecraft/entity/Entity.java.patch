@@ -1,15 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/entity/Entity.java
 +++ ../src-work/minecraft/net/minecraft/entity/Entity.java
-@@ -35,6 +35,8 @@
- import net.minecraft.world.World;
- import net.minecraft.world.WorldServer;
- 
-+import jk_5.nailed.server.NailedEventFactory;
-+
- public abstract class Entity {
-     private static int field_70152_a;
-     private int field_145783_c;
-@@ -232,23 +234,8 @@
+@@ -232,23 +232,8 @@
              i = this.func_82145_z();
  
              if (this.field_71087_bX) {
@@ -30,7 +21,7 @@
 -
 -                    this.field_71087_bX = false;
 -                }
-+                NailedEventFactory.fireEntityInPortal(this);
++                jk_5.nailed.server.NailedEventFactory.fireEntityInPortal(this);
 +                this.field_71087_bX = false;
              } else {
                  if (this.field_82153_h > 0) {

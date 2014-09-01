@@ -1,40 +1,21 @@
 --- ../src-base/minecraft/net/minecraft/world/World.java
 +++ ../src-work/minecraft/net/minecraft/world/World.java
-@@ -10,6 +10,7 @@
- import java.util.Set;
- import java.util.UUID;
- import java.util.concurrent.Callable;
-+
- import net.minecraft.block.Block;
- import net.minecraft.block.BlockHopper;
- import net.minecraft.block.BlockLiquid;
-@@ -49,6 +50,10 @@
- import net.minecraft.world.storage.MapStorage;
- import net.minecraft.world.storage.WorldInfo;
- 
-+import jk_5.nailed.api.util.Location;
-+import jk_5.nailed.server.map.gamerule.DelegatingGameRules;
-+import jk_5.nailed.server.world.NailedDimensionManager;
-+
- public abstract class World implements IBlockAccess {
-     public boolean field_72999_e;
-     public List field_72996_f = new ArrayList();
-@@ -2428,7 +2433,8 @@
+@@ -2428,7 +2428,8 @@
      }
  
      public ChunkCoordinates func_72861_E() {
 -        return new ChunkCoordinates(this.field_72986_A.func_76079_c(), this.field_72986_A.func_76075_d(), this.field_72986_A.func_76074_e());
-+        Location spawn = this.field_73011_w.getSpawnPoint();
++        jk_5.nailed.api.util.Location spawn = this.field_73011_w.getSpawnPoint();
 +        return new ChunkCoordinates(spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ());
      }
  
      public void func_72950_A(int p_72950_1_, int p_72950_2_, int p_72950_3_) {
-@@ -2458,7 +2464,7 @@
+@@ -2458,7 +2459,7 @@
      }
  
      public GameRules func_82736_K() {
 -        return this.field_72986_A.func_82574_x();
-+        return DelegatingGameRules.get(NailedDimensionManager.getWorld(this.field_73011_w.field_76574_g).getGameRules());
++        return jk_5.nailed.server.map.gamerule.DelegatingGameRules.get(jk_5.nailed.server.world.NailedDimensionManager.getWorld(this.field_73011_w.field_76574_g).getGameRules());
      }
  
      public void func_72854_c() {}

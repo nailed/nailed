@@ -1,45 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/entity/player/EntityPlayerMP.java
 +++ ../src-work/minecraft/net/minecraft/entity/player/EntityPlayerMP.java
-@@ -1,8 +1,5 @@
- package net.minecraft.entity.player;
- 
--import com.google.common.collect.Sets;
--import com.mojang.authlib.GameProfile;
--import io.netty.buffer.Unpooled;
- import java.io.IOException;
- import java.util.ArrayList;
- import java.util.Arrays;
-@@ -11,6 +8,16 @@
- import java.util.Iterator;
- import java.util.LinkedList;
- import java.util.List;
-+
-+import com.google.common.collect.Sets;
-+import com.mojang.authlib.GameProfile;
-+
-+import org.apache.commons.io.Charsets;
-+import org.apache.logging.log4j.LogManager;
-+import org.apache.logging.log4j.Logger;
-+
-+import io.netty.buffer.Unpooled;
-+
- import net.minecraft.crash.CrashReport;
- import net.minecraft.crash.CrashReportCategory;
- import net.minecraft.entity.Entity;
-@@ -96,10 +103,9 @@
- import net.minecraft.world.WorldSettings;
- import net.minecraft.world.biome.BiomeGenBase;
- import net.minecraft.world.chunk.Chunk;
--import org.apache.commons.io.Charsets;
--import org.apache.logging.log4j.LogManager;
--import org.apache.logging.log4j.Logger;
- 
-+import jk_5.nailed.api.util.Location;
-+
- public class EntityPlayerMP extends EntityPlayer implements ICrafting {
-     private static final Logger field_147102_bM = LogManager.getLogger();
-     private String field_71148_cg = "en_US";
-@@ -130,27 +136,18 @@
+@@ -130,27 +130,14 @@
          super(p_i45285_2_, p_i45285_3_);
          p_i45285_4_.field_73090_b = this;
          this.field_71134_c = p_i45285_4_;
@@ -54,21 +15,18 @@
 -            j += this.field_70146_Z.nextInt(l * 2) - l;
 -            k = p_i45285_2_.func_72825_h(i, j);
 -        }
-+        Location spawn = p_i45285_2_.field_73011_w.getSpawnPoint();
++        jk_5.nailed.api.util.Location spawn = p_i45285_2_.field_73011_w.getSpawnPoint();
  
          this.field_71133_b = p_i45285_1_;
          this.field_147103_bO = p_i45285_1_.func_71203_ab().func_152602_a(this);
          this.field_70138_W = 0.0F;
          this.field_70129_M = 0.0F;
 -        this.func_70012_b((double)i + 0.5D, (double)k, (double)j + 0.5D, 0.0F, 0.0F);
-+        this.func_70012_b(spawn.getX(), spawn.getY(), spawn.getZ(), spawn.getYaw(), spawn.getPitch());
- 
+-
 -        while (!p_i45285_2_.func_72945_a(this, this.field_70121_D).isEmpty()) {
 -            this.func_70107_b(this.field_70165_t, this.field_70163_u + 1.0D, this.field_70161_v);
 -        }
-+        /*while (!p_i45285_2_.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty()) {
-+            this.setPosition(this.posX, this.posY + 1.0D, this.posZ);
-+        }*/
++        this.func_70012_b(spawn.getX(), spawn.getY(), spawn.getZ(), spawn.getYaw(), spawn.getPitch());
      }
  
      public void func_70037_a(NBTTagCompound p_70037_1_) {

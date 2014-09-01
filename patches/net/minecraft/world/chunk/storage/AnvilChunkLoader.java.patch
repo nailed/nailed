@@ -1,26 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ ../src-work/minecraft/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-@@ -9,6 +9,10 @@
- import java.util.Iterator;
- import java.util.List;
- import java.util.Set;
-+
-+import org.apache.logging.log4j.LogManager;
-+import org.apache.logging.log4j.Logger;
-+
- import net.minecraft.block.Block;
- import net.minecraft.entity.Entity;
- import net.minecraft.entity.EntityList;
-@@ -24,8 +28,6 @@
- import net.minecraft.world.chunk.NibbleArray;
- import net.minecraft.world.storage.IThreadedFileIO;
- import net.minecraft.world.storage.ThreadedFileIOBase;
--import org.apache.logging.log4j.LogManager;
--import org.apache.logging.log4j.Logger;
- 
- public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
-     private static final Logger field_151505_a = LogManager.getLogger();
-@@ -39,16 +41,49 @@
+@@ -39,16 +39,49 @@
          this.field_75825_d = p_i2003_1_;
      }
  
@@ -73,7 +53,7 @@
                          break;
                      }
                  }
-@@ -65,10 +100,21 @@
+@@ -65,10 +98,21 @@
              nbttagcompound = CompressedStreamTools.func_74794_a(datainputstream);
          }
  
@@ -96,7 +76,7 @@
          if (!p_75822_4_.func_150297_b("Level", 10)) {
              field_151505_a.error("Chunk file at " + p_75822_2_ + "," + p_75822_3_ + " is missing level data, skipping");
              return null;
-@@ -82,10 +128,26 @@
+@@ -82,10 +126,26 @@
                  field_151505_a.error("Chunk file at " + p_75822_2_ + "," + p_75822_3_ + " is in the wrong location; relocating. (Expected " + p_75822_2_ + ", " + p_75822_3_ + ", got " + chunk.field_76635_g + ", " + chunk.field_76647_h + ")");
                  p_75822_4_.func_74768_a("xPos", p_75822_2_);
                  p_75822_4_.func_74768_a("zPos", p_75822_3_);
@@ -124,7 +104,7 @@
          }
      }
  
-@@ -271,20 +333,20 @@
+@@ -271,20 +331,20 @@
          ExtendedBlockStorage[] aextendedblockstorage = new ExtendedBlockStorage[b0];
          boolean flag = !p_75823_1_.field_73011_w.field_76576_e;
  
@@ -148,7 +128,7 @@
                  extendedblockstorage.func_76666_d(new NibbleArray(nbttagcompound1.func_74770_j("SkyLight"), 4));
              }
  
-@@ -294,10 +356,15 @@
+@@ -294,10 +354,15 @@
  
          chunk.func_76602_a(aextendedblockstorage);
  
@@ -165,7 +145,7 @@
          NBTTagList nbttaglist1 = p_75823_2_.func_150295_c("Entities", 10);
  
          if (nbttaglist1 != null) {
-@@ -348,7 +415,7 @@
+@@ -348,7 +413,7 @@
              }
          }
  
