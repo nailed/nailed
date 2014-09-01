@@ -121,6 +121,7 @@ object WorldItemEventHandler {
       val stage = stages(nextStage)
       val loc = new Location(stage.teleport)
       loc.setWorld(player.getWorld)
+      player.setAllowedToFly(allowed = true)
       Teleporter.teleportPlayer(player, new TeleportOptions(loc))
       player.sendMessage(new TextComponent(""))
       player.sendMessage(new ComponentBuilder("-- " + stage.title).color(ChatColor.DARK_AQUA).create())
