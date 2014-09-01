@@ -18,31 +18,17 @@
 
 <Configuration status="WARN" packages="com.mojang">
     <Appenders>
-        <Routing name="WINDOWS_COMPAT">
+        <Routing name="SysOut">
             <Routes pattern="$${ctx:plugin}">
                 <Route>
-                    <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT">
+                    <Console name="SysOut">
                         <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%X{plugin}]: %msg%n" />
                     </Console>
                 </Route>
                 <Route key="$${ctx:plugin}">
-                    <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT">
+                    <Console name="SysOut">
                         <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
                     </Console>
-                </Route>
-            </Routes>
-        </Routing>
-        <Routing name="TerminalConsole">
-            <Routes pattern="$${ctx:plugin}">
-                <Route>
-                    <Queue name="TerminalConsole">
-                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%X{plugin}]: %msg%n" />
-                    </Queue>
-                </Route>
-                <Route key="$${ctx:plugin}">
-                    <Queue name="TerminalConsole">
-                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
-                    </Queue>
                 </Route>
             </Routes>
         </Routing>
@@ -75,17 +61,15 @@
     <Loggers>
         <Logger level="all" name="io.netty">
             <AppenderRef ref="NettyLog"/>
-            <AppenderRef ref="WINDOWS_COMPAT" level="WARN"/>
+            <AppenderRef ref="SysOut" level="WARN"/>
             <AppenderRef ref="File" level="WARN"/>
-            <AppenderRef ref="TerminalConsole" level="WARN"/>
         </Logger>
         <Root level="all">
             <filters>
                 <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL" />
             </filters>
-            <AppenderRef ref="WINDOWS_COMPAT" level="INFO"/>
+            <AppenderRef ref="SysOut" level="INFO"/>
             <AppenderRef ref="File"/>
-            <AppenderRef ref="TerminalConsole" level="INFO"/>
         </Root>
     </Loggers>
 </Configuration>

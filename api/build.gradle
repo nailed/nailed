@@ -44,12 +44,12 @@ compileScala {
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.1'
+    compile 'org.scala-lang:scala-library:2.11.2'
     compile 'jk_5.eventbus:EventBus:2.0.0'
     compile 'org.apache.logging.log4j:log4j-api:2.0.2'
     compile 'io.netty:netty-all:4.0.23.Final'
-    compile 'com.google.guava:guava:15.0'
-    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.code.gson:gson:2.3'
 
     testCompile 'junit:junit:4.12-beta-1'
 

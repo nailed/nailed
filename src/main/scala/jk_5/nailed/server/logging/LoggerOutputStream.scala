@@ -15,7 +15,7 @@
  * this program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package jk_5.nailed.server.console
+package jk_5.nailed.server.logging
 
 import java.io.ByteArrayOutputStream
 

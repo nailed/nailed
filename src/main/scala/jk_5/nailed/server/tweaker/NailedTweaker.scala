@@ -21,19 +21,13 @@ import java.io.{File, IOException, PrintStream}
 import java.util
 
 import io.netty.util.internal.logging.InternalLoggerFactory
-import jk_5.nailed.server.console.{Autocompleter, LoggerOutputStream, TerminalWriterThread}
+import jk_5.nailed.server.logging.LoggerOutputStream
 import jk_5.nailed.server.tweaker.patcher.BinPatchManager
 import jk_5.nailed.server.tweaker.remapping.NameRemapper
 import jk_5.nailed.server.tweaker.transformer.AccessTransformer
-import jline.console.ConsoleReader
-import jline.{TerminalFactory, UnsupportedTerminal}
 import joptsimple.{OptionException, OptionParser}
 import net.minecraft.launchwrapper.{ITweaker, Launch, LaunchClassLoader}
-import org.apache.logging.log4j.core.appender.ConsoleAppender
 import org.apache.logging.log4j.{Level, LogManager}
-
-import scala.collection.convert.wrapAsScala._
-import scala.util.Properties
 
 /**
  * No description given
@@ -43,10 +37,7 @@ import scala.util.Properties
 object NailedTweaker {
   var gameDir: File = _
   var deobf = false
-  var useJline = true
-  var useConsole = true
   var acceptEula = true
-  var consoleReader: ConsoleReader = null
   lazy val classLoader = Launch.classLoader
 }
 
@@ -59,8 +50,6 @@ class NailedTweaker extends ITweaker {
     val parser = new OptionParser
     parser.allowsUnrecognizedOptions()
 
-    parser.accepts("nojline", "Disables jline and emulates the vanilla console")
-    parser.accepts("noconsole", "Disables the console")
     parser.accepts("accept-eula", "Accept the EULA, so you don't need to change the eula.txt file")
 
     val options = try{
@@ -72,26 +61,11 @@ class NailedTweaker extends ITweaker {
         null
     }
 
-    NailedTweaker.useJline = Properties.propOrEmpty("jline.terminal") != "jline.UnsupportedTerminal"
-
-    if(options.has("nojline")){
-      Properties.setProp("user.language", "en")
-      NailedTweaker.useJline = false
-    }
-
-    if(!NailedTweaker.useJline){
-      Properties.setProp(TerminalFactory.JLINE_TERMINAL, classOf[UnsupportedTerminal].getName)
-    }
-
-    if(options.has("noconsole")){
-      NailedTweaker.useConsole = false
-    }
-
     if(options.has("accept-eula")){
       NailedTweaker.acceptEula = true
     }
 
-    //Step 3 - Read configuration
+    //Step 2 - Read configuration
     NailedTweaker.gameDir = gameDir
     NailedVersion.readConfig()
 
@@ -126,7 +100,6 @@ class NailedTweaker extends ITweaker {
     classLoader.addClassLoaderExclusion("com.google.")
     classLoader.addClassLoaderExclusion("com.nothome.delta.")
     classLoader.addClassLoaderExclusion("org.apache.")
-    classLoader.addClassLoaderExclusion("jline.")
     classLoader.addClassLoaderExclusion("com.mojang.")
     classLoader.addClassLoaderExclusion("org.fusesource.")
     classLoader.addTransformerExclusion("jk_5.nailed.server.tweaker.transformer.")
@@ -137,56 +110,9 @@ class NailedTweaker extends ITweaker {
 
     AccessTransformer.readConfig("nailed_at.cfg")
 
-    //Step 2 - Initialize logging
-
-    //Force-clear the log message queue, because otherwise we will get a shitload of duplicate messages
-    {
-      val cl = classLoader.loadClass("com.mojang.util.QueueLogAppender")
-      val f = cl.getDeclaredField("QUEUES")
-      f.setAccessible(true)
-      val q = f.get(null).asInstanceOf[util.Map[String, util.concurrent.BlockingQueue[String]]]
-      val m = q.get("TerminalConsole")
-      if(m != null) m.clear() //TODO: when this is null, log4j didn't initialize our appender
-    }
-
-    //Are we running in a terminal? If we are not, disable jline
-    if(System.console() == null){
-      Properties.setProp("jline.terminal", "jline.UnsupportedTerminal")
-      NailedTweaker.useJline = false
-    }
-
-    try{
-      NailedTweaker.consoleReader = new ConsoleReader(System.in, System.out)
-      NailedTweaker.consoleReader.setExpandEvents(false) // Avoid parsing exceptions for uncommonly used event designators
-    }catch{
-      case e: Throwable =>
-        try{
-          //Try again with jline disabled for Windows users without C++ 2008 Redistributable
-          Properties.setProp("jline.terminal", "jline.UnsupportedTerminal")
-          Properties.setProp("user.language", "en")
-          NailedTweaker.useJline = false
-          NailedTweaker.consoleReader = new ConsoleReader(System.in, System.out)
-          NailedTweaker.consoleReader.setExpandEvents(false)
-        }catch{
-          case e: IOException => this.logger.error("Error while initializing jline", e)
-        }
-    }
-
-    NailedTweaker.consoleReader.addCompleter(Autocompleter)
-
-    val l = LogManager.getRootLogger.asInstanceOf[org.apache.logging.log4j.core.Logger]
-    for(appender <- l.getAppenders.values()){
-      if(appender.isInstanceOf[ConsoleAppender]){
-        l.removeAppender(appender)
-      }
-    }
-
-    TerminalWriterThread.output = System.out
-    TerminalWriterThread.reader = NailedTweaker.consoleReader
-    TerminalWriterThread.start()
-
-    System.setOut(new PrintStream(new LoggerOutputStream(l, Level.INFO), true))
-    System.setErr(new PrintStream(new LoggerOutputStream(l, Level.WARN), true))
+    // Step 3 - Initialize logging
+    System.setOut(new PrintStream(new LoggerOutputStream(LogManager.getLogger("SYSOUT"), Level.INFO), true))
+    System.setErr(new PrintStream(new LoggerOutputStream(LogManager.getLogger("SYSERR"), Level.WARN), true))
   }
 
   override def getLaunchArguments = new Array[String](0)
