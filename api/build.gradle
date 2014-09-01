@@ -51,7 +51,7 @@ dependencies {
     compile 'com.google.guava:guava:15.0'
     compile 'com.google.code.gson:gson:2.2.4'
 
-    testCompile 'junit:junit:4.11'
+    testCompile 'junit:junit:4.12-beta-1'
 
     deployer 'org.apache.maven.wagon:wagon-ssh:2.6'
 }

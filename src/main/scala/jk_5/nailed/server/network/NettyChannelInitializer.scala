@@ -22,7 +22,6 @@ import io.netty.handler.timeout.ReadTimeoutHandler
 import net.minecraft.network.NetworkManager
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.NetHandlerHandshakeTCP
-import net.minecraft.util.{MessageDeserializer, MessageDeserializer2, MessageSerializer, MessageSerializer2}
 
 /**
  * No description given
@@ -47,10 +46,10 @@ object NettyChannelInitializer extends ChannelInitializer[Channel] {
     val pipe = ch.pipeline()
     pipe.addLast("timeout", new ReadTimeoutHandler(30))
     //pipe.addLast("legacy_query", new PingResponseHandler) //TODO
-    pipe.addLast("splitter", new MessageDeserializer2)
-    pipe.addLast("decoder", new MessageDeserializer(NetworkManager.field_152462_h))
-    pipe.addLast("prepender", new MessageSerializer2)
-    pipe.addLast("encoder", new MessageSerializer(NetworkManager.field_152462_h))
+    pipe.addLast("splitter", new FrameDecoder)
+    pipe.addLast("decoder", new PacketDecoder)
+    pipe.addLast("prepender", FrameEncoder)
+    pipe.addLast("encoder", PacketEncoder)
 
     val manager = new NetworkManager(false)
     NailedNetworkManager.networkManagers.add(manager)
