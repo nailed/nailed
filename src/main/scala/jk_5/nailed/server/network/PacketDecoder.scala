@@ -1,5 +1,6 @@
 package jk_5.nailed.server.network
 
+import java.io.IOException
 import java.util
 
 import com.google.common.collect.BiMap
@@ -25,6 +26,10 @@ class PacketDecoder extends ByteToMessageDecoder {
         throw new CorruptedFrameException("Unknown packet id " + packetId)
       }
       packet.readPacketData(new PacketBuffer(in))
+      if(in.readableBytes() > 0){
+        throw new IOException("Packet was larger than expected. " + in.readableBytes() + " bytes not read. Packetid: " + packetId + " packetname: " + packet.getClass.getName)
+      }
+      out.add(packet)
     }
   }
 }

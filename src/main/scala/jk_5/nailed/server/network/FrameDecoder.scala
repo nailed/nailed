@@ -27,7 +27,7 @@ class FrameDecoder extends ByteToMessageDecoder {
       if(lengthBytes(i) >= 0){
         val buffer = Unpooled.wrappedBuffer(lengthBytes)
         try{
-          val length = PacketUtils.readVarInt(in)
+          val length = PacketUtils.readVarInt(buffer)
           if(in.readableBytes() >= length){
             out.add(in.readBytes(length))
             return
