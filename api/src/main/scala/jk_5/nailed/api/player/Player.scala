@@ -106,4 +106,11 @@ trait Player
   def clearPotionEffect(effect: Potion)
 
   def loadResourcePack(url: String)
+
+  def setExperienceLevel(level: Int)
+  def experienceLevelCap: Int
+  def addExperience(level: Int)
+  def addExperienceLevel(level: Int)
+  def getExperience: Int
+  def getExperienceLevel: Int
 }

@@ -183,5 +183,12 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     sendPacket(new S3FPacketCustomPayload("MC|RPack", url.getBytes(Charsets.UTF_8)))
   }
 
+  override def addExperienceLevel(level: Int) = entity.addExperienceLevel(level)
+  override def addExperience(level: Int) = entity.addExperience(level)
+  override def setExperienceLevel(level: Int) = entity.experienceLevel = level
+  override def experienceLevelCap = entity.xpBarCap()
+  override def getExperience = entity.experience
+  override def getExperienceLevel = entity.experienceLevel
+
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode,eid=${getEntity.getEntityId}}"
 }
