@@ -14,14 +14,7 @@ object CommandPos extends Command("pos") {
   override def execute(sender: CommandSender, args: Array[String]) = sender match {
     case p: Player =>
       val location = p.getLocation
-      val ret =
-        s"""
-          | "x": ${location.getX},
-          | "y": ${location.getY},
-          | "z": ${location.getZ},
-          | "yaw": ${location.getYaw},
-          | "pitch": ${location.getPitch}
-        """.stripMargin
+      val ret = s"""<location x="${location.getX}" y="${location.getY}" z="${location.getZ}" yaw="${location.getYaw}" pitch="${location.getPitch}/>""""
       sender.sendMessage(new TextComponent(ret))
       println(ret)
     case _ => throw new NotAPlayerException
