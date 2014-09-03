@@ -31,16 +31,16 @@ import net.minecraft.item.ItemStack
  */
 object CommandStatemitter extends Command("statemitter") {
 
-  override def execute(sender: CommandSender, args: Array[String]) = sender match {
-    case p: NailedPlayer =>
-      val is = new ItemStack(Blocks.command_block, 1)
-      NBTUtils.getItemNBT(is).setBoolean("IsStatemitter", true)
-      NBTUtils.setDisplayName(is, ChatColor.RESET + "Stat Emitter")
-      if(args.length == 1){
-        NBTUtils.getItemNBT(is).setString("Content", args(0))
-        NBTUtils.addLore(is, args(0))
-      }
-      p.getEntity.inventory.addItemStackToInventory(is)
-    case _ =>
+  override def execute(ctx: CommandContext, args: Arguments){
+    val p = ctx.requirePlayer().asInstanceOf[NailedPlayer]
+    val is = new ItemStack(Blocks.command_block, 1)
+    NBTUtils.getItemNBT(is).setBoolean("IsStatemitter", true)
+    NBTUtils.setDisplayName(is, ChatColor.RESET + "Stat Emitter")
+    if(args.amount == 1){
+      val c = args.getString(0)
+      NBTUtils.getItemNBT(is).setString("Content", c)
+      NBTUtils.addLore(is, c)
+    }
+    p.getEntity.inventory.addItemStackToInventory(is)
   }
 }

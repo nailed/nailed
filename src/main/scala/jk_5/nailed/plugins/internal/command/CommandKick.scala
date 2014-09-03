@@ -28,37 +28,25 @@ import jk_5.nailed.api.command._
  */
 object CommandKick extends Command("kick") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]){
-    if(args.length == 0){
-      sender.sendMessage(new ComponentBuilder("Usage: /kick <player> [reason]").color(ChatColor.RED).create())
-      return
-    }
-    val target = getPlayer(sender, args(0))
-    val reason = if(args.length > 1){
-      val newArray = new Array[String](args.length - 1)
-      System.arraycopy(args, 1, newArray, 0, newArray.length)
-      newArray.mkString(" ")
-    }else "No reason given"
+  override def execute(ctx: CommandContext, args: Arguments){
+    val target = args.getPlayer(0)
+    val reason = args.getSpacedString(1, "reason", "No reason given")
 
-    if(target.isEmpty){
-      throw new CommandException("Player " + args(0) + " is not online")
-    }
-
-    target.get.kick("Kicked by " + sender.getName + ". Reason: " + reason)
+    target.kick("Kicked by " + ctx.getName + ". Reason: " + reason)
 
     val b = new TextComponent("")
     b.setColor(ChatColor.RED)
     b.addExtra("Player ")
-    b.addExtra(target.get.getDescriptionComponent)
+    b.addExtra(target.getDescriptionComponent)
     b.addExtra(" was kicked by ")
-    b.addExtra(sender.getDescriptionComponent)
+    b.addExtra(ctx.getDescriptionComponent)
     Server.getInstance.broadcastMessage(b)
     Server.getInstance.broadcastMessage(new ComponentBuilder("Reason: " + reason).color(ChatColor.RED).create())
 
     val m = new TextComponent("Successfully kicked player ")
-    m.addExtra(target.get.getDescriptionComponent)
+    m.addExtra(target.getDescriptionComponent)
     m.setColor(ChatColor.GREEN)
-    sender.sendMessage(m)
+    ctx.sendMessage(m)
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] =

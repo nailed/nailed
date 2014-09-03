@@ -17,22 +17,23 @@
 
 package jk_5.nailed.server.command.sender
 
-import jk_5.nailed.api.chat.BaseComponent
+import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
 import jk_5.nailed.api.command.CommandSender
+import net.minecraft.command.server.CommandBlockLogic
 
 /**
  * No description given
  *
  * @author jk-5
  */
-class CommandBlockCommandSender extends CommandSender {
+class CommandBlockCommandSender(val wrapped: CommandBlockLogic) extends CommandSender {
 
   /**
    * Get the unique name of this command sender.
    *
    * @return the senders username
    */
-  override def getName: String = ???
+  override def getName = wrapped.getCommandSenderName
 
   /**
    * Checks if this user has the specified permission node.
@@ -40,28 +41,28 @@ class CommandBlockCommandSender extends CommandSender {
    * @param permission the node to check
    * @return whether they have this node
    */
-  override def hasPermission(permission: String): Boolean = ???
+  override def hasPermission(permission: String) = true
 
   /**
    * Send a message to this sender.
    *
    * @param message the message to send
    */
-  override def sendMessage(message: BaseComponent): Unit = ???
+  override def sendMessage(message: BaseComponent){}
 
   /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
-  override def sendMessage(messages: BaseComponent*): Unit = ???
+  override def sendMessage(messages: BaseComponent*){}
 
   /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
-  override def sendMessage(messages: Array[BaseComponent]): Unit = ???
+  override def sendMessage(messages: Array[BaseComponent]){}
 
-  override def getDescriptionComponent: BaseComponent = ???
+  override def getDescriptionComponent: BaseComponent = new TextComponent(this.getName)
 }

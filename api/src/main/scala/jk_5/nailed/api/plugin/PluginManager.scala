@@ -28,7 +28,7 @@ import com.google.gson.Gson
 import jk_5.eventbus.{Event, EventBus}
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
-import jk_5.nailed.api.command.{CommandException, CommandSender, TabExecutor}
+import jk_5.nailed.api.command._
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.Checks
 import org.apache.logging.log4j.LogManager
@@ -104,12 +104,12 @@ class PluginManager(private val server: Server) {
     }
   }
 
-  def dispatchCommand(sender: CommandSender, line: String): Boolean = dispatchCommand(sender, line, null)
-  def dispatchCommand(sender: CommandSender, line: String, tabResults: mutable.ListBuffer[String]): Boolean = {
+  def dispatchCommand(sender: CommandSender, line: String): Int = dispatchCommand(sender, line, null)
+  def dispatchCommand(sender: CommandSender, line: String, tabResults: mutable.ListBuffer[String]): Int = {
     //if(Server.getInstance.isAsync) throw new IllegalStateException("Async command dispatch")
     val split = argsSplit.split(line, -1)
     val isCompleteRequest = tabResults != null
-    if(split.length == 0) return false
+    if(split.length == 0) return -1
     val commandName = if(sender.isInstanceOf[Player] && !isCompleteRequest) split(0).substring(1).toLowerCase else split(0).toLowerCase
     val command = commandMap.get(commandName)
     if(command.isEmpty){
@@ -117,31 +117,35 @@ class PluginManager(private val server: Server) {
         val cmd = commandMap.filter(c => c._1.startsWith(split(0)))
         if(cmd.size > 0){
           tabResults ++= cmd.keySet
-          return true
+          return 1
         }else{
-          return false
+          return -1
         }
       }else{
-        return false
+        return -1
       }
     }
     val args = util.Arrays.copyOfRange(split, 1, split.length)
     try {
       if (!isCompleteRequest) {
-        command.get.execute(sender, args)
+        val ctx = new CommandContext(sender)
+        command.get.execute(ctx, new Arguments(ctx, args))
+        ctx.getAnalogOutput
       } else command.get match {
         case t: TabExecutor =>
           tabResults ++= t.onTabComplete(sender, args)
-        case _ =>
+          1
+        case _ => 1
       }
     }catch{
       case e: CommandException =>
         sender.sendMessage(new ComponentBuilder(e.getMessage).color(ChatColor.RED).create())
+        0
       case e: Exception =>
         sender.sendMessage(new ComponentBuilder("An internal error occurred whilst executing this command, please check the console log for details.").color(ChatColor.RED).create())
         logger.warn("Error while dispatching command", e)
+        0
     }
-    true
   }
 
   /**

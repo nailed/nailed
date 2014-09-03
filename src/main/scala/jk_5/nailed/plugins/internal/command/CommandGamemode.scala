@@ -27,19 +27,13 @@ import jk_5.nailed.api.player.{GameMode, Player}
  */
 object CommandGamemode extends Command("gamemode", "gm") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]){
-    if(args.length == 0) sender match {
-      case p: Player => toggleGamemode(p)
-      case _ => throw new CommandUsageException("/gamemode <mode> <player>")
-    }else if(args.length == 1 || args.length == 2){
-      val newmode = fromString(args(0))
-      senderOrMatches(sender, args, 1).foreach(_.setGameMode(newmode))
-    }else{
-      if(sender.isInstanceOf[Player]){
-        throw new CommandUsageException("/gamemode [mode] [player]")
-      }else{
-        throw new CommandUsageException("/gamemode <mode> <player>")
-      }
+  override def execute(ctx: CommandContext, args: Arguments){
+    if(args.amount == 0) toggleGamemode(ctx.requirePlayer())
+    else{
+      val newmode = fromString(args.getString(0))
+      val t = senderOrMatches(ctx, args.arguments, 1)
+      t.foreach(_.setGameMode(newmode))
+      t.length
     }
   }
 

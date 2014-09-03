@@ -17,7 +17,6 @@
 
 package jk_5.nailed.plugins.internal.command
 
-import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command._
 import jk_5.nailed.api.world.WeatherType
 
@@ -28,25 +27,24 @@ import jk_5.nailed.api.world.WeatherType
  */
 object CommandWeather extends Command("weather") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]): Unit = sender match {
-    case c: WorldCommandSender =>
-      if(args.length > 0){
-        caseInsensitiveMatch(args(0)) {
-          case "clear" =>
-            c.getWorld.setWeather(WeatherType.DRY)
-            sender.sendMessage(new ComponentBuilder("Weather changed to dry").color(ChatColor.GREEN).create())
-          case "rain" =>
-            c.getWorld.setWeather(WeatherType.RAIN)
-            sender.sendMessage(new ComponentBuilder("Weather changed to raining").color(ChatColor.GREEN).create())
-          case "thunder" =>
-            c.getWorld.setWeather(WeatherType.THUNDER)
-            sender.sendMessage(new ComponentBuilder("Weather changed to thundering").color(ChatColor.GREEN).create())
-          case w => sender.sendMessage(new ComponentBuilder("Unknown weather type " + w).color(ChatColor.RED).create())
-        }
-      }else{
-        sender.sendMessage(new ComponentBuilder("Current weather in world " + c.getWorld.getName + ": " + c.getWorld.getWeather.name().toLowerCase).color(ChatColor.GREEN).create())
-      }
-    case _ => throw new NoWorldException
+  override def execute(ctx: CommandContext, args: Arguments){
+    val world = ctx.requireWorld()
+    if(args.amount == 0){
+      ctx.success(s"Current weather in world ${world.getName}: ${world.getWeather.name().toLowerCase}")
+      return
+    }
+    args.matchArgument(0, "operation") {
+      case "clear" =>
+        world.setWeather(WeatherType.DRY)
+        ctx.success("Weather changed to dry")
+      case "rain" =>
+        world.setWeather(WeatherType.RAIN)
+        ctx.success("Weather changed to raining")
+      case "thunder" =>
+        world.setWeather(WeatherType.THUNDER)
+        ctx.success("Weather changed to thundering")
+      case w => throw ctx.error(s"Unknown weather type $w")
+    }
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match {

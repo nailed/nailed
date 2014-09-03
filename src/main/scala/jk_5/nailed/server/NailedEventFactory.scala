@@ -29,7 +29,7 @@ import jk_5.nailed.api.material.Material
 import jk_5.nailed.api.player.{GameMode, Player}
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.api.util.Location
-import jk_5.nailed.server.command.sender.ConsoleCommandSender
+import jk_5.nailed.server.command.sender.{CommandBlockCommandSender, ConsoleCommandSender}
 import jk_5.nailed.server.event.{EntityDamageEvent, EntityFallEvent}
 import jk_5.nailed.server.network.NettyChannelInitializer
 import jk_5.nailed.server.player.NailedPlayer
@@ -38,6 +38,7 @@ import jk_5.nailed.server.utils.ItemStackConverter._
 import jk_5.nailed.server.world.NailedDimensionManager
 import net.minecraft.block.Block
 import net.minecraft.command.ICommandSender
+import net.minecraft.command.server.CommandBlockLogic
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.init.Blocks
@@ -102,26 +103,26 @@ object NailedEventFactory {
   def fireCommand(sender: ICommandSender, input: String): Int = {
     val wrapped = sender match {
       case p: EntityPlayerMP => NailedServer.getPlayer(p.getGameProfile.getId).orNull
-      /*case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
-      case r: RConConsoleSource => new RConCommandSender(r)*/
+      case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
+      //case r: RConConsoleSource => new RConCommandSender(r)
       case s: MinecraftServer => this.serverCommandSender
       case _ => null
     }
     if(wrapped == null) return -1
-    if(NailedServer.getPluginManager.dispatchCommand(wrapped, input, null)) 1 else -1
+    NailedServer.getPluginManager.dispatchCommand(wrapped, input, null)
   }
 
   def fireTabCompletion(sender: ICommandSender, input: String): util.List[String] = {
     val wrapped = sender match {
       case p: EntityPlayerMP => NailedServer.getPlayer(p.getGameProfile.getId).orNull
-      /*case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
-      case r: RConConsoleSource => new RConCommandSender(r)*/
+      case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
+      //case r: RConConsoleSource => new RConCommandSender(r)
       case s: MinecraftServer => this.serverCommandSender
       case _ => null
     }
     if(wrapped == null) return null
     val ret = mutable.ListBuffer[String]()
-    if(NailedServer.getPluginManager.dispatchCommand(wrapped, input, ret)) ret else null
+    if(NailedServer.getPluginManager.dispatchCommand(wrapped, input, ret) == 1) ret else null
   }
 
   def fireWorldLoad(world: World){

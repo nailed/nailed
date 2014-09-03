@@ -27,7 +27,7 @@ import jk_5.nailed.api.command._
  */
 object CommandGamerule extends Command("gamerule") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]){
+  override def execute(sender: CommandSender, args: Array[String]) = {
     sender match {
       case s: WorldCommandSender =>
         val gameRules = s.getWorld.getGameRules
@@ -53,6 +53,7 @@ object CommandGamerule extends Command("gamerule") with TabExecutor {
         }
       case _ => throw new NoWorldException
     }
+    1
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = sender match {

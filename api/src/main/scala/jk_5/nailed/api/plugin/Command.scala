@@ -17,7 +17,7 @@
 
 package jk_5.nailed.api.plugin
 
-import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.api.command.{Arguments, CommandContext}
 import jk_5.nailed.api.util.Checks
 
 /**
@@ -34,5 +34,5 @@ abstract case class Command(private val name: String, private val aliases: Strin
   def getOwner = this.owner
   def getName = this.name
   def getAliases = this.aliases
-  def execute(sender: CommandSender, args: Array[String])
+  def execute(ctx: CommandContext, args: Arguments)
 }

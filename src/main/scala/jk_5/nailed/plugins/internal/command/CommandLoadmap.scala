@@ -30,24 +30,18 @@ import jk_5.nailed.api.map.Map
  */
 object CommandLoadmap extends Command("loadmap") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]) = args.length match {
-    case 1 =>
-      val mappack = Server.getInstance.getMappackRegistry.getByName(args(0))
-      if(mappack.isEmpty){
-        throw new CommandException("Unknown mappack " + args(0))
-      }else{
-        val future = Server.getInstance.getMapLoader.createMapFor(mappack.get)
-        future.addListener(new FutureListener[Map] {
-          override def operationComplete(future: Future[Map]){
-            val builder = new ComponentBuilder("Map ").color(ChatColor.GREEN)
-              .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("Click to go to this map")))
-              .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/goto " + future.get().worlds(0).getDimensionId)) //TODO: teleport to default world
-            builder.append(future.get().mappack.getMetadata.name).append(" was loaded")
-            sender.sendMessage(builder.create())
-          }
-        })
+  override def execute(ctx: CommandContext, args: Arguments){
+    val mappack = args.getMappack(0)
+    val future = Server.getInstance.getMapLoader.createMapFor(mappack)
+    future.addListener(new FutureListener[Map] {
+      override def operationComplete(future: Future[Map]){
+        val builder = new ComponentBuilder("Map ").color(ChatColor.GREEN)
+          .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("Click to go to this map")))
+          .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/goto " + future.get().worlds(0).getDimensionId)) //TODO: teleport to default world
+        builder.append(future.get().mappack.getMetadata.name).append(" was loaded")
+        ctx.sendMessage(builder.create())
       }
-    case _ => throw new CommandUsageException("Usage: /loadmap <mappack>")
+    })
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = {

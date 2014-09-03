@@ -113,8 +113,8 @@ package object command {
   }
 
   def senderOrMatches(sender: CommandSender, args: Array[String], index: Int): Array[Player] = sender match {
-    case player: Player => Array(player)
     case _ if args.length > index => getPlayers(sender, args(index))
+    case player: Player => Array(player)
     case _ => throw new NotAPlayerException
   }
 }

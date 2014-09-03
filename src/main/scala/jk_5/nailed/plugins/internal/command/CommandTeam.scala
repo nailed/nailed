@@ -19,7 +19,6 @@ package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command._
-import jk_5.nailed.api.player.Player
 
 /**
  * No description given
@@ -28,33 +27,24 @@ import jk_5.nailed.api.player.Player
  */
 object CommandTeam extends Command("team") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]): Unit = sender match {
-    case p: Player => if(args.length > 0) caseInsensitiveMatch(args(0)){
+  override def execute(ctx: CommandContext, args: Arguments){
+    val p = ctx.requirePlayer()
+    val map = p.getMap
+    args.matchArgument(0, "operation"){
       case "join" =>
-        if(args.length == 1){
-          throw new CommandUsageException("/team join <username> <team>")
-        }else{
-          val players = getPlayers(sender, args(1))
-          if(args.length == 2){
-            throw new CommandUsageException(s"/team join ${args(1)} <team>")
-          }else{
-            val map = p.getMap
-            map.getTeam(args(2)) match {
-              case Some(team) =>
-                if(args.length == 3){
-                  for(p <- players){
-                    map.setPlayerTeam(p, team)
-                    val msg = new ComponentBuilder(s"Player ").color(ChatColor.GREEN).append(p.getName).append(" is now in team ").append(team.name).color(team.color).create()
-                    map.broadcastChatMessage(msg)
-                  }
-                }else throw new CommandUsageException("/team join <username> <team>")
-              case None => throw new CommandException("Unknown team")
+        val players = args.getPlayers(1)
+        ctx.setAnalogOutput(players.length)
+        map.getTeam(args.getString(2, "team name")) match {
+          case Some(team) =>
+            for(p <- players){
+              map.setPlayerTeam(p, team)
+              val msg = new ComponentBuilder(s"Player ").color(ChatColor.GREEN).append(p.getName).append(" is now in team ").append(team.name).color(team.color).create()
+              map.broadcastChatMessage(msg)
             }
-          }
+          case None => throw new CommandException("Unknown team")
         }
-      case _ => throw new CommandUsageException("/team join <username> <team>")
+      case _ => ctx.wrongUsage("/team join <username> <team>")
     }
-    case _ => throw new NotAPlayerException
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match {

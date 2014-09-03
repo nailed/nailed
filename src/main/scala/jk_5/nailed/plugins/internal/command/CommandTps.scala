@@ -33,15 +33,15 @@ object CommandTps extends Command("tps") {
 
   final val timeFormatter = new DecimalFormat("########0.000")
 
-  override def execute(sender: CommandSender, args: Array[String]){
+  override def execute(ctx: CommandContext, args: Arguments){
     val server = MinecraftServer.getServer
     val meanTime = mean(server.tickTimeArray) * 1.0E-6D
     val meanTps = Math.min(1000.0 / meanTime, 20)
-    sender.sendMessage(this.getComponent("Overall", meanTime, meanTps))
+    ctx.sendMessage(this.getComponent("Overall", meanTime, meanTps))
     for(dim <- NailedDimensionManager.getAllDimensionIds){
       val worldTickTime = mean(server.worldTickTimes.get(dim)) * 1.0E-6D
       val worldTPS = Math.min(1000.0 / worldTickTime, 20)
-      sender.sendMessage(this.getComponent("Dim " + dim, worldTickTime, worldTPS))
+      ctx.sendMessage(this.getComponent("Dim " + dim, worldTickTime, worldTPS))
     }
   }
 

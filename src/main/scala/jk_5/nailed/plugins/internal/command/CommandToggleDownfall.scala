@@ -17,7 +17,6 @@
 
 package jk_5.nailed.plugins.internal.command
 
-import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command._
 import jk_5.nailed.api.world.WeatherType
 
@@ -28,15 +27,14 @@ import jk_5.nailed.api.world.WeatherType
  */
 object CommandToggleDownfall extends Command("toggledownfall") {
 
-  override def execute(sender: CommandSender, args: Array[String]) = sender match {
-    case c: WorldCommandSender =>
-      if(c.getWorld.getWeather.isRaining){
-        c.getWorld.setWeather(WeatherType.DRY)
-        sender.sendMessage(new ComponentBuilder("Weather changed to dry").color(ChatColor.GREEN).create())
-      }else{
-        c.getWorld.setWeather(WeatherType.RAIN)
-        sender.sendMessage(new ComponentBuilder("Weather changed to raining").color(ChatColor.GREEN).create())
-      }
-    case _ => throw new NoWorldException
+  override def execute(ctx: CommandContext, args: Arguments){
+    val world = ctx.requireWorld()
+    if(world.getWeather.isRaining){
+      world.setWeather(WeatherType.DRY)
+      ctx.success("Weather changed to dry")
+    }else{
+      world.setWeather(WeatherType.RAIN)
+      ctx.success("Weather changed to raining")
+    }
   }
 }

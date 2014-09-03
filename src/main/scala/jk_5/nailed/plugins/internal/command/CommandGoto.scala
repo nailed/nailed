@@ -18,9 +18,7 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.Server
-import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command._
-import jk_5.nailed.api.player.Player
 
 /**
  * No description given
@@ -29,14 +27,8 @@ import jk_5.nailed.api.player.Player
  */
 object CommandGoto extends Command("goto") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]){
-    sender match {
-      case p: Player => // args.length match {
-      //  case 0 => sender.sendMessage(new TextComponent(""))
-      //}
-        p.teleportTo(Server.getInstance.getWorld(Integer.parseInt(args(0))))
-      case _ => sender.sendMessage(new ComponentBuilder("You can't teleport to other worlds because you are not a player").color(ChatColor.RED).create())
-    }
+  override def execute(ctx: CommandContext, args: Arguments){
+    ctx.requirePlayer().teleportTo(Server.getInstance.getWorld(args.getInt(0)))
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match {

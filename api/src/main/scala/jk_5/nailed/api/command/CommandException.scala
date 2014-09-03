@@ -22,10 +22,10 @@ package jk_5.nailed.api.command
  *
  * @author jk-5
  */
-class CommandException(message: String) extends RuntimeException(message){
+class CommandException private[command] (message: String) extends RuntimeException(message){
   override def fillInStackTrace(): Throwable = this
 }
-class CommandUsageException(usage: String) extends CommandException("Usage: " + usage)
-class PlayerNotFoundException(name: String) extends CommandException("Player " + name + " could not be found")
-class NotAPlayerException extends CommandException("You are not a player")
-class NoWorldException extends CommandException("You are not in a world")
+class CommandUsageException private[command] (usage: String) extends CommandException("Usage: " + usage)
+class PlayerNotFoundException private[command] (name: String) extends CommandException("Player " + name + " could not be found")
+class NotAPlayerException private[command] extends CommandException("You are not a player")
+class NoWorldException private[command] extends CommandException("You are not in a world")

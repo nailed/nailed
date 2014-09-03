@@ -17,7 +17,6 @@
 
 package jk_5.nailed.plugins.internal.command
 
-import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.command._
 import jk_5.nailed.server.NailedServer
 
@@ -28,36 +27,30 @@ import jk_5.nailed.server.NailedServer
  */
 object CommandTime extends Command("time") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]): Unit = sender match {
-    case c: WorldCommandSender =>
-      if(args.length > 0){
-        caseInsensitiveMatch(args(0)) {
-          case "set" =>
-            if(args.length > 1){
-              caseInsensitiveMatch(args(1)) {
-                case "day" => c.getWorld.setTime(6000)
-                case "night" => c.getWorld.setTime(18000)
-                case t =>
-                  val r = parseInt(sender, args(1), 0, 23999)
-                  c.getWorld.setTime(r)
-                  sender.sendMessage(new ComponentBuilder("Set time in world " + c.getWorld.getName + " to " + r).color(ChatColor.GREEN).create())
-              }
-            }else{
-              throw new CommandUsageException("/time [set] [day|night|0-23999]")
-            }
-          case _ =>
-            val number = parseInt(sender, args(0))
-            val world = NailedServer.getWorld(number)
-            if(world != null){
-              sender.sendMessage(new ComponentBuilder("Current time in world " + world.getName + ": " + world.getTime).color(ChatColor.GREEN).create())
-            }else{
-              throw new CommandException("Was not able to find the world with id " + number)
-            }
-        }
-      }else{
-        sender.sendMessage(new ComponentBuilder("Current time in world " + c.getWorld.getName + ": " + c.getWorld.getTime).color(ChatColor.GREEN).create())
+  override def execute(ctx: CommandContext, args: Arguments){
+    val world = ctx.requireWorld()
+    if(args.amount == 0){
+      ctx.success("Current time in world " + world.getName + ": " + world.getTime)
+      return
+    }
+    args.matchArgument(0, "operation"){
+      case "set" => args.matchArgument(1, "time"){
+        case "day" => world.setTime(6000)
+        case "night" => world.setTime(18000)
+        case _ =>
+          val r = args.getInt(1, 0, 23999)
+          world.setTime(r)
+          ctx.success("Set time in world " + world.getName + " to " + r)
       }
-    case _ => throw new NoWorldException
+      case _ =>
+        val number = args.getInt(0)
+        val world = NailedServer.getWorld(number)
+        if(world != null){
+          ctx.success("Current time in world " + world.getName + ": " + world.getTime)
+        }else{
+          throw ctx.error("Was not able to find the world with id " + number)
+        }
+    }
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] =
