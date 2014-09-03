@@ -26,10 +26,10 @@ import jk_5.nailed.api.command._
  */
 object CommandKill extends Command("kill") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]) = {
-    val t = senderOrMatches(sender, args, 0)
+  override def execute(ctx: CommandContext, args: Arguments){
+    val t = senderOrMatches(ctx.sender, args.arguments, 0)
+    ctx.setAnalogOutput(t.length)
     t.foreach(_.setHealth(0))
-    t.length
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = args.length match {

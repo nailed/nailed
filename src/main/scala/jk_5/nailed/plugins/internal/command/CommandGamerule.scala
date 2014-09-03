@@ -27,33 +27,32 @@ import jk_5.nailed.api.command._
  */
 object CommandGamerule extends Command("gamerule") with TabExecutor {
 
-  override def execute(sender: CommandSender, args: Array[String]) = {
-    sender match {
-      case s: WorldCommandSender =>
-        val gameRules = s.getWorld.getGameRules
-        args.length match {
-          case 0 =>
-            val builder = new ComponentBuilder("Available gamerules: ").color(ChatColor.GREEN)
-            var first = true
-            for (rule <- gameRules.list) {
-              if (!first) builder.append(", ").event(null: HoverEvent) else first = false
-              builder.append(rule).color(ChatColor.RESET).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(rule + " = " + gameRules(rule))))
-            }
-            sender.sendMessage(builder.create())
-          case 1 =>
-            if(!gameRules.ruleExists(args(0))) throw new CommandException(s"Gamerule '${args(0)}' does not exist")
-            else sender.sendMessage(new TextComponent(args(0) + " = " + gameRules(args(0))))
-          case 2 =>
-            if(!gameRules.ruleExists(args(0))) throw new CommandException(s"Gamerule '${args(0)}' does not exist")
-            else{
-              gameRules(args(0)) = args(1)
-              sender.sendMessage(new ComponentBuilder("Gamerule " + args(0) + " changed to " + args(1)).color(ChatColor.GREEN).create())
-            }
-          case _ => throw new CommandUsageException(s"/gamerule <name> [value]")
+  override def execute(ctx: CommandContext, args: Arguments){
+    val world = ctx.requireWorld()
+    val gameRules = world.getGameRules
+    args.amount match {
+      case 0 =>
+        val builder = new ComponentBuilder("Available gamerules: ").color(ChatColor.GREEN)
+        var first = true
+        for(rule <- gameRules.list){
+          if (!first) builder.append(", ").event(null: HoverEvent) else first = false
+          builder.append(rule).color(ChatColor.RESET).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(rule + " = " + gameRules(rule))))
         }
-      case _ => throw new NoWorldException
+        ctx.sendMessage(builder.create())
+      case 1 =>
+        val name = args.getString(0)
+        if(!gameRules.ruleExists(name)) throw ctx.error(s"Gamerule '$name' does not exist")
+        else ctx.sendMessage(new TextComponent(name + " = " + gameRules(name)))
+      case 2 =>
+        val name = args.getString(0)
+        if(!gameRules.ruleExists(name)) throw ctx.error(s"Gamerule '$name' does not exist")
+        else{
+          val value = args.getString(1)
+          gameRules(name) = value
+          ctx.success(s"Gamerule $name changed to $value")
+        }
+      case _ => throw ctx.wrongUsage(s"/gamerule <name> [value]")
     }
-    1
   }
 
   override def onTabComplete(sender: CommandSender, args: Array[String]): List[String] = sender match {

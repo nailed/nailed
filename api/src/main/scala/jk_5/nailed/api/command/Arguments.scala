@@ -22,7 +22,7 @@ final class Arguments(private val ctx: CommandContext, private val args: Array[S
     }
   }
 
-  private def parseNumber[T <: Number](index: Int, toosmall: (T) => Boolean, toobig: (T) => Boolean, convert: (String) => T, default: T, d: T)(implicit mf: Manifest[T]): T = {
+  private def parseNumber[T](index: Int, toosmall: (T) => Boolean, toobig: (T) => Boolean, convert: (String) => T, default: T, d: T)(implicit mf: Manifest[T]): T = {
     val a = argAt(index, "number", default != d)
     try{
       val int = convert(a)

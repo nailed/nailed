@@ -41,7 +41,7 @@ object CommandTeam extends Command("team") with TabExecutor {
               val msg = new ComponentBuilder(s"Player ").color(ChatColor.GREEN).append(p.getName).append(" is now in team ").append(team.name).color(team.color).create()
               map.broadcastChatMessage(msg)
             }
-          case None => throw new CommandException("Unknown team")
+          case None => throw ctx.error("Unknown team")
         }
       case _ => ctx.wrongUsage("/team join <username> <team>")
     }

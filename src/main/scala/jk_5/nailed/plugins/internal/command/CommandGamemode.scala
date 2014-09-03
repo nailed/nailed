@@ -30,7 +30,7 @@ object CommandGamemode extends Command("gamemode", "gm") with TabExecutor {
   override def execute(ctx: CommandContext, args: Arguments){
     if(args.amount == 0) toggleGamemode(ctx.requirePlayer())
     else{
-      val newmode = fromString(args.getString(0))
+      val newmode = fromString(ctx, args.getString(0))
       val t = senderOrMatches(ctx, args.arguments, 1)
       t.foreach(_.setGameMode(newmode))
       t.length
@@ -43,11 +43,11 @@ object CommandGamemode extends Command("gamemode", "gm") with TabExecutor {
     case _ => List()
   }
 
-  def fromString(s: String) = caseInsensitiveMatchWithResult(s){
+  def fromString(ctx: CommandContext, s: String) = caseInsensitiveMatchWithResult(s){
     case "0" | "s" | "survival" => GameMode.SURVIVAL
     case "1" | "c" | "creative" => GameMode.CREATIVE
     case "2" | "a" | "adventure" => GameMode.ADVENTURE
-    case _ => throw new CommandException(s"Unknown gamemode '$s'")
+    case _ => throw ctx.error(s"Unknown gamemode '$s'")
   }
 
   def toggleGamemode(p: Player) = p.setGameMode(if(p.getGameMode == GameMode.SURVIVAL || p.getGameMode == GameMode.ADVENTURE) GameMode.CREATIVE else GameMode.SURVIVAL)
