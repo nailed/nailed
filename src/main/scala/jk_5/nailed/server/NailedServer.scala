@@ -19,6 +19,7 @@ package jk_5.nailed.server
 
 import java.io.File
 
+import com.google.gson.Gson
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
 import jk_5.nailed.api.plugin.PluginManager
@@ -57,6 +58,7 @@ object NailedServer
   private val logger = LogManager.getLogger
   val config = Settings.load()
   private var mainThread: Thread = _
+  val gson = new Gson
 
   Server.setInstance(this)
 
