@@ -46,8 +46,12 @@ class NailedInternalPlugin extends Plugin {
     this.getPluginManager.registerCommand(this, CommandPos)
     this.getPluginManager.registerCommand(this, CommandExperience)
     this.getPluginManager.registerCommand(this, CommandAnalog)
+    this.getPluginManager.registerCommand(this, CommandDifficulty)
     this.getPluginManager.registerCommand(this, new RemovedCommand("defaultgamemode"))
     this.getPluginManager.registerCommand(this, new RemovedCommand("debug"))
     this.getPluginManager.registerCommand(this, new RemovedCommand("setworldspawn"))
+    this.getPluginManager.registerCommand(this, new RemovedCommand("save-all"))
+    this.getPluginManager.registerCommand(this, new RemovedCommand("save-on"))
+    this.getPluginManager.registerCommand(this, new RemovedCommand("save-off"))
   }
 }
