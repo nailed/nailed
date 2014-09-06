@@ -24,6 +24,7 @@ import jk_5.nailed.api.command.{CommandSender, LocationCommandSender, WorldComma
 import jk_5.nailed.api.entity.Damageable
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.ItemStack
+import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.api.scoreboard.ScoreboardManager
 import jk_5.nailed.api.util.{Location, Potion}
 import jk_5.nailed.api.world.World
@@ -113,4 +114,6 @@ trait Player
   def addExperienceLevel(level: Int)
   def getExperience: Int
   def getExperienceLevel: Int
+
+  def sendPluginMessage(source: Plugin, channel: String, message: Array[Byte])
 }

@@ -138,7 +138,7 @@ object NailedEventFactory {
   }
 
   def firePlayerJoined(playerEntity: EntityPlayerMP){
-    val player = NailedServer.getOrCreatePlayer(playerEntity).asInstanceOf[NailedPlayer]
+    val player = NailedServer.getOrCreatePlayer(playerEntity)
     player.entity = playerEntity
     player.isOnline = true
     player.world = NailedServer.getWorld(playerEntity.dimension)
@@ -147,6 +147,7 @@ object NailedEventFactory {
     player.world.onPlayerJoined(player)
     player.world.getMap.foreach(_.onPlayerJoined(player))
     player.getScoreboardManager.onJoinedServer()
+    player.sendSupportedChannels()
     val e = this.fireEvent(new PlayerJoinServerEvent(player))
     NailedServer.broadcastMessage(e.joinMessage)
     if(player.map != null) this.firePlayerJoinMap(player, player.map)
@@ -154,7 +155,7 @@ object NailedEventFactory {
   }
 
   def firePlayerLeft(playerEntity: EntityPlayerMP){
-    val player = NailedServer.getPlayerFromEntity(playerEntity).asInstanceOf[NailedPlayer]
+    val player = NailedServer.getPlayerFromEntity(playerEntity)
     player.isOnline = false
     val e = this.fireEvent(new PlayerLeaveServerEvent(player))
     if(player.map != null) this.firePlayerLeftMap(player, player.map)
@@ -358,5 +359,13 @@ object NailedEventFactory {
   def firePlayerLeftClickBlock(player: EntityPlayerMP, x: Int, y: Int, z: Int): Boolean = { //return true to cancel
     val event = new PlayerInteractEvent(NailedServer.getPlayerFromEntity(player), InteractAction.LEFT_CLICK_BLOCK, x, y, z)
     fireEvent(event).isCanceled
+  }
+
+  def firePlayerRegisterChannelEvent(player: NailedPlayer, channel: String){
+    //TODO
+  }
+
+  def firePlayerUnregisterChannelEvent(player: NailedPlayer, channel: String){
+    //TODO
   }
 }

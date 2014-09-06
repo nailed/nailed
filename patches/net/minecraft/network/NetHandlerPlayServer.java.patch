@@ -76,3 +76,22 @@
                  if (this.field_147369_b.field_71136_j) {
                      this.field_147369_b = this.field_147367_d.func_71203_ab().func_72368_a(this.field_147369_b, 0, true);
                  } else if (this.field_147369_b.func_71121_q().func_72912_H().func_76093_s()) {
+@@ -991,6 +998,18 @@
+                 } else {
+                     containerrepair.func_82850_a("");
+                 }
++            }else if(p_147349_1_.func_149559_c().equals("REGISTER")){
++                String channels = new String(p_147349_1_.func_149558_e(), io.netty.util.CharsetUtil.UTF_8);
++                for(String channel : channels.split("\0")){
++                    jk_5.nailed.server.NailedServer$.MODULE$.getPlayerFromEntity(field_147369_b).addChannel(channel);
++                }
++            }else if(p_147349_1_.func_149559_c().equals("UNREGISTER")){
++                String channels = new String(p_147349_1_.func_149558_e(), io.netty.util.CharsetUtil.UTF_8);
++                for(String channel : channels.split("\0")){
++                    jk_5.nailed.server.NailedServer$.MODULE$.getPlayerFromEntity(field_147369_b).removeChannel(channel);
++                }
++            }else{
++                jk_5.nailed.server.NailedServer$.MODULE$.getMessenger().dispatchIncomingMessage(jk_5.nailed.server.NailedServer$.MODULE$.getPlayerFromEntity(field_147369_b), p_147349_1_.func_149559_c(), p_147349_1_.func_149558_e());
+             }
+         }
+     }

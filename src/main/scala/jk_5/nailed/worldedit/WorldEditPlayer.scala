@@ -92,7 +92,7 @@ class WorldEditPlayer(p: Player) extends AbstractPlayerActor {
   }
 
   override def setPosition(pos: Vector, pitch: Float, yaw: Float) {
-    this.np.netHandler.setPlayerLocation(pos.getX, pos.getY, pos.getZ, pitch, yaw)
+    this.np.netHandler.setPlayerLocation(pos.getX, pos.getY, pos.getZ, yaw, pitch)
   }
 
   override def getGroups = new Array[String](0)

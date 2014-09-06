@@ -17,16 +17,24 @@
 
 package jk_5.nailed.server.player
 
+import java.io.{ByteArrayOutputStream, IOException}
+import java.util
 import java.util.UUID
 
 import com.google.common.base.Charsets
+import com.google.common.collect.ImmutableSet
+import io.netty.util.CharsetUtil
+import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{BaseComponent, ClickEvent, HoverEvent, TextComponent}
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.material.ItemStack
+import jk_5.nailed.api.messaging.StandardMessenger
 import jk_5.nailed.api.player.{GameMode, Player}
+import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.api.teleport.TeleportOptions
 import jk_5.nailed.api.util.{Checks, Location, Potion}
 import jk_5.nailed.api.world.World
+import jk_5.nailed.server.NailedEventFactory
 import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
 import jk_5.nailed.server.teleport.Teleporter
 import jk_5.nailed.server.utils.ItemStackConverter
@@ -37,6 +45,11 @@ import net.minecraft.network.{NetHandlerPlayServer, Packet}
 import net.minecraft.potion.PotionEffect
 import net.minecraft.util.DamageSource
 import net.minecraft.world.WorldSettings.GameType
+import org.apache.logging.log4j.LogManager
+
+import scala.collection.JavaConverters._
+import scala.collection.convert.wrapAsScala._
+import scala.collection.mutable
 
 /**
  * No description given
@@ -52,6 +65,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   var netHandler: NetHandlerPlayServer = _
   var isOnline: Boolean = false
   var isAllowedToFly: Boolean = false
+  val channels = mutable.HashSet[String]()
 
   override val getScoreboardManager = new PlayerScoreboardManager(this)
 
@@ -189,6 +203,48 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def experienceLevelCap = entity.xpBarCap()
   override def getExperience = entity.experience.toInt
   override def getExperienceLevel = entity.experienceLevel
+
+  override def sendPluginMessage(source: Plugin, channel: String, message: Array[Byte]){
+    StandardMessenger.validatePluginMessage(Server.getInstance.getMessenger, source, channel, message)
+    if(netHandler == null) return
+
+    if(channels.contains(channel)){
+      sendPacket(new S3FPacketCustomPayload(channel, message))
+    }
+  }
+
+  def sendSupportedChannels(){
+    if(netHandler == null) return
+    val listening = Server.getInstance.getMessenger.getIncomingChannels
+
+    if(!listening.isEmpty){
+      val stream = new ByteArrayOutputStream
+      for(channel <- listening){
+        try{
+          stream.write(channel.getBytes(CharsetUtil.UTF_8))
+          stream.write(0.toByte)
+        }catch{
+          case e: IOException => LogManager.getLogger.error("Could not send Plugin Channel REGISTER to " + getName, e)
+        }
+      }
+
+      sendPacket(new S3FPacketCustomPayload("REGISTER", stream.toByteArray))
+    }
+  }
+
+  def addChannel(channel: String){
+    if(channels.add(channel)){
+      NailedEventFactory.firePlayerRegisterChannelEvent(this, channel)
+    }
+  }
+
+  def removeChannel(channel: String){
+    if(channels.remove(channel)){
+      NailedEventFactory.firePlayerUnregisterChannelEvent(this, channel)
+    }
+  }
+
+  def getListeningPluginChannels: util.Set[String] = ImmutableSet.copyOf(channels.asJava: java.lang.Iterable[String])
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode,eid=${getEntity.getEntityId}}"
 }
