@@ -339,4 +339,23 @@ object NailedEventFactory {
     val event = new EntityDamageEvent(entity, source, amount) //TODO: api event
     if(fireEvent(event).isCanceled) 0 else event.amount
   }
+
+  def firePlayerRightClickAir(player: EntityPlayerMP): Boolean = { //return true to cancel
+
+    false
+  }
+
+  def firePlayerRightClickBlock(player: EntityPlayerMP): Boolean = { //return true to cancel
+
+    false
+  }
+
+  def firePlayerLeftClickAir(player: EntityPlayerMP){
+
+  }
+
+  def firePlayerLeftClickBlock(player: EntityPlayerMP): Boolean = { //return true to cancel
+
+    false
+  }
 }

@@ -21,7 +21,18 @@
          } else if (p_147345_1_.func_149506_g() == 5) {
              this.field_147369_b.func_71034_by();
          } else {
-@@ -499,9 +499,7 @@
+@@ -431,8 +431,9 @@
+             if (itemstack == null) {
+                 return;
+             }
+-
++            if(!jk_5.nailed.server.NailedEventFactory.firePlayerRightClickAir(this.field_147369_b)){
+             this.field_147369_b.field_71134_c.func_73085_a(this.field_147369_b, worldserver, itemstack);
++            }
+         } else if (p_147346_1_.func_149571_d() >= this.field_147367_d.func_71207_Z() - 1 && (p_147346_1_.func_149568_f() == 1 || p_147346_1_.func_149571_d() >= this.field_147367_d.func_71207_Z())) {
+             ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("build.tooHigh", new Object[] {Integer.valueOf(this.field_147367_d.func_71207_Z())});
+             chatcomponenttranslation.func_150256_b().func_150238_a(EnumChatFormatting.RED);
+@@ -499,9 +500,7 @@
      public void func_147231_a(IChatComponent p_147231_1_) {
          field_147370_c.info(this.field_147369_b.func_70005_c_() + " lost connection: " + p_147231_1_);
          this.field_147367_d.func_147132_au();
@@ -32,7 +43,7 @@
          this.field_147369_b.func_71123_m();
          this.field_147367_d.func_71203_ab().func_72367_e(this.field_147369_b);
  
-@@ -569,8 +567,13 @@
+@@ -569,8 +568,13 @@
              if (s.startsWith("/")) {
                  this.func_147361_d(s);
              } else {
@@ -48,7 +59,15 @@
              }
  
              this.field_147374_l += 20;
-@@ -651,6 +654,8 @@
+@@ -589,6 +593,7 @@
+         this.field_147369_b.func_143004_u();
+ 
+         if (p_147350_1_.func_149421_d() == 1) {
++            jk_5.nailed.server.NailedEventFactory.firePlayerLeftClickAir(field_147369_b);
+             this.field_147369_b.func_71038_i();
+         }
+     }
+@@ -651,6 +656,8 @@
  
          switch (NetHandlerPlayServer.SwitchEnumState.field_151290_a[enumstate.ordinal()]) {
              case 1:

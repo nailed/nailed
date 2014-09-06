@@ -1,6 +1,17 @@
 --- ../src-base/minecraft/net/minecraft/server/management/ItemInWorldManager.java
 +++ ../src-work/minecraft/net/minecraft/server/management/ItemInWorldManager.java
-@@ -177,10 +177,8 @@
+@@ -104,6 +104,10 @@
+ 
+     public void func_73074_a(int p_73074_1_, int p_73074_2_, int p_73074_3_, int p_73074_4_) {
+         if (!this.field_73091_c.func_82752_c() || this.field_73090_b.func_82246_f(p_73074_1_, p_73074_2_, p_73074_3_)) {
++            if(jk_5.nailed.server.NailedEventFactory.firePlayerLeftClickBlock(this.field_73090_b)){
++                field_73090_b.field_71135_a.func_147359_a(new S23PacketBlockChange(p_73074_1_, p_73074_2_, p_73074_3_, field_73092_a));
++                return;
++            }
+             if (this.func_73083_d()) {
+                 if (!this.field_73092_a.func_72886_a((EntityPlayer)null, p_73074_1_, p_73074_2_, p_73074_3_, p_73074_4_)) {
+                     this.func_73084_b(p_73074_1_, p_73074_2_, p_73074_3_);
+@@ -177,10 +181,8 @@
      }
  
      public boolean func_73084_b(int p_73084_1_, int p_73084_2_, int p_73084_3_) {
@@ -12,7 +23,7 @@
          } else {
              Block block = this.field_73092_a.func_147439_a(p_73084_1_, p_73084_2_, p_73084_3_);
              int l = this.field_73092_a.func_72805_g(p_73084_1_, p_73084_2_, p_73084_3_);
-@@ -211,6 +209,7 @@
+@@ -211,6 +213,7 @@
      }
  
      public boolean func_73085_a(EntityPlayer p_73085_1_, World p_73085_2_, ItemStack p_73085_3_) {
@@ -20,3 +31,28 @@
          int i = p_73085_3_.field_77994_a;
          int j = p_73085_3_.func_77960_j();
          ItemStack itemstack1 = p_73085_3_.func_77957_a(p_73085_2_, p_73085_1_);
+@@ -240,20 +243,24 @@
+         }
+     }
+ 
+     public boolean func_73078_a(EntityPlayer p_73078_1_, World p_73078_2_, ItemStack p_73078_3_, int p_73078_4_, int p_73078_5_, int p_73078_6_, int p_73078_7_, float p_73078_8_, float p_73078_9_, float p_73078_10_) {
++        if(jk_5.nailed.server.NailedEventFactory.firePlayerRightClickBlock(field_73090_b)){
++            field_73090_b.field_71135_a.func_147359_a(new S23PacketBlockChange(p_73078_4_, p_73078_5_, p_73078_6_, field_73092_a));
++            return true;
++        }
+         if ((!p_73078_1_.func_70093_af() || p_73078_1_.func_70694_bm() == null) && p_73078_2_.func_147439_a(p_73078_4_, p_73078_5_, p_73078_6_).func_149727_a(p_73078_2_, p_73078_4_, p_73078_5_, p_73078_6_, p_73078_1_, p_73078_7_, p_73078_8_, p_73078_9_, p_73078_10_)) {
+             return true;
+         } else if (p_73078_3_ == null) {
+             return false;
+         } else if (this.func_73083_d()) {
+             int i1 = p_73078_3_.func_77960_j();
+             int j1 = p_73078_3_.field_77994_a;
+             boolean flag = p_73078_3_.func_77943_a(p_73078_1_, p_73078_2_, p_73078_4_, p_73078_5_, p_73078_6_, p_73078_7_, p_73078_8_, p_73078_9_, p_73078_10_);
+             p_73078_3_.func_77964_b(i1);
+             p_73078_3_.field_77994_a = j1;
+             return flag;
+         } else {
+             return p_73078_3_.func_77943_a(p_73078_1_, p_73078_2_, p_73078_4_, p_73078_5_, p_73078_6_, p_73078_7_, p_73078_8_, p_73078_9_, p_73078_10_);
+         }
+     }
+ 
