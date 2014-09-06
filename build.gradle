@@ -12,11 +12,6 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        /*maven {
-            //Reening's maven repo. It hosts nailed-mcp
-            name = "forge"
-            url = "http://maven.reening.nl"
-        }*/
     }
     dependencies {
         classpath "jk_5.nailed.mcp:mcp:1.2.0"
