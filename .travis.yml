@@ -1,0 +1,5 @@
+language: java
+notifications:
+  email: false
+install: TERM=dumb ./gradlew setupNailed
+script: TERM=dumb ./gradlew buildPackages -s
