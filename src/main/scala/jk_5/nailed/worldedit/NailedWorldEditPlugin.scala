@@ -26,7 +26,9 @@ class NailedWorldEditPlugin extends Plugin {
     NailedWorldEditPlugin.instance = this
     NailedWorldEditPlugin.logger = this.getLogger
 
-    this.getPluginManager.registerListener(this, this)
+    this.getServer.getPluginManager.registerListener(this, this)
+    this.getServer.getMessenger.registerOutgoingPluginChannel(this, "WECUI")
+    this.getServer.getMessenger.registerIncomingPluginChannel(this, "WECUI", WorldEditCUIPacketHandler)
 
     WorldEditConfig.load()
 
