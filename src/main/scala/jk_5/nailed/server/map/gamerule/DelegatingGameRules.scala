@@ -73,7 +73,7 @@ class DelegatingEditableGameRules(private val or: gamerule.EditableGameRules) ex
   override def addGameRule(key : String, value : String) = or(key) = value
   override def setOrCreateGameRule(key: String, value: String) = or(key) = value
   override def readGameRulesFromNBT(tag: NBTTagCompound){
-    val keys = tag.func_150296_c().asInstanceOf[util.Set[String]]
+    val keys = tag.getKeySet().asInstanceOf[util.Set[String]]
     for(k <- keys){
       this.setOrCreateGameRule(k, tag.getString(k))
     }

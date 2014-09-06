@@ -103,12 +103,12 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def getInventorySlotContent(slot: Int): ItemStack = ItemStackConverter.toNailed(this.getEntity.inventory.getStackInSlot(slot)) //TODO: maybe save inventories in our system instead the vanilla one
   override def setInventorySlot(slot: Int, stack: ItemStack){
     this.getEntity.inventory.setInventorySlotContents(slot, ItemStackConverter.toVanilla(stack))
-    this.getEntity.sendContainerAndContentsToPlayer(this.getEntity.inventoryContainer, this.getEntity.inventoryContainer.getInventory)
+    this.getEntity.updateCraftingInventory(this.getEntity.inventoryContainer, this.getEntity.inventoryContainer.getInventory)
   }
 
   override def addToInventory(stack: ItemStack){
     this.getEntity.inventory.addItemStackToInventory(ItemStackConverter.toVanilla(stack))
-    this.getEntity.sendContainerAndContentsToPlayer(this.getEntity.inventoryContainer, this.getEntity.inventoryContainer.getInventory)
+    this.getEntity.updateCraftingInventory(this.getEntity.inventoryContainer, this.getEntity.inventoryContainer.getInventory)
   }
 
   override def iterateInventory(p: ItemStack => Unit){

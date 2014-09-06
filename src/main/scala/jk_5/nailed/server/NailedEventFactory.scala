@@ -191,7 +191,7 @@ object NailedEventFactory {
     val canceled = fireEvent(new BlockPlaceEvent(xC, yC, zC, NailedDimensionManager.getWorld(world.provider.dimensionId), player)).isCanceled
     val ret = if(canceled){
       //Send the slot content to the client because the client decreases the stack size by 1 when it places a block
-      player.getEntity.sendContainerAndContentsToPlayer(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
+      player.getEntity.updateCraftingInventory(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
       true
     }else false
 
@@ -201,7 +201,7 @@ object NailedEventFactory {
     if(is.getTagCompound != null && is.getTagCompound.getBoolean("IsStatemitter")){
       if(player.getGameMode != GameMode.CREATIVE){
         player.sendMessage(new ComponentBuilder("You must be in creative mode to use Stat Emitters!").color(ChatColor.RED).create())
-        player.getEntity.sendContainerAndContentsToPlayer(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
+        player.getEntity.updateCraftingInventory(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
         return true
       }
       world.setBlock(xC, yC, zC, Blocks.command_block, 8, 3)
@@ -274,7 +274,7 @@ object NailedEventFactory {
     val destMap = destWorld.getMap
 
     currentWorld.wrapped.getEntityTracker.removePlayerFromTrackers(ent) //Remove from EntityTracker
-    currentWorld.wrapped.getEntityTracker.removeEntityFromAllTrackingPlayers(ent) //Notify other players of entity death
+    currentWorld.wrapped.getEntityTracker.untrackEntity(ent) //Notify other players of entity death
     currentWorld.wrapped.getPlayerManager.removePlayer(ent) //Remove player's ChunkLoader
     server.getConfigurationManager.playerEntityList.remove(ent) //Remove from the global player list
     currentWorld.wrapped.removePlayerEntityDangerously(ent) //Force the entity to be removed from it's current world

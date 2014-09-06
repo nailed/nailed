@@ -1,0 +1,7 @@
+{
+    "name": "WorldEdit",
+    "main": "jk_5.nailed.worldedit.NailedWorldEditPlugin",
+    "version": "${version}",
+    "author": "jk-5",
+    "description": ""
+}

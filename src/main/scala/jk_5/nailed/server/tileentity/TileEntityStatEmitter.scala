@@ -50,18 +50,18 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock {
 
     //Called when the block receives a redstone signal
     override def func_145755_a(world: World){}
-    override def func_145760_g() = strength
+    override def getSuccessCount() = strength
 
     //Called when a update shoudl be send to the client
     override def func_145756_e(){
-      getWorldObj.markBlockForUpdate(TileEntityStatEmitter.this.xCoord, TileEntityStatEmitter.this.yCoord, TileEntityStatEmitter.this.zCoord)
+      getWorld.markBlockForUpdate(TileEntityStatEmitter.this.xCoord, TileEntityStatEmitter.this.yCoord, TileEntityStatEmitter.this.zCoord)
     }
 
     override def canCommandSenderUseCommand(level: Int, command: String): Boolean = false
     override def getCommandSenderName = "StatEmitter"
 
-    override def getEntityWorld: World = getWorldObj
-    override def getPlayerCoordinates = new ChunkCoordinates(TileEntityStatEmitter.this.xCoord, TileEntityStatEmitter.this.yCoord, TileEntityStatEmitter.this.zCoord)
+    override def getEntityWorld: World = getWorld
+    override def getCommandSenderPosition = new ChunkCoordinates(TileEntityStatEmitter.this.xCoord, TileEntityStatEmitter.this.yCoord, TileEntityStatEmitter.this.zCoord)
 
     override def addChatMessage(message: IChatComponent){}
   }
@@ -71,7 +71,7 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock {
 
   override def setSignalStrength(strength: Int){
     this.strength = strength
-    worldObj.func_147453_f(xCoord, yCoord, zCoord, Blocks.command_block)
+    worldObj.updateNeighborsAboutBlockChange(xCoord, yCoord, zCoord, Blocks.command_block)
   }
 
   override def writeToNBT(tag: NBTTagCompound){

@@ -34,12 +34,12 @@ object ItemStackConverter {
 
   implicit def toNailed(is: ItemStack): NItemStack = {
     if(is == null) return null
-    val ret = new NItemStack(Material.getMaterial(Item.itemRegistry.getIDForObject(is.getItem)), is.stackSize, is.getItemDamage.toShort)
+    val ret = new NItemStack(Material.getMaterial(Item.itemRegistry.getIDForObject(is.getItem)), is.stackSize, is.getMetadata.toShort)
     val tag = is.getTagCompound
     if(tag != null){
-      for(t <- tag.func_150296_c().asInstanceOf[util.Set[String]]){
+      for(t <- tag.getKeySet().asInstanceOf[util.Set[String]]){
         tag.getTag(t) match {
-          case s: NBTTagString => ret.setTag(t, s.func_150285_a_())
+          case s: NBTTagString => ret.setTag(t, s.getString())
           case _ =>
         }
       }

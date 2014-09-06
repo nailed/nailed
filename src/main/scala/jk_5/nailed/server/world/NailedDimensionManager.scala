@@ -114,7 +114,7 @@ object NailedDimensionManager {
       //TODO: populate this from the mappack that may or may not exist
       //Arguments: seed, gameType, enable structures, hardcore mode, worldType
       val r = new WorldSettings(0, WorldSettings.GameType.ADVENTURE, false, false, WorldType.DEFAULT)
-      r.func_82750_a("") //Generator settings (for flat)
+      r.setWorldName("") //Generator settings (for flat)
       r
     }else{
       new WorldSettings(worldInfo)

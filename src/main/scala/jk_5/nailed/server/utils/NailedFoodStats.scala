@@ -41,8 +41,8 @@ class NailedFoodStats extends FoodStats {
     this.saturation = Math.min(this.saturation + food.toFloat * saturation * 2.0F, foodLevel.toFloat)
   }
 
-  override def func_151686_a(foodItem: ItemFood, is: ItemStack) {
-    this.addStats(foodItem.func_150905_g(is), foodItem.func_150906_h(is))
+  override def addStats(foodItem: ItemFood, is: ItemStack) {
+    this.addStats(foodItem.getHealAmount(is), foodItem.getSaturationModifier(is))
   }
 
   override def onUpdate(playerEntity: EntityPlayer){
