@@ -9,6 +9,7 @@ import com.sk89q.worldedit.internal.cui.CUIEvent
 import com.sk89q.worldedit.util.Location
 import com.sk89q.worldedit.world.World
 import com.sk89q.worldedit.{LocalSession, Vector, WorldEdit, WorldVector}
+import io.netty.util.CharsetUtil
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.server.NailedServer
@@ -65,14 +66,12 @@ class WorldEditPlayer(p: Player) extends AbstractPlayerActor {
   }
 
   override def dispatchCUIEvent(event: CUIEvent){
-    //TODO
-    /*String[] params = event.getParameters();
-    String send = event.getTypeId();
+    val params = event.getParameters
+    var send = event.getTypeId
     if(params.length > 0){
-        send = send + "|" + StringUtil.joinString(params, "|");
+      send = send + "|" + params.mkString("|")
     }
-    Packet250CustomPayload packet = new Packet250CustomPayload(ForgeWorldEdit.CUI_PLUGIN_CHANNEL, send.getBytes(WECUIPacketHandler.UTF_8_CHARSET));
-    this.player.playerNetServerHandler.sendPacketToPlayer(packet);*/
+    np.sendPluginMessage(NailedWorldEditPlugin.instance, "WECUI", send.getBytes(CharsetUtil.UTF_8))
   }
 
   override def printRaw(msg: String){
