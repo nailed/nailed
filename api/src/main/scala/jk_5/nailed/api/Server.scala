@@ -24,7 +24,7 @@ import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.command.CommandSender
 import jk_5.nailed.api.map.MapLoader
 import jk_5.nailed.api.mappack.MappackRegistry
-import jk_5.nailed.api.messaging.StandardMessenger
+import jk_5.nailed.api.messaging.Messenger
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.api.scheduler.Scheduler
@@ -136,5 +136,5 @@ trait Server {
 
   def isAsync: Boolean
 
-  val getMessenger = new StandardMessenger
+  def getMessenger: Messenger
 }
