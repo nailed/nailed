@@ -1,5 +1,4 @@
 searge,name,side,desc
-field_100013_f,isPotionDurationMax,0,"True if potion effect duration is at maximum, false otherwise."
 field_104003_g,isAggressive,2,
 field_104057_T,isGamemodeForced,2,
 field_110150_bn,lastAttacker,2,
@@ -39,291 +38,16 @@ field_110291_bB,horseMarkingTextures,2,
 field_110293_bH,hasReproduced,2,
 field_110295_bF,jumpRearingCounter,2,
 field_110296_bG,horseChest,2,
-field_110312_d,locationSkin,0,
-field_110313_e,locationCape,0,
-field_110314_b,locationStevePng,0,
-field_110320_a,horseJumpPowerCounter,0,
-field_110321_bQ,horseJumpPower,0,
-field_110323_l,statIcons,0,
-field_110324_m,icons,0,
-field_110325_k,optionsBackground,0,
-field_110328_d,pumpkinBlurTexPath,0,
-field_110329_b,vignetteTexPath,0,
-field_110330_c,widgetsTexPath,0,
-field_110352_y,minecraftTitleTextures,0,
-field_110353_x,splashTexts,0,
-field_110444_H,locationMojangPng,0,
-field_110445_I,macDisplayModes,0,
-field_110446_Y,fileAssets,0,
-field_110447_Z,launchedVersion,0,
-field_110448_aq,mcResourcePackRepository,0,
-field_110449_ao,defaultResourcePacks,0,
-field_110450_ap,mcDefaultResourcePack,0,
-field_110451_am,mcResourceManager,0,
-field_110452_an,metadataSerializer_,0,
-field_110453_aa,proxy,0,
 field_110456_c,serverProxy,2,
-field_110463_b,packFormat,0,
-field_110464_a,packDescription,0,
-field_110465_b,charLefts,0,
-field_110466_c,charSpacings,0,
-field_110467_a,charWidths,0,
-field_110475_d,frameTime,0,
-field_110476_b,frameWidth,0,
-field_110477_c,frameHeight,0,
-field_110478_a,animationFrames,0,
-field_110481_b,textureClamp,0,
-field_110482_a,textureBlur,0,
-field_110498_b,frameTime,0,
-field_110499_a,frameIndex,0,
-field_110506_b,gsonBuilder,0,
-field_110507_c,gson,0,"Cached Gson instance. Set to null when more sections are registered, and then re-created from the builder."
-field_110508_a,metadataSectionSerializerRegistry,0,
-field_110520_f,locationTexturePackIcon,0,
-field_110521_d,rePackMetadataSection,0,
-field_110522_e,texturePackIcon,0,
-field_110523_b,resourcePackFile,0,
-field_110524_c,reResourcePack,0,
-field_110529_f,mcmetaJsonChecked,0,
-field_110530_g,mcmetaJson,0,
-field_110531_d,mcmetaInputStream,0,
-field_110532_e,srMetadataSerializer,0,
-field_110533_b,srResourceLocation,0,
-field_110534_c,resourceInputStream,0,
-field_110535_a,mapMetadataSections,0,
-field_110539_b,frmMetadataSerializer,0,
-field_110540_a,resourcePacks,0,
-field_110546_b,reloadListeners,0,
-field_110547_c,rmMetadataSerializer,0,
-field_110548_a,domainResourceManagers,0,
-field_110553_a,glTextureId,0,
-field_110559_g,textureUploaded,0,
-field_110560_d,bufferedImage,0,
-field_110561_e,imageThread,0,
-field_110562_b,imageUrl,0,
-field_110563_c,imageBuffer,0,
-field_110566_b,dynamicTextureData,0,
-field_110567_b,layeredTextureNames,0,
-field_110568_b,textureLocation,0,
-field_110574_e,mapRegisteredSprites,0,
-field_110575_b,locationBlocksTexture,0,
-field_110576_c,locationItemsTexture,0,
-field_110582_d,theResourceManager,0,
-field_110583_b,listTickables,0,
-field_110584_c,mapTextureCounters,0,
-field_110585_a,mapTextureObjects,0,
-field_110597_b,resourcePackFile,0,
-field_110598_a,resourceLog,0,
-field_110600_d,resourcePackZipFile,0,
-field_110601_c,entryNameSplitter,0,
-field_110608_a,defaultResourceDomains,0,
-field_110617_f,repositoryEntries,0,
-field_110618_d,dirResourcepacks,0,
-field_110619_e,repositoryEntriesAll,0,
-field_110620_b,rprDefaultResourcePack,0,
-field_110621_c,rprMetadataSerializer,0,
-field_110622_a,resourcePackFilter,0,
-field_110625_b,resourcePath,0,
-field_110626_a,resourceDomain,0,
-field_110684_D,frontRightLeg,0,
-field_110685_E,frontRightShin,0,
-field_110686_F,frontRightHoof,0,
-field_110687_G,muleLeftChest,0,The left chest box on the mule model.
-field_110688_A,frontLeftLeg,0,
-field_110689_B,frontLeftShin,0,
-field_110690_C,frontLeftHoof,0,
-field_110691_L,horseLeftSaddleRope,0,
-field_110692_M,horseLeftSaddleMetal,0,
-field_110693_N,horseRightSaddleRope,0,
-field_110694_O,horseRightSaddleMetal,0,
-field_110695_H,muleRightChest,0,The right chest box on the mule model.
-field_110696_I,horseSaddleBottom,0,
-field_110697_J,horseSaddleFront,0,
-field_110698_K,horseSaddleBack,0,
-field_110699_Q,horseRightFaceMetal,0,The right metal connected to the horse's face ropes.
-field_110700_P,horseLeftFaceMetal,0,The left metal connected to the horse's face ropes.
-field_110701_S,horseRightRein,0,
-field_110702_R,horseLeftRein,0,
-field_110703_f,muleLeftEar,0,The left ear box for the mule model.
-field_110704_g,muleRightEar,0,The right ear box for the mule model.
-field_110705_d,horseLeftEar,0,
-field_110706_e,horseRightEar,0,
-field_110707_b,mouthTop,0,
-field_110708_c,mouthBottom,0,
-field_110709_a,head,0,
-field_110710_n,tailTip,0,
-field_110711_o,backLeftLeg,0,
-field_110712_l,tailBase,0,
-field_110713_m,tailMiddle,0,
-field_110714_j,mane,0,
-field_110715_k,body,0,
-field_110716_h,neck,0,
-field_110717_i,horseFaceRopes,0,The box for the horse's ropes on its face.
-field_110718_w,backLeftHoof,0,
-field_110719_v,backLeftShin,0,
-field_110720_z,backRightHoof,0,
-field_110721_y,backRightShin,0,
-field_110722_x,backRightLeg,0,
-field_110737_b,particleTextures,0,
-field_110778_a,shadowTextures,0,
-field_110780_a,arrowTextures,0,
-field_110782_f,boatTextures,0,
-field_110785_a,experienceOrbTextures,0,
-field_110787_a,enderCrystalTextures,0,
-field_110789_a,mapBackgroundTextures,0,
-field_110798_h,RES_ITEM_GLINT,0,
-field_110801_f,leashKnotModel,0,
-field_110802_a,leashKnotTextures,0,
-field_110804_g,minecartTextures,0,
-field_110810_f,witherTextures,0,
-field_110811_a,invulnerableWitherTextures,0,
-field_110814_a,RES_ITEM_GLINT,0,
-field_110826_a,steveTextures,0,
-field_110830_f,creeperTextures,0,
-field_110831_a,armoredCreeperTextures,0,
-field_110833_a,cowTextures,0,
-field_110835_a,batTextures,0,
-field_110837_a,blazeTextures,0,
-field_110839_f,endermanTextures,0,
-field_110840_a,endermanEyesTexture,0,
-field_110842_f,enderDragonExplodingTextures,0,
-field_110843_g,enderDragonCrystalBeamTextures,0,
-field_110844_k,enderDragonTextures,0,
-field_110845_h,enderDragonEyesTextures,0,
-field_110850_f,whiteHorseTextures,0,
-field_110851_g,muleTextures,0,
-field_110853_l,skeletonHorseTextures,0,
-field_110854_k,zombieHorseTextures,0,
-field_110855_h,donkeyTextures,0,
-field_110861_l,witherSkeletonTextures,0,
-field_110862_k,skeletonTextures,0,
-field_110864_q,zombieVillagerTextures,0,
-field_110865_p,zombieTextures,0,
-field_110866_o,zombiePigmanTextures,0,
-field_110868_f,ghastShootingTextures,0,
-field_110869_a,ghastTextures,0,
-field_110871_a,zombieTextures,0,
-field_110873_a,magmaCubeTextures,0,
-field_110875_f,ocelotTextures,0,
-field_110876_g,redOcelotTextures,0,
-field_110877_a,blackOcelotTextures,0,
-field_110878_h,siameseOcelotTextures,0,
-field_110880_a,mooshroomTextures,0,
-field_110882_a,silverfishTextures,0,
-field_110884_f,shearedSheepTextures,0,
-field_110885_a,sheepTextures,0,
-field_110887_f,pigTextures,0,
-field_110888_a,saddledPigTextures,0,
-field_110890_f,spiderTextures,0,
-field_110891_a,spiderEyesTextures,0,
-field_110893_a,caveSpiderTextures,0,
-field_110895_a,snowManTextures,0,
-field_110897_a,slimeTextures,0,
-field_110899_a,ironGolemTextures,0,
-field_110901_a,squidTextures,0,
-field_110903_f,villagerTextures,0,
-field_110904_g,farmerVillagerTextures,0,
-field_110905_l,smithVillagerTextures,0,
-field_110906_m,butcherVillagerTextures,0,
-field_110907_k,priestVillagerTextures,0,
-field_110908_h,librarianVillagerTextures,0,
-field_110910_a,witchTextures,0,
-field_110912_f,witherTextures,0,
-field_110913_a,invulnerableWitherTextures,0,
-field_110915_f,tamedWolfTextures,0,
-field_110916_g,anrgyWolfTextures,0,
-field_110917_a,wolfTextures,0,
-field_110918_h,wolfCollarTextures,0,
-field_110920_a,chickenTextures,0,
-field_110922_T,locationLightMap,0,
-field_110923_r,locationSnowPng,0,
-field_110924_q,locationRainPng,0,
-field_110925_j,locationCloudsPng,0,
-field_110926_k,locationEndSkyPng,0,
-field_110927_h,locationMoonPhasesPng,0,
-field_110928_i,locationSunPng,0,
-field_110929_d,RES_UNDERWATER_OVERLAY,0,
-field_110930_b,RES_ITEM_GLINT,0,
-field_110931_c,RES_MAP_BACKGROUND,0,
-field_110973_g,frameCounter,0,
-field_110974_d,originY,0,
-field_110975_c,originX,0,
-field_110976_a,framesTextureData,0,
-field_110977_n,minV,0,
-field_110978_o,maxV,0,
-field_110979_l,minU,0,
-field_110980_m,maxU,0,
-field_110982_k,animationMetadata,0,
-field_110983_h,tickCounter,0,
-field_110984_i,iconName,0,
-field_110999_b,missingTextureData,0,
-field_111000_c,dataBuffer,0,
-field_111001_a,missingTexture,0,
-field_111053_a,numericVariablePattern,2,"Pattern that matches numeric variable placeholders in a resource string, such as ""%d"", ""%3$d"", ""%.2f"""
-field_111113_b,defaultValue,2,
-field_111114_c,shouldWatch,2,
-field_111115_a,unlocalizedName,2,
-field_111118_b,maximumValue,2,
-field_111119_c,description,2,
-field_111120_a,minimumValue,2,
-field_111132_f,baseValue,2,
-field_111133_g,needsUpdate,2,
-field_111134_d,mapByName,2,
-field_111135_e,mapByUUID,2,
-field_111136_b,genericAttribute,2,The Attribute this is an instance of
-field_111137_c,mapByOperation,2,
-field_111138_a,attributeMap,2,The BaseAttributeMap this attributeInstance can be found in
-field_111139_h,cachedValue,2,
-field_111153_b,attributesByName,2,
-field_111154_a,attributes,2,
-field_111162_d,attributeInstanceSet,2,
-field_111163_c,descriptionToAttributeInstanceMap,2,
-field_111170_d,id,2,
-field_111171_e,isSaved,2,"If false, this modifier is not saved in NBT. Used for ""natural"" modifiers like speed boost from sprinting"
-field_111172_b,operation,2,
-field_111173_c,name,2,
-field_111174_a,amount,2,
-field_111180_a,horseHost,2,
-field_111188_I,attributeModifierMap,2,Contains a Map of the AttributeModifiers registered by potions
-field_111192_g,previousTotalWorldTime,2,time what is using to check if InhabitedTime should be calculated
-field_111193_e,playerInstanceList,2,This field is using when chunk should be processed (every 8000 ticks)
-field_111198_g,previousWorldTime,2,time what is using when chunk InhabitedTime is being calculated
-field_111203_a,moonPhaseFactors,2,
-field_111204_q,inhabitedTime,2,the cumulative number of ticks players have been in this chunk
-field_111210_e,itemModifierUUID,2,
-field_111218_cA,iconString,2,The string associated with this Item's Icon.
 field_111242_f,theHorse,2,
 field_111263_d,movementSpeed,2,
 field_111264_e,attackDamage,2,
 field_111265_b,followRange,2,
 field_111266_c,knockbackResistance,2,
 field_111267_a,maxHealth,2,
-field_111273_g,locationFontTexture,0,
-field_111274_c,unicodePageLocations,0,
-field_130070_K,fileResourcepacks,0,
-field_130074_a,joinerResourcePacks,0,
-field_130089_b,mapResourceLocations,0,
-field_130222_e,rotated,0,
-field_130223_c,width,0,
-field_130224_d,height,0,
-field_135017_as,mcLanguageManager,0,
-field_135019_a,languages,0,
-field_135030_b,splitter,0,"Splits on ""="""
-field_135036_d,bidirectional,0,
-field_135037_b,region,0,
-field_135038_c,name,0,
-field_135039_a,languageCode,0,
-field_135046_d,languageMap,0,
-field_135047_b,theMetadataSerializer,0,
-field_135048_c,currentLanguage,0,
-field_135049_a,currentLocale,0,
-field_135054_a,i18nLocale,0,
-field_135057_d,setResourceDomains,0,
 field_135059_Q,animalSpawner,2,
 field_135065_b,equalSignSplitter,2,"A Splitter that splits a string on the first ""="".  For example, ""a=b=c"" would split into [""a"", ""b=c""]."
 field_142016_bo,lastAttackerTime,2,Holds the value of ticksExisted when setLastAttacker was last called.
-field_142022_ce,clientBrand,0,
-field_142025_a,isRunningOnMac,0,
 field_142052_b,revengeTimerOld,2,Store the previous revengeTimer value
 field_143005_bX,playerLastActiveTime,2,
 field_143008_E,maxPlayerIdleMinutes,2,
@@ -443,282 +167,6 @@ field_146060_aG,fishPitch,2,
 field_146084_br,playerInLove,2,
 field_146087_bs,entityAIEatGrass,2,
 field_146106_i,gameProfile,2,The player's unique game profile
-field_146109_a,mc,0,
-field_146120_f,width,0,Button width in pixels
-field_146121_g,height,0,Button height in pixels
-field_146122_a,buttonTextures,0,
-field_146123_n,hovered,0,
-field_146124_l,enabled,0,"True if this control is enabled, false to disable."
-field_146125_m,visible,0,Hides the button completely if false.
-field_146126_j,displayString,0,The string displayed on this control.
-field_146127_k,id,0,
-field_146128_h,xPosition,0,The x position of this control.
-field_146129_i,yPosition,0,The y position of this control.
-field_146133_q,options,0,
-field_146134_p,sliderValue,0,
-field_146135_o,dragging,0,
-field_146137_o,enumOptions,0,
-field_146164_r,fontRenderer,0,
-field_146170_l,centered,0,
-field_146171_m,labelBgEnabled,0,
-field_146172_j,visible,0,
-field_146209_f,xPosition,0,
-field_146210_g,yPosition,0,
-field_146211_a,fontRendererInstance,0,
-field_146212_n,canLoseFocus,0,if true the textbox can lose focus by clicking elsewhere on the screen
-field_146213_o,isFocused,0,"If this value is true along with isEnabled, keyTyped will process the keys."
-field_146214_l,cursorCounter,0,
-field_146215_m,enableBackgroundDrawing,0,
-field_146216_j,text,0,Has the current text being edited on the textbox.
-field_146217_k,maxStringLength,0,
-field_146218_h,width,0,The width of this text field.
-field_146219_i,height,0,
-field_146220_v,visible,0,True if this textbox is visible
-field_146221_u,disabledColor,0,
-field_146222_t,enabledColor,0,
-field_146223_s,selectionEnd,0,"other selection position, maybe the same as the cursor"
-field_146224_r,cursorPosition,0,
-field_146225_q,lineScrollOffset,0,The current character index that should be used as start of the rendered text.
-field_146226_p,isEnabled,0,"If this value is true along with isFocused, keyTyped will process the keys."
-field_146247_f,mc,0,
-field_146248_g,sentMessages,0,A list of messages previously sent through the chat GUI
-field_146249_a,logger,0,
-field_146250_j,scrollPos,0,
-field_146251_k,isScrolled,0,
-field_146252_h,chatLines,0,Chat lines to be displayed in the chat box
-field_146259_f,mc,0,
-field_146260_g,width,0,
-field_146261_a,achievementBg,0,
-field_146262_n,permanentNotification,0,
-field_146263_l,notificationTime,0,
-field_146264_m,renderItem,0,
-field_146265_j,achievementDescription,0,
-field_146266_k,theAchievement,0,
-field_146267_h,height,0,
-field_146268_i,achievementTitle,0,
-field_146287_f,eventButton,0,
-field_146288_g,lastMouseEvent,0,
-field_146289_q,fontRendererObj,0,The FontRenderer used by GuiScreen
-field_146290_a,selectedButton,0,The button that was just pressed.
-field_146291_p,allowUserInput,0,
-field_146292_n,buttonList,0,A list of all the buttons in this container.
-field_146293_o,labelList,0,A list of all the labels in this container.
-field_146294_l,width,0,The width of the screen object.
-field_146295_m,height,0,The height of the screen object.
-field_146296_j,itemRender,0,"Holds a instance of RenderItem, used to draw the achievement icons on screen (is based on ItemStack)"
-field_146297_k,mc,0,Reference to the Minecraft object.
-field_146298_h,touchValue,0,"Incremented when the game is in touchscreen mode and the screen is tapped, decremented if the screen isn't tapped. Does not appear to be used."
-field_146304_f,message,0,
-field_146305_g,multilineMessage,0,
-field_146306_a,reason,0,
-field_146307_h,parentScreen,0,
-field_146308_f,serverIPField,0,
-field_146309_g,serverNameField,0,
-field_146310_a,parentScreen,0,
-field_146311_h,serverData,0,
-field_146349_a,logger,0,
-field_146351_f,messageLine1,0,
-field_146352_g,confirmButtonText,0,The text shown for the first button in GuiYesNo
-field_146353_s,ticksUntilEnable,0,
-field_146354_r,messageLine2,0,
-field_146355_a,parentScreen,0,A reference to the screen object that created this. Used for navigating between screens.
-field_146356_h,cancelButtonText,0,The text shown for the second button in GuiYesNo
-field_146357_i,parentButtonClickedId,0,
-field_146360_u,showSecurityWarning,0,
-field_146361_t,linkText,0,
-field_146362_s,copyLinkButtonText,0,Label for the Copy to Clipboard button.
-field_146363_r,openLinkWarning,0,Text to warn players from opening unsafe links.
-field_146370_f,logger,0,
-field_146371_g,networkManager,0,
-field_146372_a,CONNECTION_ID,0,
-field_146373_h,cancel,0,
-field_146374_i,previousGuiScreen,0,
-field_146385_f,createWorldGui,0,
-field_146387_g,theFlatGeneratorInfo,0,
-field_146390_s,createFlatWorldListSlotGui,0,
-field_146400_h,game_settings,0,
-field_146408_f,logger,0,
-field_146409_v,defaultInputFieldText,0,is the text that appears when you press the chat key and the input box appears pre-filled
-field_146410_g,historyBuffer,0,
-field_146411_u,clickedURI,0,used to pass around the URI to various dialogues and to the host os
-field_146412_t,foundPlayerNames,0,
-field_146413_s,autocompleteIndex,0,
-field_146414_r,waitingOnAutocomplete,0,
-field_146415_a,inputField,0,Chat entry field
-field_146416_h,sentHistoryCursor,0,"keeps position of which chat message you will select when you press up, (does not increase for duplicated messages sent immediately after each other)"
-field_146417_i,playerNamesFound,0,
-field_146443_h,game_settings_1,0,Reference to the GameSettings object.
-field_146451_g,game_settings_3,0,Reference to the GameSettings object.
-field_146465_D,buttonSign,0,The GuiButton to sign this book.
-field_146466_f,bookGuiTextures,0,
-field_146467_E,buttonFinalize,0,
-field_146468_g,editingPlayer,0,The player editing the book
-field_146469_F,buttonCancel,0,
-field_146470_A,buttonNextPage,0,
-field_146471_B,buttonPreviousPage,0,
-field_146472_C,buttonDone,0,
-field_146473_a,logger,0,
-field_146474_h,bookObj,0,
-field_146475_i,bookIsUnsigned,0,Whether the book is signed or can still be edited
-field_146476_w,bookTotalPages,0,
-field_146477_v,bookImageHeight,0,
-field_146478_u,bookImageWidth,0,
-field_146479_t,updateCount,0,Update ticks since the gui was opened
-field_146480_s,bookGettingSigned,0,Determines if the signing screen is open
-field_146481_r,bookIsModified,0,Whether the book's title or contents has been modified since being opened
-field_146482_z,bookTitle,0,
-field_146483_y,bookPages,0,
-field_146484_x,currPage,0,
-field_146485_f,commandTextField,0,Text field containing the command block's command.
-field_146487_r,cancelBtn,0,
-field_146489_h,localCommandBlock,0,Command block being edited.
-field_146490_i,doneBtn,0,"""Done"" button for the GUI."
-field_146491_f,buttonId,0,The ID of the button that has been pressed.
-field_146492_g,optionsArr,0,
-field_146493_s,buttonReset,0,
-field_146494_r,keyBindingList,0,
-field_146495_a,screenTitle,0,
-field_146496_h,parentScreen,0,A reference to the screen object that created this. Used for navigating between screens.
-field_146497_i,options,0,Reference to the GameSettings object.
-field_146498_f,parentGuiScreen,0,
-field_146499_g,guiGameSettings,0,
-field_146500_a,screenTitle,0,
-field_146501_h,optionsRowList,0,
-field_146502_i,videoOptions,0,An array of all of GameSettings.Options's video options.
-field_146506_g,game_settings_4,0,Reference to the GameSettings object.
-field_146510_b_,lanSearchStates,0,
-field_146542_f,screenTitle,0,
-field_146543_v,doesGuiPauseGame,0,"When true, the game will be paused when the gui is shown"
-field_146544_g,renderItem,0,
-field_146545_u,displaySlot,0,
-field_146547_s,mobStats,0,
-field_146548_r,blockStats,0,
-field_146549_a,parentScreen,0,
-field_146550_h,generalStats,0,
-field_146551_i,itemStats,0,
-field_146556_E,statFileWriter,0,
-field_146558_F,loadingAchievements,0,
-field_146562_a,parentScreen,0,
-field_146580_a,logger,0,
-field_146593_f,progress,0,
-field_146594_a,netHandlerPlayClient,0,
-field_146603_f,game_settings_2,0,Reference to the GameSettings object.
-field_146629_g,logger,0,
-field_146797_f,oldServerPinger,0,
-field_146798_g,parentScreen,0,
-field_146799_A,lanServerList,0,
-field_146800_B,lanServerDetector,0,
-field_146801_C,initialized,0,
-field_146802_a,logger,0,
-field_146803_h,serverListSelector,0,
-field_146804_i,savedServerList,0,
-field_146805_w,editingServer,0,
-field_146806_v,addingServer,0,
-field_146807_u,deletingServer,0,
-field_146808_t,btnDeleteServer,0,
-field_146809_s,btnSelectServer,0,
-field_146810_r,btnEditServer,0,
-field_146811_z,selectedServer,0,
-field_146813_x,directConnect,0,
-field_146848_f,tileSign,0,Reference to the sign object.
-field_146849_g,updateCounter,0,Counts the number of screen updates.
-field_146851_h,editLine,0,The index of the line that is being edited.
-field_146852_i,doneBtn,0,"""Done"" button for the GUI."
-field_146968_a,logger,0,
-field_146974_g,logger,0,
-field_146985_D,currentDragTargetSlot,0,
-field_146986_E,dragItemDropDelay,0,
-field_146987_F,dragSplittingLimit,0,
-field_146988_G,dragSplittingButton,0,
-field_146989_A,returningStackDestSlot,0,
-field_146990_B,returningStackTime,0,
-field_146991_C,returningStack,0,Used when touchscreen is enabled
-field_146992_L,lastClickButton,0,
-field_146993_M,doubleClick,0,
-field_146994_N,shiftClickedSlot,0,
-field_146995_H,ignoreMouseUp,0,
-field_146996_I,dragSplittingRemnant,0,
-field_146997_J,lastClickTime,0,
-field_146998_K,lastClickSlot,0,
-field_146999_f,xSize,0,The X size of the inventory window in pixels.
-field_147000_g,ySize,0,The Y size of the inventory window in pixels.
-field_147001_a,inventoryBackground,0,The location of the inventory background texture
-field_147002_h,inventorySlots,0,A list of the players inventory slots
-field_147003_i,guiLeft,0,Starting X position for the Gui. Inconsistent use for Gui backgrounds.
-field_147004_w,isRightMouseClick,0,Used when touchscreen is enabled.
-field_147005_v,clickedSlot,0,Used when touchscreen is enabled.
-field_147006_u,theSlot,0,holds the slot currently hovered
-field_147007_t,dragSplitting,0,
-field_147008_s,dragSplittingSlots,0,
-field_147009_r,guiTop,0,Starting Y position for the Gui. Inconsistent use for Gui backgrounds.
-field_147010_z,touchUpY,0,
-field_147011_y,touchUpX,0,
-field_147012_x,draggedStack,0,Used when touchscreen is enabled
-field_147013_v,tileBrewingStand,0,
-field_147014_u,brewingStandGuiTextures,0,
-field_147015_w,lowerChestInventory,0,
-field_147016_v,upperChestInventory,0,
-field_147018_x,inventoryRows,0,"window height is calculated with these values; the more rows, the heigher"
-field_147019_u,craftingTableGuiTextures,0,
-field_147024_w,tileBeacon,0,
-field_147025_v,beaconGuiTextures,0,
-field_147026_u,logger,0,
-field_147027_y,buttonsNotDrawn,0,
-field_147028_x,beaconConfirmButton,0,
-field_147031_u,horseGuiTextures,0,
-field_147039_u,logger,0,
-field_147045_u,hasActivePotionEffects,0,True if there is some potion effect to display
-field_147047_v,oldMouseY,0,The old y position of the mouse pointer
-field_147048_u,oldMouseX,0,The old x position of the mouse pointer
-field_147058_w,selectedTabIndex,0,Currently selected creative inventory tab index.
-field_147061_u,creativeInventoryTabs,0,The location of the creative inventory tabs texture
-field_147062_A,searchField,0,
-field_147065_z,wasClicking,0,True if the left mouse button was held down last time drawScreen was called.
-field_147066_y,isScrolling,0,True if the scrollbar is being dragged
-field_147067_x,currentScroll,0,"Amount scrolled in Creative mode inventory (0 = top, 1 = bottom)"
-field_147086_v,tileFurnace,0,
-field_147087_u,furnaceGuiTextures,0,
-field_147088_v,dispenserGuiTextures,0,
-field_147089_u,tileDispenser,0,
-field_147091_w,nameField,0,
-field_147092_v,anvil,0,
-field_147093_u,anvilResource,0,
-field_147094_x,playerInventory,0,
-field_147102_bM,logger,2,
-field_147123_G,logger,0,
-field_147124_at,framebufferMc,0,
-field_147125_j,pointedEntity,0,
-field_147126_aw,mcMusicTicker,0,
-field_147127_av,mcSoundHandler,0,
-field_147128_au,textureMapBlocks,0,
-field_147129_ai,jvm64bit,0,
-field_147141_M,serverTexturePack,2,The texture pack for the server
-field_147142_T,nanoTimeSinceStatusRefresh,2,
-field_147143_S,sessionService,2,
-field_147144_o,networkSystem,2,
-field_147145_h,logger,2,
-field_147146_q,random,2,
-field_147147_p,statusResponse,2,
-field_147148_h,logger,0,
-field_147150_a,logger,2,
-field_147166_l,categoryName,0,
-field_147167_m,categoryId,0,
-field_147175_a,logger,2,
-field_147208_a,logger,2,
-field_147228_b,logger,0,
-field_147229_c,pingDestinations,0,A list of NetworkManagers that have pending pings
-field_147230_a,PING_RESPONSE_SPLITTER,0,
-field_147299_f,gameController,0,"Reference to the Minecraft instance, which many handler methods operate on"
-field_147300_g,clientWorldController,0,"Reference to the current ClientWorld instance, which many handler methods operate on"
-field_147301_d,logger,0,
-field_147302_e,netManager,0,The NetworkManager instance used to communicate with the server (used only by handlePlayerPosLook to update positioning and handleJoinGame to inform the server of the client distribution/mods)
-field_147303_b,playerInfoList,0,An ArrayList of GuiPlayerInfo (includes all the players' GuiPlayerInfo on the current server)
-field_147304_c,currentServerMaxPlayers,0,
-field_147305_a,mapStorageOrigin,0,Origin of the central MapStorage serving as a public reference for WorldClient. Not used in this class
-field_147306_l,avRandomizer,0,"Just an ordinary random number generator, used to randomize audio pitch of item/orb pickup and randomize both particlespawn offset and velocity"
-field_147307_j,guiScreenServer,0,Seems to be either null (integrated server) or an instance of either GuiMultiplayer (when connecting to a server) or GuiScreenReamlsTOS (when connecting to MCO server)
-field_147309_h,doneLoadingTerrain,0,"True if the client has finished downloading terrain and may spawn. Set upon receipt of S08PacketPlayerPosLook, reset upon respawning"
-field_147310_i,playerInfoMap,0,A mapping from player names to their respective GuiPlayerInfo (specifies the clients response time to the server)
 field_147328_g,currentLoginState,2,
 field_147332_c,logger,2,
 field_147336_h,connectionTimer,2,How long has player been trying to login into the server.
@@ -734,441 +182,37 @@ field_147374_l,chatSpamThresholdCount,2,"Incremented by 20 each time a user send
 field_147380_r,hasMoved,2,
 field_147381_q,lastPosZ,2,
 field_147382_p,lastPosY,2,
-field_147396_a,logger,0,
-field_147411_m,serverIcon,0,
-field_147412_i,playerList,0,
-field_147415_a,logger,0,
 field_147417_b,logger,2,
 field_147433_r,parabolicField,2,
-field_147436_a,logger,0,
 field_147481_N,processingLoadedTiles,2,
 field_147482_g,loadedTileEntityList,2,A list of the loaded tile entities in the world
 field_147483_b,tileEntitiesToBeRemoved,2,
 field_147484_a,addedTileEntityList,2,
 field_147489_T,blockEventCacheIndex,2,
 field_147491_a,logger,2,
-field_147503_f,textureChristmas,0,
-field_147504_g,textureNormal,0,
-field_147505_d,textureNormalDouble,0,
-field_147506_e,textureTrapped,0,
-field_147507_b,textureTrappedDouble,0,
-field_147508_c,textureChristmasDouble,0,
-field_147509_j,isChristams,0,
-field_147510_h,simpleChest,0,
-field_147511_i,largeChest,0,
-field_147514_c,model,0,The ModelSign instance for use in this renderer
-field_147523_b,beaconBeam,0,
-field_147550_f,worldObj,0,
-field_147552_d,staticPlayerZ,0,The player's current Z position (same as playerZ)
-field_147553_e,renderEngine,0,
-field_147554_b,staticPlayerX,0,The player's current X position (same as playerX)
-field_147555_c,staticPlayerY,0,The player's current Y position (same as playerY)
-field_147556_a,instance,0,
-field_147559_m,mapSpecialRenderers,0,
-field_147566_d,floatBuffer,0,"The same memory as byteBuffer, but referenced as an float buffer."
-field_147567_e,shortBuffer,0,"The same memory as byteBuffer, but referenced as an short buffer."
-field_147568_c,intBuffer,0,"The same memory as byteBuffer, but referenced as an integer buffer."
-field_147569_p,rawBufferIndex,0,The index into the raw buffer to be used for the next data.
-field_147577_f,hasNormals,0,
-field_147578_g,hasColor,0,
-field_147579_d,hasTexture,0,
-field_147580_e,hasBrightness,0,
-field_147581_b,rawBufferIndex,0,
-field_147582_c,vertexCount,0,
-field_147583_a,rawBuffer,0,
-field_147592_B,renderBlocksRg,0,
-field_147593_P,mapSoundPositions,0,"Currently playing sounds.  Type:  HashMap<ChunkCoordinates, ISound>"
-field_147594_S,displayListEntities,0,
-field_147595_R,displayListEntitiesDirty,0,
-field_147596_f,prevRenderSortX,0,
-field_147597_g,prevRenderSortY,0,
-field_147598_a,tileEntities,0,
-field_147599_m,logger,0,
-field_147600_j,prevChunkSortY,0,
-field_147601_k,prevChunkSortZ,0,
-field_147602_h,prevRenderSortZ,0,
-field_147603_i,prevChunkSortX,0,
-field_147616_f,framebufferObject,0,
-field_147617_g,framebufferTexture,0,
-field_147618_d,framebufferHeight,0,
-field_147619_e,useDepth,0,
-field_147620_b,framebufferTextureHeight,0,
-field_147621_c,framebufferWidth,0,
-field_147622_a,framebufferTextureWidth,0,
-field_147623_j,framebufferFilter,0,
-field_147624_h,depthBuffer,0,
-field_147625_i,framebufferColor,0,
-field_147635_d,logger,0,
-field_147636_j,mipmapLevels,0,
-field_147637_k,anisotropicFiltering,0,
-field_147638_c,logger,0,
-field_147639_c,logger,0,
-field_147643_d,threadDownloadCounter,0,
-field_147644_c,logger,0,
-field_147646_a,logger,0,
-field_147648_b,logger,0,
-field_147658_f,zPosF,0,
-field_147659_g,repeat,0,
-field_147660_d,xPosF,0,
-field_147661_e,yPosF,0,
-field_147662_b,volume,0,
-field_147663_c,pitch,0,
-field_147664_a,positionedSoundLocation,0,
-field_147665_h,repeatDelay,0,The number of ticks between repeating the sound
-field_147666_i,attenuationType,0,
-field_147668_j,donePlaying,0,
-field_147676_d,timeUntilNextMusic,0,
-field_147677_b,mc,0,
-field_147678_c,currentMusic,0,
-field_147679_a,rand,0,
-field_147694_f,sndManager,0,
-field_147695_g,mcResourceManager,0,
-field_147697_e,sndRegistry,0,
-field_147698_b,logger,0,
-field_147700_a,missing_sound,0,
-field_147707_d,theShaderGroup,0,
-field_147708_e,shaderCount,0,
-field_147709_v,theMapItemRenderer,0,
-field_147710_q,logger,0,
-field_147711_ac,resourceManager,0,
-field_147712_ad,shaderResourceLocations,0,
-field_147713_ae,shaderIndex,0,
-field_147719_a,instance,0,
-field_147720_h,renderBlocksIr,0,
-field_147810_D,aoLightValueScratchXYPN,0,Used as a scratch variable for ambient occlusion between the bottom face and the south face.
-field_147811_E,aoLightValueScratchXYZPNP,0,Used as a scratch variable for ambient occlusion on the south/bottom/west corner.
-field_147812_F,aoLightValueScratchXYZNPN,0,Used as a scratch variable for ambient occlusion on the north/top/east corner.
-field_147813_G,aoLightValueScratchXYNP,0,Used as a scratch variable for ambient occlusion between the top face and the north face.
-field_147814_A,aoLightValueScratchYZNN,0,Used as a scratch variable for ambient occlusion between the bottom face and the east face.
-field_147815_B,aoLightValueScratchYZNP,0,Used as a scratch variable for ambient occlusion between the bottom face and the west face.
-field_147816_C,aoLightValueScratchXYZPNN,0,Used as a scratch variable for ambient occlusion on the south/bottom/east corner.
-field_147817_L,aoLightValueScratchYZPP,0,Used as a scratch variable for ambient occlusion between the top face and the west face.
-field_147818_M,aoLightValueScratchXYZPPP,0,Used as a scratch variable for ambient occlusion on the south/top/west corner.
-field_147819_N,aoLightValueScratchXZNN,0,Used as a scratch variable for ambient occlusion between the north face and the east face.
-field_147820_O,aoLightValueScratchXZPN,0,Used as a scratch variable for ambient occlusion between the south face and the east face.
-field_147821_H,aoLightValueScratchXYZNPP,0,Used as a scratch variable for ambient occlusion on the north/top/west corner.
-field_147822_I,aoLightValueScratchYZPN,0,Used as a scratch variable for ambient occlusion between the top face and the east face.
-field_147823_J,aoLightValueScratchXYZPPN,0,Used as a scratch variable for ambient occlusion on the south/top/east corner.
-field_147824_K,aoLightValueScratchXYPP,0,Used as a scratch variable for ambient occlusion between the top face and the south face.
-field_147825_U,aoBrightnessYZNN,0,Ambient occlusion brightness YZNN
-field_147826_T,aoBrightnessXYZNNP,0,Ambient occlusion brightness XYZNNP
-field_147827_W,aoBrightnessXYZPNN,0,Ambient occlusion brightness XYZPNN
-field_147828_V,aoBrightnessYZNP,0,Ambient occlusion brightness YZNP
-field_147829_Q,aoLightValueScratchXZPP,0,Used as a scratch variable for ambient occlusion between the south face and the west face.
-field_147830_P,aoLightValueScratchXZNP,0,Used as a scratch variable for ambient occlusion between the north face and the west face.
-field_147831_S,aoBrightnessXYNN,0,Ambient occlusion brightness XYNN
-field_147832_R,aoBrightnessXYZNNN,0,Ambient occlusion brightness XYZNNN
-field_147833_aA,colorBlueTopRight,0,Blue color value for the top right corner
-field_147834_Y,aoBrightnessXYZPNP,0,Ambient occlusion brightness XYZPNP
-field_147835_X,aoBrightnessXYPN,0,Ambient occlusion brightness XYPN
-field_147836_Z,aoBrightnessXYZNPN,0,Ambient occlusion brightness XYZNPN
-field_147837_f,renderAllFaces,0,"If true, renders all faces on all blocks rather than using the logic in Block.shouldSideBeRendered."
-field_147838_g,renderFromInside,0,
-field_147839_az,colorBlueBottomRight,0,Blue color value for the bottom right corner
-field_147840_d,overrideBlockTexture,0,"If set to >=0, all block faces will be rendered using this texture index"
-field_147841_ay,colorBlueBottomLeft,0,Blue color value for the bottom left corner
-field_147842_e,flipTexture,0,Set to true if the texture should be flipped horizontally during render*Face
-field_147843_b,fancyGrass,0,Fancy grass side matching biome
-field_147844_c,useInventoryTint,0,
-field_147845_a,blockAccess,0,The IBlockAccess used by this instance of RenderBlocks
-field_147846_at,colorGreenTopLeft,0,Green color value for the top left corner
-field_147847_n,lockBlockBounds,0,
-field_147848_as,colorRedTopRight,0,Red color value for the top right corner
-field_147849_o,partialRenderBounds,0,
-field_147850_ar,colorRedBottomRight,0,Red color value for the bottom right corner
-field_147851_l,renderMinZ,0,The minimum Z value for rendering (default 0.0).
-field_147852_aq,colorRedBottomLeft,0,Red color value for the bottom left corner
-field_147853_m,renderMaxZ,0,The maximum Z value for rendering (default 1.0).
-field_147854_ax,colorBlueTopLeft,0,Blue color value for the top left corner
-field_147855_j,renderMinY,0,The minimum Y value for rendering (default 0.0).
-field_147856_aw,colorGreenTopRight,0,Green color value for the top right corner
-field_147857_k,renderMaxY,0,The maximum Y value for rendering (default 1.0).
-field_147858_av,colorGreenBottomRight,0,Green color value for the bottom right corner
-field_147859_h,renderMinX,0,The minimum X value for rendering (default 0.0).
-field_147860_au,colorGreenBottomLeft,0,Green color value for the bottom left corner
-field_147861_i,renderMaxX,0,The maximum X value for rendering (default 1.0).
-field_147862_ak,aoBrightnessXZPP,0,Ambient occlusion brightness XZPP
-field_147863_w,enableAO,0,Whether ambient occlusion is enabled or not
-field_147864_al,brightnessTopLeft,0,Brightness top left
-field_147865_v,uvRotateBottom,0,
-field_147866_ai,aoBrightnessXZPN,0,Ambient occlusion brightness XZPN
-field_147867_u,uvRotateTop,0,
-field_147868_aj,aoBrightnessXZNP,0,Ambient occlusion brightness XZNP
-field_147869_t,uvRotateNorth,0,
-field_147870_ao,brightnessTopRight,0,Brightness top right
-field_147871_s,uvRotateSouth,0,
-field_147872_ap,colorRedTopLeft,0,Red color value for the top left corner
-field_147873_r,uvRotateWest,0,
-field_147874_am,brightnessBottomLeft,0,Brightness bottom left
-field_147875_q,uvRotateEast,0,
-field_147876_an,brightnessBottomRight,0,Brightness bottom right
-field_147877_p,minecraftRB,0,
-field_147878_ac,aoBrightnessYZPN,0,Ambient occlusion brightness YZPN
-field_147879_ad,aoBrightnessXYZPPN,0,Ambient occlusion brightness XYZPPN
-field_147880_aa,aoBrightnessXYNP,0,Ambient occlusion brightness XYNP
-field_147881_ab,aoBrightnessXYZNPP,0,Ambient occlusion brightness XYZNPP
-field_147882_ag,aoBrightnessXYZPPP,0,Ambient occlusion brightness XYZPPP
-field_147883_ah,aoBrightnessXZNN,0,Ambient occlusion brightness XZNN
-field_147884_z,aoLightValueScratchXYZNNP,0,Used as a scratch variable for ambient occlusion on the north/bottom/west corner.
-field_147885_ae,aoBrightnessXYPP,0,Ambient occlusion brightness XYPP
-field_147886_y,aoLightValueScratchXYNN,0,Used as a scratch variable for ambient occlusion between the bottom face and the north face.
-field_147887_af,aoBrightnessYZPP,0,Ambient occlusion brightness YZPP
-field_147888_x,aoLightValueScratchXYZNNN,0,Used as a scratch variable for ambient occlusion on the north/bottom/east corner.
-field_147893_C,tileEntities,0,
-field_147894_y,vertexState,0,
-field_147895_x,tileEntityRenderers,0,All the tile entities that have special rendering code for this chunk
-field_147908_f,staticEntity,0,
-field_147913_i,renderBlocksRi,0,
-field_147923_a,logger,0,
-field_147959_c,logger,0,
-field_147966_k,useAnisotropicFiltering,0,
-field_147967_a,logger,0,
-field_147968_d,mipmapLevelHolder,0,
-field_147971_a,mipmapLevelStitcher,0,
-field_148001_b,defaultShaderUniform,0,
-field_148002_c,staticShaderManager,0,
-field_148003_a,logger,0,
-field_148029_f,listFramebuffers,0,
-field_148030_g,projectionMatrix,0,
-field_148031_d,listShaders,0,
-field_148032_e,mapFramebuffers,0,
-field_148033_b,resourceManager,0,
-field_148034_c,shaderGroupName,0,
-field_148035_a,mainFramebuffer,0,
-field_148038_h,mainFramebufferWidth,0,
-field_148039_i,mainFramebufferHeight,0,
-field_148046_f,listAuxWidths,0,
-field_148047_g,listAuxHeights,0,
-field_148048_d,listAuxFramebuffers,0,
-field_148049_e,listAuxNames,0,
-field_148050_b,framebufferOut,0,
-field_148051_c,manager,0,
-field_148052_a,framebufferIn,0,
-field_148053_h,projectionMatrix,0,
-field_148079_b,staticShaderLinkHelper,0,
-field_148080_a,logger,0,
-field_148104_a,logger,0,
-field_148149_f,slotHeight,0,The height of a slot.
-field_148150_g,mouseX,0,
-field_148151_d,right,0,
-field_148152_e,left,0,
-field_148153_b,top,0,The top of the slot container. Affects the overlays and scrolling.
-field_148154_c,bottom,0,The bottom of the slot container. Affects the overlays and scrolling.
-field_148155_a,width,0,
-field_148156_n,scrollDownButtonID,0,The buttonID of the button used to scroll down
-field_148157_o,initialClickY,0,Where the mouse was in the window when you first clicked to scroll
-field_148158_l,height,0,
-field_148159_m,scrollUpButtonID,0,The buttonID of the button used to scroll up
-field_148160_j,headerPadding,0,
-field_148161_k,mc,0,
-field_148162_h,mouseY,0,
-field_148164_v,enabled,0,
-field_148165_u,hasListHeader,0,
-field_148166_t,showSelectionBox,0,Set to true if a selected element in this gui will show an outline box
-field_148167_s,lastClicked,0,The time when this button was last clicked.
-field_148168_r,selectedElement,0,The element in the list that was selected
-field_148169_q,amountScrolled,0,How far down this slot has been scrolled
-field_148170_p,scrollMultiplier,0,What to multiply the amount you moved your mouse by (used for slowing down scrolling when over the items and not on the scroll bar)
-field_148188_n,maxListLabelWidth,0,
-field_148189_l,mc,0,
-field_148190_m,listEntries,0,
-field_148196_n,lanScanEntry,0,
-field_148200_k,owner,0,
-field_148205_k,mc,0,
-field_148216_n,statSorter,0,
-field_148219_m,statsHolder,0,
-field_148251_b,textureManager,0,
-field_148252_c,loadedMaps,0,
-field_148253_a,mapIcons,0,
-field_148257_b,playerID,0,
-field_148258_c,token,0,
-field_148261_a,logger,0,
-field_148270_M,valueStep,0,
-field_148271_N,valueMin,0,
-field_148272_O,valueMax,0,
-field_148280_d,btnChangeKeyBinding,0,
-field_148281_e,btnReset,0,
-field_148285_b,labelText,0,
-field_148286_c,labelWidth,0,
-field_148304_a,logger,0,
-field_148322_c,logger,0,
-field_148326_f,logger,2,
-field_148330_a,itemList,0,the list of items in this container
-field_148336_b,rand,0,
-field_148337_c,namePartsArray,0,
-field_148338_a,instance,0,
-field_148536_c,listMipmaps,0,
-field_148546_d,logger,2,
-field_148550_b,logger,0,
-field_148575_b,replaceExisting,0,if true it will override all the sounds from the resourcepacks loaded before
-field_148617_f,loaded,0,Set to true when the SoundManager has been initialised.
-field_148618_g,playTime,0,A counter for how long the sound manager has been running
-field_148619_d,options,0,Reference to the GameSettings object.
-field_148620_e,sndSystem,0,A reference to the sound system.
-field_148621_b,logger,0,
-field_148622_c,sndHandler,0,A reference to the sound handler.
-field_148623_a,LOG_MARKER,0,The marker used for logging
-field_148624_n,playingSoundsStopTime,0,"The future time in which to stop this sound.  Type: HashMap<String, Integer>"
-field_148625_l,tickableSounds,0,"A subset of playingSounds, this contains only ITickableSounds"
-field_148626_m,delayedSounds,0,"Contains sounds to play in n ticks.  Type: HashMap<ISound, Integer>"
-field_148627_j,playingSoundPoolEntries,0,"A HashMap<String, SoundPoolEntry> of the playing sounds."
-field_148628_k,categorySounds,0,"Contains sounds mapped by category. Type: Multimap<SoundCategory, String>"
-field_148629_h,playingSounds,0,"Identifiers of all currently playing sounds. Type: HashBiMap<String, ISound>"
-field_148630_i,invPlayingSounds,0,"Inverse map of currently playing sounds, automatically mirroring changes in original map"
-field_148643_j,maxDelay,0,
-field_148646_i,minDelay,0,
-field_148657_b,logger,0,
-field_148731_f,eventVolume,0,
-field_148733_e,eventPitch,0,
-field_148734_b,rnd,0,
-field_148736_a,soundPool,0,A composite (List) of ISoundEventAccessors
-field_148743_a,logger,2,
-field_148759_a,underlyingIntegerMap,2,The backing store that maps Integers to objects.
-field_148823_f,framebufferSupported,0,
-field_148824_g,shadersSupported,0,
-field_148825_d,anisotropicFilteringSupported,0,
-field_148826_e,anisotropicFilteringMax,0,
-field_148827_a,openGL21,0,
-field_148828_i,openGL14,0,
-field_148841_a,logger,2,
-field_148859_d,metadata,2,Used only for vanilla tile entities
-field_148860_e,nbt,2,
-field_148861_b,y,2,
-field_148862_c,z,2,
-field_148863_a,x,2,
-field_148919_a,chatComponent,2,
-field_148927_a,logger,2,
-field_149094_d,z,2,
-field_149095_b,x,2,
-field_149096_c,y,2,
-field_149097_a,playerID,2,
-field_149191_a,mapId,2,
-field_149246_f,serverWide,2,If true the sound is played across the server
-field_149247_d,yPos,2,
-field_149248_e,zPos,2,
-field_149249_b,soundData,2,can be a block/item id or other depending on the soundtype
-field_149250_c,xPos,2,
-field_149251_a,soundType,2,
-field_149334_b,foodLevel,2,
-field_149335_c,saturationLevel,2,
-field_149336_a,health,2,
-field_149507_d,DiggedBlockFace,2,
-field_149508_e,status,2,"Status of the digging (started, ongoing, broken)."
-field_149509_b,diggedBlockY,2,
-field_149510_c,diggedBlockZ,2,
-field_149511_a,diggedBlockX,2,
-field_149549_f,mode,2,Inventory operation mode
-field_149550_d,actionNumber,2,"A unique number for the action, used for transaction handling"
-field_149551_e,clickedItem,2,The item stack present in the slot
-field_149552_b,slotId,2,Id of the clicked slot
-field_149553_c,usedButton,2,Button used
-field_149554_a,windowId,2,The id of the window which was clicked. 0 for player inventory.
-field_149579_d,placedBlockDirection,2,
-field_149581_b,placedBlockY,2,
-field_149582_c,placedBlockZ,2,
-field_149583_a,placedBlockX,2,
-field_149597_d,requestedState,2,
-field_149598_b,ip,2,
-field_149599_c,port,2,
-field_149600_a,protocolVersion,2,
-field_149622_b,forwardSpeed,2,"Positive for forward, negative for backward"
-field_149624_a,strafeSpeed,2,"Positive for left strafe, negative for right"
-field_149754_D,minZ,2,
-field_149755_E,maxX,2,
-field_149756_F,maxY,2,
-field_149757_G,maxZ,2,
-field_149758_A,isBlockContainer,2,true if the Block contains a Tile Entity
-field_149759_B,minX,2,
-field_149760_C,minY,2,
-field_149761_L,blockIcon,0,
-field_149762_H,stepSound,2,Sound of stepping on the block
-field_149763_I,blockParticleGravity,2,
-field_149764_J,blockMaterial,2,
-field_149765_K,slipperiness,2,Determines how much velocity is maintained while moving on top of this block
-field_149766_f,soundTypeWood,2,the wood sound type
-field_149767_g,soundTypeGravel,2,the gravel sound type
-field_149768_d,textureName,2,
-field_149769_e,soundTypeStone,2,
-field_149770_b,unlocalizedName,2,
-field_149771_c,blockRegistry,2,
-field_149772_a,displayOnCreativeTab,2,
-field_149773_n,soundTypeSnow,2,
-field_149774_o,soundTypeLadder,2,
-field_149775_l,soundTypeCloth,2,
-field_149776_m,soundTypeSand,2,
-field_149777_j,soundTypeMetal,2,
-field_149778_k,soundTypeGlass,2,
-field_149779_h,soundTypeGrass,2,
-field_149780_i,soundTypePiston,2,
-field_149781_w,blockResistance,2,
-field_149782_v,blockHardness,2,Indicates how many hits it takes to break a block.
-field_149783_u,useNeighborBrightness,2,Flag if block should use the brightest neighbor light value as its own
-field_149784_t,lightValue,2,Amount of light emitted
-field_149785_s,translucent,2,
-field_149786_r,lightOpacity,2,How much light is subtracted for going through this block
-field_149787_q,fullBlock,2,
-field_149788_p,soundTypeAnvil,2,
-field_149789_z,needsRandomTick,2,Flags whether or not this block is of a type that needs random ticking. Ref-counted by ExtendedBlockStorage in order to broadly cull a chunk from the random chunk update list for efficiency's sake.
 field_149790_y,enableStats,2,
 field_149791_x,blockConstructorCalled,2,
-field_149823_b,iconWet,0,The texture to use for the top of wet (watered) farmland.
-field_149824_a,iconDry,0,The texture to use for the top of dry farmland.
 field_149832_M,fallInstantly,2,
-field_149833_b,anvilRenderSide,0,
 field_149834_a,anvilDamageNames,2,
 field_149835_N,anvilIconNames,2,
-field_149836_O,anvilIcons,0,
-field_149837_b,sandIcon,0,
-field_149839_N,redSandIcon,0,
-field_149867_a,icons,0,
-field_149891_b,sunflowerIcons,0,
-field_149893_M,doublePlantBottomIcons,0,
-field_149894_N,doublePlantTopIcons,0,
 field_149914_a,isRepeaterPowered,2,Tells whether the repeater is powered or not
-field_149921_b,hopperOutsideIcon,0,
-field_149923_M,hopperTopIcon,0,
-field_149924_N,hopperInsideIcon,0,
 field_149932_b,isBurning,2,
-field_149935_N,iconTop,0,
-field_149936_O,iconFront,0,Front face of furnace either on or off
 field_149943_a,dispenseBehaviorRegistry,2,Registry for all dispense behaviors.
 field_149955_b,rand,2,
 field_149956_a,chestType,2,"0 : Normal chest, 1 : Trapped chest"
-field_149960_b,iconBrewingStandBase,0,
 field_149961_a,rand,2,
 field_149973_b,repeaterTorchOffset,2,The offsets for the two torches in redstone repeater blocks.
 field_149974_M,repeaterState,2,The states in which the redstone repeater blocks can be.
-field_149980_b,iconEnd,0,
 field_149981_a,bedDirections,2,
-field_149982_M,iconSide,0,
-field_149983_N,iconTop,0,
 field_149992_a,logger,2,
 field_149995_b,name,2,
 field_149996_a,ignoreSimilarity,2,
 field_150004_a,isFullBlock,2,
-field_150022_b,iconEndPortalFrameEye,0,
-field_150023_a,iconEndPortalFrameTop,0,
-field_150028_b,iconTop,0,
-field_150029_a,iconInner,0,
-field_150030_M,iconBottom,0,
-field_150037_b,iconBottom,0,
-field_150038_a,iconTop,0,
-field_150039_M,iconInner,0,
-field_150040_b,iconBottom,0,
-field_150041_a,iconTop,0,
 field_150047_a,wooden,2,
 field_150053_a,isPowered,2,
 field_150067_a,name,2,
-field_150081_b,innerTopIcon,0,Only visible when piston is extended
 field_150082_a,isSticky,2,This piston is the sticky one?
-field_150083_M,bottomIcon,0,Bottom side texture
-field_150084_N,topIcon,0,Top icon of piston depends on (either sticky or normal)
-field_150180_P,redstoneLineOverlayIcon,0,
 field_150181_a,canProvidePower,2,
-field_150182_M,redstoneCrossIcon,0,
-field_150183_N,redstoneLineIcon,0,
-field_150184_O,redstoneCrossOverlayIcon,0,
-field_150201_a,melonTopIcon,0,
 field_150243_f,strikethrough,2,
 field_150244_g,obfuscated,2,
 field_150245_d,italic,2,
@@ -1445,7 +489,6 @@ field_150901_e,itemRegistry,2,
 field_150907_b,cooked,2,"Indicates whether this fish is ""cooked"" or not."
 field_150914_c,effectiveBlocksTool,2,
 field_150915_c,effectiveBlocks,2,
-field_150920_d,dyeIconArray,0,"Contains all dye icons, parsed from ItemDye.dyeIcons"
 field_150921_b,dyeIcons,2,
 field_150922_c,dyeColors,2,
 field_150923_a,dyeColorNames,2,
@@ -1465,8 +508,6 @@ field_150989_l,cookedHealAmount,2,The amount that eating the cooked version of t
 field_150990_m,cookedSaturationModifier,2,The saturation modifier to apply to the heal amount when the player eats the cooked version of this fish.
 field_150991_j,uncookedHealAmount,2,The amount that eating the uncooked version of this fish should heal the player.
 field_150992_k,uncookedSaturationModifier,2,The saturation modifier to apply to the heal amount when the player eats the uncooked version of this fish.
-field_150993_h,uncookedIcon,0,The icon for the uncooked version of this fish.
-field_150994_i,cookedIcon,0,The icon for the cooked version of this fish.
 field_151002_e,theItem,2,
 field_151004_a,underlyingSet,2,The set for this ForwardingSet to forward methods to.
 field_151005_D,golden_pickaxe,2,
@@ -1647,7 +688,6 @@ field_151227_b,logger,2,
 field_151228_a,downloadThreadsStarted,2,The number of download threads that we have started so far.
 field_151234_b,logger,2,
 field_151242_b,multiplyDeBruijnBitPosition,2,"Though it looks like an array, this is really more like a mapping.  Key (index of this array) is the upper 5 bits of the result of multiplying a 32-bit unsigned integer by the B(2, 5) De Bruijn sequence 0x077CB531.  Value (value stored in the array) is the unique index (from the right) of the leftmost one-bit in a 32-bit unsigned integer that can cause the upper 5 bits to get that value.  Used for highly optimized ""find the log-base-2 of this number"" calculations."
-field_151245_t,iconItemStack,0,
 field_151249_a,logger,2,
 field_151254_d,locationOfBlockChange,2,
 field_151258_a,logger,2,
@@ -1675,30 +715,7 @@ field_151369_A,lure,2,
 field_151370_z,luckOfTheSea,2,
 field_151430_f,resourceKey,2,
 field_151433_e,chatVisibility,2,
-field_151441_H,showInventoryAchievementHint,0,
-field_151442_I,mipmapLevels,0,
-field_151443_J,anisotropicFiltering,0,
-field_151444_V,keyBindSprint,0,
-field_151445_Q,keyBindInventory,0,
-field_151446_aD,mapSoundLevels,0,
-field_151447_Z,keyBindScreenshot,0,
-field_151448_g,fboEnable,0,
-field_151449_az,typeListString,0,
-field_151450_ay,gson,0,
-field_151451_c,renderDistanceChunks,0,
-field_151452_as,saturation,0,
-field_151453_l,resourcePacks,0,
-field_151454_ax,logger,0,
-field_151455_aw,forceUnicodeFont,0,
-field_151456_ac,keyBindsHotbar,0,
-field_151457_aa,keyBindTogglePerspective,0,
-field_151458_ab,keyBindSmoothCamera,0,
-field_151471_f,keyCategory,0,
-field_151472_e,keyCodeDefault,0,
-field_151473_c,keybindSet,0,
-field_151474_i,pressTime,0,
 field_151476_f,logger,2,
-field_151477_a,optionIds,0,
 field_151478_a,logger,2,
 field_151479_b,logger,2,
 field_151480_b,logger,2,
@@ -1785,54 +802,15 @@ field_151678_z,purpleColor,2,
 field_151679_y,cyanColor,2,
 field_151680_x,silverColor,2,
 field_151687_a,logger,2,
-field_152127_m,streamIndicator,0,
-field_152175_f,supportedProtocols,0,
-field_152176_i,serverResourcePacks,0,
-field_152177_g,time,0,
-field_152350_aA,skinManager,0,
-field_152351_aB,scheduledTasks,0,
-field_152352_aC,mcThread,0,
-field_152353_at,stream,0,
-field_152354_ay,mojangLogo,0,
-field_152355_az,sessionService,0,
-field_152356_J,twitchDetails,0,
 field_152364_T,authService,2,
 field_152365_W,profileRepo,2,
 field_152366_X,profileCache,2,
 field_152367_a,USER_CACHE_FILE,2,
-field_152391_aS,STREAM_COMPRESSIONS,0,
-field_152392_aT,STREAM_CHAT_MODES,0,
-field_152393_aU,STREAM_CHAT_FILTER_MODES,0,
-field_152394_aV,STREAM_MIC_MODES,0,
-field_152395_am,keyBindFullscreen,0,
-field_152396_an,keyBindStreamStartStop,0,
-field_152397_ao,keyBindStreamPauseUnpause,0,
-field_152398_ap,keyBindStreamCommercials,0,
-field_152399_aq,keyBindStreamToggleMic,0,
-field_152400_J,streamBytesPerPixel,0,
-field_152401_K,streamMicVolume,0,
-field_152402_L,streamGameVolume,0,
-field_152403_M,streamKbps,0,
-field_152404_N,streamFps,0,
-field_152405_O,streamCompression,0,
-field_152406_P,streamSendMetadata,0,
-field_152407_Q,streamPreferredServer,0,
-field_152408_R,streamChatEnabled,0,
-field_152409_S,streamChatUserFilter,0,
-field_152410_T,streamMicToggleBehavior,0,
-field_152426_d,sessionType,0,
-field_152429_d,sessionType,0,
-field_152441_a,locationStreamIndicator,0,
-field_152442_b,mc,0,
 field_152451_a,INFINITE,2,
 field_152452_b,spaceAllocated,2,
 field_152453_c,spaceRead,2,
 field_152461_c,logMarkerStat,2,
 field_152463_r,isEncrypted,2,
-field_152587_j,resourceMode,0,
-field_152588_l,lanServer,0,
-field_152594_d,motd,0,
-field_152630_a,SKIN_PART_TYPES,0,
 field_152642_a,value,2,
 field_152659_a,dateFormat,2,
 field_152660_b,gson,2,
@@ -1843,26 +821,12 @@ field_152695_c,saveFile,2,
 field_152696_d,values,2,
 field_152697_e,lanServer,2,
 field_152698_f,saveFileFormat,2,
-field_152793_a,DEFAULT_SKIN,0,
-field_152794_b,THREAD_POOL,0,
-field_152795_c,textureManager,0,
-field_152796_d,skinCacheDir,0,
-field_152797_e,sessionService,0,
-field_152798_f,skinCacheLoader,0,
-field_152861_B,logger,0,
-field_152879_o,broadcastState,0,
-field_152886_v,channelInfo,0,
-field_152951_c,broadcastController,0,
-field_153018_p,LOGGER,0,
 field_154349_a,LOG,1,
 field_154351_c,acceptedEULA,1,
 field_155771_h,logger,1,
 field_164249_a,serverGuiFont,1,
 field_70009_b,buffer,2,RCon string buffer for log.
 field_70010_a,instance,2,Single instance of RConConsoleSource
-field_70116_cv,serverPosZ,0,
-field_70117_cu,serverPosY,0,
-field_70118_ct,serverPosX,0,
 field_70121_D,boundingBox,2,Axis aligned bounding box.
 field_70122_E,onGround,2,
 field_70123_F,isCollidedHorizontally,2,True if after a move this entity has collided with something on X- or Z-axis
@@ -1961,11 +925,8 @@ field_70274_d,boatX,2,
 field_70275_e,boatY,2,
 field_70276_b,speedMultiplier,2,
 field_70277_c,boatPosRotationIncrements,2,
-field_70278_an,velocityZ,0,
 field_70279_a,isBoatEmpty,2,true if no player in boat
-field_70280_j,velocityY,0,
 field_70281_h,boatPitch,2,
-field_70282_i,velocityX,0,
 field_70290_d,hoverStart,2,The EntityItem's random initial float height.
 field_70291_e,health,2,"The health of this EntityItem. (For example, damage for tools)"
 field_70292_b,age,2,The age of this EntityItem (used to animate it up and down as well as expire it)
@@ -2256,28 +1217,10 @@ field_71163_h,prevRenderArmYaw,0,
 field_71164_i,prevRenderArmPitch,0,
 field_71168_co,ticksSinceMovePacket,0,"Counter used to ensure that the server sends a move packet (Packet11, 12 or 13) to the client at least once a second."
 field_71169_cp,hasSetHealth,0,has the client player's health been set?
-field_71170_cm,wasSneaking,0,Used to check if the player has started or stopped sneaking and needs to tell the server.
-field_71171_cn,wasSprinting,0,Used to check if the player has started or stopped sprinting and needs to tell the server.
-field_71172_ck,oldRotationPitch,0,
-field_71173_cl,wasOnGround,0,Check if was on ground last update
-field_71174_a,sendQueue,0,
-field_71175_ci,oldPosZ,0,
-field_71176_cj,oldRotationYaw,0,
-field_71177_cg,oldMinY,0,Old Minimum Y of the bounding box
-field_71178_ch,oldPosY,0,
-field_71179_j,oldPosX,0,
-field_71180_f,otherPlayerMPYaw,0,
-field_71181_g,otherPlayerMPPitch,0,
-field_71182_d,otherPlayerMPY,0,
-field_71183_e,otherPlayerMPZ,0,
-field_71184_b,otherPlayerMPPosRotationIncrements,0,
-field_71185_c,otherPlayerMPX,0,
-field_71186_a,isItemInUse,0,
 field_71280_D,buildLimit,2,Maximum build height.
 field_71284_A,pvpEnabled,2,Indicates whether PvP is active on the server or not.
 field_71285_B,allowFlight,2,Determines if flight is allowed or not.
 field_71286_C,motd,2,The server MOTD string.
-field_71287_L,worldName,0,
 field_71288_M,isDemo,2,
 field_71289_N,enableBonusChest,2,
 field_71290_O,worldIsBeingDeleted,2,"If true, there is no need to save chunks or stop the server, because that is already being done."
@@ -2316,154 +1259,6 @@ field_71339_n,theRConThreadMain,1,
 field_71340_o,settings,1,
 field_71341_l,pendingCommandList,1,
 field_71342_m,theRConThreadQuery,1,
-field_71345_q,lanServerPing,0,
-field_71346_p,isPublic,0,
-field_71348_o,isGamePaused,0,
-field_71349_l,mc,0,The Minecraft instance.
-field_71350_m,theWorldSettings,0,
-field_71412_D,mcDataDir,0,
-field_71415_G,inGameHasFocus,0,Does the actual gameplay have focus. If so then mouse and keys will effect the player instead of menus.
-field_71417_B,mouseHelper,0,Mouse helper instance.
-field_71419_L,debugUpdateTime,0,Approximate time (in ms) of last update to debug string
-field_71420_M,fpsCounter,0,holds the current fps
-field_71421_N,prevFrameTime,0,
-field_71422_O,currentServerData,0,
-field_71423_H,systemTime,0,
-field_71424_I,mcProfiler,0,The profiler instance
-field_71425_J,running,0,Set to true to keep the game loop running. Set to false by shutdown() to allow the game loop to exit cleanly.
-field_71426_K,debug,0,String that shows the debug information
-field_71427_U,usageSnooper,0,Instance of PlayerUsageSnooper.
-field_71428_T,timer,0,
-field_71429_W,leftClickCounter,0,Mouse left click counter
-field_71431_Q,fullscreen,0,
-field_71432_P,theMinecraft,0,Set to 'this' in Minecraft constructor; used by some settings get methods
-field_71433_S,crashReporter,0,Instance of CrashReport.
-field_71434_R,hasCrashed,0,
-field_71435_Y,tempDisplayHeight,0,Display height
-field_71436_X,tempDisplayWidth,0,Display width
-field_71437_Z,theIntegratedServer,0,Instance of IntegratedServer.
-field_71438_f,renderGlobal,0,
-field_71439_g,thePlayer,0,
-field_71440_d,displayHeight,0,
-field_71441_e,theWorld,0,
-field_71442_b,playerController,0,
-field_71443_c,displayWidth,0,
-field_71444_a,memoryReserve,0,A 10MiB preallocation to ensure the heap is reasonably sized.
-field_71445_n,isGamePaused,0,
-field_71446_o,renderEngine,0,The RenderEngine instance used by Minecraft
-field_71449_j,session,0,
-field_71451_h,renderViewEntity,0,"The Entity from which the renderer determines the render viewpoint. Currently is always the parent Minecraft class's 'thePlayer' instance. Modification of its location, rotation, or other settings at render time will modify the camera likewise, with the caveat of triggering chunk rebuilds as it moves, making it unsuitable for changing the viewpoint mid-render."
-field_71452_i,effectRenderer,0,
-field_71453_ak,myNetworkManager,0,
-field_71454_w,skipRenderWorld,0,Skip render world
-field_71455_al,integratedServerIsRunning,0,
-field_71456_v,ingameGUI,0,
-field_71457_ai,joinPlayerCounter,0,Join player counter
-field_71458_u,guiAchievement,0,Gui achievement
-field_71459_aj,isDemo,0,
-field_71460_t,entityRenderer,0,
-field_71461_s,loadingScreen,0,
-field_71462_r,currentScreen,0,The GuiScreen that's being displayed at the moment.
-field_71464_q,standardGalacticFontRenderer,0,
-field_71465_an,debugProfilerName,0,Profiler currently displayed in the debug screen pie chart
-field_71466_p,fontRendererObj,0,The font renderer used for displaying and measuring text
-field_71467_ac,rightClickDelayTimer,0,"When you place a block, it's set to 6, decremented once per tick, when it's 0, you can place another block."
-field_71468_ad,refreshTexturePacksScheduled,0,"Checked in Minecraft's while(running) loop, if true it's set to false and the textures refreshed."
-field_71469_aa,saveLoader,0,
-field_71470_ab,debugFPS,0,"This is set to fpsCounter every debug screen update, and is shown on the debug screen. It's also sent as part of the usage snooping."
-field_71474_y,gameSettings,0,The game settings that currently hold effect.
-field_71475_ae,serverName,0,
-field_71476_x,objectMouseOver,0,The ray trace hit that the mouse is over.
-field_71477_af,serverPort,0,
-field_71510_d,crashReportFile,2,File of crash report.
-field_71511_b,cause,2,"The Throwable that is the ""cause"" for this crash and Crash Report."
-field_71512_c,crashReportSections,2,Holds the keys and values of all crash report sections.
-field_71513_a,description,2,Description of the crash report.
-field_71533_a,theAdmin,2,
-field_71561_b,commandSet,2,The set of ICommand objects currently loaded.
-field_71562_a,commandMap,2,Map of Strings to the ICommand objects they represent
-field_71567_b,allowedCharactersArray,2,Array of the special characters that are allowed in any text drawing of Minecraft.
-field_71572_b,posY,2,the y coordinate
-field_71573_c,posZ,2,the z coordinate
-field_71574_a,posX,2,
-field_71576_a,theReportedExceptionCrashReport,2,Instance of CrashReport.
-field_71577_f,enderEyeMetaToDirection,2,
-field_71578_g,rotateLeft,2,Maps a direction to that to the left of it.
-field_71579_d,facingToDirection,2,Maps a Facing value (3D) to a Direction value (2D).
-field_71580_e,rotateOpposite,2,Maps a direction to that opposite of it.
-field_71581_b,offsetZ,2,
-field_71582_c,directionToFacing,2,Maps a Direction value (2D) to a Facing value (3D).
-field_71583_a,offsetX,2,
-field_71584_h,bedDirection,2,
-field_71585_d,offsetsZForSide,2,gives the offset required for this axis to get the block at that side.
-field_71586_b,offsetsXForSide,2,gives the offset required for this axis to get the block at that side.
-field_71587_c,offsetsYForSide,2,gives the offset required for this axis to get the block at that side.
-field_71588_a,oppositeSide,2,Converts a side to the opposite side. This is the same as XOR'ing it with 1.
-field_72307_f,hitVec,2,The vector position of the hit
-field_72308_g,entityHit,2,The hit entity
-field_72309_d,blockZ,2,z coordinate of the block ray traced against
-field_72310_e,sideHit,2,"Which side was hit. If its -1 then it went the full length of the ray trace. Bottom = 0, Top = 1, East = 2, West = 3, North = 4, South = 5."
-field_72311_b,blockX,2,x coordinate of the block ray traced against
-field_72312_c,blockY,2,y coordinate of the block ray traced against
-field_72313_a,typeOfHit,2,"What type of ray trace hit was this? 0 = block, 1 = entity"
-field_72334_f,maxZ,2,
-field_72336_d,maxX,2,
-field_72337_e,maxY,2,
-field_72338_b,minY,2,
-field_72339_c,minZ,2,
-field_72340_a,minX,2,
-field_72400_f,mcServer,2,Reference to the MinecraftServer object.
-field_72401_g,bannedPlayers,2,
-field_72402_d,viewDistance,2,
-field_72403_e,dateFormat,2,
-field_72404_b,playerEntityList,2,A list of player entities that exist on this server.
-field_72405_c,maxPlayers,2,The maximum number of players that can be connected at a time.
-field_72407_n,commandsAllowedForAll,2,True if all players are allowed to use commands (cheats).
-field_72408_o,playerPingIndex,2,"index into playerEntities of player to ping, updated every tick; currently hardcoded to max at 200 players"
-field_72409_l,whiteListEnforced,2,Server setting to only allow OPs and whitelisted players to join the server.
-field_72410_m,gameType,2,
-field_72411_j,whiteListedPlayers,2,The Set of all whitelisted players.
-field_72412_k,playerNBTManagerObj,2,Reference to the PlayerNBTManager object.
-field_72413_h,bannedIPs,2,
-field_72414_i,ops,2,A set containing the OPs.
-field_72416_e,hostPlayerData,0,"Holds the NBT data for the host player's save file, so this can be written to level.dat."
-field_72448_b,yCoord,2,Y coordinate of Vec3D
-field_72449_c,zCoord,2,Z coordinate of Vec3D
-field_72450_a,xCoord,2,X coordinate of Vec3D
-field_72595_f,requestIdAsString,1,The request ID stored as a String
-field_72596_d,requestId,1,A client-provided request ID associated with this query.
-field_72597_e,challengeValue,1,A unique string of bytes used to verify client auth
-field_72598_b,timestamp,1,The creation timestamp for this auth
-field_72599_c,randomChallenge,1,A random integer value to be used for client response authentication
-field_72614_f,serverSocketList,1,A list of registered ServerSockets
-field_72616_e,socketList,1,A list of registered DatagramSockets
-field_72617_b,server,1,Reference to the IServer object.
-field_72618_c,rconThread,1,Thread for this runnable class
-field_72619_a,running,1,"True if the Thread is running, false otherwise"
-field_72629_g,lastAuthCheckTime,1,The time of the last client auth check
-field_72630_n,buffer,1,A buffer for incoming DatagramPackets
-field_72631_o,incomingPacket,1,Storage for incoming DatagramPackets
-field_72632_l,worldName,1,The name of the currently loaded world
-field_72633_m,querySocket,1,The remote socket querying the server
-field_72634_j,maxPlayers,1,The maximum number of players allowed on the server
-field_72635_k,serverMotd,1,The current server message of the day
-field_72636_h,queryPort,1,The RCon query port
-field_72637_i,serverPort,1,Port the server is running on
-field_72638_v,lastQueryResponseTime,1,The time of the last query response sent
-field_72639_u,output,1,The RConQuery output stream
-field_72640_t,time,1,"The time that this RConThreadQuery was constructed, from (new Date()).getTime()"
-field_72641_s,queryClients,1,A map of SocketAddress objects to RConThreadQueryAuth objects
-field_72642_r,serverHostname,1,The hostname of the running server
-field_72643_q,queryHostname,1,The hostname of this query server
-field_72647_g,rconPort,1,Port RCon is running on
-field_72648_l,clientThreads,1,A map of client addresses to their running Threads
-field_72649_j,serverSocket,1,The RCon ServerSocket.
-field_72650_k,rconPassword,1,The RCon password
-field_72651_h,serverPort,1,Port the server is running on
-field_72652_i,hostname,1,Hostname RCon is running on
-field_72657_g,loggedIn,1,"True if the client has succefssfully logged into the RCon, otherwise false"
-field_72658_j,rconPassword,1,The RCon password
-field_72659_h,clientSocket,1,The client's Socket connection
 field_72660_i,buffer,1,A buffer for incoming Socket data
 field_72666_a,hexDigits,1,Translation array of decimal to hex digits
 field_72673_b,output,1,ByteArrayOutputStream wrapper
@@ -2474,48 +1269,6 @@ field_72698_e,playerViewRadius,2,Number of chunks the server sends to the client
 field_72699_b,players,2,players in the current instance
 field_72700_c,playerInstances,2,the hash of all playerInstances created
 field_72701_a,theWorldServer,2,
-field_72737_D,maxBlockZ,0,Maximum block Z
-field_72738_E,damagedBlocks,0,Stores blocks currently being broken. Key is entity ID of the thing doing the breaking. Value is a DestroyBlockProgress
-field_72739_F,renderDistanceChunks,0,
-field_72740_G,renderEntitiesStartupCounter,0,Render entities startup counter (init value=2)
-field_72741_A,minBlockZ,0,Minimum block Z
-field_72742_B,maxBlockX,0,Maximum block X
-field_72743_C,maxBlockY,0,Maximum block Y
-field_72744_L,renderersBeingClipped,0,How many renderers are being clipped by the frustrum this frame
-field_72745_M,renderersBeingOccluded,0,How many renderers are being occluded this frame
-field_72746_N,renderersBeingRendered,0,How many renderers are actually being rendered this frame
-field_72747_O,renderersSkippingRenderPass,0,How many renderers are skipping rendering due to not having a render pass this frame
-field_72748_H,countEntitiesTotal,0,Count entities total
-field_72749_I,countEntitiesRendered,0,Count entities rendered
-field_72750_J,countEntitiesHidden,0,Count entities hidden
-field_72751_K,renderersLoaded,0,How many renderers are loaded this frame that try to be rendered
-field_72752_Q,worldRenderersCheckIndex,0,World renderers check index
-field_72753_P,dummyRenderInt,0,Dummy render int
-field_72754_S,allRenderLists,0,All render lists (fixed length 4)
-field_72755_R,glRenderLists,0,List of OpenGL lists for the current render pass
-field_72756_f,prevSortZ,0,Previous Z position when the renderers were sorted. (Once the distance moves more than 4 units they will be resorted)
-field_72757_g,frustumCheckOffset,0,The offset used to determine if a renderer is one of the sixteenth that are being updated this frame
-field_72758_d,prevSortX,0,Previous x position when the renderers were sorted. (Once the distance moves more than 4 units they will be resorted)
-field_72759_e,prevSortY,0,Previous y position when the renderers were sorted. (Once the distance moves more than 4 units they will be resorted)
-field_72761_c,occlusionResult,0,Occlusion query result
-field_72763_n,renderChunksTall,0,
-field_72764_o,renderChunksDeep,0,
-field_72765_l,worldRenderers,0,
-field_72766_m,renderChunksWide,0,
-field_72767_j,worldRenderersToUpdate,0,
-field_72768_k,sortedWorldRenderers,0,
-field_72769_h,theWorld,0,
-field_72770_i,renderEngine,0,The RenderEngine instance used by RenderGlobal
-field_72771_w,glSkyList,0,OpenGL sky list
-field_72772_v,starGLCallList,0,The star GL Call list
-field_72773_u,cloudTickCounter,0,counts the cloud render updates. Used with mod to stagger some updates
-field_72774_t,occlusionEnabled,0,Is occlusion testing enabled
-field_72775_s,glOcclusionQueryBase,0,OpenGL occlusion query base
-field_72777_q,mc,0,A reference to the Minecraft object.
-field_72778_p,glRenderListBase,0,OpenGL render lists base
-field_72779_z,minBlockY,0,Minimum block Y
-field_72780_y,minBlockX,0,Minimum block X
-field_72781_x,glSkyList2,0,OpenGL sky list 2
 field_72782_b,theWorldServer,2,The WorldServer object.
 field_72783_a,mcServer,2,Reference to the MinecraftServer object.
 field_72792_d,maxTrackingDistanceThreshold,2,
@@ -2560,13 +1313,6 @@ field_73018_p,prevThunderingStrength,2,
 field_73019_z,saveHandler,2,
 field_73020_y,chunkProvider,2,Handles chunk operations and caching
 field_73021_x,worldAccesses,2,
-field_73032_d,entityList,0,"Contains all entities for this client, both spawned and non-spawned."
-field_73033_b,clientChunkProvider,0,The ChunkProviderClient instance
-field_73034_c,entityHashSet,0,The hash set of entities handled by this client. Uses the entity's ID as the hash set's key.
-field_73035_a,sendQueue,0,The packets that need to be sent to the server.
-field_73036_L,entitySpawnQueue,0,Contains all entities for this client that were not spawned due to a non-present chunk. The game will attempt to spawn up to 10 pending entities with each subsequent tick until the spawn queue is empty.
-field_73037_M,mc,0,
-field_73038_N,previousActiveChunkSet,0,
 field_73058_d,disableLevelSaving,2,Whether level saving is disabled or not
 field_73059_b,theChunkProviderServer,2,
 field_73061_a,mcServer,2,
@@ -2595,11 +1341,6 @@ field_73098_k,posX,2,
 field_73099_h,curBlockZ,2,
 field_73100_i,curblockDamage,2,
 field_73103_d,demoTimeExpired,2,
-field_73111_d,partialBlockZ,0,
-field_73112_e,partialBlockProgress,0,damage ranges from 1 to 10. -1 causes the client to delete the partial block renderer.
-field_73113_b,partialBlockX,0,
-field_73114_c,partialBlockY,0,
-field_73115_a,miningPlayerEntId,0,"entity ID of the player associated with this partially destroyed Block. Used to identify the Blocks in the client Renderer, max 1 per player on a server"
 field_73126_f,encodedPosZ,2,The encoded entity Z position.
 field_73127_g,encodedRotationYaw,2,The encoded entity yaw rotation.
 field_73128_d,encodedPosX,2,The encoded entity X position.
@@ -2672,11 +1413,6 @@ field_73230_p,worldObj,2,Reference to the World object.
 field_73231_z,biomesForGeneration,2,The biomes that are used to generate the chunk
 field_73232_y,ravineGenerator,2,Holds ravine generator
 field_73233_x,scatteredFeatureGenerator,2,
-field_73235_d,worldObj,0,Reference to the World object.
-field_73236_b,chunkMapping,0,The mapping between ChunkCoordinates and Chunks that ChunkProviderClient maintains.
-field_73237_c,chunkListing,0,"This may have been intended to be an iterable version of all currently loaded chunks (MultiplayerChunkCache), with identical contents to chunkMapping's values. However it is never actually added to."
-field_73238_a,blankChunk,0,The completely empty chunk used by ChunkProviderClient when field_73236_b doesn't contain the requested coordinates.
-field_73244_f,id2ChunkMap,2,map of chunk Id's to Chunk instances
 field_73245_g,loadedChunks,2,
 field_73246_d,serverChunkGenerator,2,chunk generator object. Calls to load nonexistent chunks are forwarded to this object.
 field_73247_e,chunkLoader,2,
@@ -2697,117 +1433,6 @@ field_73695_e,bannedBy,2,
 field_73698_a,dateFormat,2,
 field_73701_b,sender,1,
 field_73702_a,command,1,The command string.
-field_73725_b,mc,0,A reference to the Minecraft object.
-field_73726_c,currentlyDisplayedText,0,The text currently displayed (i.e. the argument to the last call to printText or func_73722_d)
-field_73735_i,zLevel,0,
-field_73837_f,updateCounter,0,
-field_73838_g,recordPlaying,0,The string specifying which record music is playing
-field_73839_d,mc,0,
-field_73840_e,persistantChatGUI,0,ChatGUI instance that retains all previous chat data
-field_73841_b,itemRenderer,0,
-field_73842_c,rand,0,
-field_73843_a,prevVignetteBrightness,0,Previous frame vignette brightness (slowly changes by 1% each frame)
-field_73844_j,recordIsPlaying,0,
-field_73845_h,recordPlayingUpFor,0,How many ticks the record playing message will be displayed
-field_73973_d,buttonResetDemo,0,
-field_73974_b,updateCounter,0,Counts the number of screen updates.
-field_73975_c,splashText,0,The splash message.
-field_73976_a,rand,0,The RNG used by the Main Menu Screen.
-field_73977_n,viewportTexture,0,Texture allocated for the current viewport of the main menu's panorama background.
-field_73978_o,titlePanoramaPaths,0,An array of all the paths to the panorama pictures.
-field_73979_m,panoramaTimer,0,"Timer used to rotate the panorama, increases every tick."
-field_74276_f,lastHRTime,0,"The time reported by the high-resolution clock at the last call of updateTimer(), in seconds"
-field_74277_g,lastSyncSysClock,0,"The time reported by the system clock at the last sync, in milliseconds"
-field_74278_d,timerSpeed,0,A multiplier to make the timer (and therefore the game) go faster or slower.  0.5 makes the game run at half-speed.
-field_74279_e,elapsedPartialTicks,0,"How much time has elapsed since the last tick, in ticks (range: 0.0 - 1.0)."
-field_74280_b,elapsedTicks,0,"How many full ticks have turned over since the last call to updateTimer(), capped at 10."
-field_74281_c,renderPartialTicks,0,"How much time has elapsed since the last tick, in ticks, for use by display rendering routines (range: 0.0 - 1.0).  This field is frozen if the display is paused to eliminate jitter."
-field_74282_a,ticksPerSecond,0,The number of timer ticks per second of real time
-field_74283_j,timeSyncAdjustment,0,"A ratio used to sync the high-resolution clock to the system clock, updated once per second"
-field_74284_h,lastSyncHRClock,0,"The time reported by the high-resolution clock at the last sync, in milliseconds"
-field_74286_b,username,0,
-field_74293_b,pixelBuffer,0,A buffer to hold pixel values returned by OpenGL.
-field_74294_c,pixelValues,0,The built-up array that contains all the pixel values returned by OpenGL.
-field_74295_a,dateFormat,0,
-field_74310_D,keyBindChat,0,
-field_74311_E,keyBindSneak,0,
-field_74312_F,keyBindAttack,0,
-field_74313_G,keyBindUseItem,0,
-field_74314_A,keyBindJump,0,
-field_74316_C,keyBindDrop,0,
-field_74317_L,mc,0,
-field_74318_M,difficulty,0,
-field_74319_N,hideGUI,0,
-field_74320_O,thirdPersonView,0,
-field_74321_H,keyBindPlayerList,0,
-field_74322_I,keyBindPickBlock,0,
-field_74323_J,keyBindCommand,0,
-field_74324_K,keyBindings,0,
-field_74325_U,debugCamEnable,0,
-field_74326_T,smoothCamera,0,Smooth Camera Toggle
-field_74327_W,debugCamRate,0,Change rate for debug camera
-field_74328_V,noclipRate,0,No clipping movement rate
-field_74329_Q,showDebugProfilerChart,0,
-field_74330_P,showDebugInfo,0,true if debug info should be displayed instead of version
-field_74331_S,noclip,0,No clipping for singleplayer
-field_74332_R,lastServer,0,The lastServer string.
-field_74333_Y,gammaSetting,0,
-field_74334_X,fovSetting,0,
-field_74335_Z,guiScale,0,GUI scale
-field_74336_f,viewBobbing,0,
-field_74337_g,anaglyph,0,
-field_74338_d,invertMouse,0,
-field_74341_c,mouseSensitivity,0,
-field_74343_n,chatVisibility,0,
-field_74344_o,chatColours,0,
-field_74345_l,clouds,0,Clouds flag
-field_74347_j,fancyGraphics,0,
-field_74348_k,ambientOcclusion,0,Smooth Lighting
-field_74349_h,advancedOpengl,0,Advanced OpenGL
-field_74350_i,limitFramerate,0,
-field_74351_w,keyBindForward,0,
-field_74352_v,enableVsync,0,
-field_74353_u,fullScreen,0,
-field_74354_ai,optionsFile,0,
-field_74355_t,snooperEnabled,0,
-field_74357_r,chatOpacity,0,
-field_74358_q,chatLinksPrompt,0,
-field_74359_p,chatLinks,0,
-field_74362_aa,particleSetting,0,"Determines amount of particles. 0 = All, 1 = Decreased, 2 = Minimal"
-field_74363_ab,language,0,Game settings language
-field_74364_ag,PARTICLES,0,
-field_74366_z,keyBindRight,0,
-field_74367_ae,GUISCALES,0,GUI scale values
-field_74368_y,keyBindBack,0,
-field_74370_x,keyBindLeft,0,
-field_74375_b,deltaY,0,Mouse delta Y this frame
-field_74377_a,deltaX,0,Mouse delta X this frame
-field_74385_A,enumFloat,0,
-field_74386_B,enumBoolean,0,
-field_74387_C,enumString,0,
-field_74512_d,keyCode,0,
-field_74513_e,pressed,0,because _303 wanted me to call it that(Caironater)
-field_74514_b,hash,0,
-field_74515_c,keyDescription,0,
-field_74516_a,keybindArray,0,
-field_74522_a,colorBuffer,0,Float buffer used to set OpenGL material colors
-field_74530_b,listDummy,0,
-field_74531_a,mapDisplayLists,0,
-field_74541_b,lineString,0,
-field_74542_c,chatLineID,0,"int value to refer to existing Chat Lines, can be 0 which means unreferrable"
-field_74543_a,updateCounterCreated,0,GUI Update Counter value this Line was created at
-field_74586_f,rotationZ,0,The Z component of the entity's yaw rotation
-field_74587_g,rotationYZ,0,The Y component (scaled along the Z axis) of the entity's pitch rotation
-field_74588_d,rotationX,0,The X component of the entity's yaw rotation
-field_74589_e,rotationXZ,0,The combined X and Z components of the entity's pitch rotation
-field_74590_b,objectY,0,The calculated view object Y coordinate
-field_74591_c,objectZ,0,The calculated view object Z coordinate
-field_74592_a,objectX,0,The calculated view object X coordinate
-field_74593_l,objectCoords,0,The computed view object coordinates
-field_74594_j,modelview,0,The current GL modelview matrix
-field_74595_k,projection,0,The current GL projection matrix
-field_74596_h,rotationXY,0,The Y component (scaled along the X axis) of the entity's pitch rotation
-field_74597_i,viewport,0,The current GL viewport
 field_74746_b,tagType,2,The type byte for the tags in the list - they must all be of the same type.
 field_74747_a,tagList,2,The array list containing the tags encapsulated in this list.
 field_74748_a,data,2,The integer value for the tag.
@@ -4008,294 +2633,15 @@ field_78198_b,slimeRightEye,0,The slime's right eye
 field_78199_c,slimeLeftEye,0,The slime's left eye
 field_78200_a,slimeBodies,0,"The slime's bodies, both the inside box and the outside box"
 field_78201_b,squidTentacles,0,The squid's tentacles
-field_78202_a,squidBody,0,The squid's body
-field_78203_f,spiderLeg3,0,Spider's third leg
-field_78204_g,spiderLeg4,0,Spider's fourth leg
-field_78205_d,spiderLeg1,0,Spider's first leg
-field_78206_e,spiderLeg2,0,Spider's second leg
-field_78207_b,spiderNeck,0,The spider's neck box
-field_78208_c,spiderBody,0,The spider's body box
-field_78209_a,spiderHead,0,The spider's head box
-field_78210_j,spiderLeg7,0,Spider's seventh leg
-field_78211_k,spiderLeg8,0,Spider's eight leg
-field_78212_h,spiderLeg5,0,Spider's fifth leg
-field_78213_i,spiderLeg6,0,Spider's sixth leg
-field_78215_f,frontLeg,0,The front leg Model renderer of the dragon
-field_78216_g,rearLegTip,0,The rear leg tip Model renderer of the dragon
-field_78217_d,body,0,The body Model renderer of the dragon
-field_78218_e,rearLeg,0,The rear leg Model renderer of the dragon
-field_78219_b,spine,0,The spine Model renderer of the dragon
-field_78220_c,jaw,0,The jaw Model renderer of the dragon
-field_78221_a,head,0,The head Model renderer of the dragon
-field_78222_l,wingTip,0,The wing tip Model renderer of the dragon
-field_78223_m,partialTicks,0,
-field_78224_j,frontFoot,0,The front foot Model renderer of the dragon
-field_78225_k,wing,0,The wing Model renderer of the dragon
-field_78226_h,frontLegTip,0,The front leg tip Model renderer of the dragon
-field_78227_i,rearFoot,0,The rear foot Model renderer of the dragon
-field_78228_b,glass,0,The glass model for the Ender Crystal.
-field_78229_c,base,0,The base model for the Ender Crystal.
-field_78230_a,cube,0,The cube model for the Ender Crystal.
-field_78232_b,chestBelow,0,The model of the bottom of the chest.
-field_78233_c,chestKnob,0,The chest's knob in the chest model.
-field_78234_a,chestLid,0,The chest lid in the chest's model.
-field_78237_b,nVertices,0,
-field_78238_c,invertNormal,0,
-field_78239_a,vertexPositions,0,
-field_78241_b,texturePositionX,0,
-field_78242_c,texturePositionY,0,
-field_78243_a,vector3D,0,
-field_78246_f,posZ2,0,Z vertex coordinate of upper box corner
-field_78248_d,posX2,0,X vertex coordinate of upper box corner
-field_78249_e,posY2,0,Y vertex coordinate of upper box corner
-field_78250_b,posY1,0,Y vertex coordinate of lower box corner
-field_78251_c,posZ1,0,Z vertex coordinate of lower box corner
-field_78252_a,posX1,0,X vertex coordinate of lower box corner
-field_78253_h,vertexPositions,0,"The (x,y,z) vertex positions and (u,v) texture coordinates for each of the 8 points on a cube"
-field_78254_i,quadList,0,"An array of 6 TexturedQuads, one for each face of a cube"
-field_78285_g,colorCode,0,Array of RGB triplets defining the 16 standard chat colors followed by 16 darker version of the same colors for drop shadows.
-field_78286_d,charWidth,0,Array of width of all the characters in default.png
-field_78287_e,glyphWidth,0,Array of the start/end column (in upper/lower nibble) for every glyph in the /font directory.
-field_78288_b,FONT_HEIGHT,0,the height in pixels of default text
-field_78289_c,fontRandom,0,
-field_78291_n,red,0,Used to specify new red value for the current color.
-field_78292_o,blue,0,Used to specify new blue value for the current color.
-field_78293_l,unicodeFlag,0,"If true, strings should be rendered with Unicode fonts instead of the default.png font"
-field_78294_m,bidiFlag,0,"If true, the Unicode Bidirectional Algorithm should be run before rendering any string."
-field_78295_j,posX,0,Current X coordinate at which to draw the next character.
-field_78296_k,posY,0,Current Y coordinate at which to draw the next character.
-field_78298_i,renderEngine,0,The RenderEngine used to load and setup glyph textures.
-field_78299_w,strikethroughStyle,0,"Set if the ""m"" style (strikethrough) is active in currently rendering string"
-field_78300_v,underlineStyle,0,"Set if the ""n"" style (underlined) is active in currently rendering string"
-field_78301_u,italicStyle,0,"Set if the ""o"" style (italic) is active in currently rendering string"
-field_78302_t,boldStyle,0,"Set if the ""l"" style (bold) is active in currently rendering string"
-field_78303_s,randomStyle,0,"Set if the ""k"" style (random) is active in currently rendering string"
-field_78304_r,textColor,0,Text color of the currently rendering string.
-field_78305_q,alpha,0,Used to speify new alpha value for the current color.
-field_78306_p,green,0,Used to specify new green value for the current color.
-field_78329_d,scaledHeightD,0,
-field_78330_e,scaleFactor,0,
-field_78331_b,scaledHeight,0,
-field_78332_c,scaledWidthD,0,
-field_78333_a,scaledWidth,0,
-field_78388_E,bufferSize,0,The size of the buffers used (in integers).
-field_78394_d,byteBuffer,0,The byte buffer used for GL allocation.
-field_78398_a,instance,0,The static instance of the Tessellator.
-field_78399_n,hasColor,0,Whether the current draw object for this tessellator has color values.
-field_78400_o,hasTexture,0,Whether the current draw object for this tessellator has texture coordinates.
-field_78401_l,brightness,0,
-field_78402_m,color,0,The color (RGBA) value to be used for the following draw call.
-field_78403_j,textureU,0,The first coordinate to be used for the texture.
-field_78404_k,textureV,0,The second coordinate to be used for the texture.
-field_78405_h,rawBuffer,0,Raw integer array.
-field_78406_i,vertexCount,0,The number of vertices to be drawn in the next draw call. Reset to 0 between draw calls.
-field_78407_w,yOffset,0,An offset to be applied along the y-axis for all vertices in this draw call.
-field_78408_v,xOffset,0,An offset to be applied along the x-axis for all vertices in this draw call.
-field_78409_u,drawMode,0,The draw mode currently being used by the tessellator.
-field_78410_t,isColorDisabled,0,Disables all color information for the following draw call.
-field_78411_s,addedVertices,0,The number of vertices manually added to the given draw call. This differs from vertexCount because it adds extra vertices when converting quads to triangles.
-field_78413_q,hasNormals,0,Whether the current draw object for this tessellator has normal values.
-field_78414_p,hasBrightness,0,
-field_78415_z,isDrawing,0,Whether this tessellator is currently in draw mode.
-field_78416_y,normal,0,The normal to be applied to the face being drawn.
-field_78417_x,zOffset,0,An offset to be applied along the z-axis for all vertices in this draw call.
-field_78423_f,cameraZ,0,
-field_78424_g,glLists,0,A list of OpenGL render list IDs rendered by this RenderList.
-field_78425_d,cameraX,0,"The in-world location of the camera, used to translate the world into the proper position for rendering."
-field_78426_e,cameraY,0,
-field_78427_b,renderChunkY,0,
-field_78428_c,renderChunkZ,0,
-field_78429_a,renderChunkX,0,The location of the 16x16x16 render chunk rendered by this RenderList.
-field_78430_h,valid,0,Does this RenderList contain properly-initialized and current data for rendering?
-field_78431_i,bufferFlipped,0,Has glLists been flipped to make it ready for reading yet?
-field_78436_b,imageWidth,0,
-field_78437_c,imageHeight,0,
-field_78438_a,imageData,0,
-field_78450_g,equippedItemSlot,0,"The index of the currently held item (0-8, or -1 if not yet updated)"
-field_78451_d,prevEquippedProgress,0,
-field_78453_b,itemToRender,0,
-field_78454_c,equippedProgress,0,How far the current item has been equipped (0 disequipped and 1 fully up)
-field_78455_a,mc,0,A reference to the Minecraft object.
-field_78485_D,debugCamYaw,0,
-field_78486_E,prevDebugCamYaw,0,
-field_78487_F,debugCamPitch,0,
-field_78488_G,prevDebugCamPitch,0,
-field_78489_A,mouseFilterDummy4,0,Mouse filter dummy 4
-field_78490_B,thirdPersonDistance,0,
-field_78491_C,thirdPersonDistanceTemp,0,Third person distance temp
-field_78492_L,smoothCamPartialTicks,0,Smooth cam partial ticks
-field_78493_M,debugCamFOV,0,
-field_78494_N,prevDebugCamFOV,0,
-field_78495_O,camRoll,0,
-field_78496_H,smoothCamYaw,0,Smooth cam yaw
-field_78497_I,smoothCamPitch,0,Smooth cam pitch
-field_78498_J,smoothCamFilterX,0,Smooth cam filter X
-field_78499_K,smoothCamFilterY,0,Smooth cam filter Y
-field_78500_U,cloudFog,0,Cloud fog mode
-field_78501_T,fovMultiplierTemp,0,FOV multiplier temp
-field_78502_W,cameraYaw,0,
-field_78503_V,cameraZoom,0,
-field_78504_Q,lightmapColors,0,Colors computed in updateLightmap() and loaded into the lightmap emptyTexture
-field_78505_P,prevCamRoll,0,
-field_78506_S,fovModifierHandPrev,0,FOV modifier hand prev
-field_78507_R,fovModifierHand,0,FOV modifier hand
-field_78508_Y,prevFrameTime,0,Previous frame time in milliseconds
-field_78509_X,cameraPitch,0,
-field_78510_Z,renderEndNanoTime,0,End time of last render (ns)
-field_78511_f,torchFlickerDX,0,Torch flicker DX
-field_78512_g,torchFlickerY,0,Torch flicker Y
-field_78513_d,lightmapTexture,0,The texture id of the blocklight/skylight texture used for lighting effects
-field_78514_e,torchFlickerX,0,Torch flicker X
-field_78515_b,anaglyphField,0,"Anaglyph field (0=R, 1=GB)"
-field_78516_c,itemRenderer,0,
-field_78517_a,anaglyphEnable,0,
-field_78518_n,fogColorRed,0,red component of the fog color
-field_78519_o,fogColorGreen,0,green component of the fog color
-field_78521_m,fogColorBuffer,0,Fog color buffer
-field_78522_j,rainYCoords,0,Rain Y coords
-field_78524_h,torchFlickerDY,0,Torch flicker DY
-field_78525_i,rainXCoords,0,Rain X coords
-field_78526_w,mouseFilterYAxis,0,
-field_78527_v,mouseFilterXAxis,0,
-field_78528_u,pointedEntity,0,Pointed entity
-field_78529_t,rendererUpdateCount,0,Entity renderer update count
-field_78530_s,farPlaneDistance,0,
-field_78531_r,mc,0,A reference to the Minecraft object.
-field_78532_q,debugViewDirection,0,"Debug view direction (0=OFF, 1=Front, 2=Right, 3=Back, 4=Left, 5=TiltLeft, 6=TiltRight)"
-field_78533_p,fogColorBlue,0,blue component of the fog color
-field_78534_ac,rainSoundCounter,0,Rain sound counter
-field_78535_ad,fogColor2,0,Fog color 2
-field_78536_aa,lightmapUpdateNeeded,0,"Is set, updateCameraAndRender() calls updateLightmap(); set by updateTorchFlicker()"
-field_78537_ab,random,0,
-field_78538_z,mouseFilterDummy3,0,Mouse filter dummy 3
-field_78539_ae,fogColor1,0,Fog color 1
-field_78540_y,mouseFilterDummy2,0,Mouse filter dummy 2
-field_78541_x,mouseFilterDummy1,0,Mouse filter dummy 1
-field_78549_d,zPosition,0,
-field_78550_b,xPosition,0,
-field_78551_c,yPosition,0,
-field_78552_a,clippingHelper,0,
-field_78554_d,clippingMatrix,0,
-field_78555_b,projectionMatrix,0,
-field_78556_c,modelviewMatrix,0,
-field_78557_a,frustum,0,
-field_78561_f,projectionMatrixBuffer,0,
-field_78562_g,modelviewMatrixBuffer,0,
-field_78563_e,instance,0,
-field_78721_f,itemRenderer,0,
-field_78722_g,worldObj,0,Reference to the World object.
-field_78723_d,renderPosZ,0,
-field_78724_e,renderEngine,0,
-field_78725_b,renderPosX,0,
-field_78726_c,renderPosY,0,
-field_78727_a,instance,0,The static instance of RenderManager.
-field_78728_n,viewerPosZ,0,
-field_78729_o,entityRenderMap,0,A map of entity classes and the associated renderer.
-field_78730_l,viewerPosX,0,
-field_78731_m,viewerPosY,0,
-field_78732_j,playerViewX,0,
-field_78733_k,options,0,Reference to the GameSettings object.
-field_78734_h,livingPlayer,0,Rendermanager's variable for the player
-field_78735_i,playerViewY,0,
-field_78736_p,textRenderer,0,Renders fonts
-field_78741_b,secondaryComponents,2,
-field_78742_a,primaryComponents,2,
-field_78770_f,curBlockDamageMP,0,Current block damage (MP)
-field_78772_d,currentBlockY,0,PosY of the current block being destroyed
-field_78773_e,currentblockZ,0,PosZ of the current block being destroyed
-field_78774_b,netClientHandler,0,
-field_78775_c,currentBlockX,0,PosX of the current block being destroyed
-field_78776_a,mc,0,The Minecraft instance.
-field_78777_l,currentPlayerItem,0,Index of the current item held by the player in the inventory hotbar
-field_78778_j,isHittingBlock,0,Tells if the player is hitting a block
-field_78779_k,currentGameType,0,Current game type for the player
-field_78780_h,stepSoundTickCounter,0,"Tick counter, when it hits 4 it resets back to 0 and plays the step sound"
-field_78781_i,blockHitDelay,0,Delays the first damage on the block after the first click on the block
-field_78782_b,textureOffsetY,0,The y coordinate offset of the texture
-field_78783_a,textureOffsetX,0,The x coordinate offset of the texture
-field_78795_f,rotateAngleX,0,
-field_78796_g,rotateAngleY,0,
-field_78797_d,rotationPointY,0,
-field_78798_e,rotationPointZ,0,
-field_78799_b,textureHeight,0,The size of the texture file's height in pixels.
-field_78800_c,rotationPointX,0,
-field_78801_a,textureWidth,0,The size of the texture file's width in pixels.
-field_78802_n,boxName,0,
-field_78803_o,textureOffsetX,0,The X offset into the texture used for displaying this model
-field_78804_l,cubeList,0,
-field_78805_m,childModels,0,
-field_78806_j,showModel,0,
-field_78807_k,isHidden,0,Hides the model.
-field_78808_h,rotateAngleZ,0,
-field_78809_i,mirror,0,
-field_78810_s,baseModel,0,
-field_78811_r,displayList,0,The GL display list rendered by the Tessellator for this model
-field_78812_q,compiled,0,
-field_78813_p,textureOffsetY,0,The Y offset into the texture used for displaying this model
-field_78818_a,mineshaftChestContents,2,List of contents that can generate in Mineshafts.
-field_78828_a,weightClass,2,The class of the StructureComponent to which this weight corresponds.
-field_78829_b,responseTime,0,Player response time to server in milliseconds
-field_78830_c,nameinLowerCase,0,Player name in lowercase.
-field_78831_a,name,0,The string value of the object
-field_78843_d,serverMOTD,0,(better variable name would be 'hostname') server name as displayed in the server browser's second line (grey text)
-field_78844_e,pingToServer,0,last server ping that showed up in the server browser
-field_78845_b,serverIP,0,
-field_78846_c,populationInfo,0,"the string indicating number of players on and capacity of the server that is shown on the server browser (i.e. ""5/20"" meaning 5 slots used out of 20 slots total)"
-field_78847_a,serverName,0,
-field_78858_b,servers,0,List of ServerData instances.
-field_78859_a,mc,0,The Minecraft instance.
-field_78865_b,serverPort,0,
-field_78866_a,ipAddress,0,
-field_78875_d,rand,0,RNG.
-field_78876_b,fxLayers,0,
-field_78877_c,renderer,0,
-field_78878_a,worldObj,0,Reference to the World object.
 field_78892_f,maxZ,2,The second z coordinate of a bounding box.
 field_78893_d,maxX,2,The second x coordinate of a bounding box.
 field_78894_e,maxY,2,The second y coordinate of a bounding box.
 field_78895_b,minY,2,The first y coordinate of a bounding box.
 field_78896_c,minZ,2,The first z coordinate of a bounding box.
 field_78897_a,minX,2,The first x coordinate of a bounding box.
-field_78899_d,sneak,0,
-field_78900_b,moveForward,0,The speed at which the player is moving forward. Negative numbers will move backwards.
-field_78901_c,jump,0,
-field_78902_a,moveStrafe,0,The speed at which the player is strafing. Postive numbers to the left and negative to the right.
-field_78903_e,gameSettings,0,
-field_78915_A,isInitialized,0,
-field_78917_C,bytesDrawn,0,Bytes sent to the GPU
-field_78918_f,posXMinus,0,Pos X minus
-field_78919_g,posYMinus,0,Pos Y minus
-field_78920_d,posY,0,
-field_78921_e,posZ,0,
-field_78922_b,chunksUpdated,0,
-field_78923_c,posX,0,
-field_78924_a,worldObj,0,Reference to the World object.
-field_78925_n,posXPlus,0,Pos X plus
-field_78926_o,posYPlus,0,Pos Y plus
-field_78927_l,isInFrustum,0,
-field_78928_m,skipRenderPass,0,Should this renderer skip this render pass
-field_78929_j,posYClip,0,Pos Y clipped
-field_78930_k,posZClip,0,Pos Z clipped
-field_78931_h,posZMinus,0,Pos Z minus
-field_78932_i,posXClip,0,Pos X clipped
-field_78933_w,isChunkLit,0,Is the chunk lit
-field_78934_v,glOcclusionQuery,0,OpenGL occlusion query
-field_78935_u,isWaitingOnOcclusionQuery,0,Is this renderer waiting on the result of the occlusion query
-field_78936_t,isVisible,0,Is this renderer visible according to the occlusion query
-field_78937_s,chunkIndex,0,Chunk index
-field_78938_r,rendererBoundingBox,0,Axis aligned bounding box
-field_78939_q,needsUpdate,0,Boolean for whether this renderer needs to be updated or not
-field_78940_p,posZPlus,0,Pos Z plus
-field_78941_z,tessellator,0,
-field_78942_y,glRenderList,0,
-field_78945_a,baseEntity,0,The entity (usually the player) that the camera is inside.
-field_78947_b,entityPosY,0,Entity position Y
-field_78948_c,entityPosZ,0,Entity position Z
-field_78949_a,entityPosX,0,Entity position X
 field_80001_f,closestPlayer,2,The closest EntityPlayer to this orb.
 field_80002_g,xpTargetColor,2,Threshold color for tracking players
 field_80004_Q,updateEntityTick,2,
-field_80005_w,hideServerAddress,0,
 field_82151_R,distanceWalkedOnStepModified,2,
 field_82152_aq,teleportDirection,2,
 field_82153_h,portalCounter,2,
@@ -4537,13 +2883,8 @@ field_94556_a,combatEntries,2,The CombatEntry objects that we've tracked so far.
 field_94557_a,selectAnything,2,
 field_94569_a,damageSrc,2,
 field_94579_S,pendingTickListEntriesThisTick,2,
-field_94593_a,theIcon,0,
-field_94598_a,theIcon,0,
-field_94600_b,iconArray,0,
 field_94601_a,bowPullIconNameArray,2,
 field_94603_a,EMPTY_SLOT_NAMES,2,
-field_94604_cx,emptySlotIcon,0,
-field_94605_cw,overlayIcon,0,
 field_94606_cu,CLOTH_OVERLAY_NAMES,2,
 field_96093_i,entityUniqueID,2,
 field_96113_a,isBlocked,2,Whether this hopper minecart is being blocked by an activator rail.
@@ -4554,9 +2895,6 @@ field_96329_z,formattingCode,2,The formatting code that produces this format.
 field_96330_y,formattingCodePattern,2,"Matches formatting codes that indicate that the client should treat the following text as bold, recolored, obfuscated, etc."
 field_96331_x,nameMapping,2,"Maps a name (e.g., 'underline') to its corresponding enum value (e.g., UNDERLINE)."
 field_96442_D,worldScoreboard,2,
-field_96452_b,flipU,0,
-field_96453_c,flipV,0,
-field_96454_a,baseIcon,0,
 field_96465_b,behaviourDefaultDispenseItem,2,
 field_96507_a,theScoreboard,2,
 field_96540_f,teamMemberships,2,Map of usernames to ScorePlayerTeam objects.
@@ -4587,14 +2925,9 @@ field_96683_d,displayName,2,
 field_96684_b,name,2,
 field_96685_c,objectiveCriteria,2,The ScoreObjectiveCriteria for this objetive
 field_96686_a,theScoreboard,2,
-field_96691_E,chatScale,0,
-field_96692_F,chatWidth,0,
-field_96693_G,chatHeightUnfocused,0,
-field_96694_H,chatHeightFocused,0,
 field_98038_p,forceSpawn,2,
 field_98040_a,mobSpawnerLogic,2,Mob spawner logic for this spawner minecart.
 field_98044_b,transferTicker,2,
-field_98151_a,theTexture,0,
 field_98223_c,entityType,2,
 field_98224_g,minecraftStartTimeMilis,2,
 field_98282_f,randomEntity,2,
@@ -4609,4 +2942,3 @@ field_98292_k,maxNearbyEntities,2,
 field_98293_h,maxSpawnDelay,2,
 field_98294_i,spawnCount,2,
 field_98301_h,canSeeFriendlyInvisibles,2,
-field_98303_au,AMBIENT_OCCLUSIONS,0,
