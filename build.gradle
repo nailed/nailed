@@ -12,6 +12,10 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            name = "jk-5"
+            url = "http://maven.jk-5.tk"
+        }
     }
     dependencies {
         classpath "jk_5.nailed.mcp:mcp:1.2.0"
@@ -23,6 +27,10 @@ repositories {
     maven {
         name "sk89q"
         url "http://maven.sk89q.com/repo/"
+    }
+    maven {
+        name "sk89q"
+        url "http://maven.jk-5.tk"
     }
 }
 
