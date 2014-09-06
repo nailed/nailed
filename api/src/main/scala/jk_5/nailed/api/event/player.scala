@@ -58,3 +58,4 @@ case class PlayerJoinWorldEvent(private val _player: Player, world: World) exten
 case class PlayerLeaveWorldEvent(private val _player: Player, world: World) extends PlayerEvent(_player)
 @Cancelable case class PlayerThrowItemEvent(private val _player: Player, stack: ItemStack) extends PlayerEvent(_player)
 @Cancelable case class PlayerRightClickItemEvent(private val _player: Player, stack: ItemStack) extends PlayerEvent(_player)
+@Cancelable case class PlayerInteractEvent(private val _player: Player, action: InteractAction, x: Int = 0, y: Int = 0, z: Int = 0) extends PlayerEvent(_player)

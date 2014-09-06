@@ -341,21 +341,22 @@ object NailedEventFactory {
   }
 
   def firePlayerRightClickAir(player: EntityPlayerMP): Boolean = { //return true to cancel
-
-    false
+    val event = new PlayerInteractEvent(NailedServer.getPlayerFromEntity(player), InteractAction.RIGHT_CLICK_AIR)
+    fireEvent(event).isCanceled
   }
 
-  def firePlayerRightClickBlock(player: EntityPlayerMP): Boolean = { //return true to cancel
-
-    false
+  def firePlayerRightClickBlock(player: EntityPlayerMP, x: Int, y: Int, z: Int): Boolean = { //return true to cancel
+    val event = new PlayerInteractEvent(NailedServer.getPlayerFromEntity(player), InteractAction.RIGHT_CLICK_BLOCK, x, y, z)
+    fireEvent(event).isCanceled
   }
 
   def firePlayerLeftClickAir(player: EntityPlayerMP){
-
+    val event = new PlayerInteractEvent(NailedServer.getPlayerFromEntity(player), InteractAction.LEFT_CLICK_AIR)
+    fireEvent(event)
   }
 
-  def firePlayerLeftClickBlock(player: EntityPlayerMP): Boolean = { //return true to cancel
-
-    false
+  def firePlayerLeftClickBlock(player: EntityPlayerMP, x: Int, y: Int, z: Int): Boolean = { //return true to cancel
+    val event = new PlayerInteractEvent(NailedServer.getPlayerFromEntity(player), InteractAction.LEFT_CLICK_BLOCK, x, y, z)
+    fireEvent(event).isCanceled
   }
 }

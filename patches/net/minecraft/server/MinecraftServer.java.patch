@@ -264,7 +264,7 @@
  
      public NetworkSystem func_147137_ag() {
 -        return this.field_147144_o;
-+        return null;//this.field_147144_o;
++        return null;//this.networkSystem;
      }
  
      public boolean func_71279_ae() {
