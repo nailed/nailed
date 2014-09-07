@@ -47,6 +47,7 @@ class NailedInternalPlugin extends Plugin {
     this.getPluginManager.registerCommand(this, CommandExperience)
     this.getPluginManager.registerCommand(this, CommandAnalog)
     this.getPluginManager.registerCommand(this, CommandDifficulty)
+    this.getPluginManager.registerCommand(this, CommandStartGame)
     this.getPluginManager.registerCommand(this, new RemovedCommand("defaultgamemode"))
     this.getPluginManager.registerCommand(this, new RemovedCommand("debug"))
     this.getPluginManager.registerCommand(this, new RemovedCommand("setworldspawn"))

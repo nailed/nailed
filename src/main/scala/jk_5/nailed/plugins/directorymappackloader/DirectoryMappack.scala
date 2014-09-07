@@ -20,6 +20,7 @@ package jk_5.nailed.plugins.directorymappackloader
 import java.io.File
 
 import io.netty.util.concurrent.Promise
+import jk_5.nailed.api.map.filesystem.DirectoryMount
 import jk_5.nailed.api.mappack.{Mappack, MappackMetadata}
 import org.apache.commons.io.FileUtils
 
@@ -37,6 +38,7 @@ class DirectoryMappack(private val dir: File, override val getMetadata: MappackM
     FileUtils.copyDirectory(original, destinationDirectory)
     promise.setSuccess(null)
   }
+  override def getMappackMount = new DirectoryMount(new File(dir, "scripts"))
 
   override def toString = s"DirectoryMappack{id=$getId,metadata=$getMetadata,dir=$dir}"
 }

@@ -31,4 +31,5 @@ trait MappackMetadata {
   def worlds: Array[MappackWorld]
   def teams: Array[MappackTeam]
   def tutorial: Tutorial
+  def gameType: String
 }

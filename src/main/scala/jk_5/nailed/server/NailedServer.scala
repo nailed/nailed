@@ -26,6 +26,7 @@ import jk_5.nailed.api.messaging.StandardMessenger
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.server.NailedEventFactory.DummyInternalListenerPlugin
 import jk_5.nailed.server.map.NailedMapLoader
+import jk_5.nailed.server.map.game.NailedGameTypeRegistry
 import jk_5.nailed.server.mappack.MappackRegistryTrait
 import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
@@ -116,4 +117,5 @@ object NailedServer
   override def getPlayerSelector = NailedPlayerSelector
   override def isAsync = Thread.currentThread() != mainThread
   override val getMessenger = new StandardMessenger
+  override def getGameTypeRegistry = NailedGameTypeRegistry
 }

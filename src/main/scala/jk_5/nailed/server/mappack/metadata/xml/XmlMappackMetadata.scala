@@ -67,4 +67,5 @@ class XmlMappackMetadata(element: Element, ns: Namespace) extends MappackMetadat
     if(e.getChild("name", ns) == null) throw new MappackConfigurationException("Missing required element <name> in <world> element")
     new XmlMappackWorld(e.getChild("name", ns).getText, e)
   }.toArray
+  override val gameType = if(element.getChild("gametype", ns) != null) element.getChild("gametype", ns).getAttributeValue("name", ns) else null
 }

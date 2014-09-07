@@ -68,7 +68,8 @@ class JsonMappackMetadata(json: JsonObject) extends MappackMetadata {
     case e => throw new MappackConfigurationException("Invalid object type in teams array: " + e.toString)
   }.toArray
 
-  override def tutorial: Tutorial = if(json.has("tutorial")) new JsonTutorial(json.getAsJsonObject("tutorial")) else null
+  override val tutorial: Tutorial = if(json.has("tutorial")) new JsonTutorial(json.getAsJsonObject("tutorial")) else null
+  override val gameType = if(json.has("gametype")) json.get("gametype").getAsString else null
 
   for(world <- worlds){
     if(worlds.count(_.name == world.name) != 1){

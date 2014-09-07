@@ -51,4 +51,5 @@ trait Map {
   def players: Array[Player]
 
   def getScoreboardManager: ScoreboardManager
+  def getGameManager: GameManager
 }

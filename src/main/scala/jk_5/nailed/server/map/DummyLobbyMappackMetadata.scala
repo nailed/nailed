@@ -35,4 +35,5 @@ object DummyLobbyMappackMetadata extends MappackMetadata {
   override val tutorial = new Tutorial{
     override val stages = new Array[TutorialStage](0)
   }
+  override val gameType = null
 }

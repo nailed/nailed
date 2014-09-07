@@ -22,7 +22,7 @@ import java.util.UUID
 
 import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.command.CommandSender
-import jk_5.nailed.api.map.MapLoader
+import jk_5.nailed.api.map.{GameTypeRegistry, MapLoader}
 import jk_5.nailed.api.mappack.MappackRegistry
 import jk_5.nailed.api.messaging.Messenger
 import jk_5.nailed.api.player.Player
@@ -137,4 +137,6 @@ trait Server {
   def isAsync: Boolean
 
   def getMessenger: Messenger
+
+  def getGameTypeRegistry: GameTypeRegistry
 }

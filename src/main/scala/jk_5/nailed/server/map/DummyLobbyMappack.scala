@@ -33,4 +33,5 @@ object DummyLobbyMappack extends Mappack {
   override def prepareWorld(destinationDirectory: File, promise: Promise[Void]){
     promise.setSuccess(null)
   }
+  override def getMappackMount = null
 }

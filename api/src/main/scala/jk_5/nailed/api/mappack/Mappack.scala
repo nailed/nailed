@@ -20,6 +20,7 @@ package jk_5.nailed.api.mappack
 import java.io.File
 
 import io.netty.util.concurrent.Promise
+import jk_5.nailed.api.map.filesystem.IMount
 
 /**
  * No description given
@@ -47,4 +48,6 @@ trait Mappack {
    * @param promise              The callback to call when the map is set up.
    */
   def prepareWorld(destinationDirectory: File, promise: Promise[Void])
+
+  def getMappackMount: IMount
 }

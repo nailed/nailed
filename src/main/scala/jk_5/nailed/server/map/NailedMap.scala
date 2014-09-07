@@ -24,6 +24,7 @@ import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.world.World
+import jk_5.nailed.server.map.game.NailedGameManager
 import jk_5.nailed.server.scoreboard.MapScoreboardManager
 
 import scala.collection.mutable
@@ -36,7 +37,9 @@ import scala.collection.mutable
 class NailedMap(override val id: Int, override val mappack: Mappack = null, private val baseDir: File) extends Map with TeamManager {
 
   private val playerSet = mutable.HashSet[Player]()
+  var players = new Array[Player](0)
   override val getScoreboardManager = new MapScoreboardManager(this)
+  override val getGameManager = new NailedGameManager(this)
 
   this.init() //Init the TeamManager
 
@@ -51,12 +54,14 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
 
   override def onPlayerJoined(player: Player){
     playerSet += player
+    players = playerSet.toArray
     getScoreboardManager.onPlayerJoined(player)
     this.playerJoined(player)
   }
 
   override def onPlayerLeft(player: Player){
     playerSet -= player
+    players = playerSet.toArray
     getScoreboardManager.onPlayerLeft(player)
     this.playerLeft(player)
   }
@@ -64,8 +69,6 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
   override def broadcastChatMessage(message: BaseComponent) = playerSet.foreach(_.sendMessage(message))
   override def broadcastChatMessage(message: BaseComponent*) = playerSet.foreach(_.sendMessage(message: _*))
   override def broadcastChatMessage(message: Array[BaseComponent]) = playerSet.foreach(_.sendMessage(message))
-
-  override def players = this.playerSet.toArray
 
   override def toString = s"NailedMap{id=$id,mappack=$mappack}"
 }
