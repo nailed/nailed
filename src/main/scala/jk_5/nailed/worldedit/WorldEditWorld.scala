@@ -35,15 +35,14 @@ object WorldEditWorld {
 
   def getWorld(world: World): WorldEditWorld = {
     checkNotNull(world)
-    new WorldEditWorld(world)
+    new WorldEditWorld(new WeakReference[World](world))
   }
 
   private[worldedit] class WorldReferenceLostException(message: String) extends WorldEditException(message)
 }
 
-class WorldEditWorld private[worldedit] (world: World) extends AbstractWorld {
-  checkNotNull(world)
-  private val worldRef = new WeakReference[World](world)
+class WorldEditWorld private[worldedit] (private val worldRef: WeakReference[World]) extends AbstractWorld {
+  checkNotNull(worldRef)
 
   private final val logger = NailedWorldEditPlugin.instance.getLogger
 

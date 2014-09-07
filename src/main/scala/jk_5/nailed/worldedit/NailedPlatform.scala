@@ -44,7 +44,7 @@ object NailedPlatform extends MultiUserPlatform {
     val worlds = NailedDimensionManager.getVanillaWorlds
     val ret = new util.ArrayList[World](worlds.length)
     for(world <- worlds){
-      ret.add(new WorldEditWorld(world))
+      ret.add(WorldEditWorld.getWorld(world))
     }
     ret
   }
@@ -61,7 +61,7 @@ object NailedPlatform extends MultiUserPlatform {
     case w =>
       for(ws <- NailedDimensionManager.getVanillaWorlds){
         if(ws.getWorldInfo.getWorldName == world.getName){
-          return new WorldEditWorld(ws)
+          return WorldEditWorld.getWorld(ws)
         }
       }
       null
@@ -93,7 +93,7 @@ object NailedPlatform extends MultiUserPlatform {
   override def getConnectedUsers: util.Collection[Actor] = {
     val users = new util.ArrayList[Actor]
     for(p <- Server.getInstance.getOnlinePlayers){
-      users.add(new WorldEditPlayer(p))
+      users.add(WorldEditPlayer.wrap(p))
     }
     users
   }

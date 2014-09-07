@@ -23,12 +23,17 @@ import net.minecraft.item.{Item, ItemStack}
  * @author jk-5
  */
 object WorldEditPlayer {
+  def wrap(player: Player): WorldEditPlayer = {
+    checkNotNull(player)
+    new WorldEditPlayer(player)
+  }
+
   def wrap(player: EntityPlayerMP): WorldEditPlayer = {
     checkNotNull(player)
     new WorldEditPlayer(NailedServer.getPlayerFromEntity(player))
   }
 
-  def getSession(player: EntityPlayerMP): LocalSession = {
+  def getSession(player: Player): LocalSession = {
     checkNotNull(player)
     WorldEdit.getInstance.getSessionManager.get(wrap(player))
   }
