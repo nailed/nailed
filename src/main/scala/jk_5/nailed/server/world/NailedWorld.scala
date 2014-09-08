@@ -25,6 +25,8 @@ import jk_5.nailed.api.world._
 import jk_5.nailed.server.map.gamerule.WrappedEditableGameRules
 import net.minecraft.world.{EnumDifficulty, WorldServer}
 
+import scala.collection.mutable
+
 /**
  * No description given
  *
@@ -33,6 +35,8 @@ import net.minecraft.world.{EnumDifficulty, WorldServer}
 class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) extends World {
 
   private var map: Option[Map] = None
+  private val playerSet = mutable.HashSet[Player]()
+  private var players = new Array[Player](0)
 
   private val provider: Option[WorldProvider] = wrapped.provider match {
     case p: DelegatingWorldProvider => Some(p.wrapped)
@@ -48,7 +52,7 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
 
   override def getDimensionId = wrapped.provider.dimensionId
   override def getName = "world_" + getDimensionId
-  override def getPlayers = List[Player]()
+  override def getPlayers = players
   override def getType = this.provider match {
     case Some(p) => p.getTypeId
     case None => 0
@@ -60,6 +64,8 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
 
   override def onPlayerJoined(player: Player){
     println("Player " + player.toString + " joined world " + this.toString)
+    playerSet += player
+    players = playerSet.toArray
     if(this.getConfig.resourcepack != null){
       player.loadResourcePack(this.getConfig.resourcepack)
     }
@@ -67,6 +73,8 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
 
   override def onPlayerLeft(player: Player){
     println("Player " + player.toString + " left world " + this.toString)
+    playerSet -= player
+    players = playerSet.toArray
   }
 
   override def getTime = this.wrapped.getWorldTime.toInt

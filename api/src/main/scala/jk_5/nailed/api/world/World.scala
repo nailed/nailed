@@ -48,7 +48,7 @@ trait World {
    *
    * @return the player list
    */
-  def getPlayers: List[Player]
+  def getPlayers: Array[Player]
 
   /**
    * What kind of type is this world?
