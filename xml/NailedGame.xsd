@@ -107,6 +107,20 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="gametype" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines the gametype of this game</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="name" type="xs:string" default="">
+                        <xs:annotation>
+                            <xs:documentation source="version">1.0.0</xs:documentation>
+                            <xs:documentation source="description">Defines the name of the gametype</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
         </xs:all>
     </xs:complexType>
     <xs:complexType name="Author">
