@@ -37,6 +37,8 @@ class ScriptMapApi(private val map: NailedMap) {
   }
 
   def getWorld(name: String): ScriptWorldApi = {
-    new ScriptWorldApi(map.worlds.find(_.getName == name).orNull.asInstanceOf[NailedWorld])
+    val res = map.worlds.find(_.getConfig.name == name)
+    if(res.isEmpty) return null
+    new ScriptWorldApi(res.get.asInstanceOf[NailedWorld])
   }
 }

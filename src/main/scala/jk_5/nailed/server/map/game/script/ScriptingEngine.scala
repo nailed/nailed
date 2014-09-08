@@ -3,6 +3,7 @@ package jk_5.nailed.server.map.game.script
 import java.io.InputStreamReader
 
 import jk_5.nailed.api.chat._
+import jk_5.nailed.api.world.WeatherType
 import jk_5.nailed.server.map.game.NailedGameManager
 import org.apache.logging.log4j.LogManager
 import org.mozilla.javascript
@@ -44,6 +45,7 @@ object ScriptingEngine {
     scope.put("HoverEvent", scope, new NativeJavaClass(scope, classOf[HoverEvent]))
     scope.put("TextComponent", scope, new NativeJavaClass(scope, classOf[TextComponent]))
     scope.put("TranslatableComponent", scope, new NativeJavaClass(scope, classOf[TranslatableComponent]))
+    scope.put("WeatherType", scope, new NativeJavaClass(scope, classOf[WeatherType]))
 
     libraryScope.defineProperty("module", new ScriptableObject() {
       override def getClassName = "LibraryModule"
