@@ -19,6 +19,7 @@ package jk_5.nailed.server.mappack.metadata.xml
 
 import java.io.File
 
+import jk_5.nailed.api.map.stat.StatConfig
 import jk_5.nailed.api.mappack._
 import jk_5.nailed.api.mappack.implementation.DefaultMappackAuthor
 import org.jdom2.input.SAXBuilder
@@ -68,4 +69,10 @@ class XmlMappackMetadata(element: Element, ns: Namespace) extends MappackMetadat
     new XmlMappackWorld(e.getChild("name", ns).getText, e)
   }.toArray
   override val gameType = if(element.getChild("gametype", ns) != null) element.getChild("gametype", ns).getAttributeValue("name", ns) else null
+  override val stats: Array[StatConfig] = if(element.getChild("stats", ns) != null) element.getChild("stats", ns).getChildren.map{ e =>
+    if(e.getName != "stat") throw new MappackConfigurationException("Invalid element in stats list: " + e.getName)
+    val name = e.getAttributes.find(_.getName == "name")
+    if(name.isEmpty || name.get.getValue.length == 0) throw new MappackConfigurationException("Missing required attribute 'name' in stat element")
+    new XmlStatConfig(name.get.getValue, e)
+  }.toArray else new Array[StatConfig](0)
 }

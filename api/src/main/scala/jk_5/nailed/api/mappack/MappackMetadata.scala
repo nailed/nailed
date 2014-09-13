@@ -17,6 +17,7 @@
 
 package jk_5.nailed.api.mappack
 
+import jk_5.nailed.api.map.stat.StatConfig
 import jk_5.nailed.api.mappack.tutorial.Tutorial
 
 /**
@@ -32,4 +33,5 @@ trait MappackMetadata {
   def teams: Array[MappackTeam]
   def tutorial: Tutorial
   def gameType: String
+  def stats: Array[StatConfig]
 }

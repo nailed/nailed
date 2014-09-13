@@ -121,6 +121,22 @@
                     </xs:attribute>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="stats" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Declares information stats that will be registered</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence minOccurs="0">
+                        <xs:element name="stat" minOccurs="0" maxOccurs="unbounded" type="Stat">
+                            <xs:annotation>
+                                <xs:documentation source="version">1.0.0</xs:documentation>
+                                <xs:documentation source="description">Defines the properties of this stat</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:all>
     </xs:complexType>
     <xs:complexType name="Author">
@@ -403,6 +419,28 @@
                 </xs:complexType>
             </xs:element>
         </xs:all>
+    </xs:complexType>
+    <xs:complexType name="Stat">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:any processContents="lax" namespace="##any">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">Defines any stat option</xs:documentation>
+                </xs:annotation>
+            </xs:any>
+        </xs:sequence>
+        <xs:attribute name="name">
+            <xs:annotation>
+                <xs:documentation source="version">1.0.0</xs:documentation>
+                <xs:documentation source="description">Defines the name of this stat</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="track" default="">
+            <xs:annotation>
+                <xs:documentation source="version">1.0.0</xs:documentation>
+                <xs:documentation source="description">Defines the event that this stat tracks</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
     <xs:complexType name="Team">
         <xs:all>

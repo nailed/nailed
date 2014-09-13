@@ -17,6 +17,7 @@
 
 package jk_5.nailed.server.map
 
+import jk_5.nailed.api.map.stat.StatConfig
 import jk_5.nailed.api.mappack.implementation.DefaultMappackWorldProperties
 import jk_5.nailed.api.mappack.tutorial.{Tutorial, TutorialStage}
 import jk_5.nailed.api.mappack.{MappackAuthor, MappackMetadata, MappackTeam, MappackWorld}
@@ -36,4 +37,5 @@ object DummyLobbyMappackMetadata extends MappackMetadata {
     override val stages = new Array[TutorialStage](0)
   }
   override val gameType = null
+  override val stats = new Array[StatConfig](0)
 }

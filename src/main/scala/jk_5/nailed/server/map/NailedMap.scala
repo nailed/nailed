@@ -25,6 +25,7 @@ import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.world.World
 import jk_5.nailed.server.map.game.NailedGameManager
+import jk_5.nailed.server.map.stat.NailedStatManager
 import jk_5.nailed.server.scoreboard.MapScoreboardManager
 
 import scala.collection.mutable
@@ -40,6 +41,7 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
   var players = new Array[Player](0)
   override val getScoreboardManager = new MapScoreboardManager(this)
   override val getGameManager = new NailedGameManager(this)
+  override val getStatManager = new NailedStatManager(this)
 
   this.init() //Init the TeamManager
 

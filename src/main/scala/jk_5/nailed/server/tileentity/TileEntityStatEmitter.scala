@@ -17,7 +17,10 @@
 
 package jk_5.nailed.server.tileentity
 
+import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.map.stat.{Stat, StatListener}
 import jk_5.nailed.api.stat.StatBlock
+import jk_5.nailed.server.world.NailedDimensionManager
 import net.minecraft.command.server.CommandBlockLogic
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
@@ -32,16 +35,31 @@ import net.minecraft.world.World
  *
  * @author jk-5
  */
-class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock {
+class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock with StatListener {
 
   var content = ""
   var tick = 0
+  var subscribed: Stat = _
+  var map: Map = _
+  var register = false
+  var response = "Enter a stat id in the box above"
 
   override def updateEntity(){
-    if(tick == 20){
-      if(strength == 0) this.setSignalStrength(15) else this.setSignalStrength(0)
-      tick = 0
-    }else tick += 1
+    if(register && getWorld != null && map != null){
+      subscribed = map.getStatManager.getStat(content)
+      if(subscribed != null){
+        subscribed.registerListener(TileEntityStatEmitter.this)
+        response = "Stat registered. Stat emitter ready to emit"
+      }else{
+        response = "Could not register. Stat does not exist"
+      }
+      register = false
+    }
+  }
+
+  override def setWorldObj(world: World){
+    super.setWorldObj(world)
+    map = NailedDimensionManager.getWorld(world.provider.dimensionId).getMap.orNull
   }
 
   //BlockCommandBlock is hardcoded to rely on CommandBlockLogic, and i don't want to change that
@@ -50,7 +68,21 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock {
 
     //Called when the block receives a redstone signal
     override def func_145755_a(world: World){}
-    override def getSuccessCount() = strength
+    override def getSuccessCount = strength
+
+    override def setCommand(data: String){
+      content = data
+      if(subscribed != null) subscribed.unregisterListener(TileEntityStatEmitter.this)
+      if(map != null){
+        subscribed = map.getStatManager.getStat(content)
+        if(subscribed != null){
+          subscribed.registerListener(TileEntityStatEmitter.this)
+          response = "Stat registered. Stat emitter ready to emit"
+        }else{
+          response = "Could not register. Stat does not exist"
+        }
+      }else register = true
+    }
 
     //Called when a update shoudl be send to the client
     override def func_145756_e(){
@@ -81,7 +113,7 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock {
 
   override def readFromNBT(tag: NBTTagCompound){
     super.readFromNBT(tag)
-    this.content = tag.getString("Content")
+    this.commandBlockLogic.setCommand(tag.getString("Content"))
   }
 
   override def getDescriptionPacket: Packet = {
@@ -90,10 +122,18 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock {
     tag.setString("Command", content)
     tag.setInteger("SuccessCount", 0)
     tag.setString("CustomName", "Stat Emitter")
-    tag.setString("LastOutput", """{"text": "Enter a stat id in the box above"}""")
+    tag.setString("LastOutput", s"""{"text": "$response"}""")
     tag.setBoolean("TrackOutput", true)
     new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, tag)
   }
 
   def scheduleBlockUpdate() = this.commandBlockLogic.func_145756_e()
+
+  override def onEnable(){
+    setSignalStrength(15)
+  }
+
+  override def onDisable(){
+    setSignalStrength(0)
+  }
 }

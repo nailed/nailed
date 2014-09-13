@@ -20,6 +20,7 @@ package jk_5.nailed.api.mappack.implementation
 import java.io.{File, FileReader}
 
 import com.google.gson.{JsonObject, JsonParser, JsonPrimitive}
+import jk_5.nailed.api.map.stat.StatConfig
 import jk_5.nailed.api.mappack._
 import jk_5.nailed.api.mappack.tutorial.Tutorial
 
@@ -66,6 +67,11 @@ class JsonMappackMetadata(json: JsonObject) extends MappackMetadata {
   override val teams: Array[MappackTeam] = if(!json.has("teams")) new Array[MappackTeam](0) else json.getAsJsonArray("teams").map{
     case e: JsonObject => new JsonMappackTeam(e)
     case e => throw new MappackConfigurationException("Invalid object type in teams array: " + e.toString)
+  }.toArray
+
+  override val stats: Array[StatConfig] = if(!json.has("stats")) new Array[StatConfig](0) else json.getAsJsonArray("stats").map{
+    case e: JsonObject => new JsonStatConfig(e)
+    case e => throw new MappackConfigurationException("Invalid object type in stats array: " + e.toString)
   }.toArray
 
   override val tutorial: Tutorial = if(json.has("tutorial")) new JsonTutorial(json.getAsJsonObject("tutorial")) else null

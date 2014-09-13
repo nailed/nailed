@@ -207,7 +207,7 @@ object NailedEventFactory {
       }
       world.setBlock(xC, yC, zC, Blocks.command_block, 8, 3)
       if(is.getTagCompound.hasKey("Content")){
-        world.getTileEntity(xC, yC, zC).asInstanceOf[TileEntityStatEmitter].content = is.getTagCompound.getString("Content")
+        world.getTileEntity(xC, yC, zC).asInstanceOf[TileEntityStatEmitter].commandBlockLogic.setCommand(is.getTagCompound.getString("Content"))
       }
       return true
     }

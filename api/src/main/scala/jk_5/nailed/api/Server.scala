@@ -137,6 +137,5 @@ trait Server {
   def isAsync: Boolean
 
   def getMessenger: Messenger
-
   def getGameTypeRegistry: GameTypeRegistry
 }

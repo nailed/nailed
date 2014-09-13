@@ -18,6 +18,7 @@
 package jk_5.nailed.api.map
 
 import jk_5.nailed.api.chat.BaseComponent
+import jk_5.nailed.api.map.stat.StatManager
 import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.scoreboard.ScoreboardManager
@@ -52,4 +53,5 @@ trait Map {
 
   def getScoreboardManager: ScoreboardManager
   def getGameManager: GameManager
+  def getStatManager: StatManager
 }
