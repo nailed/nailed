@@ -16,9 +16,13 @@ buildscript {
             name = "jk-5"
             url = "http://maven.jk-5.tk"
         }
+        maven {
+            name = "offlineRepo"
+            url = "http://localhost:81"
+        }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.2.1"
+        classpath "jk_5.nailed.mcp:mcp:1.2.2"
     }
 }
 
@@ -29,8 +33,12 @@ repositories {
         url "http://maven.sk89q.com/repo/"
     }
     maven {
-        name "sk89q"
+        name "jk-5"
         url "http://maven.jk-5.tk"
+    }
+    maven {
+        name = "offlineRepo"
+        url = "http://localhost:81"
     }
 }
 
