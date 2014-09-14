@@ -10,7 +10,7 @@ buildscript {
         maven {
             //MinecraftForge repo for Srg2Source
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "http://files.minecraftforge.net/maven/"
         }
         maven {
             name = "jk-5"
@@ -34,8 +34,8 @@ repositories {
     }
 }
 
-apply plugin: "java"
 apply plugin: "scala"
+apply plugin: "java"
 apply plugin: "idea"
 apply plugin: "maven"
 apply plugin: "nailed-mcp"

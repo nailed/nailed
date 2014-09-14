@@ -56,8 +56,7 @@ class MinecraftConfig extends PropertyManager(null) {
   }
 
   override def saveProperties(){
-    logger.warn("Tried to save minecraft config. This is not longer supported")
-    Thread.dumpStack()
+    logger.debug("Tried to save minecraft config. This is not longer supported", new Exception)
   }
 
   private def remap(key: String): String = key match {
