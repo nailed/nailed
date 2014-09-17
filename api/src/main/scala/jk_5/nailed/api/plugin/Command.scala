@@ -25,7 +25,7 @@ import jk_5.nailed.api.util.Checks
  *
  * @author jk-5
  */
-abstract case class Command(private val name: String, private val aliases: String*) {
+abstract class Command(private val name: String, private val aliases: String*) {
   Checks.notNull(name, "name")
 
   private var owner: Plugin = _

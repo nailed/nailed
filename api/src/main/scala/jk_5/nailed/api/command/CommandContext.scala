@@ -1,6 +1,7 @@
 package jk_5.nailed.api.command
 
 import jk_5.nailed.api.chat.{BaseComponent, ChatColor, ComponentBuilder}
+import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.api.world.World
@@ -24,6 +25,7 @@ final class CommandContext(private val _sender: CommandSender) extends CommandSe
   @inline def requireLocation(): Location = if(!_sender.isInstanceOf[LocationCommandSender]) throw exception(new CommandException("You don\'t have a location")) else _sender.asInstanceOf[LocationCommandSender].getLocation
   @inline def requirePlayer(): Player = if(!_sender.isInstanceOf[Player]) throw exception(new NotAPlayerException) else _sender.asInstanceOf[Player]
   @inline def requireWorld(): World = if(!_sender.isInstanceOf[WorldCommandSender]) throw exception(new NoWorldException) else _sender.asInstanceOf[WorldCommandSender].getWorld
+  @inline def requireMap(): Map = if(!_sender.isInstanceOf[WorldCommandSender]) throw exception(new NoWorldException) else _sender.asInstanceOf[WorldCommandSender].getWorld.getMap.getOrElse(throw error("You don\'t have a map"))
   @inline def error(message: String): CommandException = exception(new CommandException(message))
   @inline def success(message: String): Unit = _sender.sendMessage(new ComponentBuilder(message).color(ChatColor.GREEN).create())
   @inline def exception[T <: CommandException](e: T): T = {setAnalogOutput(0); e}
