@@ -1,0 +1,24 @@
+--- ../src-base/minecraft/net/minecraft/server/network/NetHandlerLoginServer.java
++++ ../src-work/minecraft/net/minecraft/server/network/NetHandlerLoginServer.java
+@@ -157,8 +157,19 @@
+     }
+ 
+     protected GameProfile func_152506_a(GameProfile p_152506_1_) {
+-        UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + p_152506_1_.getName()).getBytes(Charsets.UTF_8));
+-        return new GameProfile(uuid, p_152506_1_.getName());
++        UUID uuid;
++        if(field_147333_a.spoofedUUID != null){
++            uuid = field_147333_a.spoofedUUID;
++        }else{
++            uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + p_152506_1_.getName()).getBytes(Charsets.UTF_8));
++        }
++        GameProfile p = new GameProfile(uuid, p_152506_1_.getName());
++        if(field_147333_a.spoofedProfile != null){
++            for(com.mojang.authlib.properties.Property prop : field_147333_a.spoofedProfile){
++                p.getProperties().put(prop.getName(), prop);
++            }
++        }
++        return p;
+     }
+ 
+     static enum LoginState {

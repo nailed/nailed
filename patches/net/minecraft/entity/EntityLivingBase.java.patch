@@ -1,0 +1,20 @@
+--- ../src-base/minecraft/net/minecraft/entity/EntityLivingBase.java
++++ ../src-work/minecraft/net/minecraft/entity/EntityLivingBase.java
+@@ -798,6 +798,8 @@
+     }
+ 
+     protected void func_70069_a(float p_70069_1_) {
++        p_70069_1_ = jk_5.nailed.server.NailedEventFactory.onLivingFall(this, p_70069_1_); //Nailed: fall event
++        if(p_70069_1_ <= 0) return;
+         super.func_70069_a(p_70069_1_);
+         PotionEffect potioneffect = this.func_70660_b(Potion.field_76430_j);
+         float f1 = potioneffect != null ? (float)(potioneffect.func_76458_c() + 1) : 0.0F;
+@@ -893,6 +895,8 @@
+ 
+     protected void func_70665_d(DamageSource p_70665_1_, float p_70665_2_) {
+         if (!this.func_85032_ar()) {
++            p_70665_2_ = jk_5.nailed.server.NailedEventFactory.onEntityDamage(this, p_70665_1_, p_70665_2_);
++            if(p_70665_2_ <= 0) return;
+             p_70665_2_ = this.func_70655_b(p_70665_1_, p_70665_2_);
+             p_70665_2_ = this.func_70672_c(p_70665_1_, p_70665_2_);
+             float f1 = p_70665_2_;

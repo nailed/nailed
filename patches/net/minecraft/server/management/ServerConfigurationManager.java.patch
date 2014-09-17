@@ -1,0 +1,73 @@
+--- ../src-base/minecraft/net/minecraft/server/management/ServerConfigurationManager.java
++++ ../src-work/minecraft/net/minecraft/server/management/ServerConfigurationManager.java
+@@ -13,8 +13,8 @@
+ import java.util.Iterator;
+ import java.util.List;
+ import java.util.Map;
+-import java.util.UUID;
+ import java.util.Map.Entry;
++import java.util.UUID;
+ import net.minecraft.entity.Entity;
+ import net.minecraft.entity.EntityList;
+ import net.minecraft.entity.player.EntityPlayer;
+@@ -46,9 +46,7 @@
+ import net.minecraft.server.MinecraftServer;
+ import net.minecraft.stats.StatList;
+ import net.minecraft.stats.StatisticsFile;
+-import net.minecraft.util.ChatComponentTranslation;
+ import net.minecraft.util.ChunkCoordinates;
+-import net.minecraft.util.EnumChatFormatting;
+ import net.minecraft.util.IChatComponent;
+ import net.minecraft.util.MathHelper;
+ import net.minecraft.world.World;
+@@ -114,7 +112,8 @@
+         ChunkCoordinates chunkcoordinates = worldserver.func_72861_E();
+         this.func_72381_a(p_72355_2_, (EntityPlayerMP)null, worldserver);
+         NetHandlerPlayServer nethandlerplayserver = new NetHandlerPlayServer(this.field_72400_f, p_72355_1_, p_72355_2_);
+-        nethandlerplayserver.func_147359_a(new S01PacketJoinGame(p_72355_2_.func_145782_y(), p_72355_2_.field_71134_c.func_73081_b(), worldserver.func_72912_H().func_76093_s(), worldserver.field_73011_w.field_76574_g, worldserver.field_73013_u, this.func_72352_l(), worldserver.func_72912_H().func_76067_t()));
++        int dimid = (worldserver.field_73011_w instanceof jk_5.nailed.server.world.DelegatingWorldProvider) ? ((jk_5.nailed.server.world.DelegatingWorldProvider) worldserver.field_73011_w).wrapped().getTypeId() : 0;
++        nethandlerplayserver.func_147359_a(new S01PacketJoinGame(p_72355_2_.func_145782_y(), p_72355_2_.field_71134_c.func_73081_b(), worldserver.func_72912_H().func_76093_s(), dimid, worldserver.field_73013_u, this.func_72352_l(), worldserver.func_72912_H().func_76067_t()));
+         nethandlerplayserver.func_147359_a(new S3FPacketCustomPayload("MC|Brand", this.func_72365_p().getServerModName().getBytes(Charsets.UTF_8)));
+         nethandlerplayserver.func_147359_a(new S05PacketSpawnPosition(chunkcoordinates.field_71574_a, chunkcoordinates.field_71572_b, chunkcoordinates.field_71573_c));
+         nethandlerplayserver.func_147359_a(new S39PacketPlayerAbilities(p_72355_2_.field_71075_bZ));
+@@ -123,16 +122,7 @@
+         p_72355_2_.func_147099_x().func_150884_b(p_72355_2_);
+         this.func_96456_a((ServerScoreboard)worldserver.func_96441_U(), p_72355_2_);
+         this.field_72400_f.func_147132_au();
+-        ChatComponentTranslation chatcomponenttranslation;
+ 
+-        if (!p_72355_2_.func_70005_c_().equalsIgnoreCase(s)) {
+-            chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined.renamed", new Object[] {p_72355_2_.func_145748_c_(), s});
+-        } else {
+-            chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", new Object[] {p_72355_2_.func_145748_c_()});
+-        }
+-
+-        chatcomponenttranslation.func_150256_b().func_150238_a(EnumChatFormatting.YELLOW);
+-        this.func_148539_a(chatcomponenttranslation);
+         this.func_72377_c(p_72355_2_);
+         nethandlerplayserver.func_147364_a(p_72355_2_.field_70165_t, p_72355_2_.field_70163_u, p_72355_2_.field_70161_v, p_72355_2_.field_70177_z, p_72355_2_.field_70125_A);
+         this.func_72354_b(p_72355_2_, worldserver);
+@@ -160,6 +150,7 @@
+                 entity.field_98038_p = false;
+             }
+         }
++        jk_5.nailed.server.NailedEventFactory.firePlayerJoined(p_72355_2_);
+     }
+ 
+     protected void func_96456_a(ServerScoreboard p_96456_1_, EntityPlayerMP p_96456_2_) {
+@@ -235,6 +226,7 @@
+         this.func_148540_a(new S38PacketPlayerListItem(p_72377_1_.func_70005_c_(), true, 1000));
+         this.field_72404_b.add(p_72377_1_);
+         WorldServer worldserver = this.field_72400_f.func_71218_a(p_72377_1_.field_71093_bK);
++        jk_5.nailed.server.chunkloading.ChunkIOExecutor.adjustPoolSize(this.func_72394_k());
+         worldserver.func_72838_d(p_72377_1_);
+         this.func_72375_a(p_72377_1_, (WorldServer)null);
+ 
+@@ -262,6 +254,7 @@
+         worldserver.func_73040_p().func_72695_c(p_72367_1_);
+         this.field_72404_b.remove(p_72367_1_);
+         this.field_148547_k.remove(p_72367_1_.func_110124_au());
++        jk_5.nailed.server.chunkloading.ChunkIOExecutor.adjustPoolSize(this.func_72394_k());
+         this.func_148540_a(new S38PacketPlayerListItem(p_72367_1_.func_70005_c_(), false, 9999));
+     }
+ 

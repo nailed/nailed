@@ -1,0 +1,10 @@
+--- ../src-base/minecraft/net/minecraft/server/management/PreYggdrasilConverter.java
++++ ../src-work/minecraft/net/minecraft/server/management/PreYggdrasilConverter.java
+@@ -448,6 +448,7 @@
+     }
+ 
+     private static boolean func_152715_c(PropertyManager p_152715_0_) {
++        if(true) return true; //Also disable this stupid conversion
+         File file1 = func_152725_d(p_152715_0_);
+ 
+         if (file1.exists() && file1.isDirectory()) {

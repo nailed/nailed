@@ -1,0 +1,32 @@
+--- ../src-base/minecraft/net/minecraft/entity/player/EntityPlayerMP.java
++++ ../src-work/minecraft/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -130,27 +130,14 @@
+         super(p_i45285_2_, p_i45285_3_);
+         p_i45285_4_.field_73090_b = this;
+         this.field_71134_c = p_i45285_4_;
+-        ChunkCoordinates chunkcoordinates = p_i45285_2_.func_72861_E();
+-        int i = chunkcoordinates.field_71574_a;
+-        int j = chunkcoordinates.field_71573_c;
+-        int k = chunkcoordinates.field_71572_b;
+ 
+-        if (!p_i45285_2_.field_73011_w.field_76576_e && p_i45285_2_.func_72912_H().func_76077_q() != WorldSettings.GameType.ADVENTURE) {
+-            int l = Math.max(5, p_i45285_1_.func_82357_ak() - 6);
+-            i += this.field_70146_Z.nextInt(l * 2) - l;
+-            j += this.field_70146_Z.nextInt(l * 2) - l;
+-            k = p_i45285_2_.func_72825_h(i, j);
+-        }
++        jk_5.nailed.api.util.Location spawn = p_i45285_2_.field_73011_w.getSpawnPoint();
+ 
+         this.field_71133_b = p_i45285_1_;
+         this.field_147103_bO = p_i45285_1_.func_71203_ab().func_152602_a(this);
+         this.field_70138_W = 0.0F;
+         this.field_70129_M = 0.0F;
+-        this.func_70012_b((double)i + 0.5D, (double)k, (double)j + 0.5D, 0.0F, 0.0F);
+-
+-        while (!p_i45285_2_.func_72945_a(this, this.field_70121_D).isEmpty()) {
+-            this.func_70107_b(this.field_70165_t, this.field_70163_u + 1.0D, this.field_70161_v);
+-        }
++        this.func_70012_b(spawn.getX(), spawn.getY(), spawn.getZ(), spawn.getYaw(), spawn.getPitch());
+     }
+ 
+     public void func_70037_a(NBTTagCompound p_70037_1_) {

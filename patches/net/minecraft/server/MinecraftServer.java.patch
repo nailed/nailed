@@ -1,0 +1,278 @@
+--- ../src-base/minecraft/net/minecraft/server/MinecraftServer.java
++++ ../src-work/minecraft/net/minecraft/server/MinecraftServer.java
+@@ -78,12 +78,11 @@
+     private final List field_71322_p = new ArrayList();
+     private final ICommandManager field_71321_q;
+     public final Profiler field_71304_b = new Profiler();
+-    private final NetworkSystem field_147144_o;
+     private final ServerStatusResponse field_147147_p = new ServerStatusResponse();
+     private final Random field_147146_q = new Random();
+-    private String field_71320_r;
++    private String field_71320_r = "0.0.0.0";
+     private int field_71319_s = -1;
+-    public WorldServer[] field_71305_c;
++    public WorldServer[] field_71305_c = new WorldServer[0];
+     private ServerConfigurationManager field_71318_t;
+     private boolean field_71317_u = true;
+     private boolean field_71316_v;
+@@ -100,7 +99,7 @@
+     private int field_71280_D;
+     private int field_143008_E = 0;
+     public final long[] field_71311_j = new long[100];
+-    public long[][] field_71312_k;
++    public java.util.Hashtable<Integer, long[]> worldTickTimes = new java.util.Hashtable<Integer, long[]>();
+     private KeyPair field_71292_I;
+     private String field_71293_J;
+     private String field_71294_K;
+@@ -124,10 +123,9 @@
+         this.field_152366_X = new PlayerProfileCache(this, field_152367_a);
+         field_71309_l = this;
+         this.field_110456_c = p_i45281_2_;
+-        this.field_71308_o = p_i45281_1_;
+-        this.field_147144_o = new NetworkSystem(this);
++        this.field_71308_o = new File(p_i45281_1_, "maps");
+         this.field_71321_q = new ServerCommandManager();
+-        this.field_71310_m = new AnvilSaveConverter(p_i45281_1_);
++        this.field_71310_m = new AnvilSaveConverter(this.field_71308_o);
+         this.field_152364_T = new YggdrasilAuthenticationService(p_i45281_2_, UUID.randomUUID().toString());
+         this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
+         this.field_152365_W = this.field_152364_T.createProfileRepository();
+@@ -159,56 +157,12 @@
+     }
+ 
+     protected void func_71247_a(String p_71247_1_, String p_71247_2_, long p_71247_3_, WorldType p_71247_5_, String p_71247_6_) {
+-        this.func_71237_c(p_71247_1_);
+         this.func_71192_d("menu.loadingLevel");
+-        this.field_71305_c = new WorldServer[3];
+-        this.field_71312_k = new long[this.field_71305_c.length][100];
+-        ISaveHandler isavehandler = this.field_71310_m.func_75804_a(p_71247_1_, true);
+-        WorldInfo worldinfo = isavehandler.func_75757_d();
+-        WorldSettings worldsettings;
+ 
+-        if (worldinfo == null) {
+-            worldsettings = new WorldSettings(p_71247_3_, this.func_71265_f(), this.func_71225_e(), this.func_71199_h(), p_71247_5_);
+-            worldsettings.func_82750_a(p_71247_6_);
+-        } else {
+-            worldsettings = new WorldSettings(worldinfo);
+-        }
++        jk_5.nailed.server.map.NailedMap map = (jk_5.nailed.server.map.NailedMap) jk_5.nailed.server.map.NailedMapLoader.createLobbyMap();
++        jk_5.nailed.server.world.NailedWorld world = (jk_5.nailed.server.world.NailedWorld) map.worlds()[0];
+ 
+-        if (this.field_71289_N) {
+-            worldsettings.func_77159_a();
+-        }
+-
+-        for (int j = 0; j < this.field_71305_c.length; ++j) {
+-            byte b0 = 0;
+-
+-            if (j == 1) {
+-                b0 = -1;
+-            }
+-
+-            if (j == 2) {
+-                b0 = 1;
+-            }
+-
+-            if (j == 0) {
+-                if (this.func_71242_L()) {
+-                    this.field_71305_c[j] = new DemoWorldServer(this, isavehandler, p_71247_2_, b0, this.field_71304_b);
+-                } else {
+-                    this.field_71305_c[j] = new WorldServer(this, isavehandler, p_71247_2_, b0, worldsettings, this.field_71304_b);
+-                }
+-            } else {
+-                this.field_71305_c[j] = new WorldServerMulti(this, isavehandler, p_71247_2_, b0, worldsettings, this.field_71305_c[0], this.field_71304_b);
+-            }
+-
+-            this.field_71305_c[j].func_72954_a(new WorldManager(this, this.field_71305_c[j]));
+-
+-            if (!this.func_71264_H()) {
+-                this.field_71305_c[j].func_72912_H().func_76060_a(this.func_71265_f());
+-            }
+-
+-            this.field_71318_t.func_72364_a(this.field_71305_c);
+-        }
+-
+-        this.func_147139_a(this.func_147135_j());
++        this.field_71318_t.func_72364_a(new WorldServer[]{world.wrapped()});
+         this.func_71222_d();
+     }
+ 
+@@ -268,6 +222,7 @@
+     protected void func_71267_a(boolean p_71267_1_) {
+         if (!this.field_71290_O) {
+             WorldServer[] aworldserver = this.field_71305_c;
++            if(aworldserver == null) return; //Nailed: NPE protection
+             int i = aworldserver.length;
+ 
+             for (int j = 0; j < i; ++j) {
+@@ -292,9 +247,7 @@
+         if (!this.field_71290_O) {
+             field_147145_h.info("Stopping server");
+ 
+-            if (this.func_147137_ag() != null) {
+-                this.func_147137_ag().func_151268_b();
+-            }
++            jk_5.nailed.server.network.NailedNetworkManager.stopEndpoints();
+ 
+             if (this.field_71318_t != null) {
+                 field_147145_h.info("Saving players");
+@@ -308,10 +261,17 @@
+ 
+                 for (int i = 0; i < this.field_71305_c.length; ++i) {
+                     WorldServer worldserver = this.field_71305_c[i];
++                    jk_5.nailed.server.NailedEventFactory.fireWorldUnload(worldserver);
+                     worldserver.func_73041_k();
+                 }
+             }
+ 
++            WorldServer[] tmp = field_71305_c;
++            for(WorldServer world : tmp){
++                //Nailed: unload the worlds from our system
++                jk_5.nailed.server.world.NailedDimensionManager.setWorld(world.field_73011_w.field_76574_g, null);
++            }
++
+             if (this.field_71307_n.func_76468_d()) {
+                 this.field_71307_n.func_76470_e();
+             }
+@@ -348,13 +308,13 @@
+                     long k = j - i;
+ 
+                     if (k > 2000L && i - this.field_71299_R >= 15000L) {
+-                        field_147145_h.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] {Long.valueOf(k), Long.valueOf(k / 50L)});
++                        if(jk_5.nailed.server.NailedServer$.MODULE$.config().getBoolean("warnings.cantKeepUp")) field_147145_h.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] {Long.valueOf(k), Long.valueOf(k / 50L)});
+                         k = 2000L;
+                         this.field_71299_R = i;
+                     }
+ 
+                     if (k < 0L) {
+-                        field_147145_h.warn("Time ran backwards! Did the system time change?");
++                        if(jk_5.nailed.server.NailedServer$.MODULE$.config().getBoolean("warnings.timeRanBackwards")) field_147145_h.warn("Time ran backwards! Did the system time change?");
+                         k = 0L;
+                     }
+ 
+@@ -448,6 +408,9 @@
+         }
+ 
+         this.field_71304_b.func_76320_a("root");
++        this.field_71304_b.func_76320_a("Nailed:ServerPreTickEvent");
++        jk_5.nailed.server.NailedEventFactory.firePreServerTick(this);
++        this.field_71304_b.func_76319_b();
+         this.func_71190_q();
+ 
+         if (i - this.field_147142_T >= 5000000000L) {
+@@ -485,18 +448,24 @@
+         }
+ 
+         this.field_71304_b.func_76319_b();
++        this.field_71304_b.func_76320_a("Nailed:ServerPostTickEvent");
++        jk_5.nailed.server.NailedEventFactory.firePostServerTick(this);
++
+         this.field_71304_b.func_76319_b();
++        this.field_71304_b.func_76319_b();
+     }
+ 
+     public void func_71190_q() {
+         this.field_71304_b.func_76320_a("levels");
+-        int i;
++        jk_5.nailed.server.chunkloading.ChunkIOExecutor.tick();
+ 
+-        for (i = 0; i < this.field_71305_c.length; ++i) {
++        int[] ids = jk_5.nailed.server.world.NailedDimensionManager.getAllDimensionIds();
++        for (int x = 0; x < this.field_71305_c.length; x++) {
++            int id = ids[x];
+             long j = System.nanoTime();
+ 
+-            if (i == 0 || this.func_71255_r()) {
+-                WorldServer worldserver = this.field_71305_c[i];
++            if (id == 0 || this.func_71255_r()) {
++                WorldServer worldserver = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(id);
+                 this.field_71304_b.func_76320_a(worldserver.func_72912_H().func_76065_j());
+                 this.field_71304_b.func_76320_a("pools");
+                 this.field_71304_b.func_76319_b();
+@@ -508,6 +477,7 @@
+                 }
+ 
+                 this.field_71304_b.func_76320_a("tick");
++                jk_5.nailed.server.NailedEventFactory.firePreWorldTick(this, worldserver);
+                 CrashReport crashreport;
+ 
+                 try {
+@@ -526,6 +496,7 @@
+                     throw new ReportedException(crashreport);
+                 }
+ 
++                jk_5.nailed.server.NailedEventFactory.firePostWorldTick(this, worldserver);
+                 this.field_71304_b.func_76319_b();
+                 this.field_71304_b.func_76320_a("tracker");
+                 worldserver.func_73039_n().func_72788_a();
+@@ -533,16 +504,18 @@
+                 this.field_71304_b.func_76319_b();
+             }
+ 
+-            this.field_71312_k[i][this.field_71315_w % 100] = System.nanoTime() - j;
++            worldTickTimes.get(id)[this.field_71315_w % 100] = System.nanoTime() - j;
+         }
+ 
++        this.field_71304_b.func_76318_c("dimensionUnloading");
++        jk_5.nailed.server.world.NailedDimensionManager.unloadWorlds(worldTickTimes);
+         this.field_71304_b.func_76318_c("connection");
+-        this.func_147137_ag().func_151269_c();
++        jk_5.nailed.server.network.NailedNetworkManager.processQueuedPackets();
+         this.field_71304_b.func_76318_c("players");
+         this.field_71318_t.func_72374_b();
+         this.field_71304_b.func_76318_c("tickables");
+ 
+-        for (i = 0; i < this.field_71322_p.size(); ++i) {
++        for (int i = 0; i < this.field_71322_p.size(); ++i) {
+             ((IUpdatePlayerListBox)this.field_71322_p.get(i)).func_73660_a();
+         }
+ 
+@@ -559,7 +532,7 @@
+ 
+     public static void main(String[] p_main_0_) {
+         Bootstrap.func_151354_b();
+-
++        jk_5.nailed.server.NailedServer.register();
+         try {
+             boolean flag = true;
+             String s = null;
+@@ -666,7 +639,12 @@
+     }
+ 
+     public WorldServer func_71218_a(int p_71218_1_) {
+-        return p_71218_1_ == -1 ? this.field_71305_c[1] : (p_71218_1_ == 1 ? this.field_71305_c[2] : this.field_71305_c[0]);
++        WorldServer world = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(p_71218_1_);
++        if(world == null){
++            jk_5.nailed.server.world.NailedDimensionManager.initWorld(p_71218_1_, new jk_5.nailed.api.world.WorldContext(null, null, null));
++            world = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(p_71218_1_);
++        }
++        return world;
+     }
+ 
+     public String func_71277_t() {
+@@ -726,7 +704,7 @@
+     }
+ 
+     public String getServerModName() {
+-        return "vanilla";
++        return "nailed";
+     }
+ 
+     public CrashReport func_71230_b(CrashReport p_71230_1_) {
+@@ -908,6 +886,7 @@
+             WorldServer worldserver = this.field_71305_c[i];
+ 
+             if (worldserver != null) {
++                jk_5.nailed.server.NailedEventFactory.fireWorldUnload(worldserver);
+                 worldserver.func_73041_k();
+             }
+         }
+@@ -1045,7 +1024,7 @@
+     }
+ 
+     public NetworkSystem func_147137_ag() {
+-        return this.field_147144_o;
++        return null;//this.networkSystem;
+     }
+ 
+     public boolean func_71279_ae() {

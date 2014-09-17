@@ -1,0 +1,28 @@
+--- ../src-base/minecraft/net/minecraft/entity/Entity.java
++++ ../src-work/minecraft/net/minecraft/entity/Entity.java
+@@ -232,23 +232,8 @@
+             i = this.func_82145_z();
+ 
+             if (this.field_71087_bX) {
+-                if (minecraftserver.func_71255_r()) {
+-                    if (this.field_70154_o == null && this.field_82153_h++ >= i) {
+-                        this.field_82153_h = i;
+-                        this.field_71088_bW = this.func_82147_ab();
+-                        byte b0;
+-
+-                        if (this.field_70170_p.field_73011_w.field_76574_g == -1) {
+-                            b0 = 0;
+-                        } else {
+-                            b0 = -1;
+-                        }
+-
+-                        this.func_71027_c(b0);
+-                    }
+-
+-                    this.field_71087_bX = false;
+-                }
++                jk_5.nailed.server.NailedEventFactory.fireEntityInPortal(this);
++                this.field_71087_bX = false;
+             } else {
+                 if (this.field_82153_h > 0) {
+                     this.field_82153_h -= 4;
