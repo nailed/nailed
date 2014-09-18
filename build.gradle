@@ -22,7 +22,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.2.5"
+        classpath "jk_5.nailed.mcp:mcp:1.2.6"
     }
 }
 
