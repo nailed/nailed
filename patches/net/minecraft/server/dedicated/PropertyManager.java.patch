@@ -2,9 +2,9 @@
 +++ ../src-work/minecraft/net/minecraft/server/dedicated/PropertyManager.java
 @@ -16,6 +16,7 @@
  
-     public PropertyManager(File p_i45278_1_) {
-         this.field_73673_c = p_i45278_1_;
-+        if(p_i45278_1_ == null) return;
+     public PropertyManager(File p_i46372_1_) {
+         this.field_73673_c = p_i46372_1_;
++        if(p_i46372_1_ == null) return;
  
-         if (p_i45278_1_.exists()) {
+         if (p_i46372_1_.exists()) {
              FileInputStream fileinputstream = null;

@@ -27,14 +27,14 @@
 @@ -124,10 +123,9 @@
          this.field_152366_X = new PlayerProfileCache(this, field_152367_a);
          field_71309_l = this;
-         this.field_110456_c = p_i45281_2_;
--        this.field_71308_o = p_i45281_1_;
+         this.field_110456_c = p_i46400_2_;
+-        this.field_71308_o = p_i46400_1_;
 -        this.field_147144_o = new NetworkSystem(this);
-+        this.field_71308_o = new File(p_i45281_1_, "maps");
++        this.field_71308_o = new File(p_i46400_1_, "maps");
          this.field_71321_q = new ServerCommandManager();
--        this.field_71310_m = new AnvilSaveConverter(p_i45281_1_);
+-        this.field_71310_m = new AnvilSaveConverter(p_i46400_1_);
 +        this.field_71310_m = new AnvilSaveConverter(this.field_71308_o);
-         this.field_152364_T = new YggdrasilAuthenticationService(p_i45281_2_, UUID.randomUUID().toString());
+         this.field_152364_T = new YggdrasilAuthenticationService(p_i46400_2_, UUID.randomUUID().toString());
          this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
          this.field_152365_W = this.field_152364_T.createProfileRepository();
 @@ -159,56 +157,12 @@
