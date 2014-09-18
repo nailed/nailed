@@ -8,5 +8,3 @@ runtime
 .idea
 !src/main/*
 out
-patches-backup
-patches-broke
