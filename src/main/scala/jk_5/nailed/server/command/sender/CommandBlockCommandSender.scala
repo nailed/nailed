@@ -19,6 +19,7 @@ package jk_5.nailed.server.command.sender
 
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
 import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.server.chat.ChatComponentConverter
 import net.minecraft.command.server.CommandBlockLogic
 
 /**
@@ -48,21 +49,21 @@ class CommandBlockCommandSender(val wrapped: CommandBlockLogic) extends CommandS
    *
    * @param message the message to send
    */
-  override def sendMessage(message: BaseComponent){}
+  override def sendMessage(message: BaseComponent) = wrapped.addChatMessage(ChatComponentConverter.toVanilla(message))
 
   /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
-  override def sendMessage(messages: BaseComponent*){}
+  override def sendMessage(messages: BaseComponent*) = wrapped.addChatMessage(ChatComponentConverter.arrayToVanilla(messages.toArray))
 
   /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
-  override def sendMessage(messages: Array[BaseComponent]){}
+  override def sendMessage(messages: Array[BaseComponent]) = wrapped.addChatMessage(ChatComponentConverter.arrayToVanilla(messages))
 
   override def getDescriptionComponent: BaseComponent = new TextComponent(this.getName)
 }
