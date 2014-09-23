@@ -52,7 +52,7 @@ group = "jk_5.nailed"
 version = "1.0.0-SNAPSHOT"
 
 nailedMCP {
-    minecraftVersion = "1.7.10"
+    minecraftVersion = "1.8"
     mainClass = "net.minecraft.server.MinecraftServer"
 }
 
