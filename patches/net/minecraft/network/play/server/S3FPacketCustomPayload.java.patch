@@ -1,0 +1,17 @@
+--- ../src-base/minecraft/net/minecraft/network/play/server/S3FPacketCustomPayload.java
++++ ../src-work/minecraft/net/minecraft/network/play/server/S3FPacketCustomPayload.java
+@@ -9,12 +9,12 @@
+ 
+ public class S3FPacketCustomPayload implements Packet {
+     private String field_149172_a;
+-    private PacketBuffer field_149171_b;
++    private ByteBuf field_149171_b;
+     private static final String __OBFID = "CL_00001297";
+ 
+     public S3FPacketCustomPayload() {}
+ 
+-    public S3FPacketCustomPayload(String p_i45980_1_, PacketBuffer p_i45980_2_) {
++    public S3FPacketCustomPayload(String p_i45980_1_, ByteBuf p_i45980_2_) {
+         this.field_149172_a = p_i45980_1_;
+         this.field_149171_b = p_i45980_2_;
+ 
