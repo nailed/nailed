@@ -50,7 +50,7 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
 
   override val getGameRules: EditableGameRules = if(this.context != null && this.context.config != null) new WrappedEditableGameRules(context.config.gameRules) else new WrappedEditableGameRules(DefaultGameRules)
 
-  override def getDimensionId = wrapped.provider.dimensionId
+  override def getDimensionId = wrapped.provider.getDimensionId()
   override def getName = "world_" + getDimensionId
   override def getPlayers = players
   override def getType = this.provider match {
@@ -103,9 +103,9 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
       this.wrapped.getWorldInfo.setThundering(true)
   }
 
-  override def getDifficulty = Difficulty.byId(wrapped.difficultySetting.getDifficultyId)
+  override def getDifficulty = Difficulty.byId(wrapped.getDifficulty().getDifficultyId)
   override def setDifficulty(difficulty: Difficulty){
-    this.wrapped.difficultySetting = EnumDifficulty.getDifficultyEnum(difficulty.getId)
+    this.wrapped.getWorldInfo.setDifficulty(EnumDifficulty.getDifficultyEnum(difficulty.getId))
     difficulty match {
       case Difficulty.HARD | Difficulty.NORMAL | Difficulty.EASY => wrapped.setAllowedSpawnTypes(true, true)
       case Difficulty.PEACEFUL => wrapped.setAllowedSpawnTypes(false, true)

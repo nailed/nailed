@@ -3,11 +3,10 @@ package jk_5.nailed.server.network
 import java.io.IOException
 import java.util
 
-import com.google.common.collect.BiMap
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
-import io.netty.handler.codec.{ByteToMessageDecoder, CorruptedFrameException}
-import net.minecraft.network.{NetworkManager, Packet, PacketBuffer}
+import io.netty.handler.codec.ByteToMessageDecoder
+import net.minecraft.network._
 
 /**
  * No description given
@@ -20,15 +19,13 @@ class PacketDecoder extends ByteToMessageDecoder {
     val length = in.readableBytes()
 
     if(length != 0){
-      val packetId = PacketUtils.readVarInt(in)
-      val packet = Packet.generatePacket(ctx.channel().attr(NetworkManager.attrKeyReceivable).get().asInstanceOf[BiMap[java.lang.Integer, Class[_ <: Packet]]], packetId)
-      if(packet == null){
-        throw new CorruptedFrameException("Unknown packet id " + packetId)
-      }
+      val id = PacketUtils.readVarInt(in)
+      val connectionState = ctx.channel().attr(NetworkManager.attrKeyConnectionState).get().asInstanceOf[EnumConnectionState]
+      val packet = connectionState.getPacket(EnumPacketDirection.SERVERBOUND, id)
+
+      if(packet == null) throw new IOException("Bad packet id " + id)
       packet.readPacketData(new PacketBuffer(in))
-      if(in.readableBytes() > 0){
-        throw new IOException("Packet was larger than expected. " + in.readableBytes() + " bytes not read. Packetid: " + packetId + " packetname: " + packet.getClass.getName)
-      }
+      if(in.readableBytes() > 0) throw new IOException("Packet " + connectionState.getId + "/" + id + " (" + packet.getClass.getSimpleName + ") was larger than expected. Found " + in.readableBytes() + " bytes extra")
       out.add(packet)
     }
   }

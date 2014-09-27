@@ -45,9 +45,9 @@ class DelegatingWorldProvider(val wrapped: NWorldProvider) extends WorldProvider
   }
 
   override def createChunkGenerator(): IChunkProvider = wrapped.getType match {
-    case "overworld" => new ChunkProviderGenerate(this.worldObj, this.worldObj.getSeed, this.worldObj.getWorldInfo.isMapFeaturesEnabled)
+    case "overworld" => new ChunkProviderGenerate(this.worldObj, this.worldObj.getSeed, this.worldObj.getWorldInfo.isMapFeaturesEnabled, "") //TODO: is the "" correct? Extra options
     case "void" => new ChunkProviderVoid(this.worldObj)
-    case "nether" => new ChunkProviderHell(this.worldObj, this.worldObj.getSeed)
+    case "nether" => new ChunkProviderHell(this.worldObj, false, this.worldObj.getSeed) //true to generate nether fortresses
     case "end" => new ChunkProviderEnd(this.worldObj, this.worldObj.getSeed)
     case "flat" => new ChunkProviderFlat(this.worldObj, this.worldObj.getSeed, this.worldObj.getWorldInfo.isMapFeaturesEnabled, this.wrapped.getOptions)
     case _ => throw new IllegalArgumentException("Unknown world type " + wrapped.getType)
@@ -69,5 +69,8 @@ class DelegatingWorldProvider(val wrapped: NWorldProvider) extends WorldProvider
     case _ => throw new IllegalArgumentException("Unknown world type " + wrapped.getType)
   }
 
+  //TODO: check worldborder interference
   override def getSpawnPoint = this.world.getConfig.spawnPoint
+
+  override def func_177498_l() = ""
 }

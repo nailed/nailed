@@ -121,7 +121,7 @@ object NailedDimensionManager {
     }
 
     worldContext.put(dimension, ctx)
-    val world = new WorldServer(mcserver, saveHandler, name, dimension, worldSettings, mcserver.theProfiler)
+    val world = new WorldServer(mcserver, saveHandler, worldInfo, dimension, mcserver.theProfiler)
     world.addWorldAccess(new WorldManager(mcserver, world))
     NailedEventFactory.fireWorldLoad(world)
     world.getWorldInfo.setGameType(mcserver.getGameType)

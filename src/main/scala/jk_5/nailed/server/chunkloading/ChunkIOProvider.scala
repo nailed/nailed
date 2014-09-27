@@ -60,7 +60,7 @@ class ChunkIOProvider extends AsynchronousExecutor.CallBackProvider[QueuedChunk,
     }
 
     queuedChunk.loader.loadEntities(queuedChunk.world, queuedChunk.nbt.getCompoundTag("Level"), chunk)
-    chunk.lastSaveTime = queuedChunk.provider.worldObj.getTotalWorldTime
+    chunk.setLastSaveTime(queuedChunk.provider.worldObj.getTotalWorldTime)
     queuedChunk.provider.id2ChunkMap.add(ChunkCoordIntPair.chunkXZ2Int(queuedChunk.x, queuedChunk.z), chunk)
     queuedChunk.provider.loadedChunks.asInstanceOf[java.util.List[Chunk]].add(chunk)
     chunk.onChunkLoad()

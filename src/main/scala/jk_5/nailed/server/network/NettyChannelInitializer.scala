@@ -20,7 +20,7 @@ package jk_5.nailed.server.network
 import io.netty.channel.{Channel, ChannelException, ChannelInitializer, ChannelOption}
 import io.netty.handler.timeout.ReadTimeoutHandler
 import jk_5.nailed.server.network.handler.ServerStartingConnectionDestroyer
-import net.minecraft.network.NetworkManager
+import net.minecraft.network.{EnumPacketDirection, NetworkManager}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.NetHandlerHandshakeTCP
 
@@ -56,7 +56,7 @@ object NettyChannelInitializer extends ChannelInitializer[Channel] {
 
     if(serverStarting) pipe.addLast(ServerStartingConnectionDestroyer)
 
-    val manager = new NetworkManager(false)
+    val manager = new NetworkManager(EnumPacketDirection.SERVERBOUND)
     NailedNetworkManager.networkManagers.add(manager)
     pipe.addLast("packet_handler", manager)
     manager.setNetHandler(new NetHandlerHandshakeTCP(MinecraftServer.getServer, manager))

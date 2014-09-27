@@ -94,7 +94,7 @@ object NailedNetworkManager {
   def stopEndpoints(){
     val msg = new ChatComponentText("Server shutting down")
     for(manager <- this.networkManagers){
-      manager.scheduleOutboundPacket(new S40PacketDisconnect(msg), new ChannelFutureListener {
+      manager.sendPacket(new S40PacketDisconnect(msg), new ChannelFutureListener {
         override def operationComplete(future: ChannelFuture){
           manager.closeChannel(msg)
         }
@@ -125,7 +125,7 @@ object NailedNetworkManager {
             case e: Exception =>
               logger.warn("Error while handling packet for client " + manager.getRemoteAddress, e)
               val msg = new ChatComponentText("Internal server error")
-              manager.scheduleOutboundPacket(new S40PacketDisconnect(msg), new ChannelFutureListener {
+              manager.sendPacket(new S40PacketDisconnect(msg), new ChannelFutureListener {
                 override def operationComplete(future: ChannelFuture){
                   manager.closeChannel(msg)
                 }

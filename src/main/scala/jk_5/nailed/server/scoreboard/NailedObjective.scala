@@ -66,8 +66,8 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
     if(this.scores.remove(score)){
       this.scoresByName.remove(score.name)
       val p = new S3CPacketUpdateScore
-      p.field_149329_a = score.name
-      p.field_149326_d = 1
+      p.name = score.name
+      p.action = S3CPacketUpdateScore.Action.REMOVE
       manager.sendPacket(p)
     }
   }
@@ -75,10 +75,10 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
   def sendData(player: Player){
     for(score <- this.scores){
       val p = new S3CPacketUpdateScore
-      p.field_149329_a = score.name
-      p.field_149327_b = this.id
-      p.field_149328_c = score.value
-      p.field_149326_d = 0
+      p.name = score.name
+      p.objective = this.id
+      p.value = score.value
+      p.action = S3CPacketUpdateScore.Action.CHANGE
       player.asInstanceOf[NailedPlayer].sendPacket(p)
     }
   }

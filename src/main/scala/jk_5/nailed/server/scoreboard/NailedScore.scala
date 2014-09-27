@@ -40,10 +40,10 @@ class NailedScore(val owner: NailedObjective, val name: String) extends Score {
 
   override def update(){
     val p = new S3CPacketUpdateScore
-    p.field_149329_a = this.name
-    p.field_149327_b = this.owner.id
-    p.field_149328_c = this.value
-    p.field_149326_d = 0
+    p.name = this.name
+    p.objective = this.owner.id
+    p.value = this.value
+    p.action = S3CPacketUpdateScore.Action.CHANGE
     owner.manager.sendPacket(p)
   }
 }

@@ -23,6 +23,7 @@ import java.util.UUID
 
 import com.google.common.base.Charsets
 import com.google.common.collect.ImmutableSet
+import io.netty.buffer.Unpooled
 import io.netty.util.CharsetUtil
 import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{BaseComponent, ClickEvent, HoverEvent, TextComponent}
@@ -194,7 +195,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def clearPotionEffect(effect: Potion) = entity.removePotionEffect(effect.getId)
 
   override def loadResourcePack(url: String){
-    sendPacket(new S3FPacketCustomPayload("MC|RPack", url.getBytes(Charsets.UTF_8)))
+    sendPacket(new S3FPacketCustomPayload("MC|RPack", Unpooled.copiedBuffer(url.getBytes(Charsets.UTF_8)))) //TODO: this is deprecated in 1.8
   }
 
   override def addExperienceLevel(level: Int) = entity.addExperienceLevel(level)
@@ -209,7 +210,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     if(netHandler == null) return
 
     if(channels.contains(channel)){
-      sendPacket(new S3FPacketCustomPayload(channel, message))
+      sendPacket(new S3FPacketCustomPayload(channel, Unpooled.copiedBuffer(message)))
     }
   }
 
@@ -228,7 +229,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
         }
       }
 
-      sendPacket(new S3FPacketCustomPayload("REGISTER", stream.toByteArray))
+      sendPacket(new S3FPacketCustomPayload("REGISTER", Unpooled.copiedBuffer(stream.toByteArray)))
     }
   }
 

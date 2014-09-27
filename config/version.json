@@ -11,9 +11,9 @@
     "commons-io:commons-io:2.4",
     "commons-codec:commons-codec:1.9",
     "com.google.code.gson:gson:2.3",
-    "com.mojang:authlib:1.5.13",
+    "com.mojang:authlib:1.5.17",
     "org.apache.logging.log4j:log4j-api:2.0.2",
     "org.apache.logging.log4j:log4j-core:2.0.2",
-    "net.sf.jopt-simple:jopt-simple:4.5"
+    "net.sf.jopt-simple:jopt-simple:4.6"
   ]
 }

@@ -34,7 +34,7 @@ class CommandBlockCommandSender(val wrapped: CommandBlockLogic) extends CommandS
    *
    * @return the senders username
    */
-  override def getName = wrapped.getCommandSenderName
+  override def getName = wrapped.getName
 
   /**
    * Checks if this user has the specified permission node.

@@ -2,11 +2,11 @@ package jk_5.nailed.worldedit
 
 import com.google.common.base.Preconditions.checkNotNull
 import com.sk89q.worldedit.entity.metadata.EntityType
-import net.minecraft.entity.{Entity, EntityLiving, IMerchant, INpc, IProjectile}
 import net.minecraft.entity.item.{EntityBoat, EntityEnderEye, EntityFallingBlock, EntityItem, EntityItemFrame, EntityMinecart, EntityPainting, EntityTNTPrimed, EntityXPOrb}
 import net.minecraft.entity.monster.EntityGolem
 import net.minecraft.entity.passive.{EntityAmbientCreature, EntityTameable, IAnimals}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.{Entity, EntityLiving, IMerchant, INpc, IProjectile}
 
 /**
  * No description given

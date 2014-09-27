@@ -95,5 +95,5 @@ object ChatComponentConverter {
     base
   }
 
-  @inline implicit def convertColor(color: ChatColor): EnumChatFormatting = if(color == null) null else EnumChatFormatting.values().find(c => c.getFormattingCode == color.getCode).orNull
+  @inline implicit def convertColor(color: ChatColor): EnumChatFormatting = if(color == null) null else EnumChatFormatting.values().find(c => c.toString() == "\u00a7" + color.getCode).orNull
 }

@@ -91,14 +91,14 @@ object Teleporter {
 
           p.dimension = dimension
           if(oldType != newType){
-            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newType, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newType, destWorld.getDifficulty, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
           }else{
             if(newType == 1){
-              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(-1, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(-1, destWorld.getDifficulty, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
             }else{
-              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(1, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(1, destWorld.getDifficulty, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
             }
-            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newType, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newType, destWorld.getDifficulty, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
           }
           p.worldObj.asInstanceOf[WorldServer].getPlayerManager.removePlayer(p)
         }
@@ -121,7 +121,7 @@ object Teleporter {
         if(entity == null){
           return null
         }
-        entity.dimension = destWorld.provider.dimensionId
+        entity.dimension = destWorld.provider.getDimensionId
       }
       destWorld.spawnEntityInWorld(entity)
       entity.setWorld(destWorld)
@@ -185,7 +185,7 @@ object Teleporter {
       if(entity.addedToChunk && world.getChunkProvider.chunkExists(x, z)){
         val chunk = world.getChunkFromChunkCoords(x, z)
         chunk.removeEntity(entity)
-        chunk.isModified = true
+        chunk.setChunkModified()
       }
       world.loadedEntityList.remove(entity)
       world.onEntityRemoved(entity)

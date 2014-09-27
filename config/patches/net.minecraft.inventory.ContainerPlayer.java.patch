@@ -18,17 +18,12 @@ diff -r -U 3 minecraft\net\minecraft\inventory\ContainerPlayer.java minecraft_pa
           this.func_75146_a(new Slot(p_i1819_1_, p_i1819_1_.func_70302_i_() - 1 - var4, 8, 8 + var4 * 18) {
  
              private static final String __OBFID = "CL_00001755";
-@@ -45,11 +46,11 @@
+@@ -45,7 +46,7 @@
                 return 1;
              }
              public boolean func_75214_a(ItemStack p_75214_1_) {
 -               return p_75214_1_ == null?false:(p_75214_1_.func_77973_b() instanceof ItemArmor?((ItemArmor)p_75214_1_.func_77973_b()).field_77881_a == var4:(p_75214_1_.func_77973_b() != Item.func_150898_a(Blocks.field_150423_aK) && p_75214_1_.func_77973_b() != Items.field_151144_bL?false:var4 == 0));
 +               return p_75214_1_ == null?false:(p_75214_1_.func_77973_b() instanceof ItemArmor?((ItemArmor)p_75214_1_.func_77973_b()).field_77881_a == var44:(p_75214_1_.func_77973_b() != Item.func_150898_a(Blocks.field_150423_aK) && p_75214_1_.func_77973_b() != Items.field_151144_bL?false:var44 == 0));
-             }
-             @SideOnly(Side.CLIENT)
-             public String func_178171_c() {
--               return ItemArmor.field_94603_a[var4];
-+               return ItemArmor.field_94603_a[var44];
              }
           });
        }
