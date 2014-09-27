@@ -72,5 +72,5 @@ class DelegatingWorldProvider(val wrapped: NWorldProvider) extends WorldProvider
   //TODO: check worldborder interference
   override def getSpawnPoint = this.world.getConfig.spawnPoint
 
-  override def func_177498_l() = ""
+  override def getInternalNameSuffix = ""
 }

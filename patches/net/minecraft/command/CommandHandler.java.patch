@@ -17,7 +17,7 @@
          String s1 = astring[0];
  
 +        //Nailed start
-+        List<String> ret = jk_5.nailed.server.NailedEventFactory.fireTabCompletion(p_71558_1_, p_71558_2_);
++        List<String> ret = jk_5.nailed.server.NailedEventFactory.fireTabCompletion(p_180524_1_, p_180524_2_);
 +        if(ret != null) return ret;
 +        //Nailed end
 +

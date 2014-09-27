@@ -23,6 +23,7 @@ import com.google.common.collect.MapMaker
 import jk_5.nailed.api.mappack.gamerule
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.GameRules
+import net.minecraft.world.GameRules.ValueType
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.convert.wrapAsScala._
@@ -50,7 +51,12 @@ object DelegatingGameRules {
 
 class DelegatingGameRules(original: gamerule.GameRules) extends GameRules {
 
-  override def addGameRule(key: String, value: String) = DelegatingGameRules.logger.warn("Tried to add gamerule " + key + " with value " + value + " to immutable gamerules object")
+  override def getInt(key: String) = original(key).toInt
+
+  override def addGameRule(key: String, value: String, typ: ValueType) = super.addGameRule(key, value, typ)
+  override def areSameType(key: String, otherValue: ValueType) = super.areSameType(key, otherValue)
+
+  //override def addGameRule(key: String, value: String) = DelegatingGameRules.logger.warn("Tried to add gamerule " + key + " with value " + value + " to immutable gamerules object")
   override def setOrCreateGameRule(key: String, value: String) = DelegatingGameRules.logger.warn("Tried to add gamerule " + key + " with value " + value + " to immutable gamerules object")
   override def getGameRuleStringValue(key: String) = original(key)
   override def getGameRuleBooleanValue(key: String) = original(key) == "true"
@@ -70,10 +76,10 @@ class DelegatingGameRules(original: gamerule.GameRules) extends GameRules {
 
 class DelegatingEditableGameRules(private val or: gamerule.EditableGameRules) extends DelegatingGameRules(or) {
 
-  override def addGameRule(key : String, value : String) = or(key) = value
+  //override def addGameRule(key : String, value : String) = or(key) = value
   override def setOrCreateGameRule(key: String, value: String) = or(key) = value
   override def readGameRulesFromNBT(tag: NBTTagCompound){
-    val keys = tag.getKeySet().asInstanceOf[util.Set[String]]
+    val keys = tag.getKeySet.asInstanceOf[util.Set[String]]
     for(k <- keys){
       this.setOrCreateGameRule(k, tag.getString(k))
     }

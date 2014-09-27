@@ -105,7 +105,7 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock with S
 
   override def setSignalStrength(strength: Int){
     this.strength = strength
-    worldObj.updateNeighborsAboutBlockChange(getPos, Blocks.command_block)
+    worldObj.func_175666_e(getPos, Blocks.command_block) //updateNeighborsAboutBlockChange
   }
 
   override def writeToNBT(tag: NBTTagCompound){

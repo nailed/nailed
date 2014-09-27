@@ -66,7 +66,8 @@ class ChunkIOProvider extends AsynchronousExecutor.CallBackProvider[QueuedChunk,
     chunk.onChunkLoad()
 
     if(queuedChunk.provider.serverChunkGenerator != null){
-      queuedChunk.provider.serverChunkGenerator.recreateStructures(queuedChunk.x, queuedChunk.z)
+      //TODO: what is this method in 1.8?
+      //queuedChunk.provider.serverChunkGenerator.recreateStructures(queuedChunk.x, queuedChunk.z)
     }
 
     chunk.populateChunk(queuedChunk.provider, queuedChunk.provider, queuedChunk.x, queuedChunk.z)

@@ -16,12 +16,12 @@
 +                            }
 +                        }else{
 +                            chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
-+                            field_147386_b.scheduleOutboundPacket(new S00PacketDisconnect(chatcomponenttext));
++                            field_147386_b.func_179290_a(new S00PacketDisconnect(chatcomponenttext));
 +                            field_147386_b.func_150718_a(chatcomponenttext);
 +                            return;
 +                        }
-+                        //Nailed end
 +                    }
++                    //Nailed end
                  }
  
                  break;
