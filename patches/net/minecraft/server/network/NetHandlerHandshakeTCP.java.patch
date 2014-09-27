@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/server/network/NetHandlerHandshakeTCP.java
 +++ ../src-work/minecraft/net/minecraft/server/network/NetHandlerHandshakeTCP.java
-@@ -36,6 +36,24 @@
+@@ -35,6 +35,24 @@
                      this.field_147386_b.func_150718_a(chatcomponenttext);
                  } else {
                      this.field_147386_b.func_150719_a(new NetHandlerLoginServer(this.field_147387_a, this.field_147386_b));
@@ -16,7 +16,7 @@
 +                            }
 +                        }else{
 +                            chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
-+                            field_147386_b.func_150725_a(new S00PacketDisconnect(chatcomponenttext));
++                            field_147386_b.scheduleOutboundPacket(new S00PacketDisconnect(chatcomponenttext));
 +                            field_147386_b.func_150718_a(chatcomponenttext);
 +                            return;
 +                        }

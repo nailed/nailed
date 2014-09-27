@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/command/CommandHandler.java
 +++ ../src-work/minecraft/net/minecraft/command/CommandHandler.java
-@@ -23,6 +23,11 @@
+@@ -25,6 +25,11 @@
      public int func_71556_a(ICommandSender p_71556_1_, String p_71556_2_) {
          p_71556_2_ = p_71556_2_.trim();
  
@@ -12,8 +12,8 @@
          if (p_71556_2_.startsWith("/")) {
              p_71556_2_ = p_71556_2_.substring(1);
          }
-@@ -130,6 +135,11 @@
-         String[] astring = p_71558_2_.split(" ", -1);
+@@ -126,6 +131,11 @@
+         String[] astring = p_180524_2_.split(" ", -1);
          String s1 = astring[0];
  
 +        //Nailed start
@@ -22,5 +22,5 @@
 +        //Nailed end
 +
          if (astring.length == 1) {
-             ArrayList arraylist = new ArrayList();
+             ArrayList arraylist = Lists.newArrayList();
              Iterator iterator = this.field_71562_a.entrySet().iterator();

@@ -1,35 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
 +++ ../src-work/minecraft/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -4,12 +4,10 @@
- import java.io.File;
- import java.io.IOException;
- import java.io.InputStreamReader;
--import java.net.InetAddress;
- import java.net.Proxy;
- import java.util.ArrayList;
- import java.util.Collections;
- import java.util.List;
--import java.util.Random;
- import java.util.concurrent.Callable;
- import net.minecraft.command.ICommandSender;
- import net.minecraft.command.ServerCommand;
-@@ -23,14 +21,13 @@
- import net.minecraft.server.ServerEula;
- import net.minecraft.server.gui.MinecraftServerGui;
- import net.minecraft.server.management.PreYggdrasilConverter;
--import net.minecraft.server.management.ServerConfigurationManager;
- import net.minecraft.util.ChunkCoordinates;
- import net.minecraft.util.CryptManager;
- import net.minecraft.util.MathHelper;
- import net.minecraft.world.EnumDifficulty;
- import net.minecraft.world.World;
- import net.minecraft.world.WorldSettings;
--import net.minecraft.world.WorldType;
-+
- import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
- 
-@@ -70,7 +67,7 @@
+@@ -71,7 +71,7 @@
  
      protected boolean func_71197_b() throws IOException {
          Thread thread = new Thread("Server console handler") {
@@ -38,14 +9,7 @@
              public void run() {
                  BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(System.in));
                  String s4;
-@@ -86,124 +83,62 @@
-         };
-         thread.setDaemon(true);
-         thread.start();
-+
-         field_155771_h.info("Starting minecraft server version 1.7.10");
- 
-         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
+@@ -93,11 +93,13 @@
              field_155771_h.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
          }
  
@@ -61,23 +25,18 @@
              field_155771_h.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
              this.field_154332_n.func_154348_b();
              return false;
-         } else {
--            if (this.func_71264_H()) {
--                this.func_71189_e("127.0.0.1");
--            } else {
--                this.func_71229_d(this.field_71340_o.func_73670_a("online-mode", true));
--                this.func_71189_e(this.field_71340_o.func_73671_a("server-ip", ""));
--            }
--
+@@ -109,103 +111,45 @@
+                 this.func_71189_e(this.field_71340_o.func_73671_a("server-ip", ""));
+             }
+ 
 -            this.func_71251_e(this.field_71340_o.func_73670_a("spawn-animals", true));
 -            this.func_71257_f(this.field_71340_o.func_73670_a("spawn-npcs", true));
 -            this.func_71188_g(this.field_71340_o.func_73670_a("pvp", true));
-+            this.func_71229_d(this.field_71340_o.func_73670_a("online-mode", true));
 +            this.func_71251_e(true);
 +            this.func_71257_f(true);
 +            this.func_71188_g(true);
              this.func_71245_h(this.field_71340_o.func_73670_a("allow-flight", false));
--            this.func_155759_m(this.field_71340_o.func_73671_a("resource-pack", ""));
+-            this.func_180507_a_(this.field_71340_o.func_73671_a("resource-pack", ""), this.field_71340_o.func_73671_a("resource-pack-hash", ""));
              this.func_71205_p(this.field_71340_o.func_73671_a("motd", "A Minecraft Server"));
 -            this.func_104055_i(this.field_71340_o.func_73670_a("force-gamemode", false));
 +            this.func_104055_i(false);
@@ -93,7 +52,7 @@
 -            int i = this.field_71340_o.func_73669_a("gamemode", WorldSettings.GameType.SURVIVAL.func_77148_a());
 -            this.field_71337_q = WorldSettings.func_77161_a(i);
 +            this.field_71338_p = true;
-+            this.field_71337_q = WorldSettings.GameType.ADVENTURE; //Nailed: set to ADVENTURE default
++            this.field_71337_q = WorldSettings.GameType.ADVENTURE;
              field_155771_h.info("Default game type: " + this.field_71337_q);
 -            InetAddress inetaddress = null;
  
@@ -107,7 +66,7 @@
 -
              field_155771_h.info("Generating keypair");
              this.func_71253_a(CryptManager.func_75891_b());
--            field_155771_h.info("Starting Minecraft server on " + (this.func_71211_k().length() == 0 ? "*" : this.func_71211_k()) + ":" + this.func_71215_F());
+             field_155771_h.info("Starting Minecraft server on " + (this.func_71211_k().length() == 0 ? "*" : this.func_71211_k()) + ":" + this.func_71215_F());
  
 -            try {
 -                this.func_147137_ag().func_151265_a(inetaddress, this.func_71215_F());
@@ -168,6 +127,7 @@
                  this.func_82356_Z();
                  this.func_110455_j();
                  this.func_70002_Q();
+                 this.func_175577_aI();
 -                this.func_71191_d(this.field_71340_o.func_73669_a("max-build-height", 256));
 -                this.func_71191_d((this.func_71207_Z() + 8) / 16 * 16);
 -                this.func_71191_d(MathHelper.func_76125_a(this.func_71207_Z(), 64, 256));
@@ -180,15 +140,15 @@
                  long i1 = System.nanoTime() - j;
                  String s3 = String.format("%.3fs", new Object[] {Double.valueOf((double)i1 / 1.0E9D)});
                  field_155771_h.info("Done (" + s3 + ")! For help, type \"help\" or \"?\"");
-@@ -220,6 +155,7 @@
-                     this.field_71339_n.func_72602_a();
+@@ -229,6 +173,7 @@
+                     thread1.start();
                  }
  
 +                jk_5.nailed.server.NailedEventFactory.fireServerStarted(this);
                  return true;
              }
          }
-@@ -234,11 +170,11 @@
+@@ -248,11 +193,11 @@
      }
  
      public EnumDifficulty func_147135_j() {
@@ -201,8 +161,8 @@
 +        return false;
      }
  
-     protected void func_71228_a(CrashReport p_71228_1_) {}
-@@ -271,11 +207,11 @@
+     protected void func_71228_a(CrashReport p_71228_1_) {
+@@ -295,11 +240,11 @@
      }
  
      public boolean func_71255_r() {
@@ -216,7 +176,7 @@
      }
  
      public void func_70000_a(PlayerUsageSnooper p_70000_1_) {
-@@ -346,11 +282,11 @@
+@@ -370,11 +315,11 @@
      }
  
      public boolean func_82356_Z() {
@@ -229,4 +189,4 @@
 +        return 0;
      }
  
-     public boolean func_96290_a(World p_96290_1_, int p_96290_2_, int p_96290_3_, int p_96290_4_, EntityPlayer p_96290_5_) {
+     public boolean func_175579_a(World p_175579_1_, BlockPos p_175579_2_, EntityPlayer p_175579_3_) {

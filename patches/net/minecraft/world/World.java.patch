@@ -1,16 +1,22 @@
 --- ../src-base/minecraft/net/minecraft/world/World.java
 +++ ../src-work/minecraft/net/minecraft/world/World.java
-@@ -2428,7 +2428,8 @@
+@@ -2333,13 +2333,8 @@
      }
  
-     public ChunkCoordinates func_72861_E() {
--        return new ChunkCoordinates(this.field_72986_A.func_76079_c(), this.field_72986_A.func_76075_d(), this.field_72986_A.func_76074_e());
+     public BlockPos func_175694_M() {
+-        BlockPos blockpos = new BlockPos(this.field_72986_A.func_76079_c(), this.field_72986_A.func_76075_d(), this.field_72986_A.func_76074_e());
+-
+-        if (!this.func_175723_af().func_177746_a(blockpos)) {
+-            blockpos = this.func_175645_m(new BlockPos(this.func_175723_af().func_177731_f(), 0.0D, this.func_175723_af().func_177721_g()));
+-        }
+-
+-        return blockpos;
 +        jk_5.nailed.api.util.Location spawn = this.field_73011_w.getSpawnPoint();
-+        return new ChunkCoordinates(spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ());
++        return new BlockPos(spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ());
      }
  
-     public void func_72950_A(int p_72950_1_, int p_72950_2_, int p_72950_3_) {
-@@ -2458,7 +2459,7 @@
+     public void func_175652_B(BlockPos p_175652_1_) {
+@@ -2369,7 +2364,7 @@
      }
  
      public GameRules func_82736_K() {
