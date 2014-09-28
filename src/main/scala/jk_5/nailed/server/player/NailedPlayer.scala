@@ -25,16 +25,13 @@ import com.google.common.base.Charsets
 import com.google.common.collect.ImmutableSet
 import io.netty.buffer.Unpooled
 import io.netty.util.CharsetUtil
-import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{BaseComponent, ClickEvent, HoverEvent, TextComponent}
-import jk_5.nailed.api.map.Map
-import jk_5.nailed.api.material.ItemStack
-import jk_5.nailed.api.messaging.StandardMessenger
-import jk_5.nailed.api.player.{GameMode, Player}
+import jk_5.nailed.api.math.{EulerDirection, Vector3d, Vector3f}
+import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.Plugin
-import jk_5.nailed.api.teleport.TeleportOptions
-import jk_5.nailed.api.util.{Checks, Location, Potion}
-import jk_5.nailed.api.world.World
+import jk_5.nailed.api.potion.Potion
+import jk_5.nailed.api.util.Checks
+import jk_5.nailed.api.{GameMode, potion}
 import jk_5.nailed.server.NailedEventFactory
 import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
 import jk_5.nailed.server.teleport.Teleporter
@@ -49,7 +46,6 @@ import net.minecraft.world.WorldSettings.GameType
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.JavaConverters._
-import scala.collection.convert.wrapAsScala._
 import scala.collection.mutable
 
 /**
@@ -73,15 +69,67 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def getName = this.name
   override def getDisplayName = this.displayName
   override def getUniqueId = this.uuid
-  override def hasPermission(permission: String) = true //TODO
-  override def sendMessage(message: BaseComponent) = this.netHandler.sendPacket(new S02PacketChat(message))
   override def sendMessage(messages: BaseComponent*) = this.netHandler.sendPacket(new S02PacketChat(messages: _*))
-  override def sendMessage(messages: Array[BaseComponent]) = this.netHandler.sendPacket(new S02PacketChat(messages: _*))
-  override def getPlayer = this
-  override def getLastPlayed: Long = 0
-  override def hasPlayedBefore: Boolean = false
-  override def getFirstPlayed: Long = 0
-  override def isBanned: Boolean = false
+
+  override def getMaxHealth = getEntity.getMaxHealth
+  override def resetMaxHealth() = setMaxHealth(entity.getMaxHealth)
+  override def setMaxHealth(maxHealth: Double){
+    Checks.positive(maxHealth, "Max health must be greater than 0")
+    entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(maxHealth)
+    if(getHealth > maxHealth){
+      setHealth(maxHealth)
+    }
+  }
+
+  override def getBurnDuration = this.entity.fire
+  override def setBurnDuration(ticks: Int) = this.entity.fire = ticks
+  override def isBurning = this.entity.fire != 0
+
+  override def setExperience(experience: Double) = entity.experience = experience.toFloat
+  override def getExperience = entity.experience.toInt
+  override def getLevel = entity.experienceLevel
+  override def setLevel(level: Int) = entity.experienceLevel = level
+
+  override def damage(amount: Double): Unit = setHealth(getHealth - amount)
+  override def getHealth = Math.min(Math.max(0, getEntity.getHealth), getMaxHealth)
+  override def setHealth(health: Double){
+    Checks.positiveOrZero(health, "health")
+    Checks.smallerThanOrEqual(health, getMaxHealth, "health")
+    if(health == 0) entity.onDeath(DamageSource.generic)
+    entity.setHealth(health.toFloat)
+  }
+
+  override def getPosition = ???
+
+  override def setPosition(position: Vector3d) = ???
+
+  override def setVectorRotation(rotation: Vector3f) = ???
+
+  override def getVectorRotation = ???
+
+  override def getRotation = ???
+
+  override def setRotation(rotation: EulerDirection) = ???
+
+  override def setVelocity(velocity: Vector3f) = ???
+
+  override def getVelocity = ???
+
+  override def setSaturation(saturation: Double) = ???
+
+  override def setHunger(hunger: Double) = ???
+
+  override def getHunger = ???
+
+  override def getSaturation = ???
+
+  override def addPotionEffect(effect: potion.PotionEffect) = ???
+
+  override def removePotionEffect(potion: Potion) = ???
+
+  override def clearAllEffects() = ???
+
+  override def getActiveEffects = ???
 
   override def teleportTo(world: World){
     Teleporter.teleportPlayer(this, new TeleportOptions(if(world.getConfig != null) {val s = world.getConfig.spawnPoint; s.setWorld(world); s} else new Location(world, 0, 64, 0)))
@@ -141,39 +189,6 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     c
   }
 
-  override def setHealth(health: Float){
-    if(health < 0 || health > getMaxHealth){
-      throw new IllegalArgumentException("Health must be between 0 and " + getMaxHealth)
-    }
-
-    if(health == 0){
-      entity.onDeath(DamageSource.generic)
-    }
-
-    entity.setHealth(health)
-  }
-
-  override def damage(amount: Float): Unit = entity.attackEntityFrom(DamageSource.generic, amount)
-  override def getHealth: Float = Math.min(Math.max(0, getEntity.getHealth), getMaxHealth)
-  override def getMaxHealth = getEntity.getMaxHealth
-
-  override def setMaxHealth(health: Float){
-    Checks.check(health > 0, "Max health must be greater than 0")
-
-    entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(health)
-
-    if(getHealth > health){
-      setHealth(health)
-    }
-  }
-
-  override def resetMaxHealth() = setMaxHealth(entity.getMaxHealth)
-  override def heal() = setHealth(getMaxHealth)
-  override def heal(amount: Int){
-    Checks.check(amount > 0, "Amount must be greater than 0")
-    setHealth(getHealth + amount)
-  }
-
   override def addInstantPotionEffect(effect: Potion) = addInstantPotionEffect(effect, 1)
   override def addInstantPotionEffect(effect: Potion, level: Int){
     Checks.check(effect.isInstant, "Potion is not instant")
@@ -197,13 +212,6 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def loadResourcePack(url: String){
     sendPacket(new S3FPacketCustomPayload("MC|RPack", Unpooled.copiedBuffer(url.getBytes(Charsets.UTF_8)))) //TODO: this is deprecated in 1.8
   }
-
-  override def addExperienceLevel(level: Int) = entity.addExperienceLevel(level)
-  override def addExperience(level: Int) = entity.addExperience(level)
-  override def setExperienceLevel(level: Int) = entity.experienceLevel = level
-  override def experienceLevelCap = entity.xpBarCap()
-  override def getExperience = entity.experience.toInt
-  override def getExperienceLevel = entity.experienceLevel
 
   override def sendPluginMessage(source: Plugin, channel: String, message: Array[Byte]){
     StandardMessenger.validatePluginMessage(Server.getInstance.getMessenger, source, channel, message)

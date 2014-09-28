@@ -20,9 +20,7 @@ package jk_5.nailed.server
 import java.io.File
 
 import com.google.gson.Gson
-import jk_5.nailed.api.Server
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
-import jk_5.nailed.api.messaging.StandardMessenger
 import jk_5.nailed.api.plugin.PluginManager
 import jk_5.nailed.server.NailedEventFactory.DummyInternalListenerPlugin
 import jk_5.nailed.server.map.NailedMapLoader
@@ -62,7 +60,7 @@ object NailedServer
   private var mainThread: Thread = _
   val gson = new Gson
 
-  Server.setInstance(this)
+  //Server.setInstance(this)
 
   override def getName = "Nailed"
   override def getVersion = NailedVersion.full

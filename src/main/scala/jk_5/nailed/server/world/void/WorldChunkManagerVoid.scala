@@ -40,7 +40,7 @@ class WorldChunkManagerVoid(val world: World) extends WorldChunkManager(world) {
       }
       val spawn = new BlockPos(0, 63, 0)
       if(world.isAirBlock(spawn)){
-        world.setBlock(spawn, Blocks.bedrock.getDefaultState)
+        world.setBlockState(spawn, Blocks.bedrock.getDefaultState)
       }
     }
     ret

@@ -54,23 +54,21 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
     NailedMapLoader.addWorldToMap(world, this)
   }
 
-  override def onPlayerJoined(player: Player){
+  def onPlayerJoined(player: Player){
     playerSet += player
     players = playerSet.toArray
     getScoreboardManager.onPlayerJoined(player)
     this.playerJoined(player)
   }
 
-  override def onPlayerLeft(player: Player){
+  def onPlayerLeft(player: Player){
     playerSet -= player
     players = playerSet.toArray
     getScoreboardManager.onPlayerLeft(player)
     this.playerLeft(player)
   }
 
-  override def broadcastChatMessage(message: BaseComponent) = playerSet.foreach(_.sendMessage(message))
   override def broadcastChatMessage(message: BaseComponent*) = playerSet.foreach(_.sendMessage(message: _*))
-  override def broadcastChatMessage(message: Array[BaseComponent]) = playerSet.foreach(_.sendMessage(message))
 
   override def toString = s"NailedMap{id=$id,mappack=$mappack}"
 }

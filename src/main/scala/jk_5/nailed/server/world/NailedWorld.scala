@@ -17,9 +17,11 @@
 
 package jk_5.nailed.server.world
 
+import java.util
+
+import jk_5.nailed.api.gamerule.EditableGameRules
 import jk_5.nailed.api.map.Map
-import jk_5.nailed.api.mappack.MappackWorld
-import jk_5.nailed.api.mappack.gamerule.{DefaultGameRules, EditableGameRules}
+import jk_5.nailed.api.mappack.metadata.MappackWorld
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.world._
 import jk_5.nailed.server.map.gamerule.WrappedEditableGameRules
@@ -44,30 +46,30 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
   }
 
   this.getConfig match {
-    case c: MappackWorld => setDifficulty(c.difficulty)
+    case c: MappackWorld => setDifficulty(c.difficulty())
     case _ =>
   }
 
-  override val getGameRules: EditableGameRules = if(this.context != null && this.context.config != null) new WrappedEditableGameRules(context.config.gameRules) else new WrappedEditableGameRules(DefaultGameRules)
+  override val getGameRules: EditableGameRules = if(this.context != null && this.context.getConfig != null) new WrappedEditableGameRules(context.getConfig.gameRules) else new WrappedEditableGameRules(DefaultGameRules)
 
-  override def getDimensionId = wrapped.provider.getDimensionId()
+  override def getDimensionId = wrapped.provider.getDimensionId
   override def getName = "world_" + getDimensionId
-  override def getPlayers = players
-  override def getType = this.provider match {
-    case Some(p) => p.getTypeId
-    case None => 0
+  override def getPlayers = util.Arrays.asList(players: _*)
+  override def getDimension = this.provider match {
+    case Some(p) => p.getDimension
+    case None => Dimension.OVERWORLD
   }
 
   override def setMap(map: Map) = this.map = Some(map)
-  override def getMap = this.map
-  override def getConfig: MappackWorld = if(this.context == null) null else this.context.config
+  override def getMap = this.map.orNull
+  override def getConfig: MappackWorld = if(this.context == null) null else this.context.getConfig
 
   override def onPlayerJoined(player: Player){
     println("Player " + player.toString + " joined world " + this.toString)
     playerSet += player
     players = playerSet.toArray
-    if(this.getConfig.resourcepack != null){
-      player.loadResourcePack(this.getConfig.resourcepack)
+    if(this.getConfig.resourcePackUrl() != null){
+      player.loadResourcePack(this.getConfig.resourcePackUrl(), "") //TODO: fix hash
     }
   }
 
@@ -103,7 +105,7 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
       this.wrapped.getWorldInfo.setThundering(true)
   }
 
-  override def getDifficulty = Difficulty.byId(wrapped.getDifficulty().getDifficultyId)
+  override def getDifficulty = Difficulty.byId(wrapped.getDifficulty.getDifficultyId)
   override def setDifficulty(difficulty: Difficulty){
     this.wrapped.getWorldInfo.setDifficulty(EnumDifficulty.getDifficultyEnum(difficulty.getId))
     difficulty match {
@@ -112,5 +114,5 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
     }
   }
 
-  override def toString = s"NailedWorld{id=$getDimensionId,name=$getName,type=$getType,gameRules=$getGameRules}"
+  override def toString = s"NailedWorld{id=$getDimensionId,name=$getName,dimension=$getDimension,gameRules=$getGameRules}"
 }

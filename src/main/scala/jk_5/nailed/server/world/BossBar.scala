@@ -18,7 +18,6 @@
 package jk_5.nailed.server.world
 
 import jk_5.eventbus.EventHandler
-import jk_5.nailed.api.event.TeleportEventExitWorld
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.entity.DataWatcher
@@ -38,9 +37,9 @@ object BossBar {
     val packet = new S0FPacketSpawnMob
     packet.field_149042_a = entityId
     packet.field_149040_b = typeId
-    packet.field_149041_c = Math.floor(location.getBlockX * 32.0D).toInt
-    packet.field_149038_d = Math.floor(location.getBlockY * 32.0D).toInt
-    packet.field_149039_e = Math.floor(location.getBlockZ * 32.0D).toInt
+    packet.field_149041_c = Math.floor(location.getFloorX * 32.0D).toInt
+    packet.field_149038_d = Math.floor(location.getFloorY * 32.0D).toInt
+    packet.field_149039_e = Math.floor(location.getFloorZ * 32.0D).toInt
     packet.field_149036_f = 0
     packet.field_149037_g = 0
     packet.field_149047_h = 0

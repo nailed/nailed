@@ -19,7 +19,6 @@ package jk_5.nailed.server.tileentity
 
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.map.stat.{Stat, StatListener}
-import jk_5.nailed.api.stat.StatBlock
 import jk_5.nailed.server.world.NailedDimensionManager
 import net.minecraft.command.server.CommandBlockLogic
 import net.minecraft.init.Blocks
@@ -105,7 +104,7 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock with S
 
   override def setSignalStrength(strength: Int){
     this.strength = strength
-    worldObj.func_175666_e(getPos, Blocks.command_block) //updateNeighborsAboutBlockChange
+    worldObj.updateComparatorOutputLevel(getPos, Blocks.command_block)
   }
 
   override def writeToNBT(tag: NBTTagCompound){

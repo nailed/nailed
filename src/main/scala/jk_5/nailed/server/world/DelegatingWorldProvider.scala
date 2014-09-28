@@ -34,7 +34,7 @@ class DelegatingWorldProvider(val wrapped: NWorldProvider) extends WorldProvider
 
   private var dimId: Int = _
   private lazy val world: NWorld = NailedDimensionManager.getWorld(this.dimId)
-  private lazy val map: Map = this.world.getMap.orNull
+  private lazy val map: Map = this.world.getMap
 
   override def getDimensionName = "DIM" + wrapped.getId
 
@@ -70,7 +70,7 @@ class DelegatingWorldProvider(val wrapped: NWorldProvider) extends WorldProvider
   }
 
   //TODO: check worldborder interference
-  override def getSpawnPoint = this.world.getConfig.spawnPoint
+  override def getSpawnPoint = this.world.getConfig.spawnPoint()
 
   override def getInternalNameSuffix = ""
 }

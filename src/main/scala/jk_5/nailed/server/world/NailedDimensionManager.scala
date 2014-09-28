@@ -20,8 +20,8 @@ package jk_5.nailed.server.world
 import java.util
 
 import jk_5.nailed.api
+import jk_5.nailed.api.world
 import jk_5.nailed.api.world.WorldContext
-import jk_5.nailed.api.{Server, world}
 import jk_5.nailed.server.NailedEventFactory
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world._
@@ -106,7 +106,7 @@ object NailedDimensionManager {
   def initWorld(dimension: Int, ctx: WorldContext){
     if(!this.dimensions.contains(dimension) && !this.customProviders.containsKey(dimension)) throw new IllegalArgumentException("Provider type for dimension %d does not exist!".format(dimension))
     val mcserver = MinecraftServer.getServer
-    val name = ctx.name + "/" + ctx.subName
+    val name = ctx.getName + "/" + ctx.getSubName
     val saveHandler = mcserver.getActiveAnvilConverter.getSaveLoader(name, true)
     val worldInfo = saveHandler.loadWorldInfo() //Attempt to load level.dat
 

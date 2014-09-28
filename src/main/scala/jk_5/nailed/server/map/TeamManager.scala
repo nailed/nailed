@@ -18,9 +18,8 @@
 package jk_5.nailed.server.map
 
 import jk_5.nailed.api.chat.ChatColor
-import jk_5.nailed.api.map.Map
+import jk_5.nailed.api.map.{Map, Team}
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.team.Team
 import jk_5.nailed.api.util.Checks
 import jk_5.nailed.server.team.NailedTeam
 
@@ -51,8 +50,8 @@ trait TeamManager extends Map {
     override val members = memberSet.toArray
     override val name = "Default Team"
 
-    override def onPlayerJoined(player: Player) = memberSet += player
-    override def onPlayerLeft(player: Player) = memberSet -= player
+    def onPlayerJoined(player: Player) = memberSet += player
+    def onPlayerLeft(player: Player) = memberSet -= player
   }
 
   def playerJoined(player: Player){
@@ -63,13 +62,16 @@ trait TeamManager extends Map {
 
   }
 
-  override def getTeam(team: String) = teams.get(team)
+  override def getTeam(team: String) = teams.get(team).orNull
   override def getPlayerTeam(player: Player): Team = this.playerTeams.getOrElse(player, this.defaultTeam)
   override def setPlayerTeam(player: Player, team: Team){
     Checks.notNull(player, "player may not be null")
     val before = this.playerTeams.get(player)
     if(before.isDefined){
-      before.get.onPlayerLeft(player)
+      before.get match {
+        case t: NailedTeam => t.onPlayerLeft(player)
+        case _ =>
+      }
     }
     if(team == null || team == defaultTeam){
       this.playerTeams.remove(player)
@@ -77,7 +79,10 @@ trait TeamManager extends Map {
       this.playerTeams.put(player, team)
     }
     if(team != null){
-      team.onPlayerJoined(player)
+      before.get match {
+        case t: NailedTeam => t.onPlayerJoined(player)
+        case _ =>
+      }
     }
   }
   override def getTeams: Array[Team] = teams.values.toArray
