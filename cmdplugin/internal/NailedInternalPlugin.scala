@@ -18,7 +18,6 @@
 package jk_5.nailed.plugins.internal
 
 import jk_5.nailed.api.plugin.Plugin
-import jk_5.nailed.plugins.internal.command._
 
 /**
  * No description given

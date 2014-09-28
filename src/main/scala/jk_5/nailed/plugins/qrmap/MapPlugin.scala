@@ -24,9 +24,10 @@ import jk_5.nailed.api.plugin.Plugin
  *
  * @author jk-5
  */
-class MapPlugin extends Plugin {
+@Plugin(id = "QrMap", name = "QR code maps")
+class MapPlugin {
 
-  override def onEnable(){
+  /*override def onEnable(){
     this.getPluginManager.registerCommand(this, QRMapCommand)
-  }
+  }*/
 }

@@ -3,7 +3,7 @@ package jk_5.nailed.server.map.game.script
 import java.io.{IOException, InputStream}
 import java.util
 
-import jk_5.nailed.api.map.filesystem.IMount
+import jk_5.nailed.api.mappack.filesystem.IMount
 import jk_5.nailed.api.util.Checks
 
 /**

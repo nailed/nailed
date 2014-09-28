@@ -59,15 +59,14 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock with S
 
   override def setWorldObj(world: World){
     super.setWorldObj(world)
-    map = NailedDimensionManager.getWorld(world.provider.getDimensionId).getMap.orNull
+    map = NailedDimensionManager.getWorld(world.provider.getDimensionId).getMap
   }
 
   //BlockCommandBlock is hardcoded to rely on CommandBlockLogic, and i don't want to change that
   //Because of that, we create a CommandBlockLogic object that intercepts all those calls for our own purpose
   val commandBlockLogic = new CommandBlockLogic {
 
-    //Called when the block receives a redstone signal
-    override def func_145755_a(world: World){}
+    override def trigger(worldIn: World){}
     override def getSuccessCount = strength
 
     override def setCommand(data: String){

@@ -25,7 +25,7 @@ class ScriptMapApi(private val map: NailedMap) {
   }
 
   def sendChat(comp: Array[BaseComponent]){
-    map.broadcastChatMessage(comp)
+    map.broadcastChatMessage(comp: _*)
   }
 
   def getPlayers: Array[ScriptPlayerApi] = {

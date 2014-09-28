@@ -124,7 +124,7 @@ class ScriptingEngine(val manager: NailedGameManager) {
         }catch{
           case e: Exception =>
             val map = manager.map
-            map.broadcastChatMessage(new ComponentBuilder("The script engine has crashed. The game will be stopped").color(ChatColor.RED).create())
+            map.broadcastChatMessage(new ComponentBuilder("The script engine has crashed. The game will be stopped").color(ChatColor.RED).create(): _*)
             logger.fatal("Exception while executing game script. Script engine crashed", e)
         }finally{
           manager.onEnded(success)

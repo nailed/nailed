@@ -17,19 +17,12 @@
 
 package jk_5.nailed.plugins.qrmap
 
-import jk_5.nailed.api.command.{Arguments, CommandContext}
-import jk_5.nailed.api.plugin.Command
-import jk_5.nailed.server.player.NailedPlayer
-import net.minecraft.init.Items
-import net.minecraft.item.ItemStack
-import net.minecraft.world.storage.MapData
-
 /**
  * No description given
  *
  * @author jk-5
  */
-object QRMapCommand extends Command("qrmap") {
+/*object QRMapCommand extends Command("qrmap") {
 
   override def execute(ctx: CommandContext, args: Arguments){
     val p = ctx.requirePlayer().asInstanceOf[NailedPlayer]
@@ -46,4 +39,4 @@ object QRMapCommand extends Command("qrmap") {
     data.markDirty()
     ent.inventory.addItemStackToInventory(is)
   }
-}
+}*/

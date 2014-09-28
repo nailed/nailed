@@ -37,6 +37,8 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
 
   var displayName: String = id
 
+  override def getId = id
+  override def getDisplayName = displayName
   override def setDisplayName(displayName: String){
     Checks.notNull(displayName, "displayName may not be null")
     Checks.check(displayName.length() <= 32, "displayName may not be longer than 32")
@@ -49,7 +51,7 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
     this.manager.sendPacket(packet)
   }
 
-  override def score(name: String): Score = {
+  override def getScore(name: String): Score = {
     Checks.notNull(name, "name may not be null")
     scoresByName.get(name) match {
       case Some(s) => s
@@ -64,9 +66,9 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
   override def removeScore(score: Score){
     Checks.notNull(score, "score may not be null")
     if(this.scores.remove(score)){
-      this.scoresByName.remove(score.name)
+      this.scoresByName.remove(score.getName)
       val p = new S3CPacketUpdateScore
-      p.name = score.name
+      p.name = score.getName
       p.action = S3CPacketUpdateScore.Action.REMOVE
       manager.sendPacket(p)
     }
@@ -75,9 +77,9 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
   def sendData(player: Player){
     for(score <- this.scores){
       val p = new S3CPacketUpdateScore
-      p.name = score.name
+      p.name = score.getName
       p.objective = this.id
-      p.value = score.value
+      p.value = score.getValue
       p.action = S3CPacketUpdateScore.Action.CHANGE
       player.asInstanceOf[NailedPlayer].sendPacket(p)
     }

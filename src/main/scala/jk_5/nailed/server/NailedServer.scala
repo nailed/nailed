@@ -22,7 +22,6 @@ import java.io.File
 import com.google.gson.Gson
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
 import jk_5.nailed.api.plugin.PluginManager
-import jk_5.nailed.server.NailedEventFactory.DummyInternalListenerPlugin
 import jk_5.nailed.server.map.NailedMapLoader
 import jk_5.nailed.server.map.game.NailedGameTypeRegistry
 import jk_5.nailed.server.mappack.MappackRegistryTrait

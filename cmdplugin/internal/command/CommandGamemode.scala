@@ -18,7 +18,7 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.command._
-import jk_5.nailed.api.player.{GameMode, Player}
+import jk_5.nailed.api.player.Player
 
 /**
  * No description given

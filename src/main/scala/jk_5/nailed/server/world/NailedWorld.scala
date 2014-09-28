@@ -19,7 +19,7 @@ package jk_5.nailed.server.world
 
 import java.util
 
-import jk_5.nailed.api.gamerule.EditableGameRules
+import jk_5.nailed.api.gamerule.{DefaultGameRules, EditableGameRules}
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.mappack.metadata.MappackWorld
 import jk_5.nailed.api.player.Player
@@ -50,11 +50,11 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
     case _ =>
   }
 
-  override val getGameRules: EditableGameRules = if(this.context != null && this.context.getConfig != null) new WrappedEditableGameRules(context.getConfig.gameRules) else new WrappedEditableGameRules(DefaultGameRules)
+  override val getGameRules: EditableGameRules = if(this.context != null && this.context.getConfig != null) new WrappedEditableGameRules(context.getConfig.gameRules) else new WrappedEditableGameRules(DefaultGameRules.INSTANCE)
 
   override def getDimensionId = wrapped.provider.getDimensionId
   override def getName = "world_" + getDimensionId
-  override def getPlayers = util.Arrays.asList(players: _*)
+  override def getPlayers: util.Collection[Player] = util.Arrays.asList(players: _*)
   override def getDimension = this.provider match {
     case Some(p) => p.getDimension
     case None => Dimension.OVERWORLD

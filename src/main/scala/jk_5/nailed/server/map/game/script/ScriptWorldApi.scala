@@ -4,6 +4,8 @@ import jk_5.nailed.api.world.WeatherType
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedWorld
 
+import scala.collection.convert.wrapAsScala._
+
 /**
   * No description given
   *
@@ -12,7 +14,7 @@ import jk_5.nailed.server.world.NailedWorld
 class ScriptWorldApi(private val world: NailedWorld) {
 
   def getPlayers: Array[ScriptPlayerApi] = {
-    world.getPlayers.map(p => new ScriptPlayerApi(p.asInstanceOf[NailedPlayer]))
+    world.getPlayers.map(p => new ScriptPlayerApi(p.asInstanceOf[NailedPlayer])).toArray
   }
 
   def setTime(time: Int) = world.setTime(time)

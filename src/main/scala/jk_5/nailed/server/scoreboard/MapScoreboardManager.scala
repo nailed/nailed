@@ -83,7 +83,7 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
     for(e <- this.displayLocations.entrySet){
       val packet = new S3DPacketDisplayScoreboard
       packet.field_149374_a = e.getKey.getId
-      packet.field_149373_b = e.getValue.id
+      packet.field_149373_b = e.getValue.getId
       np.sendPacket(packet)
     }
 
@@ -137,7 +137,7 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
       packet.field_149373_b = ""
     }else{
       this.displayLocations.put(display, objective)
-      packet.field_149373_b = objective.id
+      packet.field_149373_b = objective.getId
     }
     this.sendPacket(packet)
   }

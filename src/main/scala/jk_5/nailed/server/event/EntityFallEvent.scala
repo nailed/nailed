@@ -17,8 +17,8 @@
 
 package jk_5.nailed.server.event
 
-import jk_5.eventbus.Event
 import jk_5.eventbus.Event.Cancelable
+import jk_5.nailed.api.event.PlatformEvent
 import net.minecraft.entity.EntityLivingBase
 
 /**
@@ -26,4 +26,4 @@ import net.minecraft.entity.EntityLivingBase
  *
  * @author jk-5
  */
-@Cancelable case class EntityFallEvent(entity: EntityLivingBase, var distance: Float) extends Event
+@Cancelable case class EntityFallEvent(entity: EntityLivingBase, var distance: Float) extends PlatformEvent

@@ -4,7 +4,7 @@ import java.io.{BufferedReader, IOException, InputStream, InputStreamReader}
 import java.util
 import java.util.regex.Pattern
 
-import jk_5.nailed.api.map.filesystem.IMount
+import jk_5.nailed.api.mappack.filesystem.IMount
 import jk_5.nailed.api.util.Checks
 import org.apache.commons.io.FilenameUtils
 

@@ -17,8 +17,9 @@
 
 package jk_5.nailed.server.mappack.metadata.xml
 
-import jk_5.nailed.api.mappack.MappackWorld
-import jk_5.nailed.api.mappack.implementation.DefaultMappackWorldProperties
+import jk_5.nailed.api.gamerule.{GameRule, GameRules}
+import jk_5.nailed.api.mappack.metadata.MappackWorld
+import jk_5.nailed.api.mappack.metadata.impl.DefaultMappackWorld
 import jk_5.nailed.api.util.{Checks, Location}
 import jk_5.nailed.api.world.Difficulty
 import org.jdom2.Element
@@ -36,11 +37,11 @@ object XmlMappackWorld {
     val z = if(e.getAttribute("z") != null) e.getAttribute("z").getDoubleValue else 0
     val yaw = if(e.getAttribute("yaw") != null) e.getAttribute("yaw").getFloatValue else 0
     val pitch = if(e.getAttribute("pitch") != null) e.getAttribute("pitch").getFloatValue else 0
-    Location(null, x, y, z, yaw, pitch)
+    new Location(x, y, z, yaw, pitch)
   }
 }
 
-class XmlMappackWorld(override val name: String, element: Element, parent: MappackWorld = DefaultMappackWorldProperties) extends MappackWorld {
+class XmlMappackWorld(override val name: String, element: Element, parent: MappackWorld = DefaultMappackWorld.INSTANCE) extends MappackWorld {
   Checks.notNull(parent, "parent may not be null")
 
   override val generator = if(element.getChild("generator", element.getNamespace) != null) element.getChild("generator", element.getNamespace).getText else parent.generator
@@ -51,8 +52,8 @@ class XmlMappackWorld(override val name: String, element: Element, parent: Mappa
     case e => throw new RuntimeException("Unknown world generator type '"  + e + "'")
   } else parent.dimension
   override val spawnPoint = if(element.getChild("spawnpoint", element.getNamespace) != null) XmlMappackWorld.readLocation(element.getChild("spawnpoint", element.getNamespace)) else parent.spawnPoint
-  override val gameRules = new ImmutableXmlGameRules(if(element.getChild("gamerules", element.getNamespace) != null) element.getChild("gamerules", element.getNamespace) else new Element("dummy", element.getNamespace), parent.gameRules)
-  override val resourcepack = if(element.getChild("resourcepack", element.getNamespace) != null) element.getChild("resourcepack", element.getNamespace).getText else parent.resourcepack
+  override val gameRules = new ImmutableXmlGameRules(if(element.getChild("gamerules", element.getNamespace) != null) element.getChild("gamerules", element.getNamespace) else new Element("dummy", element.getNamespace), parent.gameRules.asInstanceOf[GameRules[GameRule[_]]])
+  override val resourcePackUrl = if(element.getChild("resourcepack", element.getNamespace) != null) element.getChild("resourcepack", element.getNamespace).getText else parent.resourcePackUrl()
   override val difficulty = if(element.getChild("difficulty", element.getNamespace) != null) Difficulty.byName(element.getChild("difficulty", element.getNamespace).getText) else parent.difficulty
   override val disableFood = if(element.getChild("disableFood", element.getNamespace) != null) element.getChild("disableFood", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableFood
   override val disableDamage = if(element.getChild("disableDamage", element.getNamespace) != null) element.getChild("disableDamage", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableDamage

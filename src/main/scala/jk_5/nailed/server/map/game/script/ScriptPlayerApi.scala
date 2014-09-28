@@ -23,6 +23,6 @@ class ScriptPlayerApi(private val player: NailedPlayer) {
   }
 
   def sendChat(comp: Array[BaseComponent]){
-    player.sendMessage(comp)
+    player.sendMessage(comp: _*)
   }
 }

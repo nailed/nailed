@@ -78,7 +78,7 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
       packet.field_149373_b = ""
     }else{
       this.displayLocations.put(display, objective)
-      packet.field_149373_b = objective.id
+      packet.field_149373_b = objective.getId
     }
     this.player.sendPacket(packet)
   }
@@ -97,7 +97,7 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
     for(e <- this.displayLocations.entrySet){
       val packet = new S3DPacketDisplayScoreboard
       packet.field_149374_a = e.getKey.getId
-      packet.field_149373_b = e.getValue.id
+      packet.field_149373_b = e.getValue.getId
       player.sendPacket(packet)
     }
 

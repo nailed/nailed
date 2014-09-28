@@ -20,8 +20,6 @@ package jk_5.nailed.server.player
 import java.util.UUID
 
 import jk_5.eventbus.EventHandler
-import jk_5.nailed.api.Server
-import jk_5.nailed.api.event.{PlayerJoinServerEvent, PlayerLeaveServerEvent}
 import jk_5.nailed.api.player.Player
 import net.minecraft.entity.player.EntityPlayerMP
 import org.apache.logging.log4j.LogManager

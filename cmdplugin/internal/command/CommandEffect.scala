@@ -18,9 +18,7 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.command._
-import jk_5.nailed.api.util.Potion
 
-import scala.collection.convert.wrapAsScala._
 import scala.collection.mutable
 
 /**

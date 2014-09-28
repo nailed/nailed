@@ -26,11 +26,13 @@ import com.google.common.collect.ImmutableSet
 import io.netty.buffer.Unpooled
 import io.netty.util.CharsetUtil
 import jk_5.nailed.api.chat.{BaseComponent, ClickEvent, HoverEvent, TextComponent}
+import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.math.{EulerDirection, Vector3d, Vector3f}
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.api.potion.Potion
-import jk_5.nailed.api.util.Checks
+import jk_5.nailed.api.util.{Checks, Location}
+import jk_5.nailed.api.world.World
 import jk_5.nailed.api.{GameMode, potion}
 import jk_5.nailed.server.NailedEventFactory
 import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
@@ -71,6 +73,10 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def getUniqueId = this.uuid
   override def sendMessage(messages: BaseComponent*) = this.netHandler.sendPacket(new S02PacketChat(messages: _*))
 
+  override def heal(amount: Double){
+    val newAmount = getHealth + amount
+    setHealth(Math.min(getMaxHealth, newAmount))
+  }
   override def getMaxHealth = getEntity.getMaxHealth
   override def resetMaxHealth() = setMaxHealth(entity.getMaxHealth)
   override def setMaxHealth(maxHealth: Double){
