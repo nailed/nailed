@@ -17,7 +17,7 @@
 
 package jk_5.nailed.server.world
 
-import jk_5.nailed.api.Server
+import jk_5.nailed.api.Platform
 import jk_5.nailed.api.world.{World, WorldContext, WorldProvider}
 
 /**
@@ -25,7 +25,7 @@ import jk_5.nailed.api.world.{World, WorldContext, WorldProvider}
  *
  * @author jk-5
  */
-trait WorldProviders extends Server {
+trait WorldProviders extends Platform {
   override def getDefaultWorldProviders = NailedDefaultWorldProviders
 
   override def createNewWorld(provider: WorldProvider, ctx: WorldContext): World = {

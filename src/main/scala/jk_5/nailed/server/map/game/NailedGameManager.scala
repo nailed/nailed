@@ -1,7 +1,7 @@
 package jk_5.nailed.server.map.game
 
-import jk_5.nailed.api.Server
 import jk_5.nailed.api.map.GameManager
+import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.map.NailedMap
 import jk_5.nailed.server.map.game.script.ScriptingEngine
 import org.apache.logging.log4j.LogManager
@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager
 class NailedGameManager(val map: NailedMap) extends GameManager {
 
   val logger = LogManager.getLogger
-  override val getGameType = if(map.mappack != null) Server.getInstance.getGameTypeRegistry.getByName(map.mappack.getMetadata.gameType) else null
+  override val getGameType = if(map.mappack != null) NailedPlatform.getGameTypeRegistry.getByName(map.mappack.getMetadata.gameType) else null
   override val hasCustomGameType = getGameType != null
   var isGameRunning = false
   val scriptingEngine = new ScriptingEngine(this)

@@ -18,7 +18,7 @@
 package jk_5.nailed.server.tileentity
 
 import jk_5.nailed.api.map.Map
-import jk_5.nailed.api.map.stat.{Stat, StatListener}
+import jk_5.nailed.api.map.stat.{Stat, StatBlock, StatListener}
 import jk_5.nailed.server.world.NailedDimensionManager
 import net.minecraft.command.server.CommandBlockLogic
 import net.minecraft.init.Blocks
@@ -48,7 +48,7 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock with S
     if(register && getWorld != null && map != null){
       subscribed = map.getStatManager.getStat(content)
       if(subscribed != null){
-        subscribed.registerListener(TileEntityStatEmitter.this)
+        subscribed.addListener(TileEntityStatEmitter.this)
         response = "Stat registered. Stat emitter ready to emit"
       }else{
         response = "Could not register. Stat does not exist"
@@ -71,11 +71,11 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock with S
 
     override def setCommand(data: String){
       content = data
-      if(subscribed != null) subscribed.unregisterListener(TileEntityStatEmitter.this)
+      if(subscribed != null) subscribed.removeListener(TileEntityStatEmitter.this)
       if(map != null){
         subscribed = map.getStatManager.getStat(content)
         if(subscribed != null){
-          subscribed.registerListener(TileEntityStatEmitter.this)
+          subscribed.addListener(TileEntityStatEmitter.this)
           response = "Stat registered. Stat emitter ready to emit"
         }else{
           response = "Could not register. Stat does not exist"

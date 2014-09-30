@@ -17,9 +17,12 @@
 
 package jk_5.nailed.server.player
 
-import java.util.UUID
+import java.util.{Collections, UUID}
 
+import com.google.common.collect.ImmutableSet
 import jk_5.eventbus.EventHandler
+import jk_5.nailed.api.Platform
+import jk_5.nailed.api.event.player.{PlayerJoinServerEvent, PlayerLeaveServerEvent}
 import jk_5.nailed.api.player.Player
 import net.minecraft.entity.player.EntityPlayerMP
 import org.apache.logging.log4j.LogManager
@@ -31,54 +34,43 @@ import scala.collection.mutable
  *
  * @author jk-5
  */
-trait PlayerRegistry extends Server {
+trait PlayerRegistry extends Platform {
 
   private val players = mutable.ArrayBuffer[NailedPlayer]()
   private var onlinePlayers = new Array[NailedPlayer](0)
+  private var onlinePlayersCollection: java.util.Collection[Player] = Collections.emptyList()
   private val playersById = mutable.HashMap[UUID, NailedPlayer]()
   private val playersByName = mutable.HashMap[String, NailedPlayer]()
   private val logger = LogManager.getLogger
 
-  /**
-   * Gets the player with the given UUID.
-   *
-   * @param id UUID of the player to retrieve
-   * @return Some(player) if a player was found, None otherwise
-   */
-  override def getPlayer(id: UUID) = this.playersById.get(id)
+  override def getPlayer(id: UUID) = this.playersById.get(id).orNull
+  override def getPlayerByName(name: String) = this.playersByName.get(name).orNull
+  def getPlayerFromEntity(entity: EntityPlayerMP) = this.getPlayer(entity.getGameProfile.getId)
 
-  @deprecated("Use the new uuid replacement", "mc1.8")
-  override def getPlayerByName(name: String) = this.playersByName.get(name)
-
-  def getPlayerFromEntity(entity: EntityPlayerMP) = this.getPlayer(entity.getGameProfile.getId).get
-
-  def getOrCreatePlayer(entity: EntityPlayerMP) = this.getPlayer(entity.getGameProfile.getId) match {
-    case Some(player) => player
-    case None =>
+  def getOrCreatePlayer(entity: EntityPlayerMP): NailedPlayer = this.getPlayer(entity.getGameProfile.getId) match {
+    case null =>
       val player = new NailedPlayer(entity.getGameProfile.getId, entity.getGameProfile.getName)
       this.players += player
       this.playersById.put(entity.getGameProfile.getId, player)
       this.playersByName.put(entity.getGameProfile.getName, player)
       player
+    case p => p.asInstanceOf[NailedPlayer]
   }
 
-  /**
-   * Gets all currently online players
-   *
-   * @return an array containing all online players
-   */
-  override def getOnlinePlayers: Array[Player] = this.onlinePlayers.asInstanceOf[Array[Player]]
+  override def getOnlinePlayers: java.util.Collection[Player] = this.onlinePlayersCollection
 
   @EventHandler
   def onPlayerJoin(event: PlayerJoinServerEvent){
     val b = mutable.ArrayBuffer[NailedPlayer]()
     b ++= this.onlinePlayers
-    b += event.player.asInstanceOf[NailedPlayer]
+    b += event.getPlayer.asInstanceOf[NailedPlayer]
     this.onlinePlayers = b.toArray
+    this.onlinePlayersCollection = ImmutableSet.copyOf(this.onlinePlayers.asInstanceOf[Array[Player]])
   }
 
   @EventHandler
   def onPlayerLeave(event: PlayerLeaveServerEvent){
-    this.onlinePlayers = this.onlinePlayers.filter(p => p != event.player)
+    this.onlinePlayers = this.onlinePlayers.filter(p => p != event.getPlayer)
+    this.onlinePlayersCollection = ImmutableSet.copyOf(this.onlinePlayers.asInstanceOf[Array[Player]])
   }
 }

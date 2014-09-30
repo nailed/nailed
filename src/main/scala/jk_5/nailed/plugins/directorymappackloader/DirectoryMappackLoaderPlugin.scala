@@ -38,10 +38,10 @@ class DirectoryMappackLoaderPlugin {
 
   val logger = LoggerFactory.getLogger(this.getClass)
   var wasLoaded = false
-  final lazy val mappacksDir = new File("mappacks") //TODO: get the runtime dir via some event
 
   @EventHandler
   def registerMappacks(event: RegisterMappacksEvent){
+    val mappacksDir = new File(event.getPlatform.getRuntimeDirectory, "mappacks")
     logger.info((if(wasLoaded) "Rel" else "L") + "oading directory mappacks...")
     if(!mappacksDir.exists()) mappacksDir.mkdir()
     var i = 0

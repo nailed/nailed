@@ -20,6 +20,7 @@ package jk_5.nailed.server.teleport
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.{Location, TeleportOptions}
 import jk_5.nailed.api.world.{Dimension, World}
+import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedWorld
 import net.minecraft.entity.player.EntityPlayerMP
@@ -62,8 +63,8 @@ object Teleporter {
     val destWorld = destinationWorld.asInstanceOf[NailedWorld].wrapped
 
     val player: Player = ent match {
-      case p: EntityPlayerMP => Server.getInstance.getPlayer(p.getGameProfile.getId)
-      case _ => None
+      case p: EntityPlayerMP => NailedPlatform.getPlayer(p.getGameProfile.getId)
+      case _ => null
     }
 
     if(player != null && !TeleportEventFactory.isTeleportAllowed(currentWorld, destinationWorld, player, options)){
@@ -108,7 +109,7 @@ object Teleporter {
     if(player != null) TeleportEventFactory.onExitWorld(currentWorld, destinationWorld, player, options)
 
     entity.setLocationAndAngles(location.getX, location.getX, location.getZ, location.getYaw, location.getPitch)
-    destWorld.theChunkProviderServer.loadChunk(location.getFloorX >> 4, location.getFloorZ >> 4)
+    destWorld.theChunkProviderServer.loadChunk((location.getFloorX >> 4).toInt, (location.getFloorZ >> 4).toInt)
     if(changingworlds){
       if(!entity.isInstanceOf[EntityPlayerMP]){
         val entityNBT = new NBTTagCompound

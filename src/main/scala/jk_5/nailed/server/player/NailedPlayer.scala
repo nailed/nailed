@@ -21,23 +21,22 @@ import java.io.{ByteArrayOutputStream, IOException}
 import java.util
 import java.util.UUID
 
-import com.google.common.base.Charsets
 import com.google.common.collect.ImmutableSet
 import io.netty.buffer.Unpooled
 import io.netty.util.CharsetUtil
 import jk_5.nailed.api.chat.{BaseComponent, ClickEvent, HoverEvent, TextComponent}
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.math.{EulerDirection, Vector3d, Vector3f}
+import jk_5.nailed.api.messaging.StandardMessenger
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.plugin.Plugin
+import jk_5.nailed.api.plugin.PluginIdentifier
 import jk_5.nailed.api.potion.Potion
-import jk_5.nailed.api.util.{Checks, Location}
+import jk_5.nailed.api.util.{Checks, Location, TeleportOptions}
 import jk_5.nailed.api.world.World
 import jk_5.nailed.api.{GameMode, potion}
-import jk_5.nailed.server.NailedEventFactory
 import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
 import jk_5.nailed.server.teleport.Teleporter
-import jk_5.nailed.server.utils.ItemStackConverter
+import jk_5.nailed.server.{NailedEventFactory, NailedPlatform}
 import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.{S02PacketChat, S3FPacketCustomPayload}
@@ -48,6 +47,7 @@ import net.minecraft.world.WorldSettings.GameType
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.JavaConverters._
+import scala.collection.convert.wrapAsScala._
 import scala.collection.mutable
 
 /**
@@ -105,40 +105,21 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     entity.setHealth(health.toFloat)
   }
 
-  override def getPosition = ???
-
+  override def getPosition = this.getLocation
   override def setPosition(position: Vector3d) = ???
-
   override def setVectorRotation(rotation: Vector3f) = ???
-
   override def getVectorRotation = ???
-
   override def getRotation = ???
-
   override def setRotation(rotation: EulerDirection) = ???
-
   override def setVelocity(velocity: Vector3f) = ???
-
   override def getVelocity = ???
-
   override def setSaturation(saturation: Double) = ???
-
   override def setHunger(hunger: Double) = ???
-
   override def getHunger = ???
-
   override def getSaturation = ???
 
-  override def addPotionEffect(effect: potion.PotionEffect) = ???
-
-  override def removePotionEffect(potion: Potion) = ???
-
-  override def clearAllEffects() = ???
-
-  override def getActiveEffects = ???
-
   override def teleportTo(world: World){
-    Teleporter.teleportPlayer(this, new TeleportOptions(if(world.getConfig != null) {val s = world.getConfig.spawnPoint; s.setWorld(world); s} else new Location(world, 0, 64, 0)))
+    Teleporter.teleportPlayer(this, new TeleportOptions(if(world.getConfig != null) Location.builder().copy(world.getConfig.spawnPoint()).setWorld(world).build() else new Location(world, 0, 64, 0)))
   }
 
   def getEntity = this.entity
@@ -152,6 +133,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     case GameType.SURVIVAL => GameMode.SURVIVAL
     case GameType.CREATIVE => GameMode.CREATIVE
     case GameType.ADVENTURE => GameMode.ADVENTURE
+    case GameType.SPECTATOR => GameMode.SPECTATOR
     case e => throw new IllegalStateException("Player has unknown game mode " + e.getName + " " + e.getID)
   }
 
@@ -159,6 +141,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     case GameMode.SURVIVAL => GameType.SURVIVAL
     case GameMode.CREATIVE => GameType.CREATIVE
     case GameMode.ADVENTURE => GameType.ADVENTURE
+    case GameMode.SPECTATOR => GameType.SPECTATOR
   })
 
   override def setAllowedToFly(allowed: Boolean){
@@ -168,7 +151,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     this.getEntity.sendPlayerAbilities()
   }
 
-  override def getInventorySize: Int = this.getEntity.inventory.getSizeInventory
+  /*override def getInventorySize: Int = this.getEntity.inventory.getSizeInventory
   override def getInventorySlotContent(slot: Int): ItemStack = ItemStackConverter.toNailed(this.getEntity.inventory.getStackInSlot(slot)) //TODO: maybe save inventories in our system instead the vanilla one
   override def setInventorySlot(slot: Int, stack: ItemStack){
     this.getEntity.inventory.setInventorySlotContents(slot, ItemStackConverter.toVanilla(stack))
@@ -182,7 +165,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   override def iterateInventory(p: ItemStack => Unit){
     for(i <- 0 until this.getInventorySize) p(getInventorySlotContent(i))
-  }
+  }*/
 
   override def kick(reason: String){
     this.netHandler.kickPlayerFromServer(reason)
@@ -195,32 +178,43 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     c
   }
 
-  override def addInstantPotionEffect(effect: Potion) = addInstantPotionEffect(effect, 1)
-  override def addInstantPotionEffect(effect: Potion, level: Int){
-    Checks.check(effect.isInstant, "Potion is not instant")
-    Checks.check(level > 0, "Level should be > 0")
-    this.entity.addPotionEffect(new PotionEffect(effect.getId, 1, level - 1))
-  }
-  override def addPotionEffect(effect: Potion, seconds: Int) = addPotionEffect(effect, seconds, 1)
-  override def addPotionEffect(effect: Potion, seconds: Int, level: Int) = addPotionEffect(effect, seconds, level, ambient = false)
-  override def addPotionEffect(effect: Potion, seconds: Int, level: Int, ambient: Boolean){
-    Checks.check(!effect.isInstant, "Potion is instant")
-    Checks.check(level > 0, "Level should be > 0")
-    this.entity.addPotionEffect(new PotionEffect(effect.getId, seconds * 20, level - 1, ambient, true)) //TODO: better api
-  }
-  override def addInfinitePotionEffect(effect: Potion) = addPotionEffect(effect, 1000000)
-  override def addInfinitePotionEffect(effect: Potion, level: Int) = addPotionEffect(effect, 1000000, level)
-  override def addInfinitePotionEffect(effect: Potion, level: Int, ambient: Boolean) = addPotionEffect(effect, 1000000, level, ambient)
-
-  override def clearPotionEffects() = entity.clearActivePotions()
-  override def clearPotionEffect(effect: Potion) = entity.removePotionEffect(effect.getId)
-
-  override def loadResourcePack(url: String){
-    sendPacket(new S3FPacketCustomPayload("MC|RPack", Unpooled.copiedBuffer(url.getBytes(Charsets.UTF_8)))) //TODO: this is deprecated in 1.8
+  override def addPotionEffect(effect: potion.PotionEffect){
+    val vanillaEffect = new PotionEffect(effect.getPotion.getId, effect.getDuration, effect.getLevel - 1, effect.isAmbient, effect.isShowParticles)
+    this.entity.addPotionEffect(vanillaEffect)
   }
 
-  override def sendPluginMessage(source: Plugin, channel: String, message: Array[Byte]){
-    StandardMessenger.validatePluginMessage(Server.getInstance.getMessenger, source, channel, message)
+  override def removePotionEffect(potion: Potion){
+    this.entity.removePotionEffect(potion.getId)
+  }
+
+  override def clearAllEffects(){
+    this.entity.clearActivePotions()
+  }
+
+  override def getActiveEffects = {
+    val newCollection = ImmutableSet.builder[potion.PotionEffect]()
+    for(effect <- this.entity.getActivePotionEffects.asInstanceOf[java.util.Collection[PotionEffect]]){
+      val builder = potion.PotionEffect.builder()
+      val pot = Potion.byId(effect.getPotionID)
+      if(pot != null){
+        builder.setPotion(pot)
+        builder.setAmbient(effect.getIsAmbient)
+        builder.setShowParticles(effect.func_180154_f)
+        builder.setLevel(effect.getAmplifier + 1)
+        builder.setDuration(effect.getDuration)
+        newCollection.add(builder.build())
+      }
+    }
+    newCollection.build()
+  }
+
+
+  override def loadResourcePack(url: String, hash: String){
+    this.entity.func_175397_a(url, hash)
+  }
+
+  override def sendPluginMessage(source: PluginIdentifier, channel: String, message: Array[Byte]){
+    StandardMessenger.validatePluginMessage(NailedPlatform.getMessenger, source, channel, message)
     if(netHandler == null) return
 
     if(channels.contains(channel)){
@@ -230,7 +224,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   def sendSupportedChannels(){
     if(netHandler == null) return
-    val listening = Server.getInstance.getMessenger.getIncomingChannels
+    val listening = NailedPlatform.getMessenger.getIncomingChannels
 
     if(!listening.isEmpty){
       val stream = new ByteArrayOutputStream

@@ -20,8 +20,8 @@ package jk_5.nailed.server.world
 import java.util
 
 import jk_5.nailed.api
-import jk_5.nailed.api.world
 import jk_5.nailed.api.world.WorldContext
+import jk_5.nailed.api.{Platform, world}
 import jk_5.nailed.server.NailedEventFactory
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world._
@@ -174,6 +174,6 @@ object NailedDimensionManager {
   }
 }
 
-trait DimensionManagerTrait extends Server {
+trait DimensionManagerTrait extends Platform {
   override def getWorld(dimensionId: Int): world.World = NailedDimensionManager.getWorld(dimensionId)
 }

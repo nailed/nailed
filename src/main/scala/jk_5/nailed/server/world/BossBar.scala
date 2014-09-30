@@ -18,6 +18,7 @@
 package jk_5.nailed.server.world
 
 import jk_5.eventbus.EventHandler
+import jk_5.nailed.api.event.teleport.TeleportEventExitWorld
 import jk_5.nailed.api.util.Location
 import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.entity.DataWatcher
@@ -65,6 +66,6 @@ object BossBar {
 
   @EventHandler
   def onPlayerExitWorld(event: TeleportEventExitWorld){
-    event.entity.asInstanceOf[NailedPlayer].getEntity.playerNetServerHandler.sendPacket(this.getDestroyPacket)
+    event.getPlayer.asInstanceOf[NailedPlayer].getEntity.playerNetServerHandler.sendPacket(this.getDestroyPacket)
   }
 }

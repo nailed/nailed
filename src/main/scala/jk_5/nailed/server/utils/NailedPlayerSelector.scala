@@ -21,11 +21,11 @@ import java.util
 import java.util._
 import java.util.regex.Pattern
 
-import jk_5.nailed.api.Server
-import jk_5.nailed.api.command._
-import jk_5.nailed.api.player.{GameMode, Player}
+import jk_5.nailed.api.GameMode
+import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.{Location, PlayerSelector}
 import jk_5.nailed.api.world.World
+import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.player.NailedPlayer
 
 import scala.collection.mutable
@@ -44,12 +44,12 @@ object NailedPlayerSelector extends PlayerSelector {
   override def matchPlayers(pattern: String, base: Location): Array[Player] = {
     val tokenMatcher = TOKEN_PATTERN.matcher(pattern)
     if(!tokenMatcher.matches){
-      val p = Server.getInstance.getPlayerByName(pattern)
-      if(p.isEmpty){
-        val p2 = Server.getInstance.getPlayer(UUID.fromString(pattern))
-        if(p2.isEmpty) return new Array[Player](0) else return Array[Player](p.get)
+      val p = NailedPlatform.getPlayerByName(pattern)
+      if(p == null){
+        val p2 = NailedPlatform.getPlayer(UUID.fromString(pattern))
+        if(p2 == null) return new Array[Player](0) else return Array[Player](p)
       }else{
-        return Array[Player](p.get)
+        return Array[Player](p)
       }
     }
 
@@ -63,7 +63,7 @@ object NailedPlayerSelector extends PlayerSelector {
     var gamemode: GameMode = null //j1
     val scoreboardTags = getScoreboardValues(arguments) //map1
     var currentWorldOnly = false
-    val location = base.copy()
+    val location = Location.builder().copy(base).build()
     var teamName: String = null
     var name: String = null
 
@@ -145,7 +145,7 @@ object NailedPlayerSelector extends PlayerSelector {
   }
 
   private def findPlayers(location: Location, minRange: Int, maxRange: Int, maxCount: Int, gamemode: GameMode, minXP: Int, maxXP: Int, scoreboardTags: mutable.Map[String, String], name: String, teamName: String, world: World): util.List[Player] = {
-    val players = Server.getInstance.getOnlinePlayers
+    val players = NailedPlatform.getOnlinePlayers
     if(players.length == 0) return Collections.emptyList()
 
     val ret = new util.ArrayList[Player]()

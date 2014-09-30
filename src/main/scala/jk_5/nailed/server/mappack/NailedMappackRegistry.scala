@@ -17,10 +17,10 @@
 
 package jk_5.nailed.server.mappack
 
-import jk_5.nailed.api.Server
-import jk_5.nailed.api.event.{MappackRegisteredEvent, MappackUnregisteredEvent}
+import jk_5.nailed.api.Platform
+import jk_5.nailed.api.event.mappack.{MappackRegisteredEvent, MappackUnregisteredEvent}
 import jk_5.nailed.api.mappack.{Mappack, MappackRegistry}
-import jk_5.nailed.server.NailedServer
+import jk_5.nailed.server.NailedPlatform
 
 import scala.collection.mutable
 
@@ -37,17 +37,18 @@ object NailedMappackRegistry extends MappackRegistry {
     if(this.mappacks.exists(p => p._1 == mappack.getId || p._2 == mappack)) false
     else{
       this.mappacks.put(mappack.getId, mappack)
-      NailedServer.getPluginManager.callEvent(new MappackRegisteredEvent(mappack))
+      NailedPlatform.globalEventBus.post(new MappackRegisteredEvent(mappack))
       true
     }
 
   override def getByName(name: String): Option[Mappack] = this.mappacks.get(name)
 
-  override def getByType[T <: Mappack](cl: Class[T])(implicit mf: Manifest[T]): Array[T] = {
-    this.mappacks.collect({
-      case special if mf.runtimeClass.isAssignableFrom(special.getClass) => special
+
+  override def getByType[T](cl: Class[_ <: T]): Array[T] = {
+    this.mappacks.values.collect {
+      case special if cl.isAssignableFrom(special.getClass) => special
       case _ =>
-    }).asInstanceOf[Traversable[T]].toArray
+    }.toArray.asInstanceOf[Array[T]]
   }
 
   override def getAll: Array[Mappack] = this.mappacks.values.toArray
@@ -57,12 +58,12 @@ object NailedMappackRegistry extends MappackRegistry {
     if(!this.mappacks.exists(p => p._1 == mappack.getId && p._2 == mappack)) false
     else{
       this.mappacks.remove(mappack.getId)
-      NailedServer.getPluginManager.callEvent(new MappackUnregisteredEvent(mappack))
+      NailedPlatform.globalEventBus.post(new MappackUnregisteredEvent(mappack))
       true
     }
   }
 }
 
-trait MappackRegistryTrait extends Server {
+trait MappackRegistryTrait extends Platform {
   override def getMappackRegistry = NailedMappackRegistry
 }

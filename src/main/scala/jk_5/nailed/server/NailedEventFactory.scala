@@ -78,24 +78,24 @@ object NailedEventFactory {
   }
 
   def firePreWorldTick(server: MinecraftServer, world: WorldServer) = {
-    fireEvent(new WorldPreTickEvent(NailedServer.getWorld(world.provider.getDimensionId)))
+    fireEvent(new WorldPreTickEvent(NailedPlatform.getWorld(world.provider.getDimensionId)))
   }
 
   def firePostWorldTick(server: MinecraftServer, world: WorldServer) = {
-    fireEvent(new WorldPostTickEvent(NailedServer.getWorld(world.provider.getDimensionId)))
+    fireEvent(new WorldPostTickEvent(NailedPlatform.getWorld(world.provider.getDimensionId)))
   }
 
   def firePreServerTick(server: MinecraftServer) = fireEvent(preTickEvent)
   def firePostServerTick(server: MinecraftServer) = fireEvent(postTickEvent)
 
   def fireServerStartBeforeConfig(server: DedicatedServer){
-    NailedServer.preLoad(server)
+    NailedPlatform.preLoad(server)
     this.serverCommandSender = new ConsoleCommandSender(server)
   }
 
   def fireServerStarted(server: DedicatedServer){
     NettyChannelInitializer.serverStarting = false
-    NailedServer.load(server)
+    NailedPlatform.load(server)
   }
 
   def fireStartBeforeWorldLoad(server: DedicatedServer){
@@ -104,20 +104,20 @@ object NailedEventFactory {
 
   def fireCommand(sender: ICommandSender, input: String): Int = {
     val wrapped = sender match {
-      case p: EntityPlayerMP => NailedServer.getPlayer(p.getGameProfile.getId).orNull
+      case p: EntityPlayerMP => NailedPlatform.getPlayer(p.getGameProfile.getId)
       case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
       //case r: RConConsoleSource => new RConCommandSender(r)
       case s: MinecraftServer => this.serverCommandSender
       case _ => null
     }
     if(wrapped == null) return -1
-    //NailedServer.getPluginManager.dispatchCommand(wrapped, input, null) //TODO
+    //NailedPlatform.getPluginManager.dispatchCommand(wrapped, input, null) //TODO
     0
   }
 
   def fireTabCompletion(sender: ICommandSender, input: String): util.List[String] = {
     val wrapped = sender match {
-      case p: EntityPlayerMP => NailedServer.getPlayer(p.getGameProfile.getId).orNull
+      case p: EntityPlayerMP => NailedPlatform.getPlayer(p.getGameProfile.getId)
       case c: CommandBlockLogic => new CommandBlockCommandSender(c) //TODO: use our own api commandblock for this
       //case r: RConConsoleSource => new RConCommandSender(r)
       case s: MinecraftServer => this.serverCommandSender
@@ -125,7 +125,7 @@ object NailedEventFactory {
     }
     if(wrapped == null) return null
     val ret = mutable.ListBuffer[String]()
-    //if(NailedServer.getPluginManager.dispatchCommand(wrapped, input, ret) == 1) ret else null //TODO
+    //if(NailedPlatform.getPluginManager.dispatchCommand(wrapped, input, ret) == 1) ret else null //TODO
     ret
   }
 
@@ -142,10 +142,10 @@ object NailedEventFactory {
   }
 
   def firePlayerJoined(playerEntity: EntityPlayerMP){
-    val player = NailedServer.getOrCreatePlayer(playerEntity)
+    val player = NailedPlatform.getOrCreatePlayer(playerEntity).asInstanceOf[NailedPlayer]
     player.entity = playerEntity
     player.isOnline = true
-    player.world = NailedServer.getWorld(playerEntity.dimension)
+    player.world = NailedPlatform.getWorld(playerEntity.dimension)
     player.map = player.world.getMap
     player.netHandler = playerEntity.playerNetServerHandler
     player.world.onPlayerJoined(player)
@@ -156,13 +156,13 @@ object NailedEventFactory {
     player.getScoreboardManager.onJoinedServer()
     player.sendSupportedChannels()
     val e = this.fireEvent(new PlayerJoinServerEvent(player))
-    NailedServer.broadcastMessage(e.getMessage)
+    NailedPlatform.broadcastMessage(e.getMessage)
     if(player.map != null) this.firePlayerJoinMap(player, player.map)
     this.firePlayerJoinWorld(player, player.world)
   }
 
   def firePlayerLeft(playerEntity: EntityPlayerMP){
-    val player = NailedServer.getPlayerFromEntity(playerEntity)
+    val player = NailedPlatform.getPlayerFromEntity(playerEntity).asInstanceOf[NailedPlayer]
     player.isOnline = false
     val e = this.fireEvent(new PlayerLeaveServerEvent(player))
     if(player.map != null) this.firePlayerLeftMap(player, player.map)
@@ -177,17 +177,17 @@ object NailedEventFactory {
     player.world = null
     player.map = null
     player.netHandler = null
-    NailedServer.broadcastMessage(e.getMessage)
+    NailedPlatform.broadcastMessage(e.getMessage)
   }
 
   def firePlayerChat(playerEntity: EntityPlayerMP, message: String): String = {
-    val player = NailedServer.getPlayerFromEntity(playerEntity)
+    val player = NailedPlatform.getPlayerFromEntity(playerEntity)
     val e = this.fireEvent(new PlayerChatEvent(player, message))
     if(e.isCanceled) null else e.getMessage
   }
 
   def fireOnRightClick(playerEntity: EntityPlayer, world: World, is: ItemStack, pos: BlockPos, side: EnumFacing, bX: Float, bY: Float, bZ: Float): Boolean = {
-    val player = NailedServer.getPlayerFromEntity(playerEntity.asInstanceOf[EntityPlayerMP])
+    val player = NailedPlatform.getPlayerFromEntity(playerEntity.asInstanceOf[EntityPlayerMP]).asInstanceOf[NailedPlayer]
     val xC = pos.getX + side.getFrontOffsetX
     val yC = pos.getY + side.getFrontOffsetY
     val zC = pos.getZ + side.getFrontOffsetZ
@@ -260,7 +260,7 @@ object NailedEventFactory {
 
   def firePlayerDropStack(player: EntityPlayerMP, fullStack: Boolean): Boolean = {
     //Return false to cancel
-    !fireEvent(new PlayerThrowItemEvent(NailedServer.getPlayerFromEntity(player), player.getCurrentEquippedItem)).isCanceled
+    !fireEvent(new PlayerThrowItemEvent(NailedPlatform.getPlayerFromEntity(player), player.getCurrentEquippedItem)).isCanceled
   }
 
   def firePlayerLeftWorld(player: Player, world: api.world.World) = fireEvent(new PlayerLeaveWorldEvent(player, world))
@@ -269,12 +269,12 @@ object NailedEventFactory {
   def firePlayerJoinMap(player: Player, world: Map) = fireEvent(new PlayerJoinMapEvent(player, world))
 
   def fireOnItemRightClick(player: EntityPlayer, world: World, stack: ItemStack): Boolean = {
-    fireEvent(new PlayerRightClickItemEvent(NailedServer.getPlayerFromEntity(player.asInstanceOf[EntityPlayerMP]), stack)).isCanceled
+    fireEvent(new PlayerRightClickItemEvent(NailedPlatform.getPlayerFromEntity(player.asInstanceOf[EntityPlayerMP]), stack)).isCanceled
   }
 
   def onPlayerRespawn(ent: EntityPlayerMP){
     val server = MinecraftServer.getServer
-    val player = NailedServer.getPlayerFromEntity(ent)
+    val player = NailedPlatform.getPlayerFromEntity(ent).asInstanceOf[NailedPlayer]
     val destWorld = NailedDimensionManager.getWorld(ent.dimension)
     val currentWorld = NailedDimensionManager.getWorld(ent.dimension)
     val destMap = destWorld.getMap
@@ -347,22 +347,22 @@ object NailedEventFactory {
   }
 
   def firePlayerRightClickAir(player: EntityPlayerMP): Boolean = { //return true to cancel
-    val event = new PlayerInteractEvent(NailedServer.getPlayerFromEntity(player), PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
+    val event = new PlayerInteractEvent(NailedPlatform.getPlayerFromEntity(player), PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
     fireEvent(event).isCanceled
   }
 
   def firePlayerRightClickBlock(player: EntityPlayerMP, x: Int, y: Int, z: Int): Boolean = { //return true to cancel
-    val event = new PlayerInteractEvent(NailedServer.getPlayerFromEntity(player), PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK, new Location(x, y, z)) //TODO: include world
+    val event = new PlayerInteractEvent(NailedPlatform.getPlayerFromEntity(player), PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK, new Location(x, y, z)) //TODO: include world
     fireEvent(event).isCanceled
   }
 
   def firePlayerLeftClickAir(player: EntityPlayerMP){
-    val event = new PlayerInteractEvent(NailedServer.getPlayerFromEntity(player), PlayerInteractEvent.Action.LEFT_CLICK_AIR)
+    val event = new PlayerInteractEvent(NailedPlatform.getPlayerFromEntity(player), PlayerInteractEvent.Action.LEFT_CLICK_AIR)
     fireEvent(event)
   }
 
   def firePlayerLeftClickBlock(player: EntityPlayerMP, x: Int, y: Int, z: Int): Boolean = { //return true to cancel
-    val event = new PlayerInteractEvent(NailedServer.getPlayerFromEntity(player), PlayerInteractEvent.Action.LEFT_CLICK_BLOCK, new Location(x, y, z)) //TODO: include world
+    val event = new PlayerInteractEvent(NailedPlatform.getPlayerFromEntity(player), PlayerInteractEvent.Action.LEFT_CLICK_BLOCK, new Location(x, y, z)) //TODO: include world
     fireEvent(event).isCanceled
   }
 

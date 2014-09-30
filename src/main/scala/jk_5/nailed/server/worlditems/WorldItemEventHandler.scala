@@ -22,7 +22,7 @@ import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TextComponent}
 import jk_5.nailed.api.event.player.{PlayerJoinMapEvent, PlayerLeaveMapEvent, PlayerRightClickItemEvent, PlayerThrowItemEvent}
 import jk_5.nailed.api.item.{ItemStack, Material}
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.util.Location
+import jk_5.nailed.api.util.{Location, TeleportOptions}
 import jk_5.nailed.server.teleport.Teleporter
 
 import scala.collection.mutable
@@ -56,7 +56,7 @@ object WorldItemEventHandler {
       i += 1
     }
     tutorialStage.remove(event.getPlayer)
-    event.getPlayer.setAllowedToFly(allowed = false)
+    event.getPlayer.setAllowedToFly(false)
   }
 
   @EventHandler
@@ -73,9 +73,9 @@ object WorldItemEventHandler {
           event.getPlayer.setInventorySlot(8, getEndTutorialItem)
 
           nextStage(event.getPlayer)
-          event.getPlayer.setAllowedToFly(allowed = true)
+          event.getPlayer.setAllowedToFly(true)
           doStageAction(event.getPlayer)
-          event.getPlayer.setAllowedToFly(allowed = true)
+          event.getPlayer.setAllowedToFly(true)
         case "Tutorial:NextStage" =>
           nextStage(event.getPlayer)
           doStageAction(event.getPlayer)
@@ -99,7 +99,7 @@ object WorldItemEventHandler {
 
     val loc = Location.builder.copy(player.getWorld.getConfig.spawnPoint)
     loc.setWorld(player.getWorld)
-    Teleporter.teleportPlayer(player, new TeleportOptions(loc))
+    Teleporter.teleportPlayer(player, new TeleportOptions(loc.build()))
 
     removeWorldItemFromPlayer(player, "Tutorial:NextStage")
     removeWorldItemFromPlayer(player, "Tutorial:End")
@@ -108,7 +108,7 @@ object WorldItemEventHandler {
 
     player.setInventorySlot(0, getStartTutorialItem)
 
-    player.setAllowedToFly(allowed = false)
+    player.setAllowedToFly(false)
   }
 
   private def doStageAction(player: Player){
@@ -118,13 +118,13 @@ object WorldItemEventHandler {
       endTutorial(player)
     }else{
       val stage = stages(nextStage)
-      val loc = new Location(stage.teleport)
+      val loc = Location.builder().copy(stage.teleport)
       loc.setWorld(player.getWorld)
-      player.setAllowedToFly(allowed = true)
-      Teleporter.teleportPlayer(player, new TeleportOptions(loc))
+      player.setAllowedToFly(true)
+      Teleporter.teleportPlayer(player, new TeleportOptions(loc.build()))
       player.sendMessage(new TextComponent(""))
-      player.sendMessage(new ComponentBuilder("-- " + stage.title).color(ChatColor.DARK_AQUA).create())
-      for(line <- stage.messages) player.sendMessage(new ComponentBuilder(line).color(ChatColor.GRAY).create())
+      player.sendMessage(new ComponentBuilder("-- " + stage.title).color(ChatColor.DARK_AQUA).create(): _*)
+      for(line <- stage.messages) player.sendMessage(new ComponentBuilder(line).color(ChatColor.GRAY).create(): _*)
     }
   }
 

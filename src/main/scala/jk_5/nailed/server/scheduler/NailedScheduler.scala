@@ -23,7 +23,7 @@ import java.util.concurrent.{Callable, TimeUnit}
 
 import io.netty.util.concurrent._
 import jk_5.eventbus.EventHandler
-import jk_5.nailed.api.event.ServerPostTickEvent
+import jk_5.nailed.api.event.server.ServerPostTickEvent
 import jk_5.nailed.api.scheduler.Scheduler
 
 import scala.collection.mutable
@@ -98,4 +98,10 @@ object NailedScheduler extends Scheduler {
       executionQueue.clear()
     }
   }
+
+  override def shutdown(){}
+  override def isTerminated = false
+  override def awaitTermination(timeout: Long, unit: TimeUnit){}
+  override def shutdownNow(){}
+  override def isShutdown = false
 }
