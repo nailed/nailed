@@ -37,33 +37,11 @@ class CommandBlockCommandSender(val wrapped: CommandBlockLogic) extends CommandS
   override def getName = wrapped.getName
 
   /**
-   * Checks if this user has the specified permission node.
-   *
-   * @param permission the node to check
-   * @return whether they have this node
-   */
-  override def hasPermission(permission: String) = true
-
-  /**
-   * Send a message to this sender.
-   *
-   * @param message the message to send
-   */
-  override def sendMessage(message: BaseComponent) = wrapped.addChatMessage(ChatComponentConverter.toVanilla(message))
-
-  /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
   override def sendMessage(messages: BaseComponent*) = wrapped.addChatMessage(ChatComponentConverter.arrayToVanilla(messages.toArray))
-
-  /**
-   * Send a message to this sender.
-   *
-   * @param messages the message to send
-   */
-  override def sendMessage(messages: Array[BaseComponent]) = wrapped.addChatMessage(ChatComponentConverter.arrayToVanilla(messages))
 
   override def getDescriptionComponent: BaseComponent = new TextComponent(this.getName)
 }

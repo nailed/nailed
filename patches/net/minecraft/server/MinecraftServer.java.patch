@@ -102,7 +102,7 @@
 -        this.field_71318_t.func_72364_a(this.field_71305_c);
 -        this.func_147139_a(this.func_147135_j());
 +        jk_5.nailed.server.map.NailedMap map = (jk_5.nailed.server.map.NailedMap) jk_5.nailed.server.map.NailedMapLoader.createLobbyMap();
-+        jk_5.nailed.server.world.NailedWorld world = (jk_5.nailed.server.world.NailedWorld) map.worlds()[0];
++        jk_5.nailed.server.world.NailedWorld world = (jk_5.nailed.server.world.NailedWorld) map.worldsArray()[0];
 +        this.field_71318_t.func_72364_a(new WorldServer[]{world.wrapped()});
          this.func_71222_d();
      }
@@ -149,14 +149,14 @@
  
                      if (j > 2000L && this.field_175591_ab - this.field_71299_R >= 15000L) {
 -                        field_147145_h.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] {Long.valueOf(j), Long.valueOf(j / 50L)});
-+                        if(jk_5.nailed.server.NailedServer$.MODULE$.config().getBoolean("warnings.cantKeepUp")) field_147145_h.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] {Long.valueOf(j), Long.valueOf(j / 50L)});
++                        if(jk_5.nailed.server.NailedPlatform$.MODULE$.config().getBoolean("warnings.cantKeepUp")) field_147145_h.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] {Long.valueOf(j), Long.valueOf(j / 50L)});
                          j = 2000L;
                          this.field_71299_R = this.field_175591_ab;
                      }
  
                      if (j < 0L) {
 -                        field_147145_h.warn("Time ran backwards! Did the system time change?");
-+                        if(jk_5.nailed.server.NailedServer$.MODULE$.config().getBoolean("warnings.timeRanBackwards")) field_147145_h.warn("Time ran backwards! Did the system time change?");
++                        if(jk_5.nailed.server.NailedPlatform$.MODULE$.config().getBoolean("warnings.timeRanBackwards")) field_147145_h.warn("Time ran backwards! Did the system time change?");
                          j = 0L;
                      }
  

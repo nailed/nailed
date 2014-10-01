@@ -43,7 +43,7 @@ object WorldItemEventHandler {
   def onPlayerJoinMap(event: PlayerJoinMapEvent){
     tutorialStage.remove(event.getPlayer)
     if(event.getMap.mappack.getMetadata.tutorial != null){
-      event.getPlayer.setInventorySlot(0, getStartTutorialItem)
+      //event.getPlayer.setInventorySlot(0, getStartTutorialItem) //TODO
       tutorialStage.put(event.getPlayer, -1)
     }
   }
@@ -51,10 +51,10 @@ object WorldItemEventHandler {
   @EventHandler
   def onPlayerLeaveMap(event: PlayerLeaveMapEvent){
     var i = 0
-    event.getPlayer.iterateInventory { s =>
+    /*event.getPlayer.iterateInventory { s =>
       if(s != null && s.getTag("WorldItemType").isDefined) event.getPlayer.setInventorySlot(i, null)
       i += 1
-    }
+    }*/ //TODO
     tutorialStage.remove(event.getPlayer)
     event.getPlayer.setAllowedToFly(false)
   }
@@ -69,8 +69,8 @@ object WorldItemEventHandler {
 
           removeWorldItemFromPlayer(event.getPlayer, "Tutorial")
 
-          event.getPlayer.setInventorySlot(0, getNextStageItem)
-          event.getPlayer.setInventorySlot(8, getEndTutorialItem)
+          //event.getPlayer.setInventorySlot(0, getNextStageItem) //TODO
+          //event.getPlayer.setInventorySlot(8, getEndTutorialItem) //TODO
 
           nextStage(event.getPlayer)
           event.getPlayer.setAllowedToFly(true)
@@ -106,7 +106,7 @@ object WorldItemEventHandler {
 
     tutorialStage.remove(player)
 
-    player.setInventorySlot(0, getStartTutorialItem)
+    //player.setInventorySlot(0, getStartTutorialItem) //TODO
 
     player.setAllowedToFly(false)
   }
@@ -130,10 +130,10 @@ object WorldItemEventHandler {
 
   private def removeWorldItemFromPlayer(player: Player, typ: String){
     var i = 0
-    player.iterateInventory { s =>
+    /*player.iterateInventory { s =>
       if(s != null && s.getTag("WorldItemType").isDefined && s.getTag("WorldItemType").get == typ) player.setInventorySlot(i, null)
       i += 1
-    }
+    }*/ //TODO
   }
 
   def getStartTutorialItem: ItemStack = {

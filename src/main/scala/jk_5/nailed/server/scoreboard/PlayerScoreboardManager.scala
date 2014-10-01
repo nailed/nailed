@@ -61,9 +61,9 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
     }
   }
 
-  override def getObjective(id: String): Option[Objective] = {
+  override def getObjective(id: String): Objective = {
     Checks.notNull(id, "Id may not be null")
-    objectivesById.get(id)
+    objectivesById.get(id).orNull
   }
 
   override def setDisplay(display: DisplayType, objective: Objective){
@@ -149,9 +149,9 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
     }
   }
 
-  override def getTeam(id: String): Option[ScoreboardTeam] = {
+  override def getTeam(id: String): ScoreboardTeam = {
     Checks.notNull(id, "id may not be null")
-    this.teamsById.get(id)
+    this.teamsById.get(id).orNull
   }
 
   override def sendPacket(packet: Packet) = player.sendPacket(packet)

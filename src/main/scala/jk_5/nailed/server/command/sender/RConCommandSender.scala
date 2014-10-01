@@ -36,33 +36,11 @@ class RConCommandSender(val wrapped: RConConsoleSource) extends CommandSender {
   override def getName = "Rcon"
 
   /**
-   * Checks if this user has the specified permission node.
-   *
-   * @param permission the node to check
-   * @return whether they have this node
-   */
-  override def hasPermission(permission: String) = true
-
-  /**
-   * Send a message to this sender.
-   *
-   * @param message the message to send
-   */
-  override def sendMessage(message: BaseComponent): Unit = ???
-
-  /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
   override def sendMessage(messages: BaseComponent*): Unit = ???
-
-  /**
-   * Send a message to this sender.
-   *
-   * @param messages the message to send
-   */
-  override def sendMessage(messages: Array[BaseComponent]): Unit = ???
 
   override def getDescriptionComponent: BaseComponent = ???
 }

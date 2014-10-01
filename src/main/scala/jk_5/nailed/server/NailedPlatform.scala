@@ -9,6 +9,7 @@ import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
 import jk_5.nailed.api.messaging.StandardMessenger
 import jk_5.nailed.server.map.NailedMapLoader
 import jk_5.nailed.server.map.game.NailedGameTypeRegistry
+import jk_5.nailed.server.mappack.NailedMappackRegistry
 import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.plugin.NailedPluginManager
 import jk_5.nailed.server.scheduler.NailedScheduler
@@ -56,6 +57,7 @@ object NailedPlatform
   override def getScheduler = NailedScheduler
   override def getPlayerSelector = NailedPlayerSelector
   override def getConsoleCommandSender = NailedEventFactory.serverCommandSender
+  override def getMappackRegistry = NailedMappackRegistry
 
   def preLoad(server: DedicatedServer){
     CommandBase.setAdminCommander(null) //Don't spam my log with stupid messages
@@ -64,7 +66,7 @@ object NailedPlatform
 
     this.pluginsDir.mkdir()
     this.getPluginManager.discoverClasspathPlugins()
-    this.getPluginManager.discoverPlugins(this.pluginsFolder)
+    this.getPluginManager.discoverPlugins(this.pluginsDir)
     this.getPluginManager.loadPlugins()
   }
 

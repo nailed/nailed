@@ -18,8 +18,8 @@
 package jk_5.nailed.server.scheduler
 
 import java.util
-import java.util.concurrent
 import java.util.concurrent.{Callable, TimeUnit}
+import java.util.{Collections, concurrent}
 
 import io.netty.util.concurrent._
 import jk_5.eventbus.EventHandler
@@ -101,7 +101,7 @@ object NailedScheduler extends Scheduler {
 
   override def shutdown(){}
   override def isTerminated = false
-  override def awaitTermination(timeout: Long, unit: TimeUnit){}
-  override def shutdownNow(){}
+  override def awaitTermination(timeout: Long, unit: TimeUnit): Boolean = false
+  override def shutdownNow(): java.util.List[Runnable] = Collections.emptyList()
   override def isShutdown = false
 }

@@ -5,6 +5,8 @@ import jk_5.nailed.server.map.NailedMap
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedWorld
 
+import scala.collection.convert.wrapAsScala._
+
 /**
  * No description given
  *
@@ -29,11 +31,11 @@ class ScriptMapApi(private val map: NailedMap) {
   }
 
   def getPlayers: Array[ScriptPlayerApi] = {
-    map.players.map(p => new ScriptPlayerApi(p.asInstanceOf[NailedPlayer]))
+    map.players.map(p => new ScriptPlayerApi(p.asInstanceOf[NailedPlayer])).toArray
   }
 
   def getWorlds: Array[ScriptWorldApi] = {
-    map.worlds.map(p => new ScriptWorldApi(p.asInstanceOf[NailedWorld]))
+    map.worlds.map(p => new ScriptWorldApi(p.asInstanceOf[NailedWorld])).toArray
   }
 
   def getWorld(name: String): ScriptWorldApi = {

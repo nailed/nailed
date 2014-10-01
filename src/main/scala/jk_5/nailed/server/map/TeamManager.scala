@@ -47,7 +47,7 @@ trait TeamManager extends Map {
 
     override val id = TeamManager.this.id + ":default"
     override val color = ChatColor.WHITE
-    override val members = memberSet.toArray
+    override val members = java.util.Arrays.asList(memberSet.toArray: _*)
     override val name = "Default Team"
 
     def onPlayerJoined(player: Player) = memberSet += player
@@ -85,5 +85,5 @@ trait TeamManager extends Map {
       }
     }
   }
-  override def getTeams: Array[Team] = teams.values.toArray
+  override def getTeams: java.util.Collection[Team] = java.util.Arrays.asList(teams.values.toArray: _*)
 }

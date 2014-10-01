@@ -21,7 +21,7 @@ import jk_5.nailed.api.gamerule.{GameRule, GameRules}
 import jk_5.nailed.api.mappack.metadata.MappackWorld
 import jk_5.nailed.api.mappack.metadata.impl.DefaultMappackWorld
 import jk_5.nailed.api.util.{Checks, Location}
-import jk_5.nailed.api.world.Difficulty
+import jk_5.nailed.api.world.{Difficulty, Dimension}
 import org.jdom2.Element
 
 /**
@@ -46,9 +46,9 @@ class XmlMappackWorld(override val name: String, element: Element, parent: Mappa
 
   override val generator = if(element.getChild("generator", element.getNamespace) != null) element.getChild("generator", element.getNamespace).getText else parent.generator
   override val dimension = if(element.getChild("dimension", element.getNamespace) != null) element.getChild("dimension", element.getNamespace).getText match {
-    case "nether" => -1
-    case "overworld" => 0
-    case "end" => 1
+    case "nether" => Dimension.NETHER
+    case "overworld" => Dimension.OVERWORLD
+    case "end" => Dimension.END
     case e => throw new RuntimeException("Unknown world generator type '"  + e + "'")
   } else parent.dimension
   override val spawnPoint = if(element.getChild("spawnpoint", element.getNamespace) != null) XmlMappackWorld.readLocation(element.getChild("spawnpoint", element.getNamespace)) else parent.spawnPoint

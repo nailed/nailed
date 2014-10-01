@@ -5,14 +5,14 @@
                  } else {
                      this.field_147386_b.func_150719_a(new NetHandlerLoginServer(this.field_147387_a, this.field_147386_b));
 +                    // Nailed start
-+                    if(jk_5.nailed.server.NailedServer.config().getBoolean("bungeeCord")){
++                    if(jk_5.nailed.server.NailedPlatform.config().getBoolean("bungeeCord")){
 +                        String[] split = p_147383_1_.field_149598_b.split("\00");
 +                        if(split.length >= 3){
 +                            p_147383_1_.field_149598_b = split[0];
 +                            field_147386_b.field_150743_l = new java.net.InetSocketAddress(split[1], ((java.net.InetSocketAddress) field_147386_b.func_74430_c()).getPort());
 +                            field_147386_b.spoofedUUID = com.mojang.util.UUIDTypeAdapter.fromString(split[2]);
 +                            if(split.length == 4){
-+                                field_147386_b.spoofedProfile = jk_5.nailed.server.NailedServer.gson().fromJson(split[3], com.mojang.authlib.properties.Property[].class);
++                                field_147386_b.spoofedProfile = jk_5.nailed.server.NailedPlatform.gson().fromJson(split[3], com.mojang.authlib.properties.Property[].class);
 +                            }
 +                        }else{
 +                            chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");

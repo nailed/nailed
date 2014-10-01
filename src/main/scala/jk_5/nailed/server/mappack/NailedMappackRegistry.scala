@@ -41,18 +41,17 @@ object NailedMappackRegistry extends MappackRegistry {
       true
     }
 
-  override def getByName(name: String): Option[Mappack] = this.mappacks.get(name)
+  override def getByName(name: String): Mappack = this.mappacks.get(name).orNull
 
-
-  override def getByType[T](cl: Class[_ <: T]): Array[T] = {
-    this.mappacks.values.collect {
+  override def getByType[T](cl: Class[_ <: T]): java.util.Collection[T] = {
+    java.util.Arrays.asList(this.mappacks.values.collect {
       case special if cl.isAssignableFrom(special.getClass) => special
       case _ =>
-    }.toArray.asInstanceOf[Array[T]]
+    }.toArray.asInstanceOf[Array[T]]: _*)
   }
 
-  override def getAll: Array[Mappack] = this.mappacks.values.toArray
-  override def getAllIds: Array[String] = this.getAll.map(_.getId)
+  override def getAll: java.util.Collection[Mappack] = java.util.Arrays.asList(this.mappacks.values.toArray: _*)
+  override def getAllIds: java.util.Collection[String] = java.util.Arrays.asList(this.mappacks.values.toArray.map(_.getId): _*)
 
   override def unregister(mappack: Mappack): Boolean = {
     if(!this.mappacks.exists(p => p._1 == mappack.getId && p._2 == mappack)) false

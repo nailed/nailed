@@ -12,7 +12,7 @@
 -
 -        return blockpos;
 +        jk_5.nailed.api.util.Location spawn = this.field_73011_w.getSpawnPoint();
-+        return new BlockPos(spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ());
++        return new BlockPos(spawn.getFloorX(), spawn.getFloorY(), spawn.getFloorZ());
      }
  
      public void func_175652_B(BlockPos p_175652_1_) {
@@ -21,7 +21,7 @@
  
      public GameRules func_82736_K() {
 -        return this.field_72986_A.func_82574_x();
-+        return jk_5.nailed.server.map.gamerule.DelegatingGameRules.get(jk_5.nailed.server.world.NailedDimensionManager.getWorld(this.field_73011_w.field_76574_g).getGameRules());
++        return jk_5.nailed.server.map.gamerule.DelegatingEditableGameRules.get(jk_5.nailed.server.world.NailedDimensionManager.getWorld(this.field_73011_w.field_76574_g).getGameRules());
      }
  
      public void func_72854_c() {}

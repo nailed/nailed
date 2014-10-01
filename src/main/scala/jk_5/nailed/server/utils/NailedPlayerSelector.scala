@@ -28,6 +28,7 @@ import jk_5.nailed.api.world.World
 import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.player.NailedPlayer
 
+import scala.collection.convert.wrapAsScala._
 import scala.collection.mutable
 
 /**
@@ -40,6 +41,14 @@ object NailedPlayerSelector extends PlayerSelector {
   private final val TOKEN_PATTERN = Pattern.compile("^@([parf])(?:\\[([\\w=,!-]*)\\])?$")
   private final val INT_LIST_PATTERN = Pattern.compile("\\G([-!]?[\\w-]*)(?:$|,)")
   private final val KEY_VALUE_LIST_PATTERN = Pattern.compile("\\G(\\w+)=([-!]?[\\w-]*)(?:$|,)")
+
+  def parseIntWithDefault(input: String, default: Int): Int = {
+    try{
+      input.toInt
+    }catch{
+      case _: NumberFormatException => default
+    }
+  }
 
   override def matchPlayers(pattern: String, base: Location): Array[Player] = {
     val tokenMatcher = TOKEN_PATTERN.matcher(pattern)
@@ -63,7 +72,7 @@ object NailedPlayerSelector extends PlayerSelector {
     var gamemode: GameMode = null //j1
     val scoreboardTags = getScoreboardValues(arguments) //map1
     var currentWorldOnly = false
-    val location = Location.builder().copy(base).build()
+    val locationBuilder = Location.builder().copy(base)
     var teamName: String = null
     var name: String = null
 
@@ -86,17 +95,17 @@ object NailedPlayerSelector extends PlayerSelector {
     }
 
     if(arguments.contains("x")){
-      location.setX(parseIntWithDefault(arguments.get("x").get, location.getBlockX))
+      locationBuilder.setX(parseIntWithDefault(arguments.get("x").get, locationBuilder.build().getFloorX.toInt))
       currentWorldOnly = true
     }
 
     if(arguments.contains("y")){
-      location.setY(parseIntWithDefault(arguments.get("r").get, location.getBlockY))
+      locationBuilder.setY(parseIntWithDefault(arguments.get("r").get, locationBuilder.build().getFloorY.toInt))
       currentWorldOnly = true
     }
 
     if(arguments.contains("z")){
-      location.setZ(parseIntWithDefault(arguments.get("z").get, location.getBlockZ))
+      locationBuilder.setZ(parseIntWithDefault(arguments.get("z").get, locationBuilder.build().getFloorZ.toInt))
       currentWorldOnly = true
     }
 
@@ -116,6 +125,7 @@ object NailedPlayerSelector extends PlayerSelector {
       name = arguments.get("name").get
     }
 
+    val location = locationBuilder.build()
     val world = if(currentWorldOnly) location.getWorld else null
 
     typ match {
@@ -146,7 +156,7 @@ object NailedPlayerSelector extends PlayerSelector {
 
   private def findPlayers(location: Location, minRange: Int, maxRange: Int, maxCount: Int, gamemode: GameMode, minXP: Int, maxXP: Int, scoreboardTags: mutable.Map[String, String], name: String, teamName: String, world: World): util.List[Player] = {
     val players = NailedPlatform.getOnlinePlayers
-    if(players.length == 0) return Collections.emptyList()
+    if(players.size() == 0) return Collections.emptyList()
 
     val ret = new util.ArrayList[Player]()
     val negativeCount = maxCount < 0               //flag
@@ -159,14 +169,14 @@ object NailedPlayerSelector extends PlayerSelector {
     val playerName = if(inverseNameMatch) name.substring(1) else name
     val playerTeamName = if(inverseTeamNameMatch) teamName.substring(1) else teamName
 
-    val hasMap = world.getMap.isDefined
-    val map = world.getMap.orNull
+    val hasMap = world.getMap != null
+    val map = world.getMap
 
     for(p <- players.map(_.asInstanceOf[NailedPlayer])){
       var continue = false
       //If world is not null, check if the player has the same world. Else check if the player has the same map
       //Then check if the player's name matches the queried player name
-      if(((world == null && hasMap && p.world.getMap.isDefined && p.world.getMap.get == map) || p.world == world) && (playerName == null || inverseNameMatch != playerName.equalsIgnoreCase(p.getName))){
+      if(((world == null && hasMap && p.world.getMap != null && p.world.getMap == map) || p.world == world) && (playerName == null || inverseNameMatch != playerName.equalsIgnoreCase(p.getName))){
         if(playerTeamName != null){
           val team = p.getEntity.getTeam
           val teamName = if(team == null) "" else team.getRegisteredName

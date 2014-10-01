@@ -26,7 +26,7 @@ import io.netty.channel.epoll.{Epoll, EpollEventLoopGroup, EpollServerSocketChan
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.channel.{Channel, ChannelFuture, ChannelFutureListener, EventLoopGroup}
-import jk_5.nailed.server.NailedServer
+import jk_5.nailed.server.NailedPlatform
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.play.server.S40PacketDisconnect
 import net.minecraft.util.ChatComponentText
@@ -42,7 +42,7 @@ import scala.collection.mutable
  */
 object NailedNetworkManager {
 
-  private val disableEpoll = NailedServer.config.getBoolean("network.disable-epoll")
+  private val disableEpoll = NailedPlatform.config.getBoolean("network.disable-epoll")
   private val epollSupported = Epoll.isAvailable
   private val endpoints = mutable.ArrayBuffer[Channel]()
   private[network] val networkManagers = util.Collections.synchronizedList(new util.ArrayList[NetworkManager]())
@@ -81,7 +81,7 @@ object NailedNetworkManager {
     }else{
       logger.info("Epoll transport is not supported. Falling back to NIO transport")
     }
-    for(endpoint <- NailedServer.config.getStringList("network.endpoints")){
+    for(endpoint <- NailedPlatform.config.getStringList("network.endpoints")){
       val parts = endpoint.split(":", 2)
       if(parts.length != 2){
         logger.error(s"Invalid configuration: Server endpoint $endpoint does not specify a port. Ignoring it")

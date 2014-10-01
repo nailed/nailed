@@ -63,9 +63,9 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
     }
   }
 
-  override def getObjective(id: String): Option[Objective] = {
+  override def getObjective(id: String): Objective = {
     Checks.notNull(id, "Id may not be null")
-    objectivesById.get(id)
+    objectivesById.get(id).orNull
   }
 
   def onPlayerJoined(player: Player){
@@ -169,9 +169,9 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
     }
   }
 
-  override def getTeam(id: String): Option[ScoreboardTeam] = {
+  override def getTeam(id: String): ScoreboardTeam = {
     Checks.notNull(id, "id may not be null")
-    this.teamsById.get(id)
+    this.teamsById.get(id).orNull
   }
 
   override def sendPacket(packet: Packet){
