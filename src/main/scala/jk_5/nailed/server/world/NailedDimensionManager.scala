@@ -25,6 +25,7 @@ import jk_5.nailed.api.{Platform, world}
 import jk_5.nailed.server.NailedEventFactory
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world._
+import net.minecraft.world.storage.WorldInfo
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.JavaConverters._
@@ -108,13 +109,14 @@ object NailedDimensionManager {
     val mcserver = MinecraftServer.getServer
     val name = ctx.getName + "/" + ctx.getSubName
     val saveHandler = mcserver.getActiveAnvilConverter.getSaveLoader(name, true)
-    val worldInfo = saveHandler.loadWorldInfo() //Attempt to load level.dat
+    var worldInfo = saveHandler.loadWorldInfo() //Attempt to load level.dat
 
     val worldSettings = if(worldInfo == null){ //If the level.dat does not exist, create a new one
       //TODO: populate this from the mappack that may or may not exist
       //Arguments: seed, gameType, enable structures, hardcore mode, worldType
       val r = new WorldSettings(0, WorldSettings.GameType.ADVENTURE, false, false, WorldType.DEFAULT)
       r.setWorldName("") //Generator settings (for flat)
+      worldInfo = new WorldInfo(r, name)
       r
     }else{
       new WorldSettings(worldInfo)
@@ -122,6 +124,7 @@ object NailedDimensionManager {
 
     worldContext.put(dimension, ctx)
     val world = new WorldServer(mcserver, saveHandler, worldInfo, dimension, mcserver.theProfiler)
+    world.init()
     world.addWorldAccess(new WorldManager(mcserver, world))
     NailedEventFactory.fireWorldLoad(world)
     world.getWorldInfo.setGameType(mcserver.getGameType)

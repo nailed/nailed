@@ -8,7 +8,7 @@
      private byte field_179842_b;
      private static final String __OBFID = "CL_00001289";
  
-@@ -18,19 +19,31 @@
+@@ -18,18 +19,31 @@
          this(p_i45179_1_, (byte)1);
      }
  
@@ -33,12 +33,11 @@
  
      public void func_148840_b(PacketBuffer p_148840_1_) throws IOException {
 -        p_148840_1_.func_179256_a(this.field_148919_a);
--        p_148840_1_.writeByte(this.field_179842_b);
 +        if(comps == null){
 +            p_148840_1_.func_180714_a(IChatComponent.Serializer.func_150696_a(this.field_148919_a));
 +        }else{
 +            p_148840_1_.func_180714_a(jk_5.nailed.api.chat.serialization.ComponentSerializer.toString(this.comps));
 +        }
+         p_148840_1_.writeByte(this.field_179842_b);
      }
  
-     public void func_148833_a(INetHandlerPlayClient p_148833_1_) {

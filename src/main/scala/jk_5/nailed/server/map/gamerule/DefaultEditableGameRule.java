@@ -36,6 +36,10 @@ public class DefaultEditableGameRule<T> implements EditableGameRule<T> {
     @Nonnull
     @Override
     public T getValue() {
+        if(this.key.getType() == GameRuleKey.Type.BOOL && this.value instanceof String){
+            //noinspection unchecked
+            return (T) Boolean.valueOf((String) this.value);
+        }
         return this.value;
     }
 

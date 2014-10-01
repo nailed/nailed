@@ -26,7 +26,7 @@ import jk_5.nailed.api.mappack.metadata.MappackMetadata
 import jk_5.nailed.api.mappack.metadata.json.JsonMappackMetadata
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.mappack.metadata.xml.XmlMappackMetadata
-import org.slf4j.LoggerFactory
+import org.apache.logging.log4j.LogManager
 
 /**
  * No description given
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory
 @Plugin(id = "DirectoryMappackLoader", name = "Directory Mappack Loader")
 class DirectoryMappackLoaderPlugin {
 
-  val logger = LoggerFactory.getLogger(this.getClass)
+  val logger = LogManager.getLogger
   var wasLoaded = false
 
   @EventHandler

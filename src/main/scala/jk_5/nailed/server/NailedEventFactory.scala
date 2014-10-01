@@ -70,7 +70,7 @@ object NailedEventFactory {
 
   def fireEvent[T <: Event](event: T): T = {
     event match {
-      case e: PlatformEvent => e.setPlatform(NailedPlatform)
+      case e: PlatformEvent if e.getPlatform == null => e.setPlatform(NailedPlatform)
       case _ =>
     }
     NailedPlatform.globalEventBus.post(event)
@@ -110,7 +110,7 @@ object NailedEventFactory {
       case s: MinecraftServer => this.serverCommandSender
       case _ => null
     }
-    if(wrapped == null) return -1
+    if(wrapped == null || true) return -1
     //NailedPlatform.getPluginManager.dispatchCommand(wrapped, input, null) //TODO
     0
   }
@@ -123,7 +123,7 @@ object NailedEventFactory {
       case s: MinecraftServer => this.serverCommandSender
       case _ => null
     }
-    if(wrapped == null) return null
+    if(wrapped == null || true) return null
     val ret = mutable.ListBuffer[String]()
     //if(NailedPlatform.getPluginManager.dispatchCommand(wrapped, input, ret) == 1) ret else null //TODO
     ret

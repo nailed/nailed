@@ -69,7 +69,7 @@ dependencies {
     nailed 'net.minecraft:launchwrapper:1.11'
     nailed 'org.scala-lang:scala-library:2.11.2'
     nailed 'org.ow2.asm:asm-debug-all:5.0.3'
-    nailed 'jk_5.eventbus:EventBus:2.0.0'
+    nailed 'jk_5.eventbus:EventBus:2.0.1'
     nailed 'lzma:lzma:0.0.1'
     nailed 'com.nothome:javaxdelta:2.0.1'
     nailed 'org.mozilla:rhino:1.7R4'

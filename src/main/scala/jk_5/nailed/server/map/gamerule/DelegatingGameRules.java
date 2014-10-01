@@ -3,8 +3,8 @@ package jk_5.nailed.server.map.gamerule;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -20,7 +20,7 @@ import jk_5.nailed.api.gamerule.GameRules;
  */
 public class DelegatingGameRules extends net.minecraft.world.GameRules {
 
-    private static final Logger logger = LoggerFactory.getLogger(DelegatingGameRules.class);
+    private static final Logger logger = LogManager.getLogger();
     private final GameRules<GameRule<?>> wrapped;
     private boolean allowCreation = true;
 
@@ -48,6 +48,10 @@ public class DelegatingGameRules extends net.minecraft.world.GameRules {
     @Override
     public boolean getGameRuleBooleanValue(String name) {
         GameRuleKey<?> key = DefaultGameRuleKey.getByName(name);
+        if(key == null){
+            logger.warn("Could not find gamerule key for rule " + name);
+            return false;
+        }
         if(key.getType() == GameRuleKey.Type.BOOL){
             //noinspection unchecked
             return wrapped.get((GameRuleKey<Boolean>) key).getValue();

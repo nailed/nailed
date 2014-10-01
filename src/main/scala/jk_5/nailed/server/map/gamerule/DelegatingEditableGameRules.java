@@ -5,8 +5,8 @@ import java.util.Set;
 
 import com.google.common.collect.MapMaker;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -22,7 +22,7 @@ import jk_5.nailed.api.gamerule.GameRules;
  */
 public class DelegatingEditableGameRules extends DelegatingGameRules {
 
-    private static final Logger logger = LoggerFactory.getLogger(DelegatingEditableGameRules.class);
+    private static final Logger logger = LogManager.getLogger();
     private static final Map<GameRules, net.minecraft.world.GameRules> cache = new MapMaker().weakKeys().makeMap();
 
     private final EditableGameRules wrapped;

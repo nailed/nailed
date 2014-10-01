@@ -42,7 +42,7 @@
             <filters>
                 <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL" />
             </filters>
-            <AppenderRef ref="SysOut" level="INFO"/>
+            <AppenderRef ref="SysOut"/>
             <AppenderRef ref="File"/>
         </Root>
     </Loggers>
