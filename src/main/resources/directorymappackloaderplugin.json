@@ -1,7 +1,0 @@
-{
-    "name": "DirectoryMappackLoader",
-    "main": "jk_5.nailed.plugins.directorymappackloader.DirectoryMappackLoaderPlugin",
-    "version": "${version}",
-    "author": "jk-5",
-    "description": ""
-}
