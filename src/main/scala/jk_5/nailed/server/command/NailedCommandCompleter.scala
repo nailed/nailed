@@ -66,6 +66,11 @@ class NailedCommandCompleter extends CommandCompleter {
         out.add("easy")
         out.add("medium")
         out.add("hard")
+      case "weathertype" =>
+        out.add("clear")
+        out.add("dry")
+        out.add("rain")
+        out.add("thunder")
       case "player" =>
         NailedPlatform.getOnlinePlayers.map(_.getName).foreach(out.add)
       case _ =>
