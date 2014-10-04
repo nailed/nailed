@@ -8,6 +8,7 @@ import jk_5.nailed.api.Platform
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
 import jk_5.nailed.api.event.mappack.RegisterMappacksEvent
 import jk_5.nailed.api.messaging.StandardMessenger
+import jk_5.nailed.server.command.NailedCommandManager
 import jk_5.nailed.server.config.Settings
 import jk_5.nailed.server.map.NailedMapLoader
 import jk_5.nailed.server.map.game.NailedGameTypeRegistry
@@ -79,6 +80,7 @@ object NailedPlatform
     this.getPluginManager.loadPlugins(this.pluginsDir)
 
     NailedEventFactory.fireEvent(new RegisterMappacksEvent(NailedMappackRegistry, NailedMapLoader))
+    NailedCommandManager.registerPluginCommands()
   }
 
   def load(server: DedicatedServer){

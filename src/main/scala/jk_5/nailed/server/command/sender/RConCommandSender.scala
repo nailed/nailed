@@ -18,7 +18,7 @@
 package jk_5.nailed.server.command.sender
 
 import jk_5.nailed.api.chat.BaseComponent
-import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.api.command.sender.CommandSender
 import net.minecraft.network.rcon.RConConsoleSource
 
 /**

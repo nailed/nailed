@@ -1,6 +1,7 @@
 package jk_5.nailed.plugins.internal.command
 
 import jk_5.nailed.api.command._
+import jk_5.nailed.api.command.sender.CommandSender
 
 /**
  * No description given

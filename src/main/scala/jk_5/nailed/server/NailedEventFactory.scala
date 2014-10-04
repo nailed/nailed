@@ -30,6 +30,7 @@ import jk_5.nailed.api.event.world.{WorldPostTickEvent, WorldPreTickEvent}
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.Location
+import jk_5.nailed.server.command.NailedCommandManager
 import jk_5.nailed.server.command.sender.{CommandBlockCommandSender, ConsoleCommandSender}
 import jk_5.nailed.server.event.{EntityDamageEvent, EntityFallEvent}
 import jk_5.nailed.server.map.NailedMap
@@ -50,9 +51,6 @@ import net.minecraft.util.{BlockPos, DamageSource, EnumFacing}
 import net.minecraft.world.WorldSettings.GameType
 import net.minecraft.world.{World, WorldServer}
 import org.apache.logging.log4j.LogManager
-
-import scala.collection.convert.wrapAll._
-import scala.collection.mutable
 
 /**
  * No description given
@@ -110,9 +108,9 @@ object NailedEventFactory {
       case s: MinecraftServer => this.serverCommandSender
       case _ => null
     }
-    if(wrapped == null || true) return -1
-    //NailedPlatform.getPluginManager.dispatchCommand(wrapped, input, null) //TODO
-    0
+    if(wrapped == null) return -1
+    NailedCommandManager.fireCommand(if(wrapped.isInstanceOf[Player]) input.substring(1) else input, wrapped, _.put(classOf[ICommandSender], sender))
+    1
   }
 
   def fireTabCompletion(sender: ICommandSender, input: String): util.List[String] = {
@@ -123,10 +121,7 @@ object NailedEventFactory {
       case s: MinecraftServer => this.serverCommandSender
       case _ => null
     }
-    if(wrapped == null || true) return null
-    val ret = mutable.ListBuffer[String]()
-    //if(NailedPlatform.getPluginManager.dispatchCommand(wrapped, input, ret) == 1) ret else null //TODO
-    ret
+    if(wrapped != null) NailedCommandManager.fireAutocompletion(input, wrapped, _.put(classOf[ICommandSender], sender)) else null
   }
 
   def fireWorldLoad(world: World){

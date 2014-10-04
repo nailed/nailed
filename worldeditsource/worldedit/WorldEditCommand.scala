@@ -4,6 +4,7 @@ import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.event.platform.{CommandEvent, CommandSuggestionEvent}
 import com.sk89q.worldedit.util.command.CommandMapping
 import jk_5.nailed.api.command._
+import jk_5.nailed.api.command.sender.CommandSender
 import jk_5.nailed.api.player.Player
 
 import scala.collection.JavaConverters._

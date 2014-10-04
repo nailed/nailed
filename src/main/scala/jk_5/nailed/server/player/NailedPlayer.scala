@@ -199,7 +199,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
       if(pot != null){
         builder.setPotion(pot)
         builder.setAmbient(effect.getIsAmbient)
-        builder.setShowParticles(effect.func_180154_f)
+        builder.setShowParticles(effect.getIsShowParticles)
         builder.setLevel(effect.getAmplifier + 1)
         builder.setDuration(effect.getDuration)
         newCollection.add(builder.build())
@@ -208,9 +208,8 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
     newCollection.build()
   }
 
-
   override def loadResourcePack(url: String, hash: String){
-    this.entity.func_175397_a(url, hash)
+    this.entity.loadResourcePack(url, hash)
   }
 
   override def sendPluginMessage(source: PluginIdentifier, channel: String, message: Array[Byte]){

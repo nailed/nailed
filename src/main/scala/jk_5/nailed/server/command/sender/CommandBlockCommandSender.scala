@@ -18,7 +18,7 @@
 package jk_5.nailed.server.command.sender
 
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
-import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.api.command.sender.CommandSender
 import jk_5.nailed.server.chat.ChatComponentConverter
 import net.minecraft.command.server.CommandBlockLogic
 
