@@ -28,6 +28,8 @@ import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.mappack.metadata.xml.XmlMappackMetadata
 import org.apache.logging.log4j.LogManager
 
+import scala.collection.convert.wrapAsScala._
+
 /**
  * No description given
  *

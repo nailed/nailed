@@ -15,7 +15,7 @@
  * this program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package jk_5.nailed.server
+package jk_5.nailed.server.config
 
 import java.io.{File, FileOutputStream}
 import java.nio.channels.Channels

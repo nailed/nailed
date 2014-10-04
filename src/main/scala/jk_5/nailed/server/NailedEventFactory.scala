@@ -195,7 +195,7 @@ object NailedEventFactory {
     val canceled = false//fireEvent(new BlockPlaceEvent(xC, yC, zC, NailedDimensionManager.getWorld(world.provider.getDimensionId), player)).isCanceled
     val ret = if(canceled){
       //Send the slot content to the client because the client decreases the stack size by 1 when it places a block
-      player.getEntity.updateCraftingInventory(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
+      player.getEntity.sendContainerAndContentsToPlayer(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
       true
     }else false
 
@@ -205,7 +205,7 @@ object NailedEventFactory {
     if(is.getTagCompound != null && is.getTagCompound.getBoolean("IsStatemitter")){
       if(player.getGameMode != GameMode.CREATIVE){
         player.sendMessage(new ComponentBuilder("You must be in creative mode to use Stat Emitters!").color(ChatColor.RED).create(): _*)
-        player.getEntity.updateCraftingInventory(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
+        player.getEntity.sendContainerAndContentsToPlayer(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
         return true
       }
       /*world.func_175722_b(new BlockPos(xC, yC, zC), Blocks.command_block)

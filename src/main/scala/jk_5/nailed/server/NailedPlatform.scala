@@ -8,6 +8,7 @@ import jk_5.nailed.api.Platform
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
 import jk_5.nailed.api.event.mappack.RegisterMappacksEvent
 import jk_5.nailed.api.messaging.StandardMessenger
+import jk_5.nailed.server.config.Settings
 import jk_5.nailed.server.map.NailedMapLoader
 import jk_5.nailed.server.map.game.NailedGameTypeRegistry
 import jk_5.nailed.server.mappack.NailedMappackRegistry

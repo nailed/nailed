@@ -1,5 +1,7 @@
 package jk_5.nailed.server.plugin
 
+import java.io.File
+
 import jk_5.eventbus.EventBus
 import jk_5.nailed.api.event.plugin.PluginEvent
 import jk_5.nailed.api.plugin.{Plugin, PluginContainer, PluginIdentifier}
@@ -10,7 +12,7 @@ import jk_5.nailed.server.NailedPlatform
  *
  * @author jk-5
  */
-class DefaultPluginContainer(val annotation: Plugin, val instance: Any) extends PluginContainer with PluginIdentifier {
+class DefaultPluginContainer(val annotation: Plugin, val instance: Any, private val location: File = null) extends PluginContainer with PluginIdentifier {
 
   private val eventBus = new EventBus
 
@@ -28,6 +30,9 @@ class DefaultPluginContainer(val annotation: Plugin, val instance: Any) extends 
   override val getVersion = annotation.version()
   override def getInstance() = instance.asInstanceOf[AnyRef]
   override def getIdentifier = this
+
+  def hasLocation = this.location != null
+  def getLocation = this.location
 
   override def toString = s"DefaultPluginContainer{id=$getId, name=$getName, version=$getVersion, instance=${getInstance()}"
 }
