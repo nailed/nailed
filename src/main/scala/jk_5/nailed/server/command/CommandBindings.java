@@ -9,7 +9,10 @@ import jk_5.nailed.api.command.parametric.binding.BindingBehavior;
 import jk_5.nailed.api.command.parametric.binding.BindingHelper;
 import jk_5.nailed.api.command.parametric.binding.BindingMatch;
 import jk_5.nailed.api.command.sender.CommandSender;
+import jk_5.nailed.api.command.sender.MapCommandSender;
 import jk_5.nailed.api.command.sender.WorldCommandSender;
+import jk_5.nailed.api.map.Team;
+import jk_5.nailed.api.mappack.Mappack;
 import jk_5.nailed.api.player.Player;
 import jk_5.nailed.api.world.Difficulty;
 import jk_5.nailed.api.world.WeatherType;
@@ -37,6 +40,16 @@ public class CommandBindings extends BindingHelper {
         }
     }
 
+    @BindingMatch(type = MapCommandSender.class, behavior = BindingBehavior.PROVIDES)
+    public MapCommandSender getMapCommandSender(ArgumentStack stack) throws CommandException {
+        CommandSender sender = stack.getContext().getLocals().get(CommandSender.class);
+        if(sender instanceof MapCommandSender){
+            return ((MapCommandSender) sender);
+        }else{
+            throw new CommandException("You are not in a map");
+        }
+    }
+
     @BindingMatch(type = Platform.class, behavior = BindingBehavior.PROVIDES)
     public Platform getPlatform(ArgumentStack stack) throws CommandException {
         return NailedPlatform$.MODULE$;
@@ -45,7 +58,6 @@ public class CommandBindings extends BindingHelper {
     @BindingMatch(type = Player.class, behavior = BindingBehavior.CONSUMES)
     public Player getPlayer(ArgumentStack stack) throws ParameterException, CommandException {
         String name = stack.next();
-        stack.markConsumed();
         Player player = NailedPlatform$.MODULE$.getPlayerByName(name);
         if(player == null){
             throw new CommandException("Player " + name + " is not online");
@@ -96,6 +108,30 @@ public class CommandBindings extends BindingHelper {
             return WeatherType.THUNDER;
         }else{
             throw new CommandException("Unknown weather type \'" + input + "\'");
+        }
+    }
+
+    @BindingMatch(type = Mappack.class, behavior = BindingBehavior.CONSUMES)
+    public Mappack getMappack(ArgumentStack stack) throws ParameterException, CommandException {
+        String input = stack.next();
+        Mappack mappack = NailedPlatform$.MODULE$.getMappackRegistry().getByName(input);
+        if(mappack == null) throw new CommandException("Unknown mappack \'" + input + "\'");
+        return mappack;
+    }
+
+    @BindingMatch(type = Team.class, behavior = BindingBehavior.CONSUMES)
+    public Team getTeam(ArgumentStack stack) throws ParameterException, CommandException {
+        String input = stack.next();
+        CommandSender sender = stack.getContext().getLocals().get(CommandSender.class);
+        if(sender instanceof MapCommandSender){
+            Team team = ((MapCommandSender) sender).getMap().getTeam(input);
+            if(team == null){
+                throw new CommandException("Unknown team \'" + input + "\'");
+            }else{
+                return team;
+            }
+        }else{
+            throw new CommandException("You are not in a map");
         }
     }
 }

@@ -20,7 +20,7 @@ package jk_5.nailed.server.map
 import jk_5.nailed.api.chat.ChatColor
 import jk_5.nailed.api.map.{Map, Team}
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.util.Checks
+import jk_5.nailed.api.util.{Checks, Location}
 import jk_5.nailed.server.team.NailedTeam
 
 import scala.collection.{immutable, mutable}
@@ -49,6 +49,9 @@ trait TeamManager extends Map {
     override val color = ChatColor.WHITE
     override val members = java.util.Arrays.asList(memberSet.toArray: _*)
     override val name = "Default Team"
+    override def getName = name
+    override def getSpawnPoint = null
+    override def setSpawnPoint(sp: Location){}
 
     def onPlayerJoined(player: Player) = memberSet += player
     def onPlayerLeft(player: Player) = memberSet -= player
@@ -79,7 +82,7 @@ trait TeamManager extends Map {
       this.playerTeams.put(player, team)
     }
     if(team != null){
-      before.get match {
+      team match {
         case t: NailedTeam => t.onPlayerJoined(player)
         case _ =>
       }

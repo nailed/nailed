@@ -24,6 +24,7 @@ import java.util.UUID
 import com.google.common.collect.ImmutableSet
 import io.netty.buffer.Unpooled
 import io.netty.util.CharsetUtil
+import jk_5.nailed.api.chat.serialization.ComponentSerializer
 import jk_5.nailed.api.chat.{BaseComponent, ClickEvent, HoverEvent, TextComponent}
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.math.{EulerDirection, Vector3d, Vector3f}
@@ -31,18 +32,19 @@ import jk_5.nailed.api.messaging.StandardMessenger
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.PluginIdentifier
 import jk_5.nailed.api.potion.Potion
-import jk_5.nailed.api.util.{Checks, Location, TeleportOptions}
+import jk_5.nailed.api.util.{Checks, Location, TeleportOptions, TitleMessage}
 import jk_5.nailed.api.world.World
 import jk_5.nailed.api.{GameMode, potion}
 import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
 import jk_5.nailed.server.teleport.Teleporter
+import jk_5.nailed.server.world.NailedWorld
 import jk_5.nailed.server.{NailedEventFactory, NailedPlatform}
 import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.network.play.server.{S02PacketChat, S3FPacketCustomPayload}
+import net.minecraft.network.play.server.{S02PacketChat, S3FPacketCustomPayload, S45PacketTitle}
 import net.minecraft.network.{NetHandlerPlayServer, Packet}
 import net.minecraft.potion.PotionEffect
-import net.minecraft.util.DamageSource
+import net.minecraft.util.{DamageSource, IChatComponent}
 import net.minecraft.world.WorldSettings.GameType
 import org.apache.logging.log4j.LogManager
 
@@ -65,6 +67,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   var isOnline: Boolean = false
   var isAllowedToFly: Boolean = false
   val channels = mutable.HashSet[String]()
+  var subtitle: Seq[BaseComponent] = null
 
   override val getScoreboardManager = new PlayerScoreboardManager(this)
 
@@ -114,8 +117,8 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def setVelocity(velocity: Vector3f) = ???
   override def getVelocity = ???
   override def setSaturation(saturation: Double) = ???
-  override def setHunger(hunger: Double) = ???
-  override def getHunger = ???
+  override def setHunger(hunger: Double) = entity.getFoodStats.setFoodLevel(20 - hunger.toInt)
+  override def getHunger = 20 + entity.getFoodStats.getFoodLevel
   override def getSaturation = ???
 
   override def teleportTo(world: World){
@@ -253,6 +256,50 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   }
 
   def getListeningPluginChannels: util.Set[String] = ImmutableSet.copyOf(channels.asJava: java.lang.Iterable[String])
+
+  override def displayTitle(title: TitleMessage){
+    val main = if(title.getTitle != null && title.getTitle.size != 0) IChatComponent.Serializer.jsonToComponent(ComponentSerializer.toString(title.getTitle: _*)) else null
+    val sub = if(title.getSubtitle != null && title.getSubtitle.size != 0) IChatComponent.Serializer.jsonToComponent(ComponentSerializer.toString(title.getSubtitle: _*)) else null
+    sendPacket(new S45PacketTitle(title.getFadeInTime, title.getDisplayTime, title.getFadeOutTime))
+    if(main != null) sendPacket(new S45PacketTitle(S45PacketTitle.Type.TITLE, main))
+    if(sub != null) sendPacket(new S45PacketTitle(S45PacketTitle.Type.SUBTITLE, sub))
+  }
+
+  override def clearTitle(){
+    sendPacket(new S45PacketTitle(S45PacketTitle.Type.CLEAR, null))
+  }
+
+  override def displaySubtitle(message: BaseComponent*){
+    sendPacket(new S02PacketChat(2.toByte, message: _*))
+  }
+
+  override def setSubtitle(message: BaseComponent*){
+    displaySubtitle(message: _*)
+    subtitle = message
+  }
+
+  override def clearSubtitle(){
+    subtitle = null
+  }
+
+  override def clearInventory(){
+    entity.inventory.clear()
+    entity.sendContainerAndContentsToPlayer(entity.inventoryContainer, entity.inventoryContainer.getInventory)
+  }
+
+  def getSpawnPoint: Location = {
+    val team = this.map.getPlayerTeam(this)
+    if(team == null){
+      world.asInstanceOf[NailedWorld].wrapped.provider.getSpawnPoint
+    }else{
+      val s = team.getSpawnPoint
+      if(s == null){
+        world.asInstanceOf[NailedWorld].wrapped.provider.getSpawnPoint
+      }else{
+        s
+      }
+    }
+  }
 
   override def toString = s"NailedPlayer{uuid=$uuid,name=$name,isOnline=$isOnline,gameMode=$getGameMode,eid=${getEntity.getEntityId}}"
 }

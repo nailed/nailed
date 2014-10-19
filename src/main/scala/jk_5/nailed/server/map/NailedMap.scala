@@ -42,6 +42,7 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
   override val getScoreboardManager = new MapScoreboardManager(this)
   override val getGameManager = new NailedGameManager(this)
   override val getStatManager = new NailedStatManager(this)
+  var defaultWorld: World = null
 
   this.init() //Init the TeamManager
 
@@ -59,6 +60,7 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
 
   override def addWorld(world: World){
     NailedMapLoader.addWorldToMap(world, this)
+    if(world.getConfig.isDefault) defaultWorld = world
   }
 
   def onPlayerJoined(player: Player){

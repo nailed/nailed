@@ -269,7 +269,7 @@
      }
  
      public CrashReport func_71230_b(CrashReport p_71230_1_) {
-@@ -942,6 +908,7 @@
+@@ -939,6 +905,7 @@
              WorldServer worldserver = this.field_71305_c[i];
  
              if (worldserver != null) {
@@ -277,7 +277,7 @@
                  worldserver.func_73041_k();
              }
          }
-@@ -1090,7 +1057,7 @@
+@@ -1087,7 +1054,7 @@
      }
  
      public NetworkSystem func_147137_ag() {

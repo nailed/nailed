@@ -20,6 +20,7 @@ package jk_5.nailed.server.team
 import jk_5.nailed.api.map.Team
 import jk_5.nailed.api.mappack.metadata.MappackTeam
 import jk_5.nailed.api.player.Player
+import jk_5.nailed.api.util.Location
 import jk_5.nailed.server.map.TeamManager
 
 import scala.collection.mutable
@@ -32,10 +33,12 @@ import scala.collection.mutable
 class NailedTeam(val mappackTeam: MappackTeam, val manager: TeamManager) extends Team {
 
   private val memberSet = mutable.HashSet[Player]()
+  var spawnpoint: Location = null
 
   override val id = mappackTeam.id
   override val color = mappackTeam.color
   override val name = mappackTeam.name
+  override def getName = name
 
   val scoreboardTeam = manager.getScoreboardManager.getOrCreateTeam(this.id)
   scoreboardTeam.setPrefix(color.toString)
@@ -52,4 +55,7 @@ class NailedTeam(val mappackTeam: MappackTeam, val manager: TeamManager) extends
     memberSet -= player
     scoreboardTeam.removePlayer(player)
   }
+
+  override def getSpawnPoint = spawnpoint
+  override def setSpawnPoint(spawnpoint: Location) = this.spawnpoint = spawnpoint
 }

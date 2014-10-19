@@ -71,6 +71,8 @@ class NailedCommandCompleter extends CommandCompleter {
         out.add("dry")
         out.add("rain")
         out.add("thunder")
+      case "mappack" =>
+        NailedPlatform.getMappackRegistry.getAllIds.foreach(out.add)
       case "player" =>
         NailedPlatform.getOnlinePlayers.map(_.getName).foreach(out.add)
       case _ =>

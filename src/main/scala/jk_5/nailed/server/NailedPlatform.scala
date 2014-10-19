@@ -70,6 +70,7 @@ object NailedPlatform
   override def getPlayerSelector = NailedPlayerSelector
   override def getConsoleCommandSender = NailedEventFactory.serverCommandSender
   override def getMappackRegistry = NailedMappackRegistry
+  override def getMapLoader = NailedMapLoader
 
   def preLoad(server: DedicatedServer){
     CommandBase.setAdminCommander(null) //Don't spam my log with stupid messages

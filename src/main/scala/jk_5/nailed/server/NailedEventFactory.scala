@@ -66,6 +66,8 @@ object NailedEventFactory {
 
   private val logger = LogManager.getLogger
 
+  private var subtitleCounter = 0
+
   def fireEvent[T <: Event](event: T): T = {
     event match {
       case e: PlatformEvent if e.getPlatform == null => e.setPlatform(NailedPlatform)
@@ -84,7 +86,20 @@ object NailedEventFactory {
   }
 
   def firePreServerTick(server: MinecraftServer) = fireEvent(preTickEvent)
-  def firePostServerTick(server: MinecraftServer) = fireEvent(postTickEvent)
+  def firePostServerTick(server: MinecraftServer) = {
+    if(subtitleCounter == 15){
+      val it = NailedPlatform.getOnlinePlayers.iterator()
+      while(it.hasNext){
+        val p = it.next()
+        val sub = p.asInstanceOf[NailedPlayer].subtitle
+        if(sub != null){
+          p.displaySubtitle(sub: _*)
+        }
+      }
+      subtitleCounter = 0
+    }else subtitleCounter += 1
+    fireEvent(postTickEvent)
+  }
 
   def fireServerStartBeforeConfig(server: DedicatedServer){
     NailedPlatform.preLoad(server)

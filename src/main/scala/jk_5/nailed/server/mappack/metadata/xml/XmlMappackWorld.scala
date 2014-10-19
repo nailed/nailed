@@ -59,4 +59,5 @@ class XmlMappackWorld(override val name: String, element: Element, parent: Mappa
   override val disableDamage = if(element.getChild("disableDamage", element.getNamespace) != null) element.getChild("disableDamage", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableDamage
   override val disableBlockBreaking = if(element.getChild("disableBlockBreaking", element.getNamespace) != null) element.getChild("disableBlockBreaking", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableBlockBreaking
   override val disableBlockPlacement = if(element.getChild("disableBlockPlacement", element.getNamespace) != null) element.getChild("disableBlockPlacement", element.getNamespace).getText.equalsIgnoreCase("true") else parent.disableBlockPlacement
+  override val isDefault = element.getAttributeValue("default", element.getNamespace, "false") == "true"
 }

@@ -22,6 +22,7 @@ import jk_5.nailed.api.scoreboard.{Objective, Score}
 import jk_5.nailed.api.util.Checks
 import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.network.play.server.{S3BPacketScoreboardObjective, S3CPacketUpdateScore}
+import net.minecraft.scoreboard.IScoreObjectiveCriteria
 
 import scala.collection.mutable
 
@@ -47,6 +48,7 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
     val packet = new S3BPacketScoreboardObjective
     packet.field_149343_a = this.id
     packet.field_149341_b = this.displayName
+    packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
     packet.field_149342_c = 2 //Update
     this.manager.sendPacket(packet)
   }

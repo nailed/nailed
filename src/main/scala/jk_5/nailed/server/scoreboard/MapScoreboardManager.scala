@@ -27,6 +27,7 @@ import jk_5.nailed.server.map.NailedMap
 import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.network.Packet
 import net.minecraft.network.play.server.{S3BPacketScoreboardObjective, S3DPacketDisplayScoreboard, S3EPacketTeams}
+import net.minecraft.scoreboard.IScoreObjectiveCriteria
 
 import scala.collection.convert.wrapAsScala._
 import scala.collection.mutable
@@ -58,6 +59,7 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
         packet.field_149343_a = obj.id
         packet.field_149341_b = obj.displayName
         packet.field_149342_c = 0 //0 = Create
+        packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
         this.sendPacket(packet)
         obj
     }
@@ -75,6 +77,7 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
       packet.field_149343_a = objective.id
       packet.field_149341_b = objective.displayName
       packet.field_149342_c = 0 //0 = Create
+      packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
       np.sendPacket(packet)
 
       objective.sendData(player)

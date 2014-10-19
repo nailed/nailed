@@ -1,11 +1,14 @@
 package jk_5.nailed.plugins.commands
 
+import io.netty.util.concurrent.{Future, FutureListener}
 import jk_5.eventbus.EventHandler
-import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TextComponent}
+import jk_5.nailed.api.chat._
 import jk_5.nailed.api.command.parametric.annotation.{Optional, Text}
-import jk_5.nailed.api.command.sender.{CommandSender, WorldCommandSender}
+import jk_5.nailed.api.command.sender.{CommandSender, MapCommandSender, WorldCommandSender}
 import jk_5.nailed.api.command.{Command, CommandException}
 import jk_5.nailed.api.event.RegisterCommandsEvent
+import jk_5.nailed.api.map.{Map, Team}
+import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.api.world.{Difficulty, WeatherType}
@@ -23,8 +26,20 @@ class CommandPlugin {
   @EventHandler
   def registerCommands(event: RegisterCommandsEvent){
     event.registerCommandClass(this)
+    event.subcommand("team").registerCommandClass(TeamCommand)
 
     event.registerCallable(new VanillaCommand(new CommandHelp), "help")
+  }
+
+  object TeamCommand {
+
+    @Command(aliases = Array("join"), desc = "Join a team")
+    def difficulty(sender: MapCommandSender, player: Player, team: Team){
+      val map = sender.getMap
+      map.setPlayerTeam(player, team)
+      val msg = new ComponentBuilder(s"Player ").color(ChatColor.GREEN).append(player.getName).append(" is now in team ").append(team.name).color(team.color).create()
+      map.broadcastChatMessage(msg: _*)
+    }
   }
 
   @Command(aliases = Array("gamemode", "gm"), desc = "Change your gamemode", usage = "[mode] [target]")
@@ -64,7 +79,7 @@ class CommandPlugin {
     if(target == null){
       sender match {
         case p: Player => p.setHealth(p.getMaxHealth)
-        case _ => throw new CommandException("Please specify and player")
+        case _ => throw new CommandException("Please specify a player")
       }
     }else{
       target.setHealth(target.getMaxHealth)
@@ -130,6 +145,28 @@ class CommandPlugin {
       }else{
         throw new CommandException("Could not start the game. No game.js was found")
       }
+    }
+  }
+
+  @Command(aliases = Array("loadmap"), desc = "Loads a new map and registers it to the system")
+  def startgame(platform: Platform, sender: CommandSender, mappack: Mappack){
+    val future = platform.getMapLoader.createMapFor(mappack)
+    future.addListener(new FutureListener[Map] {
+      override def operationComplete(future: Future[Map]){
+        val builder = new ComponentBuilder("Map ").color(ChatColor.GREEN)
+          .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("Click to go to this map")))
+          .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/goto " + future.get().defaultWorld().getDimensionId)) //TODO: teleport to default world
+        builder.append(future.get().mappack.getMetadata.name).append(" was loaded")
+        sender.sendMessage(builder.create(): _*)
+      }
+    })
+  }
+
+  @Command(aliases = Array("goto"), desc = "Teleports the player to a world")
+  def startgame(platform: Platform, sender: CommandSender, dimension: Int){
+    sender match {
+      case p: Player => p.teleportTo(platform.getWorld(dimension))
+      case _ =>
     }
   }
 }
