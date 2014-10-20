@@ -7,6 +7,7 @@ import jk_5.nailed.api.command.context.CommandLocals
 import jk_5.nailed.api.command.dispatcher.Dispatcher
 import jk_5.nailed.api.command.parametric.binding.BindingBehavior
 import jk_5.nailed.api.command.parametric.{ParameterData, ParametricCallable}
+import jk_5.nailed.api.command.sender.{CommandSender, MapCommandSender}
 import jk_5.nailed.server.NailedPlatform
 import org.apache.logging.log4j.LogManager
 
@@ -74,6 +75,13 @@ class NailedCommandCompleter extends CommandCompleter {
       case "mappack" =>
         NailedPlatform.getMappackRegistry.getAllIds.foreach(out.add)
       case "player" =>
+        NailedPlatform.getOnlinePlayers.map(_.getName).foreach(out.add)
+      case "team" =>
+        val sender = locals.get(classOf[CommandSender])
+        sender match {
+          case s: MapCommandSender if s.getMap != null => s.getMap.getTeams.map(_.id()).foreach(out.add)
+          case _ =>
+        }
         NailedPlatform.getOnlinePlayers.map(_.getName).foreach(out.add)
       case _ =>
     }
