@@ -51,6 +51,7 @@ class NailedGameManager(val map: NailedMap) extends GameManager {
     if(hasCustomGameType) getGameType.onGameEnded(map)
     scriptingEngine.kill()
     map.getStatManager.fireEvent(new StatEvent("gameRunning", false))
+    cleanup()
     true
   }
 
@@ -59,6 +60,7 @@ class NailedGameManager(val map: NailedMap) extends GameManager {
     isGameRunning = false
     if(hasCustomGameType) getGameType.onGameEnded(map)
     map.getStatManager.fireEvent(new StatEvent("gameRunning", false))
+    cleanup()
   }
 
   override def setWinner(winner: GameWinnable){
