@@ -8,9 +8,11 @@ import jk_5.nailed.api.command.parametric.argument.ArgumentStack;
 import jk_5.nailed.api.command.parametric.binding.BindingBehavior;
 import jk_5.nailed.api.command.parametric.binding.BindingHelper;
 import jk_5.nailed.api.command.parametric.binding.BindingMatch;
+import jk_5.nailed.api.command.sender.AnalogContext;
 import jk_5.nailed.api.command.sender.CommandSender;
 import jk_5.nailed.api.command.sender.MapCommandSender;
 import jk_5.nailed.api.command.sender.WorldCommandSender;
+import jk_5.nailed.api.map.GameWinnable;
 import jk_5.nailed.api.map.Team;
 import jk_5.nailed.api.mappack.Mappack;
 import jk_5.nailed.api.player.Player;
@@ -53,6 +55,11 @@ public class CommandBindings extends BindingHelper {
     @BindingMatch(type = Platform.class, behavior = BindingBehavior.PROVIDES)
     public Platform getPlatform(ArgumentStack stack) throws CommandException {
         return NailedPlatform$.MODULE$;
+    }
+
+    @BindingMatch(type = AnalogContext.class, behavior = BindingBehavior.PROVIDES)
+    public AnalogContext getAnalogContext(ArgumentStack stack) throws CommandException {
+        return stack.getContext().getLocals().get(AnalogContext.class);
     }
 
     @BindingMatch(type = Player.class, behavior = BindingBehavior.CONSUMES)
@@ -127,6 +134,26 @@ public class CommandBindings extends BindingHelper {
             Team team = ((MapCommandSender) sender).getMap().getTeam(input);
             if(team == null){
                 throw new CommandException("Unknown team \'" + input + "\'");
+            }else{
+                return team;
+            }
+        }else{
+            throw new CommandException("You are not in a map");
+        }
+    }
+
+    @BindingMatch(type = GameWinnable.class, behavior = BindingBehavior.CONSUMES)
+    public GameWinnable getWinnable(ArgumentStack stack) throws ParameterException, CommandException {
+        String input = stack.next();
+        CommandSender sender = stack.getContext().getLocals().get(CommandSender.class);
+        if(sender instanceof MapCommandSender){
+            Team team = ((MapCommandSender) sender).getMap().getTeam(input);
+            if(team == null){
+                Player player = NailedPlatform$.MODULE$.getPlayerByName(input);
+                if(player == null){
+                    throw new CommandException(input + " is not a team nor a player. It can\'t win this game");
+                }
+                return player;
             }else{
                 return team;
             }

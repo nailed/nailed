@@ -7,7 +7,7 @@ import jk_5.nailed.api.command.context.CommandLocals
 import jk_5.nailed.api.command.dispatcher.Dispatcher
 import jk_5.nailed.api.command.fluent.CommandGraph
 import jk_5.nailed.api.command.parametric.ParametricBuilder
-import jk_5.nailed.api.command.sender.CommandSender
+import jk_5.nailed.api.command.sender.{AnalogCommandSender, AnalogContext, CommandSender}
 import jk_5.nailed.api.command.util.auth.{AuthorizationException, Authorizer}
 import jk_5.nailed.api.command.{CommandException, InvocationCommandException}
 import jk_5.nailed.api.event.RegisterCommandsEvent
@@ -45,26 +45,31 @@ object NailedCommandManager {
   private def prepareLocals(locals: CommandLocals, input: String, sender: CommandSender): CommandLocals = {
     locals.put(classOf[CommandSender], sender)
     locals.put("CMD_INPUT", input)
+    if(sender.isInstanceOf[AnalogCommandSender]) locals.put(classOf[AnalogContext], new AnalogContext)
     locals
   }
 
-  def fireCommand(input: String, sender: CommandSender, withLocals: (CommandLocals) => Unit = null){
+  def fireCommand(input: String, sender: CommandSender, withLocals: (CommandLocals) => Unit = null): Int = {
     val locals = prepareLocals(new CommandLocals, input, sender)
     if(withLocals != null) withLocals(locals)
     try{
       dispatcher.call(input, locals, new Array[String](0))
+      if(sender.isInstanceOf[AnalogCommandSender]) locals.get(classOf[AnalogContext]).getPower else 1
     }catch{
       case e: InvocationCommandException =>
         sender.sendMessage(new ComponentBuilder("Internal exception has occurred while executing the command").color(ChatColor.RED).create(): _*)
         logger.error(s"Internal exception while executing command \'${e.getCommandUsed("/", null)}\'", e)
+        0
       case e: CommandException =>
         sender.sendMessage(new ComponentBuilder(e.getMessage).color(ChatColor.RED).create(): _*)
+        0
       case e: AuthorizationException =>
         if(e.getMessage == null){
           sender.sendMessage(new ComponentBuilder("You don\'t have permissions to execute this command").color(ChatColor.RED).create(): _*)
         }else{
           sender.sendMessage(new ComponentBuilder(e.getMessage).color(ChatColor.RED).create(): _*)
         }
+        0
     }
   }
 

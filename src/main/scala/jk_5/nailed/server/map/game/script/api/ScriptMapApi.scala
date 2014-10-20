@@ -1,7 +1,7 @@
 package jk_5.nailed.server.map.game.script.api
 
 import jk_5.nailed.api.chat.{BaseComponent, ChatColor, TextComponent}
-import jk_5.nailed.api.map.stat.StatEvent
+import jk_5.nailed.api.map.stat.ModifiableStat
 import jk_5.nailed.api.util.TitleMessage
 import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.map.NailedMap
@@ -89,8 +89,18 @@ class ScriptMapApi(private[this] val map: NailedMap) {
 
   def clearSubtitle() = map.players.foreach(_.clearSubtitle())
 
-  def enableStat(name: String) = map.getStatManager.fireEvent(new StatEvent(name, true))
-  def disableStat(name: String) = map.getStatManager.fireEvent(new StatEvent(name, false))
+  def enableStat(name: String){
+    map.getStatManager.getStat(name) match {
+      case s: ModifiableStat => s.enable()
+      case _ =>
+    }
+  }
+  def disableStat(name: String){
+    map.getStatManager.getStat(name) match {
+      case s: ModifiableStat => s.disable()
+      case _ =>
+    }
+  }
 
   def setWinner(winner: Any){
     winner match {

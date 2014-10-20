@@ -18,7 +18,8 @@
 package jk_5.nailed.server.command.sender
 
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
-import jk_5.nailed.api.command.sender.CommandSender
+import jk_5.nailed.api.command.sender.{AnalogCommandSender, CommandSender, WorldCommandSender}
+import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.chat.ChatComponentConverter
 import net.minecraft.command.server.CommandBlockLogic
 
@@ -27,7 +28,10 @@ import net.minecraft.command.server.CommandBlockLogic
  *
  * @author jk-5
  */
-class CommandBlockCommandSender(val wrapped: CommandBlockLogic) extends CommandSender {
+class CommandBlockCommandSender(val wrapped: CommandBlockLogic) extends CommandSender with AnalogCommandSender with WorldCommandSender {
+
+  override val getWorld = NailedPlatform.getWorld(wrapped.getEntityWorld.provider.getDimensionId)
+  override def getMap = getWorld.getMap
 
   /**
    * Get the unique name of this command sender.

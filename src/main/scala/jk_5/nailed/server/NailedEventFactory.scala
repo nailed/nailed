@@ -36,12 +36,14 @@ import jk_5.nailed.server.event.{EntityDamageEvent, EntityFallEvent}
 import jk_5.nailed.server.map.NailedMap
 import jk_5.nailed.server.network.NettyChannelInitializer
 import jk_5.nailed.server.player.NailedPlayer
+import jk_5.nailed.server.tileentity.TileEntityStatEmitter
 import jk_5.nailed.server.utils.ItemStackConverter._
 import jk_5.nailed.server.world.NailedDimensionManager
 import net.minecraft.command.ICommandSender
 import net.minecraft.command.server.CommandBlockLogic
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.network.play.server.{S05PacketSpawnPosition, S07PacketRespawn, S1FPacketSetExperience}
 import net.minecraft.server.MinecraftServer
@@ -125,7 +127,6 @@ object NailedEventFactory {
     }
     if(wrapped == null) return -1
     NailedCommandManager.fireCommand(if(wrapped.isInstanceOf[Player]) input.substring(1) else input, wrapped, _.put(classOf[ICommandSender], sender))
-    1
   }
 
   def fireTabCompletion(sender: ICommandSender, input: String): util.List[String] = {
@@ -218,12 +219,13 @@ object NailedEventFactory {
         player.getEntity.sendContainerAndContentsToPlayer(player.getEntity.inventoryContainer, player.getEntity.inventoryContainer.getInventory)
         return true
       }
-      /*world.func_175722_b(new BlockPos(xC, yC, zC), Blocks.command_block)
-      world.setBlock(xC, yC, zC, Blocks.command_block, 8, 3)
+      val pos = new BlockPos(xC, yC, zC)
+      world.setBlockState(pos, Blocks.command_block.getDefaultState)
+      world.setTileEntity(pos, new TileEntityStatEmitter)
       if(is.getTagCompound.hasKey("Content")){
-        world.getTileEntity(xC, yC, zC).asInstanceOf[TileEntityStatEmitter].commandBlockLogic.setCommand(is.getTagCompound.getString("Content"))
+        world.getTileEntity(pos).asInstanceOf[TileEntityStatEmitter].commandBlockLogic.setCommand(is.getTagCompound.getString("Content"))
       }
-      return true*/
+      return true
     }
     ret
   }

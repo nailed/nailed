@@ -16,7 +16,7 @@ import jk_5.nailed.server.mappack.NailedMappackRegistry
 import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.plugin.NailedPluginManager
 import jk_5.nailed.server.scheduler.NailedScheduler
-import jk_5.nailed.server.tileentity.TileEntityStatEmitter
+import jk_5.nailed.server.tileentity.{OldStatEmitterConverter, TileEntityStatEmitter}
 import jk_5.nailed.server.tweaker.NailedTweaker
 import jk_5.nailed.server.utils.NailedPlayerSelector
 import jk_5.nailed.server.world.{BossBar, DimensionManagerTrait, WorldProviders}
@@ -76,6 +76,7 @@ object NailedPlatform
     CommandBase.setAdminCommander(null) //Don't spam my log with stupid messages
 
     TileEntity.addMapping(classOf[TileEntityStatEmitter], "Nailed:StatEmitter")
+    TileEntity.addMapping(classOf[OldStatEmitterConverter], "nailed.stat")
 
     this.pluginsDir.mkdir()
     this.getPluginManager.loadPlugins(this.pluginsDir)

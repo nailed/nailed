@@ -1,6 +1,8 @@
 package jk_5.nailed.server.map.game
 
+import com.google.common.collect.ImmutableMap
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
+import jk_5.nailed.api.map.stat.StatEvent
 import jk_5.nailed.api.map.{GameManager, GameWinnable, Team}
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.TitleMessage
@@ -34,6 +36,7 @@ class NailedGameManager(val map: NailedMap) extends GameManager {
       val scriptStarted = scriptingEngine.start()
       if(hasCustomGameType) getGameType.onGameStarted(map)
       isGameRunning = scriptStarted || hasCustomGameType
+      if(isGameRunning) map.getStatManager.fireEvent(new StatEvent("gameRunning", true))
       isGameRunning
     }catch{
       case e: Exception =>
@@ -47,6 +50,7 @@ class NailedGameManager(val map: NailedMap) extends GameManager {
     isGameRunning = false
     if(hasCustomGameType) getGameType.onGameEnded(map)
     scriptingEngine.kill()
+    map.getStatManager.fireEvent(new StatEvent("gameRunning", false))
     true
   }
 
@@ -54,13 +58,14 @@ class NailedGameManager(val map: NailedMap) extends GameManager {
     if(!isGameRunning) return
     isGameRunning = false
     if(hasCustomGameType) getGameType.onGameEnded(map)
+    map.getStatManager.fireEvent(new StatEvent("gameRunning", false))
   }
 
   override def setWinner(winner: GameWinnable){
     if(this.winner != null) return
     this.winner = winner
     val builder = TitleMessage.builder().setFadeInTime(0).setDisplayTime(200).setFadeOutTime(40)
-    builder.setTitle(new ComponentBuilder("You won!").color(ChatColor.GREEN).create(): _*)
+    builder.setTitle(new ComponentBuilder("You Win!").color(ChatColor.GREEN).create(): _*)
     winner match {
       case p: Player =>
         p.displayTitle(builder.build())
@@ -73,9 +78,11 @@ class NailedGameManager(val map: NailedMap) extends GameManager {
         val b2 = TitleMessage.builder().setFadeInTime(0).setDisplayTime(200).setFadeOutTime(40)
         val t2 = b2.setTitle(new ComponentBuilder("You lost!").color(ChatColor.RED).create(): _*).build()
         map.teams.values.filter(_ != t).map(_.members).flatten.foreach(_.displayTitle(t2))
+        map.getStatManager.fireEvent(new StatEvent("teamWon", true, ImmutableMap.of[String, String]("team", t.id)))
     }
     map.broadcastChatMessage(new ComponentBuilder(winner.getName + " won the game").color(ChatColor.GOLD).create(): _*)
     onEnded(success = true)
+    map.getStatManager.fireEvent(new StatEvent("gameHasWinner", true))
     if(winInterrupt){
       scriptingEngine.kill()
     }
@@ -86,4 +93,8 @@ class NailedGameManager(val map: NailedMap) extends GameManager {
 
   override def setUnreadyInterrupt(unreadyInterrupt: Boolean) = this.unreadyInterrupt = unreadyInterrupt
   override def isUnreadyInterrupt = unreadyInterrupt
+
+  def cleanup(){
+    map.players.foreach(_.clearSubtitle())
+  }
 }

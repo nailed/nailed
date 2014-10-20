@@ -9,7 +9,6 @@ import jk_5.nailed.api.command.parametric.binding.BindingBehavior
 import jk_5.nailed.api.command.parametric.{ParameterData, ParametricCallable}
 import jk_5.nailed.api.command.sender.{CommandSender, MapCommandSender}
 import jk_5.nailed.server.NailedPlatform
-import org.apache.logging.log4j.LogManager
 
 import scala.collection.convert.wrapAsScala._
 
@@ -20,7 +19,6 @@ import scala.collection.convert.wrapAsScala._
  */
 class NailedCommandCompleter extends CommandCompleter {
 
-  private val logger = LogManager.getLogger
   var dispatcher: Dispatcher = _
   private val parameters = {
     val field = classOf[ParametricCallable].getDeclaredField("parameters")

@@ -288,7 +288,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   }
 
   def getSpawnPoint: Location = {
-    val team = this.map.getPlayerTeam(this)
+    val team = this.map.getPlayerTeam(this) //TODO: this line throws an NPE when the player logs in for the second time (over EntityPlayerMP)
     if(team == null){
       world.asInstanceOf[NailedWorld].wrapped.provider.getSpawnPoint
     }else{

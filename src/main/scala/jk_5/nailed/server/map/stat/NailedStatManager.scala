@@ -20,7 +20,7 @@ class NailedStatManager(private val map: NailedMap) extends StatManager {
   }
 
   def fireEvent(event: StatEvent){
-    stats.foreach{
+    stats.foreach {
       case s: SubscribedStat if s.getTrack == event.getName =>
         var stop = false
         for(e <- event.getAttributes.entrySet() if !stop){
