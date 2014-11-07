@@ -298,23 +298,20 @@ object NailedEventFactory {
     currentWorld.wrapped.removePlayerEntityDangerously(ent) //Force the entity to be removed from it's current world
 
     val mappack = if(destMap != null) destMap.mappack else null
-    val pos = if(mappack == null) new Location(destWorld, 0, 64, 0) else Location.builder.copy(destWorld.getConfig.spawnPoint).setWorld(destWorld).build()
+    var pos = if(mappack == null) new Location(destWorld, 0, 64, 0) else Location.builder.copy(destWorld.getConfig.spawnPoint).setWorld(destWorld).build()
 
-    //TODO: implement gamemanager
-    /*if(destMap.getGameManager().isGameRunning()){
-      if(player.getSpawnpoint() != null){
-        pos = player.getSpawnpoint();
-      }else if(player.getTeam() instanceof TeamUndefined){
-        if(mappack != null && mappack.getMappackMetadata().isChoosingRandomSpawnpointAtRespawn()){
+    if(destMap != null && destMap.getGameManager.isGameRunning){
+      if(destMap.getPlayerTeam(player) == null){
+        //TODO
+        /*if(mappack != null && mappack.getMetadata.isChoosingRandomSpawnpointAtRespawn()){
           List<Location> spawnpoints = mappack.getMappackMetadata().getRandomSpawnpoints();
           pos = spawnpoints.get(NailedAPI.getMapLoader().getRandomSpawnpointSelector().nextInt(spawnpoints.size()));
-        }
+        }*/
       }else{
-        if(player.getTeam().shouldOverrideDefaultSpawnpoint()){
-          pos = player.getTeam().getSpawnpoint();
-        }
+        val p = destMap.getPlayerTeam(player).getSpawnPoint
+        if(p != null) pos = p
       }
-    }*/
+    }
 
     ent.dimension = destWorld.getDimensionId
 
