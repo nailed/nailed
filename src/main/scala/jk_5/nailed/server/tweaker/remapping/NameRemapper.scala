@@ -23,7 +23,6 @@ import LZMA.LzmaInputStream
 import com.google.common.base.{CharMatcher, Splitter, Strings}
 import com.google.common.collect.ImmutableBiMap.Builder
 import com.google.common.collect.{BiMap, ImmutableBiMap, Iterables}
-import jk_5.nailed.server.tweaker.NailedVersion
 import jk_5.nailed.server.tweaker.patcher.BinPatchManager
 import net.minecraft.launchwrapper.Launch
 import org.apache.logging.log4j.LogManager
@@ -59,7 +58,7 @@ object NameRemapper extends Remapper {
 
   def init(){
     logger.info("Loading deobfuscation data...")
-    val data = this.getClass.getResourceAsStream("/deobfuscation_data-" + NailedVersion.mcversion + ".lzma")
+    val data = this.getClass.getResourceAsStream("/deobfuscation_data.lzma")
     if(data == null){
       logger.warn("Was not able to find deobfuscation data. Assuming development environment")
       return
