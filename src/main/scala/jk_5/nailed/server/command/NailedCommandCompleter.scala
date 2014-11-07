@@ -80,6 +80,13 @@ class NailedCommandCompleter extends CommandCompleter {
           case s: MapCommandSender if s.getMap != null => s.getMap.getTeams.map(_.id()).foreach(out.add)
           case _ =>
         }
+      case "gamewinnable" =>
+        val sender = locals.get(classOf[CommandSender])
+        sender match {
+          case s: MapCommandSender if s.getMap != null => s.getMap.getTeams.map(_.id()).foreach(out.add)
+          case _ =>
+        }
+        NailedPlatform.getOnlinePlayers.map(_.getName).foreach(out.add)
       case _ =>
     }
     val ret = new util.ArrayList[String]()

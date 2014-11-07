@@ -29,7 +29,7 @@ class VanillaCommand(val wrapped: CommandBase) extends CommandCallable {
     if(usernameIndex > -1){ //Has username index
       val selector = split(usernameIndex)
       val selected = PlayerSelector.matchEntities(sender, selector, classOf[Entity])
-      sender.func_174794_a(CommandResultStats.Type.AFFECTED_ENTITIES, selected.size())
+      sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, selected.size())
       val it = selected.iterator()
       while(it.hasNext){
         val entity = it.next().asInstanceOf[Entity]
@@ -37,11 +37,11 @@ class VanillaCommand(val wrapped: CommandBase) extends CommandCallable {
         if(this.execute(sender, split, input)) value += 1
       }
     }else{ //No username index
-      sender.func_174794_a(CommandResultStats.Type.AFFECTED_ENTITIES, 1)
+      sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, 1)
       if(execute(sender, split, input)) value += 1
     }
     analog.foreach(_.setPower(value))
-    sender.func_174794_a(CommandResultStats.Type.SUCCESS_COUNT, value)
+    sender.setCommandStat(CommandResultStats.Type.SUCCESS_COUNT, value)
     true
   }
 
@@ -51,11 +51,11 @@ class VanillaCommand(val wrapped: CommandBase) extends CommandCallable {
       return true
     }catch{
       case e: WrongUsageException =>
-        val comp = new ChatComponentTranslation("commands.generic.usage", new ChatComponentTranslation(e.getMessage), e.getErrorOjbects)
+        val comp = new ChatComponentTranslation("commands.generic.usage", new ChatComponentTranslation(e.getMessage), e.getErrorObjects)
         comp.getChatStyle.setColor(EnumChatFormatting.RED)
         sender.addChatMessage(comp)
       case e: CommandException =>
-        val comp = new ChatComponentTranslation(e.getMessage, e.getErrorOjbects)
+        val comp = new ChatComponentTranslation(e.getMessage, e.getErrorObjects)
         comp.getChatStyle.setColor(EnumChatFormatting.RED)
         sender.addChatMessage(comp)
       case t: Throwable =>

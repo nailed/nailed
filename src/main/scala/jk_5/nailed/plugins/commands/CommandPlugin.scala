@@ -15,8 +15,8 @@ import jk_5.nailed.api.world.{Difficulty, WeatherType}
 import jk_5.nailed.api.{GameMode, Platform}
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.utils.NBTUtils
-import net.minecraft.command.server.{CommandSetBlock, CommandTestFor, CommandTestForBlock}
-import net.minecraft.command.{CommandGive, CommandHelp}
+import net.minecraft.command._
+import net.minecraft.command.server._
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 
@@ -40,6 +40,9 @@ class CommandPlugin {
     event.registerCallable(new VanillaCommand(new CommandTestForBlock), "testforblock")
     event.registerCallable(new VanillaCommand(new CommandTestFor), "testfor")
     event.registerCallable(new VanillaCommand(new CommandSetBlock), "setblock")
+    event.registerCallable(new VanillaCommand(new CommandEffect), "effect")
+    event.registerCallable(new VanillaCommand(new CommandTeleport), "tp")
+    event.registerCallable(new VanillaCommand(new CommandExecuteAt), "execute")
   }
 
   object TeamCommand {
