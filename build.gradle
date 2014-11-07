@@ -12,17 +12,13 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven/"
         }
-        /*maven {
+        maven {
             name = "jk-5"
             url = "http://maven.jk-5.tk"
-        }*/
-        maven {
-            name = "offlineRepo"
-            url = "http://localhost:81"
         }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.3.4"
+        classpath "jk_5.nailed.mcp:mcp:1.3.5"
     }
 }
 
@@ -32,13 +28,9 @@ repositories {
         name "sk89q"
         url "http://maven.sk89q.com/repo/"
     }
-    /*maven {
+    maven {
         name "jk-5"
         url "http://maven.jk-5.tk"
-    }*/
-    maven {
-        name = "offlineRepo"
-        url = "http://localhost:81"
     }
 }
 
