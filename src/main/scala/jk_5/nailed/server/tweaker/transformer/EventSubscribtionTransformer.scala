@@ -56,8 +56,6 @@ class EventSubscribtionTransformer extends IClassTransformer {
     val parent = this.getClass.getClassLoader.loadClass(cnode.superName.replace('/', '.'))
     if(!classOf[Event].isAssignableFrom(parent)) return false
 
-    println("Transforming " + cnode.name)
-
     var hasSetup = false
     var hasGetHandlerList = false
     var hasDefaultConstructor = false

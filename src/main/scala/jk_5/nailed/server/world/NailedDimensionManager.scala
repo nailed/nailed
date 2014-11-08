@@ -23,6 +23,7 @@ import jk_5.nailed.api
 import jk_5.nailed.api.world.WorldContext
 import jk_5.nailed.api.{Platform, world}
 import jk_5.nailed.server.NailedEventFactory
+import jk_5.nailed.server.mixin.interfaces.InternalWorld
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world._
 import net.minecraft.world.storage.WorldInfo
@@ -41,15 +42,13 @@ object NailedDimensionManager {
 
   private var defaultsRegistered = false
   private val customProviders = new util.Hashtable[Int, world.WorldProvider]()
-  private val vanillaWorlds = new util.Hashtable[Int, WorldServer]()
-  private val worlds = new util.Hashtable[Int, NailedWorld]()
+  private val worlds = new util.Hashtable[Int, WorldServer]()
   private val worldContext = new util.Hashtable[Int, WorldContext]()
   private val dimensions = mutable.ArrayBuffer[Int]()
   private val unloadQueue = mutable.Queue[Int]()
   private val dimensionMap = new util.BitSet(java.lang.Long.SIZE << 4)
   private val logger = LogManager.getLogger
-
-  private var vanillaWorldIdArray = new Array[Int](0)
+  private var worldIdArray = new Array[Int](0)
 
   if(!defaultsRegistered){
     this.dimensionMap.set(1)
@@ -77,27 +76,28 @@ object NailedDimensionManager {
 
   def isDimensionRegistered(dim: Int) = dimensions.contains(dim)
 
-  def getAllDimensionIds: Array[Int] = this.vanillaWorldIdArray
+  def getAllDimensionIds: Array[Int] = this.worldIdArray
 
   def setWorld(id: Int, world: WorldServer){
+    val internal = world.asInstanceOf[InternalWorld]
     val context = this.worldContext.get(id)
     if(world != null){
-      val nworld = new NailedWorld(world, context)
-      this.vanillaWorlds.put(id, world)
-      this.vanillaWorldIdArray = this.vanillaWorlds.keySet().asScala.toArray
-      this.worlds.put(id, nworld)
+      internal.setContext(context)
+      this.worlds.put(id, world)
+      this.worldIdArray = this.worlds.keySet().asScala.toArray
+      this.worlds.put(id, world)
       MinecraftServer.getServer.worldTickTimes.put(id, new Array[Long](100))
-      logger.info(s"Loading dimension $id (${world.getWorldInfo.getWorldName}) (${nworld.toString})")
+      logger.info(s"Loading dimension $id (${world.getWorldInfo.getWorldName}) (${internal.toString})")
     }else{
-      this.vanillaWorlds.remove(id)
-      this.vanillaWorldIdArray = this.vanillaWorlds.keySet().asScala.toArray
+      this.worlds.remove(id)
+      this.worldIdArray = this.worlds.keySet().asScala.toArray
       this.worlds.remove(id)
       MinecraftServer.getServer.worldTickTimes.remove(id)
       logger.info(s"Unloading dimension $id")
     }
     val builder = mutable.ArrayBuffer[WorldServer]()
-    if(this.vanillaWorlds.get(0) != null) builder += vanillaWorlds.get(0)
-    for(e <- this.vanillaWorlds.entrySet()){
+    if(this.worlds.get(0) != null) builder += worlds.get(0)
+    for(e <- this.worlds.entrySet()){
       val dim = e.getKey
       if(dim < -1 || dim > 1) builder += e.getValue
     }
@@ -130,10 +130,7 @@ object NailedDimensionManager {
     world.getWorldInfo.setGameType(mcserver.getGameType)
   }
 
-  def getVanillaWorld(dimension: Int) = this.vanillaWorlds.get(dimension)
   def getWorld(dimension: Int) = this.worlds.get(dimension)
-
-  def getVanillaWorlds = this.vanillaWorlds.values.toArray(new Array[WorldServer](this.vanillaWorlds.size()))
   def getWorlds = this.worlds.values.toArray(new Array[api.world.World](this.worlds.size()))
 
   def createProviderFor(dim: Int): WorldProvider = {
@@ -147,7 +144,7 @@ object NailedDimensionManager {
   def unloadWorld(id: Int) = this.unloadQueue += id
   def unloadWorlds(times: util.Hashtable[java.lang.Integer, Array[Long]]){
     for(id <- this.unloadQueue){
-      val w = this.vanillaWorlds.get(id)
+      val w = this.worlds.get(id)
       try{
         if(w != null){
           w.saveAllChunks(true, null)
@@ -178,5 +175,5 @@ object NailedDimensionManager {
 }
 
 trait DimensionManagerTrait extends Platform {
-  override def getWorld(dimensionId: Int): world.World = NailedDimensionManager.getWorld(dimensionId)
+  override def getWorld(dimensionId: Int): world.World = NailedDimensionManager.getWorld(dimensionId).asInstanceOf[world.World]
 }

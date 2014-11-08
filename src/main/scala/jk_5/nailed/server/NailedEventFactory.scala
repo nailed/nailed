@@ -288,17 +288,18 @@ object NailedEventFactory {
     val server = MinecraftServer.getServer
     val player = NailedPlatform.getPlayerFromEntity(ent).asInstanceOf[NailedPlayer]
     val destWorld = NailedDimensionManager.getWorld(ent.dimension)
+    val dstWorld = destWorld.asInstanceOf[api.world.World]
     val currentWorld = NailedDimensionManager.getWorld(ent.dimension)
-    val destMap = destWorld.getMap
+    val destMap = destWorld.asInstanceOf[api.world.World].getMap
 
-    currentWorld.wrapped.getEntityTracker.removePlayerFromTrackers(ent) //Remove from EntityTracker
-    currentWorld.wrapped.getEntityTracker.untrackEntity(ent) //Notify other players of entity death
-    currentWorld.wrapped.getPlayerManager.removePlayer(ent) //Remove player's ChunkLoader
+    currentWorld.getEntityTracker.removePlayerFromTrackers(ent) //Remove from EntityTracker
+    currentWorld.getEntityTracker.untrackEntity(ent) //Notify other players of entity death
+    currentWorld.getPlayerManager.removePlayer(ent) //Remove player's ChunkLoader
     server.getConfigurationManager.playerEntityList.remove(ent) //Remove from the global player list
-    currentWorld.wrapped.removePlayerEntityDangerously(ent) //Force the entity to be removed from it's current world
+    currentWorld.removePlayerEntityDangerously(ent) //Force the entity to be removed from it's current world
 
     val mappack = if(destMap != null) destMap.mappack else null
-    var pos = if(mappack == null) new Location(destWorld, 0, 64, 0) else Location.builder.copy(destWorld.getConfig.spawnPoint).setWorld(destWorld).build()
+    var pos = if(mappack == null) new Location(dstWorld, 0, 64, 0) else Location.builder.copy(dstWorld.getConfig.spawnPoint).setWorld(dstWorld).build()
 
     if(destMap != null && destMap.getGameManager.isGameRunning){
       if(destMap.getPlayerTeam(player) == null){
@@ -313,28 +314,28 @@ object NailedEventFactory {
       }
     }
 
-    ent.dimension = destWorld.getDimensionId
+    ent.dimension = dstWorld.getDimensionId
 
-    val worldManager = new ItemInWorldManager(destWorld.wrapped)
+    val worldManager = new ItemInWorldManager(destWorld)
 
-    val newPlayer = new EntityPlayerMP(server, destWorld.wrapped, ent.getGameProfile, worldManager)
+    val newPlayer = new EntityPlayerMP(server, destWorld, ent.getGameProfile, worldManager)
     newPlayer.playerNetServerHandler = ent.playerNetServerHandler
     newPlayer.clonePlayer(ent, false)
-    newPlayer.dimension = destWorld.getDimensionId
+    newPlayer.dimension = dstWorld.getDimensionId
     newPlayer.setEntityId(ent.getEntityId)
 
     worldManager.setGameType(ent.theItemInWorldManager.getGameType)
 
     newPlayer.setLocationAndAngles(pos.getX, pos.getY, pos.getZ, pos.getYaw, pos.getPitch)
-    destWorld.wrapped.theChunkProviderServer.loadChunk(newPlayer.posX.toInt >> 4, newPlayer.posZ.toInt >> 4)
+    destWorld.theChunkProviderServer.loadChunk(newPlayer.posX.toInt >> 4, newPlayer.posZ.toInt >> 4)
 
-    player.sendPacket(new S07PacketRespawn(destWorld.getConfig.dimension.getId, destWorld.wrapped.getDifficulty, destWorld.wrapped.getWorldInfo.getTerrainType, worldManager.getGameType))
+    player.sendPacket(new S07PacketRespawn(dstWorld.getConfig.dimension.getId, destWorld.getDifficulty, destWorld.getWorldInfo.getTerrainType, worldManager.getGameType))
     player.netHandler.setPlayerLocation(pos.getX, pos.getY, pos.getZ, pos.getYaw, pos.getPitch)
     player.sendPacket(new S05PacketSpawnPosition(new BlockPos(pos.getX, pos.getY, pos.getZ)))
     player.sendPacket(new S1FPacketSetExperience(newPlayer.experience, newPlayer.experienceTotal, newPlayer.experienceLevel))
-    server.getConfigurationManager.updateTimeAndWeatherForPlayer(newPlayer, destWorld.wrapped)
-    destWorld.wrapped.getPlayerManager.addPlayer(newPlayer)
-    destWorld.wrapped.spawnEntityInWorld(newPlayer)
+    server.getConfigurationManager.updateTimeAndWeatherForPlayer(newPlayer, destWorld)
+    destWorld.getPlayerManager.addPlayer(newPlayer)
+    destWorld.spawnEntityInWorld(newPlayer)
     server.getConfigurationManager.playerEntityList.asInstanceOf[java.util.List[EntityPlayer]].add(newPlayer)
     newPlayer.addSelfToInternalCraftingInventory()
     newPlayer.setHealth(newPlayer.getHealth)

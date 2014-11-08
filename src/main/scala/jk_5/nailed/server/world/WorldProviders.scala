@@ -32,7 +32,6 @@ trait WorldProviders extends Platform {
     val id = NailedDimensionManager.getNextFreeDimensionId
     NailedDimensionManager.registerDimension(id, provider)
     NailedDimensionManager.initWorld(id, ctx)
-    val world = NailedDimensionManager.getWorld(id)
-    world
+    NailedDimensionManager.getWorld(id).asInstanceOf[World]
   }
 }
