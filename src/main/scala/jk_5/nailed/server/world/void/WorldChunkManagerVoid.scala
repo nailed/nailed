@@ -21,9 +21,9 @@ import java.util
 import java.util.Random
 
 import net.minecraft.init.Blocks
-import net.minecraft.util.ChunkCoordinates
+import net.minecraft.util.BlockPos
+import net.minecraft.world.World
 import net.minecraft.world.biome.WorldChunkManager
-import net.minecraft.world.{ChunkPosition, World}
 
 /**
  * No description given
@@ -32,15 +32,15 @@ import net.minecraft.world.{ChunkPosition, World}
  */
 class WorldChunkManagerVoid(val world: World) extends WorldChunkManager(world) {
 
-  override def findBiomePosition(x: Int, z: Int, range: Int, biomes: util.List[_], random: Random): ChunkPosition = {
+  override def findBiomePosition(x: Int, z: Int, range: Int, biomes: util.List[_], random: Random): BlockPos = {
     var ret = super.findBiomePosition(x, z, range, biomes, random)
     if(x == 0 && z == 0 && !world.getWorldInfo.isInitialized){
       if(ret == null){
-        ret = new ChunkPosition(0, 0, 0)
+        ret = new BlockPos(0, 0, 0)
       }
-      val spawn = new ChunkCoordinates(0, 63, 0)
-      if(world.isAirBlock(spawn.posX, spawn.posY, spawn.posZ)){
-        world.setBlock(spawn.posX, spawn.posY, spawn.posZ, Blocks.bedrock)
+      val spawn = new BlockPos(0, 63, 0)
+      if(world.isAirBlock(spawn)){
+        world.setBlockState(spawn, Blocks.bedrock.getDefaultState)
       }
     }
     ret

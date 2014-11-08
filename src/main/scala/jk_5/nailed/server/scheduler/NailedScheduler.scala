@@ -18,12 +18,12 @@
 package jk_5.nailed.server.scheduler
 
 import java.util
-import java.util.concurrent
 import java.util.concurrent.{Callable, TimeUnit}
+import java.util.{Collections, concurrent}
 
 import io.netty.util.concurrent._
 import jk_5.eventbus.EventHandler
-import jk_5.nailed.api.event.ServerPostTickEvent
+import jk_5.nailed.api.event.server.ServerPostTickEvent
 import jk_5.nailed.api.scheduler.Scheduler
 
 import scala.collection.mutable
@@ -98,4 +98,10 @@ object NailedScheduler extends Scheduler {
       executionQueue.clear()
     }
   }
+
+  override def shutdown(){}
+  override def isTerminated = false
+  override def awaitTermination(timeout: Long, unit: TimeUnit): Boolean = false
+  override def shutdownNow(): java.util.List[Runnable] = Collections.emptyList()
+  override def isShutdown = false
 }

@@ -17,8 +17,9 @@
 
 package jk_5.nailed.server.utils
 
+import jk_5.nailed.api.gamerule.GameRuleKey
 import jk_5.nailed.api.world.Difficulty
-import jk_5.nailed.server.NailedServer
+import jk_5.nailed.server.NailedPlatform
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.item.{ItemFood, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
@@ -46,7 +47,7 @@ class NailedFoodStats extends FoodStats {
   }
 
   override def onUpdate(playerEntity: EntityPlayer){
-    val player = NailedServer.getPlayerFromEntity(playerEntity.asInstanceOf[EntityPlayerMP])
+    val player = NailedPlatform.getPlayerFromEntity(playerEntity.asInstanceOf[EntityPlayerMP])
     val world = player.getWorld
 
     if(world.getConfig.disableFood){
@@ -65,7 +66,7 @@ class NailedFoodStats extends FoodStats {
       }
     }
 
-    if(world.getGameRules("naturalRegeneration") == "true" && foodLevel >= 18 && playerEntity.shouldHeal()){
+    if(world.getGameRules.get(GameRuleKey.NATURAL_REGENERATION).getValue == true && foodLevel >= 18 && playerEntity.shouldHeal()){
       timer += 1
       if(timer >= 80){
         player.heal(1)

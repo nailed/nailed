@@ -1,19 +1,21 @@
 --- ../src-base/minecraft/net/minecraft/world/WorldServer.java
 +++ ../src-work/minecraft/net/minecraft/world/WorldServer.java
-@@ -105,15 +105,12 @@
- 
-         scoreboardsavedata.func_96499_a(this.field_96442_D);
-         ((ServerScoreboard)this.field_96442_D).func_96547_a(scoreboardsavedata);
-+        jk_5.nailed.server.world.NailedDimensionManager.setWorld(p_i45284_4_, this);
+@@ -102,6 +102,7 @@
+         this.func_72966_v();
+         this.func_72947_a();
+         this.func_175723_af().func_177725_a(p_i45921_1_.func_175580_aG());
++        jk_5.nailed.server.world.NailedDimensionManager.setWorld(p_i45921_4_, this);
      }
  
+     public World func_175643_b() {
+@@ -145,10 +146,6 @@
      public void func_72835_b() {
          super.func_72835_b();
  
--        if (this.func_72912_H().func_76093_s() && this.field_73013_u != EnumDifficulty.HARD) {
--            this.field_73013_u = EnumDifficulty.HARD;
+-        if (this.func_72912_H().func_76093_s() && this.func_175659_aa() != EnumDifficulty.HARD) {
+-            this.func_72912_H().func_176144_a(EnumDifficulty.HARD);
 -        }
 -
-         this.field_73011_w.field_76578_c.func_76938_b();
+         this.field_73011_w.func_177499_m().func_76938_b();
  
          if (this.func_73056_e()) {

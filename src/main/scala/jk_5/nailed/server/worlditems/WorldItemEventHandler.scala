@@ -19,11 +19,10 @@ package jk_5.nailed.server.worlditems
 
 import jk_5.eventbus.EventHandler
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder, TextComponent}
-import jk_5.nailed.api.event.{PlayerJoinMapEvent, PlayerLeaveMapEvent, PlayerRightClickItemEvent, PlayerThrowItemEvent}
-import jk_5.nailed.api.material.{ItemStack, Material}
+import jk_5.nailed.api.event.player.{PlayerJoinMapEvent, PlayerLeaveMapEvent, PlayerRightClickItemEvent, PlayerThrowItemEvent}
+import jk_5.nailed.api.item.{ItemStack, Material}
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.teleport.TeleportOptions
-import jk_5.nailed.api.util.Location
+import jk_5.nailed.api.util.{Location, TeleportOptions}
 import jk_5.nailed.server.teleport.Teleporter
 
 import scala.collection.mutable
@@ -42,46 +41,46 @@ object WorldItemEventHandler {
 
   @EventHandler
   def onPlayerJoinMap(event: PlayerJoinMapEvent){
-    tutorialStage.remove(event.player)
-    if(event.map.mappack.getMetadata.tutorial != null){
-      event.player.setInventorySlot(0, getStartTutorialItem)
-      tutorialStage.put(event.player, -1)
+    tutorialStage.remove(event.getPlayer)
+    if(event.getMap.mappack.getMetadata.tutorial != null){
+      //event.getPlayer.setInventorySlot(0, getStartTutorialItem) //TODO
+      tutorialStage.put(event.getPlayer, -1)
     }
   }
 
   @EventHandler
   def onPlayerLeaveMap(event: PlayerLeaveMapEvent){
     var i = 0
-    event.player.iterateInventory { s =>
-      if(s != null && s.getTag("WorldItemType").isDefined) event.player.setInventorySlot(i, null)
+    /*event.getPlayer.iterateInventory { s =>
+      if(s != null && s.getTag("WorldItemType").isDefined) event.getPlayer.setInventorySlot(i, null)
       i += 1
-    }
-    tutorialStage.remove(event.player)
-    event.player.setAllowedToFly(allowed = false)
+    }*/ //TODO
+    tutorialStage.remove(event.getPlayer)
+    event.getPlayer.setAllowedToFly(false)
   }
 
   @EventHandler
   def onPlayerRightClickItem(event: PlayerRightClickItemEvent){
-    val stack = event.stack
-    if(stack != null && stack.getTag("WorldItemType").isDefined){
-      stack.getTag("WorldItemType").get match {
+    val stack = event.getStack
+    if(stack != null && stack.getTag("WorldItemType") != null){
+      stack.getTag("WorldItemType") match {
         case "Tutorial" =>
-          event.player.sendMessage(new ComponentBuilder("Starting tutorial").color(ChatColor.GREEN).create())
+          event.getPlayer.sendMessage(new ComponentBuilder("Starting tutorial").color(ChatColor.GREEN).create(): _*)
 
-          removeWorldItemFromPlayer(event.player, "Tutorial")
+          removeWorldItemFromPlayer(event.getPlayer, "Tutorial")
 
-          event.player.setInventorySlot(0, getNextStageItem)
-          event.player.setInventorySlot(8, getEndTutorialItem)
+          //event.getPlayer.setInventorySlot(0, getNextStageItem) //TODO
+          //event.getPlayer.setInventorySlot(8, getEndTutorialItem) //TODO
 
-          nextStage(event.player)
-          event.player.setAllowedToFly(allowed = true)
-          doStageAction(event.player)
-          event.player.setAllowedToFly(allowed = true)
+          nextStage(event.getPlayer)
+          event.getPlayer.setAllowedToFly(true)
+          doStageAction(event.getPlayer)
+          event.getPlayer.setAllowedToFly(true)
         case "Tutorial:NextStage" =>
-          nextStage(event.player)
-          doStageAction(event.player)
+          nextStage(event.getPlayer)
+          doStageAction(event.getPlayer)
         case "Tutorial:End" =>
-          endTutorial(event.player)
+          endTutorial(event.getPlayer)
         case _ =>
       }
     }
@@ -96,20 +95,20 @@ object WorldItemEventHandler {
 
   private def endTutorial(player: Player){
     player.sendMessage(new TextComponent(""))
-    player.sendMessage(new ComponentBuilder("Finished the tutorial").color(ChatColor.GREEN).create())
+    player.sendMessage(new ComponentBuilder("Finished the tutorial").color(ChatColor.GREEN).create(): _*)
 
-    val loc = new Location(player.getWorld.getConfig.spawnPoint)
+    val loc = Location.builder.copy(player.getWorld.getConfig.spawnPoint)
     loc.setWorld(player.getWorld)
-    Teleporter.teleportPlayer(player, new TeleportOptions(loc))
+    Teleporter.teleportPlayer(player, new TeleportOptions(loc.build()))
 
     removeWorldItemFromPlayer(player, "Tutorial:NextStage")
     removeWorldItemFromPlayer(player, "Tutorial:End")
 
     tutorialStage.remove(player)
 
-    player.setInventorySlot(0, getStartTutorialItem)
+    //player.setInventorySlot(0, getStartTutorialItem) //TODO
 
-    player.setAllowedToFly(allowed = false)
+    player.setAllowedToFly(false)
   }
 
   private def doStageAction(player: Player){
@@ -119,22 +118,22 @@ object WorldItemEventHandler {
       endTutorial(player)
     }else{
       val stage = stages(nextStage)
-      val loc = new Location(stage.teleport)
+      val loc = Location.builder().copy(stage.teleport)
       loc.setWorld(player.getWorld)
-      player.setAllowedToFly(allowed = true)
-      Teleporter.teleportPlayer(player, new TeleportOptions(loc))
+      player.setAllowedToFly(true)
+      Teleporter.teleportPlayer(player, new TeleportOptions(loc.build()))
       player.sendMessage(new TextComponent(""))
-      player.sendMessage(new ComponentBuilder("-- " + stage.title).color(ChatColor.DARK_AQUA).create())
-      for(line <- stage.messages) player.sendMessage(new ComponentBuilder(line).color(ChatColor.GRAY).create())
+      player.sendMessage(new ComponentBuilder("-- " + stage.title).color(ChatColor.DARK_AQUA).create(): _*)
+      for(line <- stage.messages) player.sendMessage(new ComponentBuilder(line).color(ChatColor.GRAY).create(): _*)
     }
   }
 
   private def removeWorldItemFromPlayer(player: Player, typ: String){
     var i = 0
-    player.iterateInventory { s =>
+    /*player.iterateInventory { s =>
       if(s != null && s.getTag("WorldItemType").isDefined && s.getTag("WorldItemType").get == typ) player.setInventorySlot(i, null)
       i += 1
-    }
+    }*/ //TODO
   }
 
   def getStartTutorialItem: ItemStack = {
@@ -163,8 +162,8 @@ object WorldItemEventHandler {
 
   @EventHandler
   def onPlayerThrowItem(event: PlayerThrowItemEvent){
-    val stack = event.stack
-    if(stack != null && stack.getTag("WorldItemType").isDefined){
+    val stack = event.getStack
+    if(stack != null && stack.getTag("WorldItemType") != null){
       event.setCanceled(true)
     }
   }

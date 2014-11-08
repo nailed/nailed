@@ -1,11 +1,11 @@
 --- ../src-base/minecraft/net/minecraft/network/NetworkManager.java
 +++ ../src-work/minecraft/net/minecraft/network/NetworkManager.java
-@@ -44,6 +44,8 @@
-     private IChatComponent field_150742_o;
+@@ -61,6 +61,8 @@
      private boolean field_152463_r;
+     private boolean field_179297_n;
      private static final String __OBFID = "CL_00001240";
 +    public java.util.UUID spoofedUUID;
 +    public com.mojang.authlib.properties.Property[] spoofedProfile;
  
-     public NetworkManager(boolean p_i45147_1_) {
-         this.field_150747_h = p_i45147_1_;
+     public NetworkManager(EnumPacketDirection p_i46004_1_) {
+         this.field_179294_g = p_i46004_1_;

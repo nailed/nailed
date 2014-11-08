@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/world/gen/ChunkProviderServer.java
 +++ ../src-work/minecraft/net/minecraft/world/gen/ChunkProviderServer.java
-@@ -23,6 +23,7 @@
+@@ -21,6 +21,7 @@
  import net.minecraft.world.chunk.Chunk;
  import net.minecraft.world.chunk.EmptyChunk;
  import net.minecraft.world.chunk.IChunkProvider;
@@ -8,7 +8,7 @@
  import net.minecraft.world.chunk.storage.IChunkLoader;
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;
-@@ -78,7 +79,41 @@
+@@ -71,7 +72,41 @@
          }
      }
  

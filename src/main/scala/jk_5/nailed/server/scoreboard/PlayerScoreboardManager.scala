@@ -25,6 +25,7 @@ import jk_5.nailed.api.util.Checks
 import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.network.Packet
 import net.minecraft.network.play.server.{S3BPacketScoreboardObjective, S3DPacketDisplayScoreboard, S3EPacketTeams}
+import net.minecraft.scoreboard.IScoreObjectiveCriteria
 
 import scala.collection.convert.wrapAsScala._
 import scala.collection.mutable
@@ -56,14 +57,15 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
         packet.field_149343_a = obj.id
         packet.field_149341_b = obj.displayName
         packet.field_149342_c = 0 //0 = Create
+        packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
         player.sendPacket(packet)
         obj
     }
   }
 
-  override def getObjective(id: String): Option[Objective] = {
+  override def getObjective(id: String): Objective = {
     Checks.notNull(id, "Id may not be null")
-    objectivesById.get(id)
+    objectivesById.get(id).orNull
   }
 
   override def setDisplay(display: DisplayType, objective: Objective){
@@ -78,7 +80,7 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
       packet.field_149373_b = ""
     }else{
       this.displayLocations.put(display, objective)
-      packet.field_149373_b = objective.id
+      packet.field_149373_b = objective.getId
     }
     this.player.sendPacket(packet)
   }
@@ -89,6 +91,7 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
       packet.field_149343_a = objective.id
       packet.field_149341_b = objective.displayName
       packet.field_149342_c = 0 //0 = Create
+      packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
       player.sendPacket(packet)
 
       objective.sendData(player)
@@ -97,7 +100,7 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
     for(e <- this.displayLocations.entrySet){
       val packet = new S3DPacketDisplayScoreboard
       packet.field_149374_a = e.getKey.getId
-      packet.field_149373_b = e.getValue.id
+      packet.field_149373_b = e.getValue.getId
       player.sendPacket(packet)
     }
 
@@ -149,9 +152,9 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
     }
   }
 
-  override def getTeam(id: String): Option[ScoreboardTeam] = {
+  override def getTeam(id: String): ScoreboardTeam = {
     Checks.notNull(id, "id may not be null")
-    this.teamsById.get(id)
+    this.teamsById.get(id).orNull
   }
 
   override def sendPacket(packet: Packet) = player.sendPacket(packet)

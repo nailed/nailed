@@ -19,7 +19,7 @@ package jk_5.nailed.server.utils
 
 import java.util
 
-import jk_5.nailed.api.material.{Material, ItemStack => NItemStack}
+import jk_5.nailed.api.item.{Material, ItemStack => NItemStack}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagString
 
@@ -37,9 +37,9 @@ object ItemStackConverter {
     val ret = new NItemStack(Material.getMaterial(Item.itemRegistry.getIDForObject(is.getItem)), is.stackSize, is.getMetadata.toShort)
     val tag = is.getTagCompound
     if(tag != null){
-      for(t <- tag.getKeySet().asInstanceOf[util.Set[String]]){
+      for(t <- tag.getKeySet.asInstanceOf[util.Set[String]]){
         tag.getTag(t) match {
-          case s: NBTTagString => ret.setTag(t, s.getString())
+          case s: NBTTagString => ret.setTag(t, s.getString)
           case _ =>
         }
       }
@@ -60,7 +60,7 @@ object ItemStackConverter {
   implicit def toVanilla(is: NItemStack): ItemStack = {
     if(is == null) return null
     val ret = new ItemStack(Item.itemRegistry.getObjectById(is.getMaterial.getLegacyId).asInstanceOf[Item], is.getAmount, is.getDamage.toInt)
-    if(is.getDisplayName.isDefined) NBTUtils.setDisplayName(ret, is.getDisplayName.get)
+    if(is.getDisplayName != null) NBTUtils.setDisplayName(ret, is.getDisplayName)
     NBTUtils.addLore(ret, is.getLore: _*)
     val nbt = NBTUtils.getItemNBT(ret)
     for(t <- is.getTags) nbt.setString(t._1, t._2)

@@ -18,7 +18,9 @@
 package jk_5.nailed.server.command.sender
 
 import jk_5.nailed.api.chat.{BaseComponent, TextComponent}
-import jk_5.nailed.api.command.CommandSender
+import jk_5.nailed.api.command.sender.{AnalogCommandSender, CommandSender, WorldCommandSender}
+import jk_5.nailed.server.NailedPlatform
+import jk_5.nailed.server.chat.ChatComponentConverter
 import net.minecraft.command.server.CommandBlockLogic
 
 /**
@@ -26,43 +28,24 @@ import net.minecraft.command.server.CommandBlockLogic
  *
  * @author jk-5
  */
-class CommandBlockCommandSender(val wrapped: CommandBlockLogic) extends CommandSender {
+class CommandBlockCommandSender(val wrapped: CommandBlockLogic) extends CommandSender with AnalogCommandSender with WorldCommandSender {
+
+  override val getWorld = NailedPlatform.getWorld(wrapped.getEntityWorld.provider.getDimensionId)
+  override def getMap = getWorld.getMap
 
   /**
    * Get the unique name of this command sender.
    *
    * @return the senders username
    */
-  override def getName = wrapped.getCommandSenderName
-
-  /**
-   * Checks if this user has the specified permission node.
-   *
-   * @param permission the node to check
-   * @return whether they have this node
-   */
-  override def hasPermission(permission: String) = true
-
-  /**
-   * Send a message to this sender.
-   *
-   * @param message the message to send
-   */
-  override def sendMessage(message: BaseComponent){}
+  override def getName = wrapped.getName
 
   /**
    * Send a message to this sender.
    *
    * @param messages the message to send
    */
-  override def sendMessage(messages: BaseComponent*){}
-
-  /**
-   * Send a message to this sender.
-   *
-   * @param messages the message to send
-   */
-  override def sendMessage(messages: Array[BaseComponent]){}
+  override def sendMessage(messages: BaseComponent*) = wrapped.addChatMessage(ChatComponentConverter.arrayToVanilla(messages.toArray))
 
   override def getDescriptionComponent: BaseComponent = new TextComponent(this.getName)
 }

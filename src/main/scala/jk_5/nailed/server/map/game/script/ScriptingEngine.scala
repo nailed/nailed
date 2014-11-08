@@ -2,9 +2,12 @@ package jk_5.nailed.server.map.game.script
 
 import java.io.InputStreamReader
 
+import jk_5.nailed.api.GameMode
 import jk_5.nailed.api.chat._
-import jk_5.nailed.api.world.WeatherType
+import jk_5.nailed.api.scoreboard.DisplayType
+import jk_5.nailed.api.world.{Difficulty, WeatherType}
 import jk_5.nailed.server.map.game.NailedGameManager
+import jk_5.nailed.server.map.game.script.api.ScriptMapApi
 import org.apache.logging.log4j.LogManager
 import org.mozilla.javascript
 import org.mozilla.javascript._
@@ -46,6 +49,9 @@ object ScriptingEngine {
     scope.put("TextComponent", scope, new NativeJavaClass(scope, classOf[TextComponent]))
     scope.put("TranslatableComponent", scope, new NativeJavaClass(scope, classOf[TranslatableComponent]))
     scope.put("WeatherType", scope, new NativeJavaClass(scope, classOf[WeatherType]))
+    scope.put("GameMode", scope, new NativeJavaClass(scope, classOf[GameMode]))
+    scope.put("Difficulty", scope, new NativeJavaClass(scope, classOf[Difficulty]))
+    scope.put("DisplayType", scope, new NativeJavaClass(scope, classOf[DisplayType]))
 
     libraryScope.defineProperty("module", new ScriptableObject() {
       override def getClassName = "LibraryModule"
@@ -70,7 +76,7 @@ object ScriptingEngine {
         libScope.setParentScope(libraryScope)
         var s: Script = null
         try{
-          s = context.compileReader(new InputStreamReader(stream), args(0).toString, 0, null)
+          s = context.compileReader(new InputStreamReader(stream), args(0).toString, 1, null)
         }finally{
           stream.close()
         }
@@ -115,7 +121,7 @@ class ScriptingEngine(val manager: NailedGameManager) {
         context = s._1
         scope = s._2
         libraryScope = s._3
-        script = context.compileReader(new InputStreamReader(gameScript), "game.js", 0, null)
+        script = context.compileReader(new InputStreamReader(gameScript), "game.js", 1, null)
         gameScript.close()
         var success = false
         try{
@@ -124,7 +130,7 @@ class ScriptingEngine(val manager: NailedGameManager) {
         }catch{
           case e: Exception =>
             val map = manager.map
-            map.broadcastChatMessage(new ComponentBuilder("The script engine has crashed. The game will be stopped").color(ChatColor.RED).create())
+            map.broadcastChatMessage(new ComponentBuilder("The script engine has crashed. The game will be stopped").color(ChatColor.RED).create(): _*)
             logger.fatal("Exception while executing game script. Script engine crashed", e)
         }finally{
           manager.onEnded(success)

@@ -17,7 +17,7 @@
 
 package jk_5.nailed.server.world
 
-import jk_5.nailed.api.world.{DefaultWorldProviders, WorldProvider}
+import jk_5.nailed.api.world.{DefaultWorldProviders, Dimension, WorldProvider}
 
 /**
  * No description given
@@ -25,44 +25,29 @@ import jk_5.nailed.api.world.{DefaultWorldProviders, WorldProvider}
  * @author jk-5
  */
 object NailedDefaultWorldProviders extends DefaultWorldProviders {
-  override def getVoidProvider: WorldProvider = new WorldProvider {
-    var id: Int = _
+  private sealed trait IdTracked extends WorldProvider {
+    private var id: Int = _
+    override final def getId = this.id
+    override final def setId(id: Int) = this.id = id
+    override def getOptions: String = null
+    override def getDimension = Dimension.OVERWORLD
+  }
+  override def getVoidProvider: WorldProvider = new WorldProvider with IdTracked {
     override def getType = "void"
-    override def getOptions = null
-    override def getId = this.id
-    override def setId(id: Int) = this.id = id
-    override def getTypeId = 0
   }
-  override def getOverworldProvider: WorldProvider = new WorldProvider {
-    var id: Int = _
+  override def getOverworldProvider: WorldProvider = new WorldProvider with IdTracked {
     override def getType = "overworld"
-    override def getOptions = null
-    override def getId = this.id
-    override def setId(id: Int) = this.id = id
-    override def getTypeId = 0
   }
-  override def getNetherProvider: WorldProvider = new WorldProvider {
-    var id: Int = _
+  override def getNetherProvider: WorldProvider = new WorldProvider with IdTracked {
     override def getType = "nether"
-    override def getOptions = null
-    override def getId = this.id
-    override def setId(id: Int) = this.id = id
-    override def getTypeId = -1
+    override def getDimension = Dimension.NETHER
   }
-  override def getEndProvider: WorldProvider = new WorldProvider {
-    var id: Int = _
+  override def getEndProvider: WorldProvider = new WorldProvider with IdTracked {
     override def getType = "end"
-    override def getOptions = null
-    override def getId = this.id
-    override def setId(id: Int) = this.id = id
-    override def getTypeId = 1
+    override def getDimension = Dimension.END
   }
-  override def getFlatProvider(pattern: String): WorldProvider = new WorldProvider {
-    var id: Int = _
+  override def getFlatProvider(pattern: String): WorldProvider = new WorldProvider with IdTracked {
     override def getType = "flat"
     override def getOptions = pattern
-    override def getId = this.id
-    override def setId(id: Int) = this.id = id
-    override def getTypeId = 0
   }
 }

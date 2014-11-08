@@ -2,7 +2,7 @@ package jk_5.nailed.server.mappack.metadata.xml
 
 import java.util
 
-import jk_5.nailed.api.map.stat.StatConfig
+import jk_5.nailed.api.mappack.metadata.StatConfig
 import org.jdom2.Element
 
 import scala.collection.convert.wrapAsScala._

@@ -17,8 +17,8 @@
 
 package jk_5.nailed.server.event
 
-import jk_5.eventbus.Event
 import jk_5.eventbus.Event.Cancelable
+import jk_5.nailed.api.event.PlatformEvent
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.DamageSource
 
@@ -27,4 +27,4 @@ import net.minecraft.util.DamageSource
  *
  * @author jk-5
  */
-@Cancelable case class EntityDamageEvent(entity: EntityLivingBase, source: DamageSource, var amount: Float) extends Event
+@Cancelable case class EntityDamageEvent(entity: EntityLivingBase, source: DamageSource, var amount: Float) extends PlatformEvent

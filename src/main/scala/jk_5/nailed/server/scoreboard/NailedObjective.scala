@@ -22,6 +22,7 @@ import jk_5.nailed.api.scoreboard.{Objective, Score}
 import jk_5.nailed.api.util.Checks
 import jk_5.nailed.server.player.NailedPlayer
 import net.minecraft.network.play.server.{S3BPacketScoreboardObjective, S3CPacketUpdateScore}
+import net.minecraft.scoreboard.IScoreObjectiveCriteria
 
 import scala.collection.mutable
 
@@ -37,6 +38,8 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
 
   var displayName: String = id
 
+  override def getId = id
+  override def getDisplayName = displayName
   override def setDisplayName(displayName: String){
     Checks.notNull(displayName, "displayName may not be null")
     Checks.check(displayName.length() <= 32, "displayName may not be longer than 32")
@@ -45,11 +48,12 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
     val packet = new S3BPacketScoreboardObjective
     packet.field_149343_a = this.id
     packet.field_149341_b = this.displayName
+    packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
     packet.field_149342_c = 2 //Update
     this.manager.sendPacket(packet)
   }
 
-  override def score(name: String): Score = {
+  override def getScore(name: String): Score = {
     Checks.notNull(name, "name may not be null")
     scoresByName.get(name) match {
       case Some(s) => s
@@ -64,10 +68,10 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
   override def removeScore(score: Score){
     Checks.notNull(score, "score may not be null")
     if(this.scores.remove(score)){
-      this.scoresByName.remove(score.name)
+      this.scoresByName.remove(score.getName)
       val p = new S3CPacketUpdateScore
-      p.field_149329_a = score.name
-      p.field_149326_d = 1
+      p.name = score.getName
+      p.action = S3CPacketUpdateScore.Action.REMOVE
       manager.sendPacket(p)
     }
   }
@@ -75,10 +79,10 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
   def sendData(player: Player){
     for(score <- this.scores){
       val p = new S3CPacketUpdateScore
-      p.field_149329_a = score.name
-      p.field_149327_b = this.id
-      p.field_149328_c = score.value
-      p.field_149326_d = 0
+      p.name = score.getName
+      p.objective = this.id
+      p.value = score.getValue
+      p.action = S3CPacketUpdateScore.Action.CHANGE
       player.asInstanceOf[NailedPlayer].sendPacket(p)
     }
   }

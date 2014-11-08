@@ -20,8 +20,9 @@ package jk_5.nailed.plugins.directorymappackloader
 import java.io.File
 
 import io.netty.util.concurrent.Promise
-import jk_5.nailed.api.map.filesystem.DirectoryMount
-import jk_5.nailed.api.mappack.{Mappack, MappackMetadata}
+import jk_5.nailed.api.mappack.Mappack
+import jk_5.nailed.api.mappack.filesystem.DirectoryMount
+import jk_5.nailed.api.mappack.metadata.MappackMetadata
 import org.apache.commons.io.FileUtils
 
 /**

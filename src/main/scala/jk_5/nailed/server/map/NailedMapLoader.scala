@@ -23,13 +23,13 @@ import java.util.concurrent.atomic.AtomicInteger
 import io.netty.util.concurrent.{DefaultPromise, Future, FutureListener}
 import jk_5.eventbus.EventHandler
 import jk_5.nailed.api
-import jk_5.nailed.api.event.{BlockBreakEvent, BlockPlaceEvent, TeleportEventEnd}
-import jk_5.nailed.api.map.{Map, MapLoader, MappackLoadingFailedException}
-import jk_5.nailed.api.mappack.Mappack
+import jk_5.nailed.api.event.teleport.TeleportEventEnd
+import jk_5.nailed.api.map.{Map, MapLoader}
+import jk_5.nailed.api.mappack.{Mappack, MappackLoadingFailedException}
 import jk_5.nailed.api.world.{WorldContext, WorldProvider}
 import jk_5.nailed.server.event.{EntityDamageEvent, EntityFallEvent}
 import jk_5.nailed.server.scheduler.NailedScheduler
-import jk_5.nailed.server.{NailedEventFactory, NailedServer}
+import jk_5.nailed.server.{NailedEventFactory, NailedPlatform}
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.DamageSource
 import org.apache.logging.log4j.LogManager
@@ -61,7 +61,7 @@ object NailedMapLoader extends MapLoader {
   }
   override def getLobbyMappack = this.lobbyMappack
   override def getLobby = this.lobby
-  override def getMap(mapId: Int) = this.maps.get(mapId)
+  override def getMap(mapId: Int) = this.maps.get(mapId).orNull
   override def getOrCreateMap(mapId: Int): Map = {
     this.maps.get(mapId) match {
       case Some(map) => map
@@ -141,9 +141,9 @@ object NailedMapLoader extends MapLoader {
         override def getOptions = null
         override def getId = this.id
         override def setId(id: Int) = this.id = id
-        override def getTypeId = w.dimension
+        override def getDimension = w.dimension
       }
-      map.addWorld(NailedServer.createNewWorld(provider, new WorldContext(saveDir, w.name, w)))
+      map.addWorld(NailedPlatform.createNewWorld(provider, new WorldContext(saveDir, w.name, w)))
     }
   }
 
@@ -164,32 +164,44 @@ object NailedMapLoader extends MapLoader {
 
   @EventHandler
   def onPlayerTeleported(event: TeleportEventEnd){
-    val oldWorld = event.oldWorld
-    val newWorld = event.newWorld
-    val oldMap = oldWorld.getMap
-    val newMap = newWorld.getMap
+    val oldWorld = event.getOldWorld
+    val newWorld = event.getNewWorld
+    val oldMap = Option(oldWorld.getMap)
+    val newMap = Option(newWorld.getMap)
     if(oldWorld != newWorld){
-      oldWorld.onPlayerLeft(event.entity)
-      NailedEventFactory.firePlayerLeftWorld(event.entity, event.oldWorld)
-      newWorld.onPlayerJoined(event.entity)
-      NailedEventFactory.firePlayerJoinWorld(event.entity, event.newWorld)
+      oldWorld.onPlayerLeft(event.getPlayer)
+      NailedEventFactory.firePlayerLeftWorld(event.getPlayer, oldWorld)
+      newWorld.onPlayerJoined(event.getPlayer)
+      NailedEventFactory.firePlayerJoinWorld(event.getPlayer, newWorld)
     }
     if(oldMap.isDefined || newMap.isDefined){
       if(oldMap.isDefined && newMap.isDefined){
         if(oldMap.get != newMap.get){
-          oldMap.get.onPlayerLeft(event.entity)
-          NailedEventFactory.firePlayerLeftMap(event.entity, oldMap.get)
-          newMap.get.onPlayerJoined(event.entity)
-          NailedEventFactory.firePlayerJoinMap(event.entity, newMap.get)
+          oldMap.get match {
+            case m: NailedMap => m.onPlayerLeft(event.getPlayer)
+            case _ =>
+          }
+          NailedEventFactory.firePlayerLeftMap(event.getPlayer, oldMap.get)
+          newMap.get match {
+            case m: NailedMap => m.onPlayerJoined(event.getPlayer)
+            case _ =>
+          }
+          NailedEventFactory.firePlayerJoinMap(event.getPlayer, newMap.get)
         }
       }else{
         if(oldMap.isDefined){
-          oldMap.get.onPlayerLeft(event.entity)
-          NailedEventFactory.firePlayerLeftMap(event.entity, oldMap.get)
+          oldMap.get match {
+            case m: NailedMap => m.onPlayerLeft(event.getPlayer)
+            case _ =>
+          }
+          NailedEventFactory.firePlayerLeftMap(event.getPlayer, oldMap.get)
         }
         if(newMap.isDefined){
-          newMap.get.onPlayerJoined(event.entity)
-          NailedEventFactory.firePlayerJoinMap(event.entity, newMap.get)
+          newMap.get match {
+            case m: NailedMap => m.onPlayerJoined(event.getPlayer)
+            case _ =>
+          }
+          NailedEventFactory.firePlayerJoinMap(event.getPlayer, newMap.get)
         }
       }
     }
@@ -199,7 +211,7 @@ object NailedMapLoader extends MapLoader {
   def onEntityFall(event: EntityFallEvent){
     event.entity match {
       case e: EntityPlayerMP =>
-        val world = NailedServer.getPlayerFromEntity(e).getWorld
+        val world = NailedPlatform.getPlayerFromEntity(e).getWorld
         if(world.getConfig != null && world.getConfig.disableDamage){
           event.setCanceled(true)
         }
@@ -212,7 +224,7 @@ object NailedMapLoader extends MapLoader {
     if(event.source == DamageSource.outOfWorld) return
     event.entity match {
       case e: EntityPlayerMP =>
-        val world = NailedServer.getPlayerFromEntity(e).getWorld
+        val world = NailedPlatform.getPlayerFromEntity(e).getWorld
         if(world.getConfig != null && world.getConfig.disableDamage){
           event.setCanceled(true)
         }
@@ -220,7 +232,8 @@ object NailedMapLoader extends MapLoader {
     }
   }
 
-  @EventHandler
+  //TODO
+  /*@EventHandler
   def onBlockPlace(event: BlockPlaceEvent){
     if(event.world.getConfig != null && event.world.getConfig.disableBlockPlacement){
       event.setCanceled(true)
@@ -232,5 +245,5 @@ object NailedMapLoader extends MapLoader {
     if(event.world.getConfig != null && event.world.getConfig.disableBlockBreaking){
       event.setCanceled(true)
     }
-  }
+  }*/
 }

@@ -19,9 +19,9 @@ package jk_5.nailed.server.mappack.metadata.xml
 
 import java.io.File
 
-import jk_5.nailed.api.map.stat.StatConfig
 import jk_5.nailed.api.mappack._
-import jk_5.nailed.api.mappack.implementation.DefaultMappackAuthor
+import jk_5.nailed.api.mappack.metadata._
+import jk_5.nailed.api.mappack.metadata.impl.DefaultMappackAuthor
 import org.jdom2.input.SAXBuilder
 import org.jdom2.{Element, Namespace}
 

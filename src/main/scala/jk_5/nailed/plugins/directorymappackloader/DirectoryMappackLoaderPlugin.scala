@@ -19,36 +19,31 @@ package jk_5.nailed.plugins.directorymappackloader
 
 import java.io.File
 
-import jk_5.nailed.api.mappack.implementation.JsonMappackMetadata
-import jk_5.nailed.api.mappack.{MappackConfigurationException, MappackMetadata}
+import jk_5.eventbus.EventHandler
+import jk_5.nailed.api.event.mappack.RegisterMappacksEvent
+import jk_5.nailed.api.mappack.MappackConfigurationException
+import jk_5.nailed.api.mappack.metadata.MappackMetadata
+import jk_5.nailed.api.mappack.metadata.json.JsonMappackMetadata
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.mappack.metadata.xml.XmlMappackMetadata
+import org.apache.logging.log4j.LogManager
 
 /**
  * No description given
  *
  * @author jk-5
  */
-class DirectoryMappackLoaderPlugin extends Plugin {
+@Plugin(id = "DirectoryMappackLoader", name = "Directory Mappack Loader")
+class DirectoryMappackLoaderPlugin {
 
-  final lazy val mappacksDir = new File(this.getServer.getPluginsFolder.getParentFile, "mappacks")
-  private var wasLoaded = false
+  val logger = LogManager.getLogger
 
-  override def onLoad() = discoverMappacks()
-
-  def discoverMappacks(){
-    this.getLogger.info((if(wasLoaded) "Rel" else "L") + "oading directory mappacks...")
+  @EventHandler
+  def registerMappacks(event: RegisterMappacksEvent){
+    val mappacksDir = new File(event.getPlatform.getRuntimeDirectory, "mappacks")
+    logger.info("Loading directory mappacks")
     if(!mappacksDir.exists()) mappacksDir.mkdir()
     var i = 0
-    if(wasLoaded){
-      val existing = this.getServer.getMappackRegistry.getByType(classOf[DirectoryMappack])
-      for(m <- existing){
-        this.getServer.getMappackRegistry.unregister(m)
-        i += 1
-      }
-      this.getLogger.info(s"Unloaded $i DirectoryMappacks")
-    }else wasLoaded = true
-    i = 0
     for(file <- mappacksDir.listFiles()){
       if(file.isDirectory){
         val jsonMappackMetadata = new File(file, "mappack.json")
@@ -56,28 +51,28 @@ class DirectoryMappackLoaderPlugin extends Plugin {
 
         try{
           val metadata: MappackMetadata = if(xmlMappackMetadata.exists() && xmlMappackMetadata.isFile){
-            getLogger.trace("Attempting to load xml mappack " + file.getName)
+            logger.trace("Attempting to load xml mappack " + file.getName)
             XmlMappackMetadata.fromFile(xmlMappackMetadata)
           }else if(jsonMappackMetadata.exists() && jsonMappackMetadata.isFile){
-            getLogger.trace("Attempting to load json mappack " + file.getName)
+            logger.trace("Attempting to load json mappack " + file.getName)
             JsonMappackMetadata.fromFile(jsonMappackMetadata)
           }else null
 
           if(metadata != null){
             val mappack = new DirectoryMappack(file, metadata)
-            if(this.getServer.getMappackRegistry.register(mappack)){
+            if(event.registerMappack(mappack)){
               i += 1
               if(mappack.getId == "lobby"){
-                this.getServer.getMapLoader.setLobbyMappack(mappack)
+                event.setLobbyMappack(mappack)
               }
             }
           }
         }catch{
           case e: MappackConfigurationException =>
-            getLogger.warn("Configuration for mappack " + file.getName + " is invalid: " + e.getMessage)
+            logger.warn("Configuration for mappack " + file.getName + " is invalid: " + e.getMessage)
         }
       }
     }
-    this.getLogger.info(s"Registered $i DirectoryMappacks")
+    logger.info(s"Registered $i DirectoryMappacks")
   }
 }

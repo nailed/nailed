@@ -17,7 +17,7 @@
 
 package jk_5.nailed.server.mappack.metadata.xml
 
-import jk_5.nailed.api.mappack.tutorial.{Tutorial, TutorialStage}
+import jk_5.nailed.api.mappack.metadata.{Tutorial, TutorialStage}
 import org.jdom2.Element
 
 import scala.collection.convert.wrapAsScala._

@@ -20,9 +20,10 @@ package jk_5.nailed.server.network
 import io.netty.channel.{Channel, ChannelException, ChannelInitializer, ChannelOption}
 import io.netty.handler.timeout.ReadTimeoutHandler
 import jk_5.nailed.server.network.handler.ServerStartingConnectionDestroyer
-import net.minecraft.network.NetworkManager
+import net.minecraft.network.{EnumPacketDirection, NetworkManager}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.NetHandlerHandshakeTCP
+import net.minecraft.util._
 
 /**
  * No description given
@@ -49,14 +50,18 @@ object NettyChannelInitializer extends ChannelInitializer[Channel] {
     val pipe = ch.pipeline()
     pipe.addLast("timeout", new ReadTimeoutHandler(30))
     //pipe.addLast("legacy_query", new PingResponseHandler) //TODO
-    pipe.addLast("splitter", new FrameDecoder)
-    pipe.addLast("decoder", new PacketDecoder)
-    pipe.addLast("prepender", FrameEncoder)
-    pipe.addLast("encoder", PacketEncoder)
+    //pipe.addLast("splitter", new FrameDecoder)
+    //pipe.addLast("decoder", new PacketDecoder)
+    //pipe.addLast("prepender", FrameEncoder)
+    //pipe.addLast("encoder", PacketEncoder)
+    pipe.addLast("splitter", new MessageDeserializer2)
+    pipe.addLast("decoder", new MessageDeserializer(EnumPacketDirection.SERVERBOUND))
+    pipe.addLast("prepender", new MessageSerializer2)
+    pipe.addLast("encoder", new MessageSerializer(EnumPacketDirection.CLIENTBOUND))
 
     if(serverStarting) pipe.addLast(ServerStartingConnectionDestroyer)
 
-    val manager = new NetworkManager(false)
+    val manager = new NetworkManager(EnumPacketDirection.SERVERBOUND)
     NailedNetworkManager.networkManagers.add(manager)
     pipe.addLast("packet_handler", manager)
     manager.setNetHandler(new NetHandlerHandshakeTCP(MinecraftServer.getServer, manager))

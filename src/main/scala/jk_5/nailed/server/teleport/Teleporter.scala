@@ -17,11 +17,10 @@
 
 package jk_5.nailed.server.teleport
 
-import jk_5.nailed.api.Server
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.teleport.TeleportOptions
-import jk_5.nailed.api.util.Location
-import jk_5.nailed.api.world.World
+import jk_5.nailed.api.util.{Location, TeleportOptions}
+import jk_5.nailed.api.world.{Dimension, World}
+import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedWorld
 import net.minecraft.entity.player.EntityPlayerMP
@@ -63,12 +62,12 @@ object Teleporter {
     val dimension = destinationWorld.getDimensionId
     val destWorld = destinationWorld.asInstanceOf[NailedWorld].wrapped
 
-    val player = ent match {
-      case p: EntityPlayerMP => Server.getInstance.getPlayer(p.getGameProfile.getId)
-      case _ => None
+    val player: Player = ent match {
+      case p: EntityPlayerMP => NailedPlatform.getPlayer(p.getGameProfile.getId)
+      case _ => null
     }
 
-    if(player.isDefined && !TeleportEventFactory.isTeleportAllowed(currentWorld, destinationWorld, player.get, options)){
+    if(player != null && !TeleportEventFactory.isTeleportAllowed(currentWorld, destinationWorld, player, options)){
       return entity
     }
     var mount = entity.ridingEntity
@@ -80,25 +79,25 @@ object Teleporter {
     val mY = entity.motionY
     val mZ = entity.motionZ
     val changingworlds = entity.worldObj != destWorld
-    if(player.isDefined) TeleportEventFactory.onLinkStart(currentWorld, destinationWorld, player.get, options)
+    if(player != null) TeleportEventFactory.onLinkStart(currentWorld, destinationWorld, player, options)
     entity.worldObj.updateEntityWithOptionalForce(entity, false)
     entity match {
       case p: EntityPlayerMP =>
         p.closeScreen()
         if(changingworlds){
-          val oldType = currentWorld.getType
-          val newType = destinationWorld.getType
+          val oldDimension = currentWorld.getDimension
+          val newDimension = destinationWorld.getDimension
 
           p.dimension = dimension
-          if(oldType != newType){
-            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newType, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+          if(oldDimension != newDimension){
+            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newDimension.getId, destWorld.getDifficulty, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
           }else{
-            if(newType == 1){
-              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(-1, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+            if(newDimension == Dimension.END){
+              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(-1, destWorld.getDifficulty, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
             }else{
-              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(1, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+              p.playerNetServerHandler.sendPacket(new S07PacketRespawn(1, destWorld.getDifficulty, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
             }
-            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newType, destWorld.difficultySetting, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
+            p.playerNetServerHandler.sendPacket(new S07PacketRespawn(newDimension.getId, destWorld.getDifficulty, destWorld.getWorldInfo.getTerrainType, p.theItemInWorldManager.getGameType))
           }
           p.worldObj.asInstanceOf[WorldServer].getPlayerManager.removePlayer(p)
         }
@@ -107,10 +106,10 @@ object Teleporter {
     if(changingworlds){
       removeEntityFromWorld(entity.worldObj, entity)
     }
-    if(player.isDefined) TeleportEventFactory.onExitWorld(currentWorld, destinationWorld, player.get, options)
+    if(player != null) TeleportEventFactory.onExitWorld(currentWorld, destinationWorld, player, options)
 
     entity.setLocationAndAngles(location.getX, location.getX, location.getZ, location.getYaw, location.getPitch)
-    destWorld.theChunkProviderServer.loadChunk(location.getBlockX >> 4, location.getBlockZ >> 4)
+    destWorld.theChunkProviderServer.loadChunk((location.getFloorX >> 4).toInt, (location.getFloorZ >> 4).toInt)
     if(changingworlds){
       if(!entity.isInstanceOf[EntityPlayerMP]){
         val entityNBT = new NBTTagCompound
@@ -121,13 +120,13 @@ object Teleporter {
         if(entity == null){
           return null
         }
-        entity.dimension = destWorld.provider.dimensionId
+        entity.dimension = destWorld.provider.getDimensionId
       }
       destWorld.spawnEntityInWorld(entity)
       entity.setWorld(destWorld)
     }
     entity.setLocationAndAngles(location.getX, location.getY, location.getZ, location.getYaw, location.getPitch)
-    if(player.isDefined) TeleportEventFactory.onEnterWorld(currentWorld, destinationWorld, player.get, options)
+    if(player != null) TeleportEventFactory.onEnterWorld(currentWorld, destinationWorld, player, options)
     destWorld.updateEntityWithOptionalForce(entity, false)
     entity.setLocationAndAngles(location.getX, location.getY, location.getZ, location.getYaw, location.getPitch)
     entity match {
@@ -141,10 +140,10 @@ object Teleporter {
     destWorld.updateEntityWithOptionalForce(entity, false)
     entity match {
       case p: EntityPlayerMP if changingworlds =>
-        if(player.isDefined){
-          val pl = player.get.asInstanceOf[NailedPlayer]
+        if(player != null){
+          val pl = player.asInstanceOf[NailedPlayer]
           pl.world = location.getWorld
-          pl.map = pl.world.getMap.orNull
+          pl.map = pl.world.getMap
         }
         p.theItemInWorldManager.setWorld(destWorld)
         p.mcServer.getConfigurationManager.updateTimeAndWeatherForPlayer(p, destWorld)
@@ -156,7 +155,7 @@ object Teleporter {
       case _ =>
     }
     entity.setLocationAndAngles(location.getX, location.getY, location.getZ, location.getYaw, location.getPitch)
-    if(player.isDefined) TeleportEventFactory.onEnd(currentWorld, destinationWorld, player.get, options)
+    if(player != null) TeleportEventFactory.onEnd(currentWorld, destinationWorld, player, options)
     /*if(options.isMaintainMomentum()){
       entity.motionX = mX;
       entity.motionY = mY;
@@ -185,7 +184,7 @@ object Teleporter {
       if(entity.addedToChunk && world.getChunkProvider.chunkExists(x, z)){
         val chunk = world.getChunkFromChunkCoords(x, z)
         chunk.removeEntity(entity)
-        chunk.isModified = true
+        chunk.setChunkModified()
       }
       world.loadedEntityList.remove(entity)
       world.onEntityRemoved(entity)

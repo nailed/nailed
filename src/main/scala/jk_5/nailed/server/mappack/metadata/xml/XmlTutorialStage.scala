@@ -18,7 +18,7 @@
 package jk_5.nailed.server.mappack.metadata.xml
 
 import jk_5.nailed.api.mappack.MappackConfigurationException
-import jk_5.nailed.api.mappack.tutorial.TutorialStage
+import jk_5.nailed.api.mappack.metadata.TutorialStage
 import org.jdom2.Element
 
 import scala.collection.convert.wrapAsScala._

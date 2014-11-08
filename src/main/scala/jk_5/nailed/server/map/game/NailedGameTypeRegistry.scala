@@ -12,22 +12,22 @@ import scala.collection.mutable
 object NailedGameTypeRegistry extends GameTypeRegistry {
 
   private val types = mutable.ArrayBuffer[GameType]()
-  private var typeArray = new Array[GameType](0)
+  private var typeCollection: java.util.Collection[GameType] = java.util.Arrays.asList()
   private val typesByName = mutable.HashMap[String, GameType]()
 
   override def registerGameType(gameType: GameType){
     types += gameType
-    typeArray = types.toArray
+    typeCollection = java.util.Arrays.asList(types.toArray: _*)
     typesByName.put(gameType.getName, gameType)
   }
 
   override def unregisterGameType(gameType: GameType){
     types -= gameType
-    typeArray = types.toArray
+    typeCollection = java.util.Arrays.asList(types.toArray: _*)
     typesByName.remove(gameType.getName)
   }
 
-  override def getTypes = typeArray
+  override def getTypes = typeCollection
 
   override def getByName(name: String) = typesByName.get(name).orNull
 }

@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/world/WorldProvider.java
 +++ ../src-work/minecraft/net/minecraft/world/WorldProvider.java
-@@ -9,6 +9,7 @@
+@@ -11,6 +11,7 @@
  import net.minecraft.world.gen.ChunkProviderFlat;
  import net.minecraft.world.gen.ChunkProviderGenerate;
  import net.minecraft.world.gen.FlatGeneratorInfo;
@@ -8,7 +8,7 @@
  
  public abstract class WorldProvider {
      public static final float[] field_111203_a = new float[] {1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
-@@ -88,7 +89,7 @@
+@@ -94,7 +95,7 @@
      }
  
      public static WorldProvider func_76570_a(int p_76570_0_) {
@@ -16,12 +16,11 @@
 +        return jk_5.nailed.server.world.NailedDimensionManager.createProviderFor(p_76570_0_);
      }
  
-     public ChunkCoordinates func_76554_h() {
-@@ -100,4 +101,17 @@
-     }
+     public BlockPos func_177496_h() {
+@@ -107,6 +108,19 @@
  
      public abstract String func_80007_l();
-+
+ 
 +    /**
 +     * ****** Nailed Start ********
 +     */
@@ -34,4 +33,7 @@
 +        WorldInfo info = this.field_76579_a.field_72986_A;
 +        return new jk_5.nailed.api.util.Location(null, info.func_76079_c(), info.func_76075_d(), info.func_76074_e(), 0, 0);
 +    }
- }
++
+     public abstract String func_177498_l();
+ 
+     public WorldChunkManager func_177499_m() {

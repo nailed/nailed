@@ -1,15 +1,15 @@
 --- ../src-base/minecraft/net/minecraft/server/management/PlayerManager.java
 +++ ../src-work/minecraft/net/minecraft/server/management/PlayerManager.java
-@@ -1,6 +1,8 @@
- package net.minecraft.server.management;
+@@ -2,6 +2,8 @@
  
+ import com.google.common.collect.Lists;
  import java.util.ArrayList;
 +import java.util.Collections;
 +import java.util.HashMap;
  import java.util.Iterator;
  import java.util.List;
  import net.minecraft.entity.player.EntityPlayerMP;
-@@ -103,13 +105,21 @@
+@@ -105,13 +107,21 @@
          int j = (int)p_72683_1_.field_70161_v >> 4;
          p_72683_1_.field_71131_d = p_72683_1_.field_70165_t;
          p_72683_1_.field_71132_e = p_72683_1_.field_70161_v;
@@ -32,7 +32,7 @@
          this.field_72699_b.add(p_72683_1_);
          this.func_72691_b(p_72683_1_);
      }
-@@ -196,12 +206,13 @@
+@@ -198,12 +208,13 @@
              int i1 = this.field_72698_e;
              int j1 = i - k;
              int k1 = j - l;
@@ -47,7 +47,7 @@
                          }
  
                          if (!this.func_72684_a(l1 - j1, i2 - k1, i, j, i1)) {
-@@ -217,6 +228,16 @@
+@@ -219,6 +230,16 @@
                  this.func_72691_b(p_72685_1_);
                  p_72685_1_.field_71131_d = p_72685_1_.field_70165_t;
                  p_72685_1_.field_71132_e = p_72685_1_.field_70161_v;
@@ -64,7 +64,7 @@
              }
          }
      }
-@@ -276,14 +297,21 @@
+@@ -279,14 +300,21 @@
          private int field_73262_e;
          private int field_73260_f;
          private long field_111198_g;
@@ -88,7 +88,7 @@
              if (this.field_73263_b.contains(p_73255_1_)) {
                  PlayerManager.field_152627_a.debug("Failed to add player. {} already is in chunk {}, {}", new Object[] {p_73255_1_, Integer.valueOf(this.field_73264_c.field_77276_a), Integer.valueOf(this.field_73264_c.field_77275_b)});
              } else {
-@@ -292,18 +320,46 @@
+@@ -295,18 +323,46 @@
                  }
  
                  this.field_73263_b.add(p_73255_1_);

@@ -18,7 +18,8 @@
 package jk_5.nailed.server.mappack.metadata.xml
 
 import jk_5.nailed.api.chat.ChatColor
-import jk_5.nailed.api.mappack.{MappackConfigurationException, MappackTeam}
+import jk_5.nailed.api.mappack.MappackConfigurationException
+import jk_5.nailed.api.mappack.metadata.MappackTeam
 import org.jdom2.Element
 
 /**

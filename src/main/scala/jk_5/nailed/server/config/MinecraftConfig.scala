@@ -56,7 +56,7 @@ class MinecraftConfig extends PropertyManager(null) {
   }
 
   override def saveProperties(){
-    logger.debug("Tried to save minecraft config. This is not longer supported", new Exception)
+    logger.debug("Attempted to save minecraft config")
   }
 
   private def remap(key: String): String = key match {
@@ -66,8 +66,22 @@ class MinecraftConfig extends PropertyManager(null) {
   }
 
   override def getPropertiesFile = null
-  override def getStringProperty(key: String, default: String) = config.getString(remap(key))
-  override def getIntProperty(key: String, default: Int) = config.getInt(remap(key))
-  override def getBooleanProperty(key: String, default: Boolean) = config.getBoolean(remap(key))
+  override def getStringProperty(key: String, default: String) = if(config.hasPath(remap(key))) config.getString(remap(key)) else{
+    logger.warn(s"Attempted to get minecraft config value \'${remap(key)}\', but it was not found in the configuration. Returning default value (\'$default\')")
+    default
+  }
+  override def getIntProperty(key: String, default: Int) = if(config.hasPath(remap(key))) config.getInt(remap(key)) else{
+    logger.warn(s"Attempted to get minecraft config value \'${remap(key)}\', but it was not found in the configuration. Returning default value (\'$default\')")
+    default
+  }
+  override def getBooleanProperty(key: String, default: Boolean) = if(config.hasPath(remap(key))) config.getBoolean(remap(key)) else{
+    logger.warn(s"Attempted to get minecraft config value \'${remap(key)}\', but it was not found in the configuration. Returning default value (\'$default\')")
+    default
+  }
+  override def getLongProperty(key: String, default: Long) = if(config.hasPath(remap(key))) config.getLong(remap(key)) else{
+    logger.warn(s"Attempted to get minecraft config value \'${remap(key)}\', but it was not found in the configuration. Returning default value (\'$default\')")
+    default
+  }
   override def setProperty(key: String, value: scala.Any){}
+  override def generateNewProperties(){}
 }

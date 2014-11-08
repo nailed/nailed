@@ -17,10 +17,8 @@
 
 package jk_5.nailed.server.map
 
-import jk_5.nailed.api.map.stat.StatConfig
-import jk_5.nailed.api.mappack.implementation.DefaultMappackWorldProperties
-import jk_5.nailed.api.mappack.tutorial.{Tutorial, TutorialStage}
-import jk_5.nailed.api.mappack.{MappackAuthor, MappackMetadata, MappackTeam, MappackWorld}
+import jk_5.nailed.api.mappack.metadata._
+import jk_5.nailed.api.mappack.metadata.impl.DefaultMappackWorld
 
 /**
  * No description given
@@ -29,7 +27,7 @@ import jk_5.nailed.api.mappack.{MappackAuthor, MappackMetadata, MappackTeam, Map
  */
 object DummyLobbyMappackMetadata extends MappackMetadata {
   override val name = "Lobby"
-  override val worlds = Array[MappackWorld](DefaultMappackWorldProperties)
+  override val worlds = Array[MappackWorld](DefaultMappackWorld.INSTANCE)
   override val version = "1.0.0"
   override val authors = new Array[MappackAuthor](0)
   override val teams = new Array[MappackTeam](0)

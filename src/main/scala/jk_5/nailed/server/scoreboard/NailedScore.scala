@@ -26,7 +26,7 @@ import net.minecraft.network.play.server.S3CPacketUpdateScore
  *
  * @author jk-5
  */
-class NailedScore(val owner: NailedObjective, val name: String) extends Score {
+class NailedScore(val owner: NailedObjective, private val name: String) extends Score {
   Checks.notNull(owner, "owner may not be null")
   Checks.notNull(name, "name may not be null")
   Checks.check(name.length() <= 16, "name may not be longer than 16")
@@ -37,13 +37,15 @@ class NailedScore(val owner: NailedObjective, val name: String) extends Score {
     update()
   }
   override def addValue(value: Int) = this.setValue(this.value + value)
+  override def getValue = value
+  override def getName = name
 
   override def update(){
     val p = new S3CPacketUpdateScore
-    p.field_149329_a = this.name
-    p.field_149327_b = this.owner.id
-    p.field_149328_c = this.value
-    p.field_149326_d = 0
+    p.name = this.name
+    p.objective = this.owner.id
+    p.value = this.value
+    p.action = S3CPacketUpdateScore.Action.CHANGE
     owner.manager.sendPacket(p)
   }
 }

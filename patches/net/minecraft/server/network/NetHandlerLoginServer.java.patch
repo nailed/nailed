@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/server/network/NetHandlerLoginServer.java
 +++ ../src-work/minecraft/net/minecraft/server/network/NetHandlerLoginServer.java
-@@ -157,8 +157,19 @@
+@@ -166,8 +166,19 @@
      }
  
      protected GameProfile func_152506_a(GameProfile p_152506_1_) {

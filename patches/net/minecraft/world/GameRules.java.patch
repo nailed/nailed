@@ -5,6 +5,6 @@
  
      public GameRules() {
 +        if(true) return; //Nailed: don't initialize them here. See DefaultGameRules
-         this.func_82769_a("doFireTick", "true");
-         this.func_82769_a("mobGriefing", "true");
-         this.func_82769_a("keepInventory", "false");
+         this.func_180262_a("doFireTick", "true", GameRules.ValueType.BOOLEAN_VALUE);
+         this.func_180262_a("mobGriefing", "true", GameRules.ValueType.BOOLEAN_VALUE);
+         this.func_180262_a("keepInventory", "false", GameRules.ValueType.BOOLEAN_VALUE);

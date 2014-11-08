@@ -44,7 +44,7 @@ case class QueuedChunk(x: Int, z: Int, loader: AnvilChunkLoader, world: World, p
     val result = new StringBuilder
     val NEW_LINE = Properties.lineSeparator
 
-    result.append("QueuedChunk{x=").append(x).append(",z=").append(z).append(",loader=").append(loader).append(",world=").append(world.getWorldInfo.getWorldName).append(",dimension=").append(world.provider.dimensionId).append(",provider=").append(world.provider.getClass().getName()).append('}')
+    result.append("QueuedChunk{x=").append(x).append(",z=").append(z).append(",loader=").append(loader).append(",world=").append(world.getWorldInfo.getWorldName).append(",dimension=").append(world.provider.getDimensionId).append(",provider=").append(world.provider.getClass().getName()).append('}')
     result.toString()
   }
 }

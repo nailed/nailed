@@ -17,9 +17,9 @@
 
 package jk_5.nailed.server.teleport
 
-import jk_5.nailed.api.event._
+import jk_5.nailed.api.event.teleport._
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.api.teleport.TeleportOptions
+import jk_5.nailed.api.util.TeleportOptions
 import jk_5.nailed.api.world.World
 import jk_5.nailed.server.NailedEventFactory
 
@@ -35,7 +35,7 @@ object TeleportEventFactory {
   }
 
   def alterDestination(origin: World, destination: World, entity: Player, options: TeleportOptions) = {
-    val newLoc = NailedEventFactory.fireEvent(new TeleportEventAlter(origin, destination, entity, options.copy)).location
+    val newLoc = NailedEventFactory.fireEvent(new TeleportEventAlter(origin, destination, entity, options.copy)).getLocation
     if(newLoc == null) options.getDestination else newLoc
   }
 
