@@ -88,7 +88,7 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock with S
       getWorld.markBlockForUpdate(TileEntityStatEmitter.this.pos)
     }
 
-    override def canCommandSenderUseCommand(level: Int, command: String): Boolean = false
+    override def canCommandSenderUse(level: Int, command: String): Boolean = false
     override def getName = "StatEmitter"
 
     override def getEntityWorld: World = getWorld

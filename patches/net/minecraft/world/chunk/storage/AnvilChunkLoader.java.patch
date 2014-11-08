@@ -1,6 +1,37 @@
 --- ../src-base/minecraft/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ ../src-work/minecraft/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-@@ -41,16 +41,49 @@
+@@ -1,7 +1,5 @@
+ package net.minecraft.world.chunk.storage;
+ 
+-import com.google.common.collect.Lists;
+-import com.google.common.collect.Sets;
+ import java.io.DataInputStream;
+ import java.io.DataOutputStream;
+ import java.io.File;
+@@ -9,6 +7,13 @@
+ import java.util.Iterator;
+ import java.util.List;
+ import java.util.Set;
++
++import com.google.common.collect.Lists;
++import com.google.common.collect.Sets;
++
++import org.apache.logging.log4j.LogManager;
++import org.apache.logging.log4j.Logger;
++
+ import net.minecraft.block.Block;
+ import net.minecraft.entity.Entity;
+ import net.minecraft.entity.EntityList;
+@@ -26,8 +31,6 @@
+ import net.minecraft.world.chunk.NibbleArray;
+ import net.minecraft.world.storage.IThreadedFileIO;
+ import net.minecraft.world.storage.ThreadedFileIOBase;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+ 
+ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+     private static final Logger field_151505_a = LogManager.getLogger();
+@@ -41,16 +44,49 @@
          this.field_75825_d = p_i2003_1_;
      }
  
@@ -53,7 +84,7 @@
                          break;
                      }
                  }
-@@ -67,10 +100,21 @@
+@@ -67,10 +103,21 @@
              nbttagcompound = CompressedStreamTools.func_74794_a(datainputstream);
          }
  
@@ -76,7 +107,7 @@
          if (!p_75822_4_.func_150297_b("Level", 10)) {
              field_151505_a.error("Chunk file at " + p_75822_2_ + "," + p_75822_3_ + " is missing level data, skipping");
              return null;
-@@ -84,10 +128,26 @@
+@@ -84,10 +131,26 @@
                  field_151505_a.error("Chunk file at " + p_75822_2_ + "," + p_75822_3_ + " is in the wrong location; relocating. (Expected " + p_75822_2_ + ", " + p_75822_3_ + ", got " + chunk.field_76635_g + ", " + chunk.field_76647_h + ")");
                  p_75822_4_.func_74768_a("xPos", p_75822_2_);
                  p_75822_4_.func_74768_a("zPos", p_75822_3_);
@@ -86,10 +117,10 @@
 +                if(tileEntities != null){
 +                    for(int te = 0; te < tileEntities.func_74745_c(); te++){
 +                        NBTTagCompound tileEntity = (NBTTagCompound) tileEntities.func_150305_b(te);
-+                        int x = tileEntity.func_74762_e("x") - chunk.field_76635_g * 16;
-+                        int z = tileEntity.func_74762_e("z") - chunk.field_76647_h * 16;
-+                        tileEntity.func_74768_a("x", p_75822_2_ * 16 + x);
-+                        tileEntity.func_74768_a("z", p_75822_3_ * 16 + z);
++                        int tx = tileEntity.func_74762_e("x") - chunk.field_76635_g * 16;
++                        int tz = tileEntity.func_74762_e("z") - chunk.field_76647_h * 16;
++                        tileEntity.func_74768_a("x", tx * 16 + tx);
++                        tileEntity.func_74768_a("z", tz * 16 + tz);
 +                    }
 +                }
 +
@@ -104,7 +135,7 @@
          }
      }
  
-@@ -326,10 +386,15 @@
+@@ -326,10 +389,15 @@
  
          chunk.func_76602_a(aextendedblockstorage);
  
@@ -121,7 +152,7 @@
          NBTTagList nbttaglist1 = p_75823_2_.func_150295_c("Entities", 10);
  
          if (nbttaglist1 != null) {
-@@ -388,7 +453,7 @@
+@@ -388,7 +456,7 @@
              }
          }
  
