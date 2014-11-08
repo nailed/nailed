@@ -80,8 +80,31 @@ dependencies {
 }
 
 packageServer.manifest {
-    attributes 'TweakClass': 'jk_5.nailed.server.tweaker.NailedTweaker'
-    attributes 'Main-Class': 'jk_5.nailed.deploader.DepLoader'
+    attributes "TweakClass": "jk_5.nailed.server.tweaker.NailedTweaker"
+    attributes "Main-Class": "jk_5.nailed.deploader.DepLoader"
+    attributes "Built-By": System.getProperty("user.name")
+    attributes "Build-Jdk": System.getProperty("java.version")
+    attributes "Created-By": "Gradle " + gradle.gradleVersion
+    attributes "Implementation-Version": project.version
+    attributes "Implementation-Title": "jk_5.nailed"
+    attributes "Implementation-Vendor": "jk-5"
+    attributes "Specification-Version": project.version
+    attributes "Specification-Title": "Nailed server implementation"
+    attributes "Specification-Vendor": "jk-5"
+}
+
+//Delay evaluation of packageServer manifest
+project.gradle.taskGraph.whenReady { taskGraph ->
+    if(taskGraph.hasTask(packageServer)){
+        packageServer.manifest{
+            attributes("Implementation-Version": project(":api").version, "jk_5.nailed.api")
+            attributes("Implementation-Title": "jk_5.nailed.api", "jk_5.nailed.api")
+            attributes("Implementation-Vendor": "jk-5", "jk_5.nailed.api")
+            attributes("Specification-Version": project(":api").version, "jk_5.nailed.api")
+            attributes("Specification-Title": "Nailed api", "jk_5.nailed.api")
+            attributes("Specification-Vendor": "jk-5", "jk_5.nailed.api")
+        }
+    }
 }
 
 /*
