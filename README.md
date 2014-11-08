@@ -44,7 +44,7 @@ __Server__
 |:-----------------:|:-----------------------------------|
 |    Main class     | net.minecraft.launchwrapper.Launch |
 |  Program Options  | --tweakClass=jk_5.nailed.server.tweaker.NailedTweaker |
-| Working directory | ./runtime)                         |
+| Working directory | ./runtime                          |
 | Module classpath  | nailed                             |
 
 
