@@ -13,8 +13,10 @@ import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.api.world.{Difficulty, WeatherType}
 import jk_5.nailed.api.{GameMode, Platform}
+import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.mappack.NailedMappackRegistry
 import jk_5.nailed.server.player.NailedPlayer
+import jk_5.nailed.server.tweaker.NailedVersion
 import jk_5.nailed.server.utils.NBTUtils
 import net.minecraft.command._
 import net.minecraft.command.server._
@@ -36,6 +38,7 @@ class CommandPlugin {
     event.subcommand("game").registerCommandClass(GameCommand)
     event.subcommand("map").registerCommandClass(MapCommand)
     event.subcommand("reload").registerCommandClass(ReloadCommand)
+    event.subcommand("nailed").registerCommandClass(NailedCommand)
 
     event.registerCallable(new VanillaCommand(new CommandHelp), "help")
     event.registerCallable(new VanillaCommand(new CommandGive), "give")
@@ -45,6 +48,16 @@ class CommandPlugin {
     event.registerCallable(new VanillaCommand(new CommandEffect), "effect")
     event.registerCallable(new VanillaCommand(new CommandTeleport), "tp")
     event.registerCallable(new VanillaCommand(new CommandExecuteAt), "execute")
+  }
+
+  object NailedCommand {
+
+    @Command(aliases = Array("version"), desc = "Tells you the nailed version")
+    def reloadMappacks(sender: CommandSender){
+      val message = new TextComponent("Nailed version " + NailedVersion.full + " implementing api version " + NailedPlatform.getAPIVersion + " for minecraft " + NailedVersion.mcversion)
+      message.setColor(ChatColor.GOLD)
+      sender.sendMessage(message)
+    }
   }
 
   object ReloadCommand {
