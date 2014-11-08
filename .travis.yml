@@ -1,5 +1,5 @@
 language: java
 notifications:
   email: false
-install: TERM=dumb ./gradlew setupNailed -s
+install: TERM=dumb ./gradlew setupNailed -s -x scaladoc -x packageScaladoc
 script: TERM=dumb ./gradlew buildPackages -s
