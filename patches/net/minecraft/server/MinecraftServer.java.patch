@@ -38,7 +38,7 @@
          this.field_152364_T = new YggdrasilAuthenticationService(p_i46054_2_, UUID.randomUUID().toString());
          this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
          this.field_152365_W = this.field_152364_T.createProfileRepository();
-@@ -179,65 +177,10 @@
+@@ -179,65 +177,9 @@
      }
  
      protected void func_71247_a(String p_71247_1_, String p_71247_2_, long p_71247_3_, WorldType p_71247_5_, String p_71247_6_) {
@@ -102,12 +102,11 @@
 -        this.field_71318_t.func_72364_a(this.field_71305_c);
 -        this.func_147139_a(this.func_147135_j());
 +        jk_5.nailed.server.map.NailedMap map = (jk_5.nailed.server.map.NailedMap) jk_5.nailed.server.map.NailedMapLoader.createLobbyMap();
-+        jk_5.nailed.server.world.NailedWorld world = (jk_5.nailed.server.world.NailedWorld) map.worldsArray()[0];
-+        this.field_71318_t.func_72364_a(new WorldServer[]{world.wrapped()});
++        this.field_71318_t.func_72364_a(new WorldServer[]{((WorldServer) map.worldsArray()[0])}); //TODO: should we add all the worlds from the array?
          this.func_71222_d();
      }
  
-@@ -303,6 +246,7 @@
+@@ -303,6 +245,7 @@
      protected void func_71267_a(boolean p_71267_1_) {
          if (!this.field_71290_O) {
              WorldServer[] aworldserver = this.field_71305_c;
@@ -115,7 +114,7 @@
              int i = aworldserver.length;
  
              for (int j = 0; j < i; ++j) {
-@@ -327,9 +271,7 @@
+@@ -327,9 +270,7 @@
          if (!this.field_71290_O) {
              field_147145_h.info("Stopping server");
  
@@ -126,7 +125,7 @@
  
              if (this.field_71318_t != null) {
                  field_147145_h.info("Saving players");
-@@ -343,10 +285,17 @@
+@@ -343,10 +284,17 @@
  
                  for (int i = 0; i < this.field_71305_c.length; ++i) {
                      WorldServer worldserver = this.field_71305_c[i];
@@ -144,7 +143,7 @@
              if (this.field_71307_n.func_76468_d()) {
                  this.field_71307_n.func_76470_e();
              }
-@@ -383,13 +332,13 @@
+@@ -383,13 +331,13 @@
                      long j = k - this.field_175591_ab;
  
                      if (j > 2000L && this.field_175591_ab - this.field_71299_R >= 15000L) {
@@ -160,7 +159,7 @@
                          j = 0L;
                      }
  
-@@ -483,6 +432,9 @@
+@@ -483,6 +431,9 @@
          }
  
          this.field_71304_b.func_76320_a("root");
@@ -170,7 +169,7 @@
          this.func_71190_q();
  
          if (i - this.field_147142_T >= 5000000000L) {
-@@ -520,7 +472,10 @@
+@@ -520,7 +471,10 @@
          }
  
          this.field_71304_b.func_76319_b();
@@ -181,7 +180,7 @@
      }
  
      public void func_71190_q() {
-@@ -538,13 +493,15 @@
+@@ -538,13 +492,15 @@
          }
  
          this.field_71304_b.func_76318_c("levels");
@@ -197,11 +196,11 @@
 -            if (j == 0 || this.func_71255_r()) {
 -                WorldServer worldserver = this.field_71305_c[j];
 +            if (id == 0 || this.func_71255_r()) {
-+                WorldServer worldserver = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(id);
++                WorldServer worldserver = jk_5.nailed.server.world.NailedDimensionManager.getWorld(id);
                  this.field_71304_b.func_76320_a(worldserver.func_72912_H().func_76065_j());
  
                  if (this.field_71315_w % 20 == 0) {
-@@ -554,6 +511,7 @@
+@@ -554,6 +510,7 @@
                  }
  
                  this.field_71304_b.func_76320_a("tick");
@@ -209,7 +208,7 @@
                  CrashReport crashreport;
  
                  try {
-@@ -572,6 +530,7 @@
+@@ -572,6 +529,7 @@
                      throw new ReportedException(crashreport);
                  }
  
@@ -217,7 +216,7 @@
                  this.field_71304_b.func_76319_b();
                  this.field_71304_b.func_76320_a("tracker");
                  worldserver.func_73039_n().func_72788_a();
-@@ -579,15 +538,18 @@
+@@ -579,15 +537,18 @@
                  this.field_71304_b.func_76319_b();
              }
  
@@ -238,7 +237,7 @@
          for (j = 0; j < this.field_71322_p.size(); ++j) {
              ((IUpdatePlayerListBox)this.field_71322_p.get(j)).func_73660_a();
          }
-@@ -605,7 +567,6 @@
+@@ -605,7 +566,6 @@
  
      public static void main(String[] p_main_0_) {
          Bootstrap.func_151354_b();
@@ -246,21 +245,21 @@
          try {
              boolean flag = true;
              String s = null;
-@@ -708,7 +669,12 @@
+@@ -708,7 +668,12 @@
      }
  
      public WorldServer func_71218_a(int p_71218_1_) {
 -        return p_71218_1_ == -1 ? this.field_71305_c[1] : (p_71218_1_ == 1 ? this.field_71305_c[2] : this.field_71305_c[0]);
-+        WorldServer world = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(p_71218_1_);
++        WorldServer world = jk_5.nailed.server.world.NailedDimensionManager.getWorld(p_71218_1_);
 +        if(world == null){
 +            jk_5.nailed.server.world.NailedDimensionManager.initWorld(p_71218_1_, new jk_5.nailed.api.world.WorldContext(null, null, null));
-+            world = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(p_71218_1_);
++            world = jk_5.nailed.server.world.NailedDimensionManager.getWorld(p_71218_1_);
 +        }
 +        return world;
      }
  
      public String func_71277_t() {
-@@ -768,7 +734,7 @@
+@@ -768,7 +733,7 @@
      }
  
      public String getServerModName() {
@@ -269,7 +268,7 @@
      }
  
      public CrashReport func_71230_b(CrashReport p_71230_1_) {
-@@ -939,6 +905,7 @@
+@@ -939,6 +904,7 @@
              WorldServer worldserver = this.field_71305_c[i];
  
              if (worldserver != null) {
@@ -277,7 +276,7 @@
                  worldserver.func_73041_k();
              }
          }
-@@ -1087,7 +1054,7 @@
+@@ -1087,7 +1053,7 @@
      }
  
      public NetworkSystem func_147137_ag() {
