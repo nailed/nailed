@@ -1,0 +1,6 @@
+{
+    "package": "jk_5.nailed.server.mixin.impl",
+    "mixins": [
+        "MixinWorld"
+    ]
+}
