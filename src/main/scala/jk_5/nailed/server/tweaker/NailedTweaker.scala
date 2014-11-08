@@ -102,11 +102,13 @@ class NailedTweaker extends ITweaker {
     classLoader.addClassLoaderExclusion("org.apache.")
     classLoader.addClassLoaderExclusion("com.mojang.")
     classLoader.addClassLoaderExclusion("org.fusesource.")
+    classLoader.addTransformerExclusion("jk_5.nailed.server.tweaker.mixin.")
     classLoader.addTransformerExclusion("jk_5.nailed.server.tweaker.transformer.")
     classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.PatchingTransformer")
     classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.EventSubscribtionTransformer")
     if(!NailedTweaker.deobf) classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.RemappingTransformer")
     classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.AccessTransformer")
+    classLoader.registerTransformer("jk_5.nailed.server.tweaker.mixin.MixinTransformer")
 
     AccessTransformer.readConfig("nailed_at.cfg")
 
