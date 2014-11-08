@@ -17,7 +17,6 @@
 
 package jk_5.nailed.server.tileentity
 
-import jk_5.nailed.api
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.map.stat.{Stat, StatBlock, StatListener}
 import jk_5.nailed.server.world.NailedDimensionManager
@@ -60,7 +59,7 @@ class TileEntityStatEmitter extends TileEntityCommandBlock with StatBlock with S
 
   override def setWorldObj(world: World){
     super.setWorldObj(world)
-    map = NailedDimensionManager.getWorld(world.provider.getDimensionId).asInstanceOf[api.world.World].getMap
+    map = NailedDimensionManager.getWorld(world.provider.getDimensionId).getMap
   }
 
   //BlockCommandBlock is hardcoded to rely on CommandBlockLogic, and i don't want to change that

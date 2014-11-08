@@ -33,7 +33,7 @@ import net.minecraft.world.gen._
 class DelegatingWorldProvider(val wrapped: NWorldProvider) extends WorldProvider {
 
   private var dimId: Int = _
-  private lazy val world: NWorld = NailedDimensionManager.getWorld(this.dimId).asInstanceOf[NWorld]
+  private lazy val world: NWorld = NailedDimensionManager.getWorld(this.dimId)
   private lazy val map: Map = this.world.getMap
 
   override def getDimensionName = "DIM" + wrapped.getId

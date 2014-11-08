@@ -21,7 +21,7 @@
  
      public GameRules func_82736_K() {
 -        return this.field_72986_A.func_82574_x();
-+        return jk_5.nailed.server.map.gamerule.DelegatingEditableGameRules.get(((jk_5.nailed.api.world.World) this).getGamerules());
++        return jk_5.nailed.server.map.gamerule.DelegatingEditableGameRules.get(jk_5.nailed.server.world.NailedDimensionManager.getWorld(this.field_73011_w.field_76574_g).getGameRules());
      }
  
      public void func_72854_c() {}

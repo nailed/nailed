@@ -37,6 +37,7 @@ import jk_5.nailed.api.world.World
 import jk_5.nailed.api.{GameMode, potion}
 import jk_5.nailed.server.scoreboard.PlayerScoreboardManager
 import jk_5.nailed.server.teleport.Teleporter
+import jk_5.nailed.server.world.NailedWorld
 import jk_5.nailed.server.{NailedEventFactory, NailedPlatform}
 import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.player.EntityPlayerMP
@@ -44,7 +45,6 @@ import net.minecraft.network.play.server.{S02PacketChat, S3FPacketCustomPayload,
 import net.minecraft.network.{NetHandlerPlayServer, Packet}
 import net.minecraft.potion.PotionEffect
 import net.minecraft.util.{DamageSource, IChatComponent}
-import net.minecraft.world.WorldServer
 import net.minecraft.world.WorldSettings.GameType
 import org.apache.logging.log4j.LogManager
 
@@ -290,11 +290,11 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   def getSpawnPoint: Location = {
     val team = this.map.getPlayerTeam(this) //TODO: this line throws an NPE when the player logs in for the second time (over EntityPlayerMP)
     if(team == null){
-      world.asInstanceOf[WorldServer].provider.getSpawnPoint
+      world.asInstanceOf[NailedWorld].wrapped.provider.getSpawnPoint
     }else{
       val s = team.getSpawnPoint
       if(s == null){
-        world.asInstanceOf[WorldServer].provider.getSpawnPoint
+        world.asInstanceOf[NailedWorld].wrapped.provider.getSpawnPoint
       }else{
         s
       }

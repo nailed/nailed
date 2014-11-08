@@ -55,7 +55,7 @@ class NailedFoodStats extends FoodStats {
       return
     }
 
-    val difficulty = world.getDifficultyValue
+    val difficulty = world.getDifficulty
 
     if(exhaustion > 4){
       exhaustion -= 4
@@ -66,7 +66,7 @@ class NailedFoodStats extends FoodStats {
       }
     }
 
-    if(world.getGamerules.get(GameRuleKey.NATURAL_REGENERATION).getValue == true && foodLevel >= 18 && playerEntity.shouldHeal()){
+    if(world.getGameRules.get(GameRuleKey.NATURAL_REGENERATION).getValue == true && foodLevel >= 18 && playerEntity.shouldHeal()){
       timer += 1
       if(timer >= 80){
         player.heal(1)
