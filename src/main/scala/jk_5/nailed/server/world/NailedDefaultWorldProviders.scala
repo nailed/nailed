@@ -30,14 +30,13 @@ object NailedDefaultWorldProviders extends DefaultWorldProviders {
     override final def getId = this.id
     override final def setId(id: Int) = this.id = id
     override def getOptions: String = null
+    override def getDimension = Dimension.OVERWORLD
   }
   override def getVoidProvider: WorldProvider = new WorldProvider with IdTracked {
     override def getType = "void"
-    override def getDimension = Dimension.OVERWORLD
   }
   override def getOverworldProvider: WorldProvider = new WorldProvider with IdTracked {
     override def getType = "overworld"
-    override def getDimension = Dimension.OVERWORLD
   }
   override def getNetherProvider: WorldProvider = new WorldProvider with IdTracked {
     override def getType = "nether"
@@ -50,6 +49,5 @@ object NailedDefaultWorldProviders extends DefaultWorldProviders {
   override def getFlatProvider(pattern: String): WorldProvider = new WorldProvider with IdTracked {
     override def getType = "flat"
     override def getOptions = pattern
-    override def getDimension = Dimension.OVERWORLD
   }
 }

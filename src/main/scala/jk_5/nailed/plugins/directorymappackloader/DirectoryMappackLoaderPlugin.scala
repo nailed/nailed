@@ -28,8 +28,6 @@ import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.server.mappack.metadata.xml.XmlMappackMetadata
 import org.apache.logging.log4j.LogManager
 
-import scala.collection.convert.wrapAsScala._
-
 /**
  * No description given
  *
@@ -39,23 +37,13 @@ import scala.collection.convert.wrapAsScala._
 class DirectoryMappackLoaderPlugin {
 
   val logger = LogManager.getLogger
-  var wasLoaded = false
 
   @EventHandler
   def registerMappacks(event: RegisterMappacksEvent){
     val mappacksDir = new File(event.getPlatform.getRuntimeDirectory, "mappacks")
-    logger.info((if(wasLoaded) "Rel" else "L") + "oading directory mappacks...")
+    logger.info("Loading directory mappacks")
     if(!mappacksDir.exists()) mappacksDir.mkdir()
     var i = 0
-    if(wasLoaded){
-      val existing = event.getPlatform.getMappackRegistry.getByType(classOf[DirectoryMappack])
-      for(m <- existing){
-        event.getPlatform.getMappackRegistry.unregister(m)
-        i += 1
-      }
-      logger.info(s"Unloaded $i DirectoryMappacks")
-    }else wasLoaded = true
-    i = 0
     for(file <- mappacksDir.listFiles()){
       if(file.isDirectory){
         val jsonMappackMetadata = new File(file, "mappack.json")

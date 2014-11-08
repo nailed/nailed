@@ -13,6 +13,7 @@ import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.plugin.Plugin
 import jk_5.nailed.api.world.{Difficulty, WeatherType}
 import jk_5.nailed.api.{GameMode, Platform}
+import jk_5.nailed.server.mappack.NailedMappackRegistry
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.utils.NBTUtils
 import net.minecraft.command._
@@ -34,6 +35,7 @@ class CommandPlugin {
     event.subcommand("team").registerCommandClass(TeamCommand)
     event.subcommand("game").registerCommandClass(GameCommand)
     event.subcommand("map").registerCommandClass(MapCommand)
+    event.subcommand("reload").registerCommandClass(ReloadCommand)
 
     event.registerCallable(new VanillaCommand(new CommandHelp), "help")
     event.registerCallable(new VanillaCommand(new CommandGive), "give")
@@ -43,6 +45,14 @@ class CommandPlugin {
     event.registerCallable(new VanillaCommand(new CommandEffect), "effect")
     event.registerCallable(new VanillaCommand(new CommandTeleport), "tp")
     event.registerCallable(new VanillaCommand(new CommandExecuteAt), "execute")
+  }
+
+  object ReloadCommand {
+
+    @Command(aliases = Array("mappacks"), desc = "Reload mappacks")
+    def reloadMappacks(){
+      NailedMappackRegistry.reload()
+    }
   }
 
   object TeamCommand {

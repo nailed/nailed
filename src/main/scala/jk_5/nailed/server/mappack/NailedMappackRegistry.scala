@@ -18,9 +18,11 @@
 package jk_5.nailed.server.mappack
 
 import jk_5.nailed.api.Platform
-import jk_5.nailed.api.event.mappack.{MappackRegisteredEvent, MappackUnregisteredEvent}
+import jk_5.nailed.api.event.mappack.{MappackRegisteredEvent, MappackUnregisteredEvent, RegisterMappacksEvent}
 import jk_5.nailed.api.mappack.{Mappack, MappackRegistry}
-import jk_5.nailed.server.NailedPlatform
+import jk_5.nailed.server.map.NailedMapLoader
+import jk_5.nailed.server.{NailedEventFactory, NailedPlatform}
+import org.apache.logging.log4j.LogManager
 
 import scala.collection.mutable
 
@@ -31,6 +33,7 @@ import scala.collection.mutable
  */
 object NailedMappackRegistry extends MappackRegistry {
 
+  private val logger = LogManager.getLogger
   private val mappacks = mutable.HashMap[String, Mappack]()
 
   override def register(mappack: Mappack): Boolean =
@@ -60,6 +63,12 @@ object NailedMappackRegistry extends MappackRegistry {
       NailedPlatform.globalEventBus.post(new MappackUnregisteredEvent(mappack))
       true
     }
+  }
+
+  def reload(){
+    logger.info("Reloading mappacks")
+    mappacks.clear()
+    NailedEventFactory.fireEvent(new RegisterMappacksEvent(NailedMappackRegistry, NailedMapLoader))
   }
 }
 
