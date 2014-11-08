@@ -1,6 +1,6 @@
 package jk_5.nailed.server.tweaker.mixin
 
-import java.io.IOException
+import java.io.{File, FileOutputStream, IOException}
 import java.util
 
 import net.minecraft.launchwrapper.Launch
@@ -94,6 +94,12 @@ private[mixin] class MixinInfo(
         basicClass = transformer.transform(name, name, basicClass)
       }
     }
+    logger.info("Transformed " + name)
+    val f = new File("transformerOut/" + name).getCanonicalFile
+    f.getParentFile.mkdirs()
+    val fos = new FileOutputStream(f)
+    fos.write(basicClass)
+    fos.close()
     basicClass
   }
 

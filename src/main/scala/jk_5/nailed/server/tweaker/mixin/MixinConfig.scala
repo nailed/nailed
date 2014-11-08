@@ -12,7 +12,7 @@ private[mixin] object MixinConfig {
 
   def apply(configFile: String): MixinConfig = {
     try{
-      return new Gson().fromJson(new InputStreamReader(this.getClass.getResourceAsStream("/" + configFile)), classOf[MixinConfig])
+      new Gson().fromJson(new InputStreamReader(this.getClass.getResourceAsStream("/" + configFile)), classOf[MixinConfig])
     }catch{
       case e: Exception =>
         e.printStackTrace()

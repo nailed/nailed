@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.profiler.Profiler;
+import net.minecraft.util.IThreadListener;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
@@ -30,7 +31,7 @@ import jk_5.nailed.server.tweaker.mixin.Mixin;
 import jk_5.nailed.server.world.DelegatingWorldProvider;
 
 @Mixin(WorldServer.class)
-public abstract class MixinWorld extends net.minecraft.world.World implements World, InternalWorld {
+public abstract class MixinWorld extends net.minecraft.world.World implements World, InternalWorld, IThreadListener {
 
     protected MixinWorld(ISaveHandler saveHandlerIn, WorldInfo info, WorldProvider providerIn, Profiler profilerIn, boolean client) {
         super(saveHandlerIn, info, providerIn, profilerIn, client);
