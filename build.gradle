@@ -18,7 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.4.0"
+        classpath "jk_5.nailed.mcp:mcp:1.4.1"
     }
 }
 
@@ -46,7 +46,7 @@ version = "1.1.0-SNAPSHOT"
 nailedMCP {
     minecraftVersion = "1.8"
     mainClass = "net.minecraft.server.MinecraftServer"
-    mappings = "snapshot_20141109"
+    mappings = "snapshot_nodoc_20141109"
 }
 
 configurations {
