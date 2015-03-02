@@ -56,10 +56,10 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
         this.objectives += obj
         this.objectivesById.put(id, obj)
         val packet = new S3BPacketScoreboardObjective
-        packet.field_149343_a = obj.id
-        packet.field_149341_b = obj.displayName
+        packet.objectiveName = obj.id
+        packet.objectiveValue = obj.displayName
         packet.field_149342_c = 0 //0 = Create
-        packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
+        packet.`type` = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
         this.sendPacket(packet)
         obj
     }
@@ -74,10 +74,10 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
     val np = player.asInstanceOf[NailedPlayer]
     for(objective <- this.objectives){
       val packet = new S3BPacketScoreboardObjective()
-      packet.field_149343_a = objective.id
-      packet.field_149341_b = objective.displayName
+      packet.objectiveName = objective.id
+      packet.objectiveValue = objective.displayName
       packet.field_149342_c = 0 //0 = Create
-      packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
+      packet.`type` = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
       np.sendPacket(packet)
 
       objective.sendData(player)
@@ -85,8 +85,8 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
 
     for(e <- this.displayLocations.entrySet){
       val packet = new S3DPacketDisplayScoreboard
-      packet.field_149374_a = e.getKey.getId
-      packet.field_149373_b = e.getValue.getId
+      packet.position = e.getKey.getId
+      packet.scoreName = e.getValue.getId
       np.sendPacket(packet)
     }
 
@@ -113,8 +113,8 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
       val np = player.asInstanceOf[NailedPlayer]
       for(objective <- this.objectives){
         val packet = new S3BPacketScoreboardObjective
-        packet.field_149343_a = objective.id
-        packet.field_149341_b = objective.displayName
+        packet.objectiveName = objective.id
+        packet.objectiveValue = objective.displayName
         packet.field_149342_c = 1; //Remove
         np.sendPacket(packet)
       }
@@ -134,13 +134,13 @@ class MapScoreboardManager(val map: NailedMap) extends ScoreboardManager with Ne
     //    return;
     //}
     val packet = new S3DPacketDisplayScoreboard
-    packet.field_149374_a = display.getId
+    packet.position = display.getId
     if(objective == null){
       this.displayLocations.remove(display)
-      packet.field_149373_b = ""
+      packet.scoreName = ""
     }else{
       this.displayLocations.put(display, objective)
-      packet.field_149373_b = objective.getId
+      packet.scoreName = objective.getId
     }
     this.sendPacket(packet)
   }

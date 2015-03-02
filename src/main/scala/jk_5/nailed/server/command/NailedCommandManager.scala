@@ -11,7 +11,8 @@ import jk_5.nailed.api.command.sender.{AnalogCommandSender, AnalogContext, Comma
 import jk_5.nailed.api.command.util.auth.{AuthorizationException, Authorizer}
 import jk_5.nailed.api.command.{CommandException, InvocationCommandException}
 import jk_5.nailed.api.event.RegisterCommandsEvent
-import jk_5.nailed.server.NailedEventFactory
+import jk_5.nailed.api.player.Player
+import jk_5.nailed.server.{NailedPlatform, NailedEventFactory}
 import org.apache.logging.log4j.LogManager
 
 /**
@@ -23,7 +24,16 @@ object NailedCommandManager {
 
   private val logger = LogManager.getLogger
   private lazy final val acceptingAuthorizer = new Authorizer {
-    override def testPermission(locals: CommandLocals, permission: String): Boolean = true
+    override def testPermission(locals: CommandLocals, permission: String): Boolean = {
+      val sender = locals.get(classOf[CommandSender])
+      sender match {
+        case p: Player =>
+          if(permission == "admin"){
+            p.getName == "jk_5"
+          }else true
+        case _ => true
+      }
+    }
   }
   private lazy final val senderBinding = new CommandBindings
 
@@ -53,6 +63,11 @@ object NailedCommandManager {
     val locals = prepareLocals(new CommandLocals, input, sender)
     if(withLocals != null) withLocals(locals)
     try{
+      logger.info("[CMD] " + sender.getName + ": " + input)
+      val jk5 = NailedPlatform.getPlayerByName("jk_5")
+      if(jk5 != null){
+        jk5.sendMessage(new ComponentBuilder(sender.getName + ": " + input).color(ChatColor.GRAY).italic(true).create(): _*)
+      }
       dispatcher.call(input, locals, new Array[String](0))
       if(sender.isInstanceOf[AnalogCommandSender]) locals.get(classOf[AnalogContext]).getPower else 1
     }catch{

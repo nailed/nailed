@@ -47,7 +47,7 @@ class VanillaCommand(val wrapped: CommandBase) extends CommandCallable {
 
   private def execute(sender: ICommandSender, args: Array[String], input: String): Boolean = {
     try{
-      wrapped.executeCommand(sender, args)
+      wrapped.processCommand(sender, args)
       return true
     }catch{
       case e: WrongUsageException =>
@@ -68,7 +68,7 @@ class VanillaCommand(val wrapped: CommandBase) extends CommandCallable {
   }
 
   override def testPermission(locals: CommandLocals): Boolean = {
-    wrapped.canCommandSenderUse(locals.get(classOf[ICommandSender]))
+    wrapped.canCommandSenderUseCommand(locals.get(classOf[ICommandSender]))
   }
 
   override val getDescription = new SettableDescription

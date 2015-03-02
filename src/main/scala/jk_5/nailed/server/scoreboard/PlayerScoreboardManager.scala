@@ -54,10 +54,10 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
         this.objectives += obj
         this.objectivesById.put(id, obj)
         val packet = new S3BPacketScoreboardObjective
-        packet.field_149343_a = obj.id
-        packet.field_149341_b = obj.displayName
+        packet.objectiveName = obj.id
+        packet.objectiveValue = obj.displayName
         packet.field_149342_c = 0 //0 = Create
-        packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
+        packet.`type` = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
         player.sendPacket(packet)
         obj
     }
@@ -74,13 +74,13 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
     //    return;
     //}
     val packet = new S3DPacketDisplayScoreboard
-    packet.field_149374_a = display.getId
+    packet.position = display.getId
     if(objective == null){
       this.displayLocations.remove(display)
-      packet.field_149373_b = ""
+      packet.scoreName = ""
     }else{
       this.displayLocations.put(display, objective)
-      packet.field_149373_b = objective.getId
+      packet.scoreName = objective.getId
     }
     this.player.sendPacket(packet)
   }
@@ -88,10 +88,10 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
   def onJoinedServer(){
     for(objective <- this.objectives){
       val packet = new S3BPacketScoreboardObjective()
-      packet.field_149343_a = objective.id
-      packet.field_149341_b = objective.displayName
+      packet.objectiveName = objective.id
+      packet.objectiveValue = objective.displayName
       packet.field_149342_c = 0 //0 = Create
-      packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
+      packet.`type` = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
       player.sendPacket(packet)
 
       objective.sendData(player)
@@ -99,8 +99,8 @@ class PlayerScoreboardManager(val player: NailedPlayer) extends ScoreboardManage
 
     for(e <- this.displayLocations.entrySet){
       val packet = new S3DPacketDisplayScoreboard
-      packet.field_149374_a = e.getKey.getId
-      packet.field_149373_b = e.getValue.getId
+      packet.position = e.getKey.getId
+      packet.scoreName = e.getValue.getId
       player.sendPacket(packet)
     }
 

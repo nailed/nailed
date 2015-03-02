@@ -46,9 +46,9 @@ case class NailedObjective(id: String, manager: NetworkedScoreboardManager) exte
 
     this.displayName = displayName
     val packet = new S3BPacketScoreboardObjective
-    packet.field_149343_a = this.id
-    packet.field_149341_b = this.displayName
-    packet.field_179818_c = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
+    packet.objectiveName = this.id
+    packet.objectiveValue = this.displayName
+    packet.`type` = IScoreObjectiveCriteria.EnumRenderType.INTEGER //TODO: config option
     packet.field_149342_c = 2 //Update
     this.manager.sendPacket(packet)
   }

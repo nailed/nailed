@@ -284,7 +284,8 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   override def clearInventory(){
     entity.inventory.clear()
-    entity.sendContainerAndContentsToPlayer(entity.inventoryContainer, entity.inventoryContainer.getInventory)
+    //was sendContainerAndContentsToPlayer
+    entity.updateCraftingInventory(entity.inventoryContainer, entity.inventoryContainer.getInventory)
   }
 
   def getSpawnPoint: Location = {

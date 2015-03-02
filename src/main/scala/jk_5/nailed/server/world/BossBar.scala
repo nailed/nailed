@@ -36,17 +36,17 @@ object BossBar {
 
   def getSpawnPacket(text: String, location: Location): S0FPacketSpawnMob = {
     val packet = new S0FPacketSpawnMob
-    packet.field_149042_a = entityId
-    packet.field_149040_b = typeId
-    packet.field_149041_c = Math.floor(location.getFloorX * 32.0D).toInt
-    packet.field_149038_d = Math.floor(location.getFloorY * 32.0D).toInt
-    packet.field_149039_e = Math.floor(location.getFloorZ * 32.0D).toInt
-    packet.field_149036_f = 0
-    packet.field_149037_g = 0
-    packet.field_149047_h = 0
-    packet.field_149048_i = 0
-    packet.field_149045_j = 0
-    packet.field_149046_k = 0
+    packet.entityId = entityId
+    packet.`type` = typeId
+    packet.x = Math.floor(location.getFloorX * 32.0D).toInt
+    packet.y = Math.floor(location.getFloorY * 32.0D).toInt
+    packet.z = Math.floor(location.getFloorZ * 32.0D).toInt
+    packet.velocityX = 0
+    packet.velocityY = 0
+    packet.velocityZ = 0
+    packet.yaw = 0
+    packet.pitch = 0
+    packet.headPitch = 0
     packet.field_149043_l = getWatcher(text, 200)
     packet
   }

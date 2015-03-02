@@ -38,7 +38,7 @@ class CommandBlockCommandSender(val wrapped: CommandBlockLogic) extends CommandS
    *
    * @return the senders username
    */
-  override def getName = wrapped.getName
+  override def getName = wrapped.getCustomName
 
   /**
    * Send a message to this sender.

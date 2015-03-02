@@ -132,7 +132,7 @@ object Teleporter {
     entity match {
       case p: EntityPlayerMP =>
         if(changingworlds){
-          p.mcServer.getConfigurationManager.func_72375_a(p, destWorld)
+          p.mcServer.getConfigurationManager.preparePlayer(p, destWorld)
         }
         p.playerNetServerHandler.setPlayerLocation(location.getX, location.getY, location.getZ, location.getYaw, location.getPitch)
       case _ =>
