@@ -5,7 +5,7 @@ import jk_5.eventbus.EventHandler
 import jk_5.nailed.api.chat._
 import jk_5.nailed.api.command.parametric.annotation.{Optional, Text}
 import jk_5.nailed.api.command.sender.{CommandSender, MapCommandSender, WorldCommandSender}
-import jk_5.nailed.api.command.{Require, Command, CommandException}
+import jk_5.nailed.api.command.{Command, CommandException, Require}
 import jk_5.nailed.api.event.RegisterCommandsEvent
 import jk_5.nailed.api.map.{GameWinnable, Map, Team}
 import jk_5.nailed.api.mappack.Mappack
@@ -63,7 +63,7 @@ class CommandPlugin {
   object ReloadCommand {
 
     @Command(aliases = Array("mappacks"), desc = "Reload mappacks")
-    @Require("admin")
+    @Require(Array("admin"))
     def reloadMappacks(){
       NailedMappackRegistry.reload()
     }
@@ -72,7 +72,7 @@ class CommandPlugin {
   object TeamCommand {
 
     @Command(aliases = Array("join"), desc = "Join a team")
-    @Require("admin")
+    @Require(Array("admin"))
     def difficulty(sender: MapCommandSender, player: Player, team: Team){
       val map = sender.getMap
       map.setPlayerTeam(player, team)
@@ -84,7 +84,7 @@ class CommandPlugin {
   object GameCommand {
 
     @Command(aliases = Array("start"), desc = "Starts the game in this map")
-    @Require("admin")
+    @Require(Array("admin"))
     def startgame(sender: WorldCommandSender){
       val map = sender.getWorld.getMap
       if(map == null) throw new CommandException("There is no game in this world")
@@ -102,7 +102,7 @@ class CommandPlugin {
     }
 
     @Command(aliases = Array("stop"), desc = "Stops the game in this map")
-    @Require("admin")
+    @Require(Array("admin"))
     def stopgame(sender: WorldCommandSender){
       val map = sender.getWorld.getMap
       if(map == null) throw new CommandException("There is no game in this world")
@@ -114,7 +114,7 @@ class CommandPlugin {
     }
 
     @Command(aliases = Array("setwinner"), desc = "Sets the winner")
-    @Require("admin")
+    @Require(Array("admin"))
     def stopgame(sender: MapCommandSender, winner: GameWinnable){
       sender.getMap.getGameManager.setWinner(winner)
     }
@@ -123,7 +123,7 @@ class CommandPlugin {
   object MapCommand {
 
     @Command(aliases = Array("load"), desc = "Loads a new map and registers it to the system")
-    @Require("admin")
+    @Require(Array("admin"))
     def startgame(platform: Platform, sender: CommandSender, mappack: Mappack){
       val future = platform.getMapLoader.createMapFor(mappack)
       future.addListener(new FutureListener[Map] {
@@ -139,7 +139,7 @@ class CommandPlugin {
   }
 
   @Command(aliases = Array("gamemode", "gm"), desc = "Change your gamemode", usage = "[mode] [target]")
-  @Require("admin")
+  @Require(Array("admin"))
   def gamemode(sender: CommandSender, @Optional mode: GameMode, @Optional target: Player){
     if(mode == null){
       sender match {
@@ -166,14 +166,14 @@ class CommandPlugin {
   }
 
   @Command(aliases = Array("difficulty"), desc = "Change the world difficulty")
-  @Require("admin")
+  @Require(Array("admin"))
   def difficulty(sender: WorldCommandSender, difficulty: Difficulty){
     sender.getWorld.setDifficulty(difficulty)
     sender.sendMessage(new ComponentBuilder("Set difficulty to " + difficulty.getName).color(ChatColor.GREEN).create(): _*)
   }
 
   @Command(aliases = Array("heal"), desc = "Heal yourself or another player")
-  @Require("admin")
+  @Require(Array("admin"))
   def heal(sender: CommandSender, @Optional target: Player){
     if(target == null){
       sender match {
@@ -186,7 +186,7 @@ class CommandPlugin {
   }
 
   @Command(aliases = Array("kick"), desc = "Kick a player")
-  @Require("admin")
+  @Require(Array("admin"))
   def kick(platform: Platform, sender: CommandSender, target: Player, @Optional @Text r: String){
     val reason = if(r == null) "No reason given" else r
     target.kick("Kicked by " + sender.getName + ". Reason: " + reason)
@@ -207,7 +207,7 @@ class CommandPlugin {
   }
 
   @Command(aliases = Array("toggledownfall"), desc = "Toggles rain")
-  @Require("admin")
+  @Require(Array("admin"))
   def toggledownfall(sender: WorldCommandSender){
     val world = sender.getWorld
     if(world.getWeather.isRaining){
@@ -220,7 +220,7 @@ class CommandPlugin {
   }
 
   @Command(aliases = Array("weather"), desc = "Changes the weather")
-  @Require("admin")
+  @Require(Array("admin"))
   def weather(sender: WorldCommandSender, weather: WeatherType){
     val world = sender.getWorld
     world.setWeather(weather)
@@ -228,7 +228,7 @@ class CommandPlugin {
   }
 
   @Command(aliases = Array("kill"), desc = "Kills a player")
-  @Require("admin")
+  @Require(Array("admin"))
   def kill(sender: CommandSender, target: Player){
     target.setHealth(0)
     sender.sendMessage(new ComponentBuilder("Killed " + target.getName).color(ChatColor.GREEN).create(): _*)
@@ -243,7 +243,7 @@ class CommandPlugin {
   }
 
   @Command(aliases = Array("statemitter"), desc = "Gives you an stat emitter")
-  @Require("admin")
+  @Require(Array("admin"))
   def startgame(sender: CommandSender, @Optional statName: String){
     val p = sender match {
       case p: Player => p

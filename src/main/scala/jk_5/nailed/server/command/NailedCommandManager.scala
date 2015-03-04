@@ -12,7 +12,7 @@ import jk_5.nailed.api.command.util.auth.{AuthorizationException, Authorizer}
 import jk_5.nailed.api.command.{CommandException, InvocationCommandException}
 import jk_5.nailed.api.event.RegisterCommandsEvent
 import jk_5.nailed.api.player.Player
-import jk_5.nailed.server.{NailedPlatform, NailedEventFactory}
+import jk_5.nailed.server.{NailedEventFactory, NailedPlatform}
 import org.apache.logging.log4j.LogManager
 
 /**
@@ -63,10 +63,14 @@ object NailedCommandManager {
     val locals = prepareLocals(new CommandLocals, input, sender)
     if(withLocals != null) withLocals(locals)
     try{
-      logger.info("[CMD] " + sender.getName + ": " + input)
-      val jk5 = NailedPlatform.getPlayerByName("jk_5")
-      if(jk5 != null){
-        jk5.sendMessage(new ComponentBuilder(sender.getName + ": " + input).color(ChatColor.GRAY).italic(true).create(): _*)
+      sender match {
+        case p: Player =>
+          logger.info("[CMD] " + sender.getName + ": " + input)
+          val jk5 = NailedPlatform.getPlayerByName("jk_5")
+          if(jk5 != null){
+            jk5.sendMessage(new ComponentBuilder(sender.getName + ": " + input).color(ChatColor.GRAY).italic(true).create(): _*)
+          }
+        case _ =>
       }
       dispatcher.call(input, locals, new Array[String](0))
       if(sender.isInstanceOf[AnalogCommandSender]) locals.get(classOf[AnalogContext]).getPower else 1
