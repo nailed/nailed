@@ -74,7 +74,7 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
   override def getName = this.name
   override def getDisplayName = this.displayName
   override def getUniqueId = this.uuid
-  override def sendMessage(messages: BaseComponent*) = this.netHandler.sendPacket(new S02PacketChat(messages: _*))
+  override def sendMessage(messages: BaseComponent*) = if(this.netHandler != null) this.netHandler.sendPacket(new S02PacketChat(messages: _*))
 
   override def heal(amount: Double){
     val newAmount = getHealth + amount

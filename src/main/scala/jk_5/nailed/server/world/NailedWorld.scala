@@ -25,6 +25,8 @@ import jk_5.nailed.api.mappack.metadata.MappackWorld
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.world._
 import jk_5.nailed.server.map.gamerule.WrappedEditableGameRules
+import jk_5.nailed.server.player.NailedPlayer
+import net.minecraft.network.play.server.S41PacketServerDifficulty
 import net.minecraft.world.{EnumDifficulty, WorldServer}
 
 import scala.collection.mutable
@@ -68,6 +70,7 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
     println("Player " + player.toString + " joined world " + this.toString)
     playerSet += player
     players = playerSet.toArray
+    player.asInstanceOf[NailedPlayer].sendPacket(new S41PacketServerDifficulty(wrapped.getDifficulty, false))
     if(this.getConfig.resourcePackUrl() != null){
       player.loadResourcePack(this.getConfig.resourcePackUrl(), "") //TODO: fix hash
     }
@@ -107,7 +110,9 @@ class NailedWorld(var wrapped: WorldServer, val context: WorldContext = null) ex
 
   override def getDifficulty = Difficulty.byId(wrapped.getDifficulty.getDifficultyId)
   override def setDifficulty(difficulty: Difficulty){
-    this.wrapped.getWorldInfo.setDifficulty(EnumDifficulty.getDifficultyEnum(difficulty.getId))
+    val diff = EnumDifficulty.getDifficultyEnum(difficulty.getId)
+    this.wrapped.getWorldInfo.setDifficulty(diff)
+    this.players.map(_.asInstanceOf[NailedPlayer]).foreach(_.sendPacket(new S41PacketServerDifficulty(diff, false)))
     difficulty match {
       case Difficulty.HARD | Difficulty.NORMAL | Difficulty.EASY => wrapped.setAllowedSpawnTypes(true, true)
       case Difficulty.PEACEFUL => wrapped.setAllowedSpawnTypes(false, true)

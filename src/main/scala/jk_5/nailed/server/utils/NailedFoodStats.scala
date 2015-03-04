@@ -109,4 +109,5 @@ class NailedFoodStats extends FoodStats {
   override def getSaturationLevel = this.saturation
   override def getFoodLevel = this.foodLevel
   override def needFood = this.foodLevel < 20
+  override def setFoodLevel(foodLevel: Int) = this.foodLevel = foodLevel
 }

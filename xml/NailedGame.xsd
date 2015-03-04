@@ -40,6 +40,30 @@
                     <xs:documentation source="description">Declares the version config file</xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="disableDamage" minOccurs="0" maxOccurs="1" type="xs:boolean" default="true">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">True if the damage in this world should be disabled. False otherwise</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableFood" minOccurs="0" maxOccurs="1" type="xs:boolean" default="true">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">True if the hunger in this world should be disabled. False otherwise</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableBlockBreaking" minOccurs="0" maxOccurs="1" type="xs:boolean" default="false">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">True if block breaking in this world should be disabled. False otherwise</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="disableBlockPlacement" minOccurs="0" maxOccurs="1" type="xs:boolean" default="false">
+                <xs:annotation>
+                    <xs:documentation source="version">1.0.0</xs:documentation>
+                    <xs:documentation source="description">True if block placement in this world should be disabled. False otherwise</xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="objective" minOccurs="0" maxOccurs="1" type="xs:string">
                 <xs:annotation>
                     <xs:documentation source="version">1.0.0</xs:documentation>
