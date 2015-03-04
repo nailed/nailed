@@ -471,6 +471,10 @@
             <xs:element name="id" minOccurs="1" type="xs:string"/>
             <xs:element name="name" minOccurs="1" type="xs:string"/>
             <xs:element name="color" minOccurs="1" type="xs:string"/>
+            <xs:element name="friendlyFire" minOccurs="0" type="xs:boolean" default="true"/>
+            <xs:element name="friendlyInvisiblesInvisible" minOccurs="0" type="xs:boolean" default="true"/>
+            <xs:element name="nameTagsVisible" minOccurs="0" type="xs:string" default="always"/>
+            <xs:element name="deathMessagesVisible" minOccurs="0" type="xs:string" default="always"/>
         </xs:all>
     </xs:complexType>
 </xs:schema>

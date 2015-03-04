@@ -20,6 +20,7 @@ package jk_5.nailed.server.mappack.metadata.xml
 import jk_5.nailed.api.chat.ChatColor
 import jk_5.nailed.api.mappack.MappackConfigurationException
 import jk_5.nailed.api.mappack.metadata.MappackTeam
+import jk_5.nailed.api.scoreboard.Visibility
 import org.jdom2.Element
 
 /**
@@ -35,6 +36,10 @@ class XmlMappackTeam(element: Element) extends MappackTeam {
   override val id = element.getChild("id", element.getNamespace).getText
   override val name = element.getChild("name", element.getNamespace).getText
   override val color = ChatColor.getByName(element.getChild("color", element.getNamespace).getText)
+  override val isFriendlyFire = if(element.getChild("friendlyFire", element.getNamespace) != null) element.getChild("friendlyFire", element.getNamespace).getText.equalsIgnoreCase("true") else true
+  override val areFriendlyInvisiblesInvisible = if(element.getChild("friendlyInvisiblesInvisible", element.getNamespace) != null) element.getChild("friendlyInvisiblesInvisible", element.getNamespace).getText.equalsIgnoreCase("true") else true
+  override val getNameTagVisibility = if(element.getChild("nameTagsVisible", element.getNamespace) != null) Visibility.getByName(element.getChild("nameTagsVisible", element.getNamespace).getText) else Visibility.ALWAYS
+  override val getDeathMessageVisibility = if(element.getChild("deathMessagesVisible", element.getNamespace) != null) Visibility.getByName(element.getChild("deathMessagesVisible", element.getNamespace).getText) else Visibility.ALWAYS
 
   if(color == null) throw new MappackConfigurationException("Invalid team color '" + element.getChild("color", element.getNamespace).getText + "'. Color does not exist")
 }
