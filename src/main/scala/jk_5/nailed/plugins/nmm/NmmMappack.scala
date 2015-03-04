@@ -64,4 +64,6 @@ class NmmMappack(path: String) extends Mappack {
   }
 
   override def getMappackMount = new DirectoryMount(new File(new File(dir, ".data"), "scripts"))
+
+  override def toString = s"NmmMappack{id=$getId,dir=$dir}"
 }
