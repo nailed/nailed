@@ -69,6 +69,7 @@ object NailedMappackRegistry extends MappackRegistry {
     logger.info("Reloading mappacks")
     mappacks.clear()
     NailedEventFactory.fireEvent(new RegisterMappacksEvent(NailedMappackRegistry, NailedMapLoader))
+    NailedMapLoader.checkLobbyMappack()
   }
 }
 

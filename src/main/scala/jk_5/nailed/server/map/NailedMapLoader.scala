@@ -28,6 +28,7 @@ import jk_5.nailed.api.map.{Map, MapLoader}
 import jk_5.nailed.api.mappack.{Mappack, MappackLoadingFailedException}
 import jk_5.nailed.api.world.{WorldContext, WorldProvider}
 import jk_5.nailed.server.event.{EntityDamageEvent, EntityFallEvent}
+import jk_5.nailed.server.mappack.NailedMappackRegistry
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.{NailedEventFactory, NailedPlatform}
 import net.minecraft.entity.player.EntityPlayerMP
@@ -51,7 +52,11 @@ object NailedMapLoader extends MapLoader {
   private val logger = LogManager.getLogger
   private val mapsDir = new File("maps")
 
-  override def setLobbyMappack(mappack: Mappack): Boolean = {
+  def checkLobbyMappack(){
+    setLobbyMappack(NailedMappackRegistry.getByName(NailedPlatform.config.getString("lobbyMappack")))
+  }
+
+  def setLobbyMappack(mappack: Mappack): Boolean = {
     logger.info("Lobby mappack was set to {}", mappack)
     if(this.lobbyMappack != null) false
     else{

@@ -60,12 +60,7 @@ class DirectoryMappackLoaderPlugin {
 
           if(metadata != null){
             val mappack = new DirectoryMappack(file, metadata)
-            if(event.registerMappack(mappack)){
-              i += 1
-              if(mappack.getId == "lobby"){
-                event.setLobbyMappack(mappack)
-              }
-            }
+            if(event.registerMappack(mappack)) i += 1
           }
         }catch{
           case e: MappackConfigurationException =>

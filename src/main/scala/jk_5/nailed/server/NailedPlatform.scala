@@ -82,6 +82,7 @@ object NailedPlatform
     this.getPluginManager.loadPlugins(this.pluginsDir)
 
     NailedEventFactory.fireEvent(new RegisterMappacksEvent(NailedMappackRegistry, NailedMapLoader))
+    NailedMapLoader.checkLobbyMappack()
     NailedCommandManager.registerPluginCommands()
   }
 
