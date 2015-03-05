@@ -17,11 +17,13 @@ import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.mappack.NailedMappackRegistry
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.tweaker.NailedVersion
-import jk_5.nailed.server.utils.NBTUtils
+import jk_5.nailed.server.utils.{InventoryOtherPlayer, NBTUtils}
 import net.minecraft.command._
 import net.minecraft.command.server._
 import net.minecraft.init.Blocks
+import net.minecraft.inventory.ContainerChest
 import net.minecraft.item.ItemStack
+import net.minecraft.network.play.server.S2DPacketOpenWindow
 
 /**
  * No description given
@@ -258,5 +260,23 @@ class CommandPlugin {
       NBTUtils.addLore(is, statName)
     }
     p.asInstanceOf[NailedPlayer].getEntity.inventory.addItemStackToInventory(is)
+  }
+
+  @Command(aliases = Array("invsee"), desc = "Look at the inventory of another player")
+  @Require(Array("admin"))
+  def invsee(sender: CommandSender, player: Player){
+    val p = sender match {
+      case p: Player => p.asInstanceOf[NailedPlayer]
+      case _ => throw new CommandException("You are not a player")
+    }
+    val entity = p.getEntity
+    if(entity.openContainer != entity.inventoryContainer) entity.closeScreen()
+    entity.getNextWindowId()
+
+    val chest = new InventoryOtherPlayer(player.asInstanceOf[NailedPlayer].getEntity, entity)
+    entity.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(entity.currentWindowId, "minecraft:container", chest.getDisplayName, chest.getSizeInventory))
+    entity.openContainer = new ContainerChest(entity.inventory, chest, entity)
+    entity.openContainer.windowId = entity.currentWindowId
+    entity.openContainer.onCraftGuiOpened(entity)
   }
 }

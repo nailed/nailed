@@ -18,7 +18,7 @@ import jk_5.nailed.server.plugin.NailedPluginManager
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.tileentity.{OldStatEmitterConverter, TileEntityStatEmitter}
 import jk_5.nailed.server.tweaker.NailedTweaker
-import jk_5.nailed.server.utils.NailedPlayerSelector
+import jk_5.nailed.server.utils.{InvSeeTicker, NailedPlayerSelector}
 import jk_5.nailed.server.world.{BossBar, DimensionManagerTrait, WorldProviders}
 import jk_5.nailed.server.worlditems.WorldItemEventHandler
 import net.minecraft.command.CommandBase
@@ -53,6 +53,7 @@ object NailedPlatform
     globalEventBus.register(NailedMapLoader)
     globalEventBus.register(BossBar)
     globalEventBus.register(WorldItemEventHandler)
+    globalEventBus.register(InvSeeTicker)
   }else{
     logger.info("------------------")
     logger.info("WRONG CLASSLOADER!")
