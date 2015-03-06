@@ -16,6 +16,7 @@ import jk_5.nailed.server.mappack.NailedMappackRegistry
 import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.plugin.NailedPluginManager
 import jk_5.nailed.server.scheduler.NailedScheduler
+import jk_5.nailed.server.teamspeak.TeamspeakManager
 import jk_5.nailed.server.tileentity.{OldStatEmitterConverter, TileEntityStatEmitter}
 import jk_5.nailed.server.tweaker.NailedTweaker
 import jk_5.nailed.server.utils.{InvSeeTicker, NailedPlayerSelector}
@@ -89,6 +90,7 @@ object NailedPlatform
 
   def load(server: DedicatedServer){
     this.getPluginManager.enablePlugins()
+    TeamspeakManager.start()
   }
 
   override def getPluginManager = NailedPluginManager

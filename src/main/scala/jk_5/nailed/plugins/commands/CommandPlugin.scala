@@ -279,4 +279,9 @@ class CommandPlugin {
     entity.openContainer.windowId = entity.currentWindowId
     entity.openContainer.onCraftGuiOpened(entity)
   }
+
+  @Command(aliases = Array("teamspeak", "ts"), desc = "Information about the teamspeak server")
+  def teamspeak(sender: CommandSender, @Optional statName: String): Unit ={
+
+  }
 }
