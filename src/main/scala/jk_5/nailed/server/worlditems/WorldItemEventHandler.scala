@@ -56,7 +56,7 @@ object WorldItemEventHandler {
       i += 1
     }*/ //TODO
     tutorialStage.remove(event.getPlayer)
-    event.getPlayer.setAllowedToFly(false)
+    event.getPlayer.setAllowedToFly(false) //TODO don't set this to false if the player is creative or was allowed to fly
   }
 
   @EventHandler

@@ -123,6 +123,10 @@ class NailedPlayer(private val uuid: UUID, private var name: String) extends Pla
 
   override def teleportTo(world: World){
     Teleporter.teleportPlayer(this, new TeleportOptions(if(world.getConfig != null) Location.builder().copy(world.getConfig.spawnPoint()).setWorld(world).build() else new Location(world, 0, 64, 0)))
+    //TODO: maybe move this to a per-world inventory system
+    this.clearInventory()
+    this.setGameMode(GameMode.ADVENTURE)
+    this.setAllowedToFly(false)
   }
 
   def getEntity = this.entity
