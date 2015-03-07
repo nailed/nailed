@@ -20,6 +20,7 @@ package jk_5.nailed.server.map
 import java.io.File
 import java.util.Collections
 
+import jk_5.nailed.api.GameMode
 import jk_5.nailed.api.chat.BaseComponent
 import jk_5.nailed.api.map.Map
 import jk_5.nailed.api.mappack.Mappack
@@ -73,6 +74,12 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
     playerSet -= player
     getScoreboardManager.onPlayerLeft(player)
     this.playerLeft(player)
+
+    //TODO: move this to a per-map inventory system
+    //See https://github.com/nailed/nailed/issues/50
+    player.clearInventory()
+    player.setGameMode(GameMode.ADVENTURE)
+    player.setAllowedToFly(false)
   }
 
   override def broadcastChatMessage(message: BaseComponent*) = playerSet.foreach(_.sendMessage(message: _*))
