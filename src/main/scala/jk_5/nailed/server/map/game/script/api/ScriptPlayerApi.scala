@@ -35,4 +35,5 @@ class ScriptPlayerApi(private[this] val player: NailedPlayer) {
   def setHealth(health: Double) = player.setHealth(health)
   def setHunger(hunger: Double) = player.setHunger(hunger)
   def setLevel(level: Int) = player.setLevel(level)
+  def setAllowedToFly(allowedToFly: Boolean) = player.setAllowedToFly(allowedToFly)
 }
