@@ -39,7 +39,7 @@ object ScriptingEngine {
     scope.delete("net")
     scope.delete("eval")
 
-    scope.put("map", scope, new javascript.NativeJavaObject(scope, new ScriptMapApi(engine.manager.map), classOf[ScriptMapApi]))
+    scope.put("map", scope, new javascript.NativeJavaObject(scope, new ScriptMapApi(engine.manager.map, context, scope), classOf[ScriptMapApi]))
     scope.put("sleep", scope, new NativeJavaMethod(classOf[Thread].getDeclaredMethod("sleep", java.lang.Long.TYPE), "sleep"))
     scope.put("BaseComponent", scope, new NativeJavaClass(scope, classOf[BaseComponent]))
     scope.put("ChatColor", scope, new NativeJavaClass(scope, classOf[ChatColor]))

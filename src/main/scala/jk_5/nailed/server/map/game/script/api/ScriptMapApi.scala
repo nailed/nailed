@@ -7,6 +7,7 @@ import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.map.NailedMap
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedWorld
+import org.mozilla.javascript.{Context, ScriptableObject}
 
 import scala.collection.convert.wrapAsScala._
 
@@ -15,7 +16,7 @@ import scala.collection.convert.wrapAsScala._
  *
  * @author jk-5
  */
-class ScriptMapApi(private[this] val map: NailedMap) {
+class ScriptMapApi(private[this] val map: NailedMap, private[this] val context: Context, private[this] val scope: ScriptableObject) {
 
   private[this] val scoreboard = new ScriptScoreboardApi(this, map)
 
@@ -52,7 +53,7 @@ class ScriptMapApi(private[this] val map: NailedMap) {
   }
 
   def getTeam(name: String): ScriptTeamApi = {
-    new ScriptTeamApi(map.getTeam(name))
+    new ScriptTeamApi(map.getTeam(name), context, scope)
   }
 
   def setUnreadyInterrupt(unreadyInterrupt: Boolean) = map.getGameManager.unreadyInterrupt = unreadyInterrupt

@@ -4,6 +4,7 @@ import jk_5.nailed.api.chat.{BaseComponent, ChatColor, TextComponent}
 import jk_5.nailed.api.map.Team
 import jk_5.nailed.api.util.{Location, TitleMessage}
 import jk_5.nailed.server.player.NailedPlayer
+import org.mozilla.javascript.{Context, Function, ScriptableObject}
 
 import scala.collection.convert.wrapAsScala._
 
@@ -12,13 +13,17 @@ import scala.collection.convert.wrapAsScala._
  *
  * @author jk-5
  */
-class ScriptTeamApi(private[this] val team: Team) {
+class ScriptTeamApi(private[this] val team: Team, private[this] val context: Context, private[this] val scope: ScriptableObject) {
 
   def getId = team.id()
   def getName = team.name()
 
   def getPlayers: Array[ScriptPlayerApi] = {
     team.members.map(p => new ScriptPlayerApi(p.asInstanceOf[NailedPlayer])).toArray
+  }
+
+  def forEachPlayer(function: Function){
+    team.members.map(p => new ScriptPlayerApi(p.asInstanceOf[NailedPlayer])).foreach(p => function.call(context, scope, scope, Array(p)))
   }
 
   def broadcastChat(msg: String) = team.members().foreach(_.sendMessage(new TextComponent(msg)))
