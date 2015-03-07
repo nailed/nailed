@@ -84,6 +84,16 @@ class CommandPlugin {
       val msg = new ComponentBuilder(s"Player ").color(ChatColor.GREEN).append(player.getName).append(" is now in team ").append(team.name).color(team.color).create()
       map.broadcastChatMessage(msg: _*)
     }
+
+    @Command(aliases = Array("remove"), desc = "Remove a player from its team")
+    @Require(Array("admin"))
+    def difficulty(sender: MapCommandSender, player: Player){
+      val map = sender.getMap
+      val team = map.getPlayerTeam(player)
+      map.setPlayerTeam(player, null)
+      val msg = new ComponentBuilder(s"Player ").color(ChatColor.GREEN).append(player.getName).append(" is no longer in team ").append(team.name).color(team.color).create()
+      map.broadcastChatMessage(msg: _*)
+    }
   }
 
   object GameCommand {
