@@ -1,10 +1,13 @@
 package jk_5.nailed.server.map.game.script.api
 
+import java.util.concurrent.TimeUnit
+
 import jk_5.nailed.api.chat.{BaseComponent, ChatColor, TextComponent}
 import jk_5.nailed.api.map.Team
 import jk_5.nailed.api.util.{Location, TitleMessage}
+import jk_5.nailed.server.map.game.script.ScriptingEngine
 import jk_5.nailed.server.player.NailedPlayer
-import org.mozilla.javascript.{Context, Function, ScriptableObject}
+import org.mozilla.javascript.Function
 
 import scala.collection.convert.wrapAsScala._
 
@@ -13,7 +16,7 @@ import scala.collection.convert.wrapAsScala._
  *
  * @author jk-5
  */
-class ScriptTeamApi(private[this] val team: Team, private[this] val context: Context, private[this] val scope: ScriptableObject) {
+class ScriptTeamApi(private[this] val team: Team, private[api] val engine: ScriptingEngine) {
 
   def getId = team.id()
   def getName = team.name()
@@ -23,7 +26,7 @@ class ScriptTeamApi(private[this] val team: Team, private[this] val context: Con
   }
 
   def forEachPlayer(function: Function){
-    team.members.map(p => new ScriptPlayerApi(p.asInstanceOf[NailedPlayer])).foreach(p => function.call(context, scope, scope, Array(p)))
+    team.members.map(p => new ScriptPlayerApi(p.asInstanceOf[NailedPlayer])).foreach(p => function.call(engine.context, engine.scope, engine.scope, Array(p)))
   }
 
   def broadcastChat(msg: String) = team.members().foreach(_.sendMessage(new TextComponent(msg)))
@@ -43,10 +46,11 @@ class ScriptTeamApi(private[this] val team: Team, private[this] val context: Con
 
   def clearSubtitle() = team.members().foreach(_.clearSubtitle())
 
-  def countdown(seconds: Int){
+  def countdown(seconds: Int, callback: Function){
     val builder = TitleMessage.builder().setFadeInTime(0).setDisplayTime(1).setFadeOutTime(30)
     var ellapsed = 0
-    do{
+
+    def tick(){
       val comp = new TextComponent((seconds - ellapsed).toString)
       if(seconds - ellapsed == 5) comp.setColor(ChatColor.YELLOW)
       if(seconds - ellapsed == 4) comp.setColor(ChatColor.GOLD)
@@ -54,12 +58,29 @@ class ScriptTeamApi(private[this] val team: Team, private[this] val context: Con
       val msg = builder.setTitle(comp).build()
       team.members.foreach(_.displayTitle(msg))
       ellapsed += 1
-      Thread.sleep(1000)
-    }while(ellapsed < seconds)
-    val comp = new TextComponent("GO")
-    comp.setColor(ChatColor.GREEN)
-    val msg = builder.setTitle(comp).build()
-    team.members.foreach(_.displayTitle(msg))
+      if(ellapsed < seconds){
+        engine.executor.schedule(new Runnable {
+          def run() = tick()
+        }, 1, TimeUnit.SECONDS)
+      }else{
+        engine.executor.schedule(new Runnable {
+          def run(){
+            val comp = new TextComponent("GO")
+            comp.setColor(ChatColor.GREEN)
+            val msg = builder.setTitle(comp).build()
+            team.members.foreach(_.displayTitle(msg))
+            try{
+              callback.call(engine.context, engine.scope, engine.scope, new Array[AnyRef](0))
+            }catch{
+              case e: Exception =>
+                e.printStackTrace()
+            }
+          }
+        }, 1, TimeUnit.SECONDS)
+      }
+    }
+
+    tick()
   }
 
   def setSpawn(x: Double, y: Double, z: Double){

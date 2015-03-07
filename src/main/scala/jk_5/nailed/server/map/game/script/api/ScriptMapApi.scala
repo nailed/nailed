@@ -1,22 +1,22 @@
 package jk_5.nailed.server.map.game.script.api
 
+import java.util.concurrent.TimeUnit
+
 import jk_5.nailed.api.chat.{BaseComponent, ChatColor, TextComponent}
 import jk_5.nailed.api.map.stat.ModifiableStat
 import jk_5.nailed.api.util.TitleMessage
 import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.map.NailedMap
+import jk_5.nailed.server.map.game.script.ScriptingEngine
 import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.world.NailedWorld
-import org.mozilla.javascript.{Context, ScriptableObject}
+import org.mozilla.javascript.Function
 
 import scala.collection.convert.wrapAsScala._
 
-/**
- * No description given
- *
- * @author jk-5
- */
-class ScriptMapApi(private[this] val map: NailedMap, private[this] val context: Context, private[this] val scope: ScriptableObject) {
+class ScriptMapApi(private[this] val map: NailedMap, private[api] val engine: ScriptingEngine) extends EventEmitter {
+
+  map.eventEmitter = this
 
   private[this] val scoreboard = new ScriptScoreboardApi(this, map)
 
@@ -53,16 +53,17 @@ class ScriptMapApi(private[this] val map: NailedMap, private[this] val context: 
   }
 
   def getTeam(name: String): ScriptTeamApi = {
-    new ScriptTeamApi(map.getTeam(name), context, scope)
+    new ScriptTeamApi(map.getTeam(name), engine)
   }
 
   def setUnreadyInterrupt(unreadyInterrupt: Boolean) = map.getGameManager.unreadyInterrupt = unreadyInterrupt
   def setWinInterrupt(winInterrupt: Boolean) = map.getGameManager.winInterrupt = winInterrupt
 
-  def countdown(seconds: Int){
+  def countdown(seconds: Int, callback: Function){
     val builder = TitleMessage.builder().setFadeInTime(0).setDisplayTime(1).setFadeOutTime(30)
     var ellapsed = 0
-    do{
+
+    def tick(){
       val comp = new TextComponent((seconds - ellapsed).toString)
       if(seconds - ellapsed == 5) comp.setColor(ChatColor.YELLOW)
       if(seconds - ellapsed == 4) comp.setColor(ChatColor.GOLD)
@@ -70,12 +71,24 @@ class ScriptMapApi(private[this] val map: NailedMap, private[this] val context: 
       val msg = builder.setTitle(comp).build()
       map.players.foreach(_.displayTitle(msg))
       ellapsed += 1
-      Thread.sleep(1000)
-    }while(ellapsed < seconds)
-    val comp = new TextComponent("GO")
-    comp.setColor(ChatColor.GREEN)
-    val msg = builder.setTitle(comp).build()
-    map.players.foreach(_.displayTitle(msg))
+      if(ellapsed < seconds){
+        engine.executor.schedule(new Runnable {
+          def run() = tick()
+        }, 1, TimeUnit.SECONDS)
+      }else{
+        engine.executor.schedule(new Runnable {
+          def run(){
+            val comp = new TextComponent("GO")
+            comp.setColor(ChatColor.GREEN)
+            val msg = builder.setTitle(comp).build()
+            map.players.foreach(_.displayTitle(msg))
+            callback.call(engine.context, engine.scope, engine.scope, new Array[AnyRef](0))
+          }
+        }, 1, TimeUnit.SECONDS)
+      }
+    }
+
+    tick()
   }
 
   def broadcastSubtitle(msg: String) = map.players.foreach(_.displaySubtitle(new TextComponent(msg)))

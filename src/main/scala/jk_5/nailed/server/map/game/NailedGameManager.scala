@@ -9,6 +9,8 @@ import jk_5.nailed.api.util.TitleMessage
 import jk_5.nailed.server.NailedPlatform
 import jk_5.nailed.server.map.NailedMap
 import jk_5.nailed.server.map.game.script.ScriptingEngine
+import jk_5.nailed.server.map.game.script.api.{ScriptPlayerApi, ScriptTeamApi}
+import jk_5.nailed.server.player.NailedPlayer
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.convert.wrapAsScala._
@@ -97,6 +99,10 @@ class NailedGameManager(val map: NailedMap) extends GameManager {
     map.broadcastChatMessage(new ComponentBuilder(winner.getName + " won the game").color(ChatColor.GOLD).create(): _*)
     onEnded(success = true)
     map.getStatManager.fireEvent(new StatEvent("gameHasWinner", true))
+    map.eventEmitter.emit("gameDone", winner match {
+      case p: Player => new ScriptPlayerApi(p.asInstanceOf[NailedPlayer])
+      case t: Team => new ScriptTeamApi(t, scriptingEngine)
+    })
     if(winInterrupt){
       scriptingEngine.kill()
     }

@@ -27,7 +27,9 @@ import jk_5.nailed.api.mappack.Mappack
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.world.World
 import jk_5.nailed.server.map.game.NailedGameManager
+import jk_5.nailed.server.map.game.script.api.{EventEmitter, ScriptPlayerApi}
 import jk_5.nailed.server.map.stat.NailedStatManager
+import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.scoreboard.MapScoreboardManager
 
 import scala.collection.mutable
@@ -44,6 +46,7 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
   override val getGameManager = new NailedGameManager(this)
   override val getStatManager = new NailedStatManager(this)
   var defaultWorld: World = null
+  var eventEmitter: EventEmitter = null
 
   this.init() //Init the TeamManager
 
@@ -68,18 +71,23 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
     playerSet += player
     getScoreboardManager.onPlayerJoined(player)
     this.playerJoined(player)
+    if(eventEmitter != null) eventEmitter.emit("playerJoinedMap", new ScriptPlayerApi(player.asInstanceOf[NailedPlayer]))
   }
 
   def onPlayerLeft(player: Player){
     playerSet -= player
     getScoreboardManager.onPlayerLeft(player)
     this.playerLeft(player)
+    if(eventEmitter != null) eventEmitter.emit("playerLeftMap", new ScriptPlayerApi(player.asInstanceOf[NailedPlayer]))
 
     //TODO: move this to a per-map inventory system
     //See https://github.com/nailed/nailed/issues/50
     player.clearInventory()
     player.setGameMode(GameMode.ADVENTURE)
     player.setAllowedToFly(false)
+    player.clearTitle()
+    player.clearSubtitle()
+    player.clearAllEffects()
   }
 
   override def broadcastChatMessage(message: BaseComponent*) = playerSet.foreach(_.sendMessage(message: _*))

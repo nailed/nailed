@@ -1,7 +1,9 @@
 package jk_5.nailed.server.map.game.script
 
 import java.io.InputStreamReader
+import java.util.concurrent.{Executors, ScheduledFuture, TimeUnit}
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder
 import jk_5.nailed.api.GameMode
 import jk_5.nailed.api.chat._
 import jk_5.nailed.api.scoreboard.DisplayType
@@ -39,8 +41,7 @@ object ScriptingEngine {
     scope.delete("net")
     scope.delete("eval")
 
-    scope.put("map", scope, new javascript.NativeJavaObject(scope, new ScriptMapApi(engine.manager.map, context, scope), classOf[ScriptMapApi]))
-    scope.put("sleep", scope, new NativeJavaMethod(classOf[Thread].getDeclaredMethod("sleep", java.lang.Long.TYPE), "sleep"))
+    scope.put("map", scope, new javascript.NativeJavaObject(scope, new ScriptMapApi(engine.manager.map, engine), classOf[ScriptMapApi]))
     scope.put("BaseComponent", scope, new NativeJavaClass(scope, classOf[BaseComponent]))
     scope.put("ChatColor", scope, new NativeJavaClass(scope, classOf[ChatColor]))
     scope.put("ClickEvent", scope, new NativeJavaClass(scope, classOf[ClickEvent]))
@@ -84,6 +85,28 @@ object ScriptingEngine {
       }
     }, ScriptableObject.DONTENUM)
 
+    scope.defineProperty("setTimeout", new BaseFunction{
+      override def call(cx: Context, scope: Scriptable, thisObj: Scriptable, args: Array[AnyRef]): AnyRef = {
+        val func = args(0).asInstanceOf[Function]
+        val timeout = args(1).asInstanceOf[java.lang.Integer].longValue()
+        println("Scheduled timeout")
+        engine.executor.schedule(new Runnable {
+          def run(){
+            println("Hit timeout")
+            func.call(cx, scope, scope, new Array[AnyRef](0))
+          }
+        }, timeout, TimeUnit.SECONDS)
+      }
+    }, ScriptableObject.DONTENUM)
+
+    scope.defineProperty("clearTimeout", new BaseFunction{
+      override def call(cx: Context, scope: Scriptable, thisObj: Scriptable, args: Array[AnyRef]): AnyRef = {
+        println("Cleared timeout")
+        args(0).asInstanceOf[ScheduledFuture[_]].cancel(false)
+        java.lang.Boolean.TRUE
+      }
+    }, ScriptableObject.DONTENUM)
+
     (context, scope, libraryScope)
   }
 }
@@ -96,6 +119,7 @@ class ScriptingEngine(val manager: NailedGameManager) {
   var libraryScope: ScriptableObject = null
   var script: Script = null
   var thread: Thread = null
+  val executor = Executors.newScheduledThreadPool(1, new ThreadFactoryBuilder().setDaemon(true).setNameFormat("ScriptEngine-" + manager.map.id + (if(manager.map.mappack != null) "-" + manager.map.mappack.getId else "")).setPriority(3).build())
 
   def start(): Boolean = {
     if(fileSystem != null){
@@ -115,7 +139,7 @@ class ScriptingEngine(val manager: NailedGameManager) {
       return false
     }
 
-    thread = newThread(new Runnable {
+    executor.execute(new Runnable {
       override def run(){
         val s = ScriptingEngine.getScopes(ScriptingEngine.this)
         context = s._1
@@ -133,25 +157,16 @@ class ScriptingEngine(val manager: NailedGameManager) {
             map.broadcastChatMessage(new ComponentBuilder("The script engine has crashed. The game will be stopped").color(ChatColor.RED).create(): _*)
             logger.fatal("Exception while executing game script. Script engine crashed", e)
         }finally{
-          manager.onEnded(success)
+          //manager.onEnded(success)
         }
       }
     })
-    thread.start()
     true
   }
 
   def kill(){
-    thread.stop()
+    //TODO: Stop any pending futures
     fileSystem.unload()
     fileSystem = null
-  }
-
-  private def newThread(r: Runnable): Thread = {
-    val t = new Thread(r)
-    t.setName("ScriptEngine-" + manager.map.id + (if(manager.map.mappack != null) "-" + manager.map.mappack.getId else ""))
-    t.setDaemon(true)
-    t.setPriority(3)
-    t
   }
 }
