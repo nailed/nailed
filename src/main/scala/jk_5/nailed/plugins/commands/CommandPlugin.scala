@@ -24,6 +24,7 @@ import net.minecraft.init.Blocks
 import net.minecraft.inventory.ContainerChest
 import net.minecraft.item.ItemStack
 import net.minecraft.network.play.server.S2DPacketOpenWindow
+import org.apache.logging.log4j.LogManager
 
 /**
  * No description given
@@ -32,6 +33,8 @@ import net.minecraft.network.play.server.S2DPacketOpenWindow
  */
 @Plugin(id = "Nailed|Commands", name = "Nailed Commands", version = "1.0.0")
 class CommandPlugin {
+
+  val logger = LogManager.getLogger
 
   @EventHandler
   def registerCommands(event: RegisterCommandsEvent){
@@ -91,15 +94,15 @@ class CommandPlugin {
       val map = sender.getWorld.getMap
       if(map == null) throw new CommandException("There is no game in this world")
       val manager = map.getGameManager
-      if(manager.isGameRunning) throw new CommandException("A game is already running")
-      if(manager.startGame()){
+      val startResult = manager.startGame()
+      if(startResult.isSuccess){
         sender.sendMessage(new ComponentBuilder("Started the game").color(ChatColor.GREEN).create(): _*)
       }else{
-        if(manager.hasCustomGameType){
-          throw new CommandException("Could not start the game. An error has occurred in the GameType")
-        }else{
-          throw new CommandException("Could not start the game. No game.js was found")
+        if(startResult.getCause != null){
+          logger.info("Game in " + map + " could not be started because of an exception")
+          logger.info(startResult.getError, startResult.getCause)
         }
+        throw new CommandException(startResult.getError, startResult.getCause)
       }
     }
 

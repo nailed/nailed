@@ -3,7 +3,7 @@ package jk_5.nailed.server.map.game
 import com.google.common.collect.ImmutableMap
 import jk_5.nailed.api.chat.{ChatColor, ComponentBuilder}
 import jk_5.nailed.api.map.stat.StatEvent
-import jk_5.nailed.api.map.{GameManager, GameWinnable, Team}
+import jk_5.nailed.api.map.{GameManager, GameStartResult, GameWinnable, Team}
 import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.util.TitleMessage
 import jk_5.nailed.server.NailedPlatform
@@ -12,6 +12,7 @@ import jk_5.nailed.server.map.game.script.ScriptingEngine
 import org.apache.logging.log4j.LogManager
 
 import scala.collection.convert.wrapAsScala._
+import scala.collection.mutable
 
 /**
  * No description given
@@ -30,18 +31,29 @@ class NailedGameManager(val map: NailedMap) extends GameManager {
   var unreadyInterrupt = false
   var winner: GameWinnable = _
 
-  override def startGame(): Boolean = {
-    if(isGameRunning) return false
+  override def startGame(): GameStartResult = {
+    if(isGameRunning) return new GameStartResult(false, "A game is already running")
     try{
+      val missingPlayers = mutable.ArrayBuffer[Player]()
+      map.getTeams.foreach { team =>
+        team.members().foreach { member =>
+          if(member.getMap != map){
+            missingPlayers += member
+          }
+        }
+      }
+      if(missingPlayers.length > 0){
+        return new GameStartResult(false, "Game could not be started because the following players are not in the map: " + missingPlayers.map(_.getName).mkString(", "))
+      }
       val scriptStarted = scriptingEngine.start()
       if(hasCustomGameType) getGameType.onGameStarted(map)
       isGameRunning = scriptStarted || hasCustomGameType
-      if(isGameRunning) map.getStatManager.fireEvent(new StatEvent("gameRunning", true))
-      isGameRunning
+      if(!isGameRunning) return new GameStartResult(false, "game.js could not be found or read")
+      map.getStatManager.fireEvent(new StatEvent("gameRunning", true))
+      new GameStartResult(true, null)
     }catch{
       case e: Exception =>
-        logger.error("Exception while starting game for " + map.toString, e)
-        false
+        new GameStartResult(false, "Exception while starting game", e)
     }
   }
 
