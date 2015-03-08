@@ -28,7 +28,9 @@ import jk_5.nailed.api.player.Player
 import jk_5.nailed.api.world.World
 import jk_5.nailed.server.map.game.NailedGameManager
 import jk_5.nailed.server.map.stat.NailedStatManager
+import jk_5.nailed.server.player.NailedPlayer
 import jk_5.nailed.server.scoreboard.MapScoreboardManager
+import net.minecraft.nbt.NBTTagList
 
 import scala.collection.mutable
 
@@ -39,6 +41,7 @@ import scala.collection.mutable
  */
 class NailedMap(override val id: Int, override val mappack: Mappack = null, private val baseDir: File) extends Map with TeamManager {
 
+  val inventories = mutable.HashMap[Player, NBTTagList]()
   private val playerSet = mutable.HashSet[Player]()
   override val getScoreboardManager = new MapScoreboardManager(this)
   override val getGameManager = new NailedGameManager(this)
@@ -75,9 +78,7 @@ class NailedMap(override val id: Int, override val mappack: Mappack = null, priv
     getScoreboardManager.onPlayerLeft(player)
     this.playerLeft(player)
 
-    //TODO: move this to a per-map inventory system
-    //See https://github.com/nailed/nailed/issues/50
-    player.clearInventory()
+    player.asInstanceOf[NailedPlayer].getEntity.fallDistance = 0
     player.setGameMode(GameMode.ADVENTURE)
     player.setAllowedToFly(false)
   }

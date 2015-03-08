@@ -17,6 +17,7 @@ import jk_5.nailed.server.player.PlayerRegistry
 import jk_5.nailed.server.plugin.NailedPluginManager
 import jk_5.nailed.server.scheduler.NailedScheduler
 import jk_5.nailed.server.teamspeak.TeamspeakManager
+import jk_5.nailed.server.teleport.MapInventoryListener
 import jk_5.nailed.server.tileentity.{OldStatEmitterConverter, TileEntityStatEmitter}
 import jk_5.nailed.server.tweaker.NailedTweaker
 import jk_5.nailed.server.utils.{InvSeeTicker, NailedPlayerSelector}
@@ -55,6 +56,7 @@ object NailedPlatform
     globalEventBus.register(BossBar)
     globalEventBus.register(WorldItemEventHandler)
     globalEventBus.register(InvSeeTicker)
+    globalEventBus.register(MapInventoryListener)
   }else{
     logger.info("------------------")
     logger.info("WRONG CLASSLOADER!")

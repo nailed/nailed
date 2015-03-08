@@ -168,7 +168,9 @@ object Teleporter {
       entity.mountEntity(mount)
     }
     entity match {
-      case e: EntityLiving => e.setHealth(e.getMaxHealth)
+      case e: EntityLiving =>
+        e.setHealth(e.getMaxHealth)
+        e.fallDistance = 0
       case _ =>
     }
     entity
