@@ -22,6 +22,8 @@ buildscript {
     }
 }
 
+evaluationDependsOn('Mixin')
+
 repositories {
     mavenLocal()
     maven {
@@ -42,6 +44,9 @@ apply plugin: "nailed-mcp"
 
 group = "jk_5.nailed"
 version = "1.1.0-SNAPSHOT"
+
+ext.mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.srg")
+ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/mixins.nailed.refmap.json")
 
 nailedMCP {
     minecraftVersion = "1.8"
@@ -74,6 +79,7 @@ dependencies {
     nailed "com.sk89q:worldedit:6.0.0-SNAPSHOT"
 
     compile project(':api')
+    compile project(':Mixin')
 
     testCompile 'junit:junit:4.12-beta-1'
 
@@ -108,6 +114,22 @@ project.gradle.taskGraph.whenReady { taskGraph ->
     }
 }
 
+compileJava {
+    options.compilerArgs += [
+            '-Xlint:all',
+            '-Xlint:-path',
+            '-Xlint:-processing',
+            "-AoutSrgFile=${project.mixinSrg.getCanonicalPath()}",
+            "-AoutRefMapFile=${project.mixinRefMap.getCanonicalPath()}"
+    ]
+    options.deprecation = true
+    options.encoding = 'UTF-8'
+}
+
+afterEvaluate {
+    tasks.compileJava.options.compilerArgs += "-AreobfSrgFile=${tasks.reobfuscate.srg}"
+}
+
 /*
  * Nailed, a Minecraft PvP server framework
  * Copyright (C) jk-5 <http://github.com/jk-5/>
@@ -132,6 +154,10 @@ sourceSets {
         scala {
             srcDir 'src/main/scala'
             srcDir 'minecraft/Nailed/src/main/java'
+        }
+        java {
+            srcDir 'src/main/java'
+            //srcDir 'minecraft/Nailed/src/main/java'
         }
         resources {
             srcDir 'src/main/resources'

@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.2",
+  "package": "jk_5.nailed.server.mixin.core",
+  "plugin" : "jk_5.nailed.server.mixin.CoreMixinPlugin",
+  "refmap": "mixins.nailed.refmap.json",
+  "mixins": [
+    "TestMinecraftServerMixin"
+  ]
+}
