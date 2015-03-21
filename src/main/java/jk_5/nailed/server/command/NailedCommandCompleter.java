@@ -14,7 +14,7 @@ import jk_5.nailed.api.command.sender.MapCommandSender;
 import jk_5.nailed.api.map.Map;
 import jk_5.nailed.api.map.Team;
 import jk_5.nailed.api.player.Player;
-import jk_5.nailed.server.NailedPlatform$;
+import jk_5.nailed.server.NailedPlatform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +44,7 @@ public class NailedCommandCompleter implements CommandCompleter {
         String inputPath = input.substring(0, input.length() - arguments.length()).trim();
         String partialInput = input.substring(input.lastIndexOf(' ') + 1);
         String path = input.substring(0, input.lastIndexOf(' '));
-        List<String> out = new ArrayList<>();
+        List<String> out = new ArrayList<String>();
         String[] split = inputPath.split(" ", -1);
         String[] splitInput = arguments.split(" " , -1);
         CommandMapping p = dispatcher.get(inputPath);
@@ -68,7 +68,7 @@ public class NailedCommandCompleter implements CommandCompleter {
             }
         }
 
-        List<ParameterData> realParamsBuilder = new ArrayList<>();
+        List<ParameterData> realParamsBuilder = new ArrayList<ParameterData>();
         for(ParameterData pd : paramData){
             if(pd.getBinding().getBehavior(pd) != BindingBehavior.PROVIDES){
                 realParamsBuilder.add(pd);
@@ -78,58 +78,53 @@ public class NailedCommandCompleter implements CommandCompleter {
         ParameterData completingParam = realParams.length >= splitInput.length ? realParams[splitInput.length - 1] : null;
 
         if(completingParam == null) return out;
-        switch(completingParam.getName()){
-            case "gamemode":
-                out.add("survival");
-                out.add("creative");
-                out.add("adventure");
-                out.add("spectator");
-                break;
-            case "difficulty":
-                out.add("peaceful");
-                out.add("easy");
-                out.add("medium");
-                out.add("hard");
-                break;
-            case "weathertype":
-                out.add("clear");
-                out.add("dry");
-                out.add("rain");
-                out.add("thunder");
-                break;
-            case "mappack":
-                out.addAll(NailedPlatform$.MODULE$.getMappackRegistry().getAllIds());
-                break;
-            case "player":
-                for(Player pl : NailedPlatform$.MODULE$.getOnlinePlayers()){
-                    out.add(pl.getName());
-                }
-                break;
-            case "team":
-                CommandSender sender = locals.get(CommandSender.class);
-                if(sender instanceof MapCommandSender){
-                    Map map = ((MapCommandSender) sender).getMap();
-                    if(map != null){
-                        for(Team team : map.getTeams()){
-                            out.add(team.id());
-                        }
+        String completingName = completingParam.getName();
+        if(completingName.equals("gamemode")){
+            out.add("survival");
+            out.add("creative");
+            out.add("adventure");
+            out.add("spectator");
+        }else if(completingName.equals("difficulty")){
+            out.add("peaceful");
+            out.add("easy");
+            out.add("medium");
+            out.add("hard");
+        }else if(completingName.equals("weathertype")){
+            out.add("clear");
+            out.add("dry");
+            out.add("rain");
+            out.add("thunder");
+        }else if(completingName.equals("mappack")){
+            out.addAll(NailedPlatform.instance().getMappackRegistry().getAllIds());
+        }else if(completingName.equals("player")){
+            for(Player pl : NailedPlatform.instance().getOnlinePlayers()){
+                out.add(pl.getName());
+            }
+        }else if(completingName.equals("team")){
+            CommandSender sender = locals.get(CommandSender.class);
+            if(sender instanceof MapCommandSender){
+                Map map = ((MapCommandSender) sender).getMap();
+                if(map != null){
+                    for(Team team : map.getTeams()){
+                        out.add(team.id());
                     }
                 }
-                break;
-            case "gamewinnable":
-                CommandSender sender1 = locals.get(CommandSender.class);
-                if(sender1 instanceof MapCommandSender){
-                    Map map = ((MapCommandSender) sender1).getMap();
-                    if(map != null){
-                        map.getTeams().stream().map(Team::id).forEach(out::add);
+            }
+        }else if(completingName.equals("gamewinnable")){
+            CommandSender sender1 = locals.get(CommandSender.class);
+            if(sender1 instanceof MapCommandSender){
+                Map map = ((MapCommandSender) sender1).getMap();
+                if(map != null){
+                    for(Team team : map.getTeams()){
+                        out.add(team.id());
                     }
                 }
-                NailedPlatform$.MODULE$.getOnlinePlayers().stream().map(Player::getName).forEach(out::add);
-                break;
-            default:
-                break;
+            }
+            for(Player pl : NailedPlatform.instance().getOnlinePlayers()){
+                out.add(pl.getName());
+            }
         }
-        List<String> ret = new ArrayList<>();
+        List<String> ret = new ArrayList<String>();
         for(String s : out){
             if(s.toLowerCase().startsWith(partialInput.toLowerCase())){
                 ret.add(s);

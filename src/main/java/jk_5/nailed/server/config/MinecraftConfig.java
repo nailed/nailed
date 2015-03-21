@@ -51,10 +51,12 @@ public class MinecraftConfig extends PropertyManager {
     }
 
     private String remap(String key){
-        switch(key){
-            case "enable-query": return "query.enabled";
-            case "enable-rcon": return "rcon.enabled";
-            default: return key;
+        if(key.equals("enable-query")){
+            return "query.enabled";
+        }else if(key.equals("enable-rcon")){
+            return "rcon.enabled";
+        }else{
+            return key;
         }
     }
 

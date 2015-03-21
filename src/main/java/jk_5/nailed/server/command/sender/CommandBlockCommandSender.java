@@ -21,7 +21,7 @@ public class CommandBlockCommandSender implements CommandSender, AnalogCommandSe
 
     @Override
     public World getWorld() {
-        return NailedPlatform.getWorld(wrapped.getEntityWorld().provider.getDimensionId());
+        return NailedPlatform.instance().getWorld(wrapped.getEntityWorld().provider.getDimensionId());
     }
 
     @Override

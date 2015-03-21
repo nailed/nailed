@@ -28,9 +28,8 @@ import jk_5.nailed.api.world.WorldProvider;
 import jk_5.nailed.server.command.NailedCommandManager;
 import jk_5.nailed.server.config.Settings;
 import jk_5.nailed.server.map.NailedMapLoader;
-import jk_5.nailed.server.map.NailedMapLoader$;
-import jk_5.nailed.server.map.game.NailedGameTypeRegistry$;
-import jk_5.nailed.server.mappack.NailedMappackRegistry$;
+import jk_5.nailed.server.map.game.NailedGameTypeRegistry;
+import jk_5.nailed.server.mappack.NailedMappackRegistry;
 import jk_5.nailed.server.player.NailedPlayer;
 import jk_5.nailed.server.plugin.NailedPluginManager$;
 import jk_5.nailed.server.scheduler.NailedScheduler$;
@@ -39,7 +38,7 @@ import jk_5.nailed.server.teleport.MapInventoryListener$;
 import jk_5.nailed.server.tileentity.OldStatEmitterConverter;
 import jk_5.nailed.server.tileentity.TileEntityStatEmitter;
 import jk_5.nailed.server.tweaker.NailedTweaker;
-import jk_5.nailed.server.utils.InvSeeTicker$;
+import jk_5.nailed.server.utils.InvSeeTicker;
 import jk_5.nailed.server.utils.NailedPlayerSelector$;
 import jk_5.nailed.server.world.*;
 import jk_5.nailed.server.worlditems.WorldItemEventHandler$;
@@ -61,7 +60,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class NailedPlatform implements Platform {
 
@@ -78,20 +76,20 @@ public class NailedPlatform implements Platform {
     private final StandardMessenger messenger = new StandardMessenger(this);
 
     //Player registry stuff
-    private final List<NailedPlayer> players = new ArrayList<>();
+    private final List<NailedPlayer> players = new ArrayList<NailedPlayer>();
     private NailedPlayer[] onlinePlayers = new NailedPlayer[0];
     private Collection<Player> onlinePlayersCollection = Collections.emptyList();
-    private final HashMap<UUID, NailedPlayer> playersById = new HashMap<>();
-    private final HashMap<String, NailedPlayer> playersByName = new HashMap<>();
+    private final HashMap<UUID, NailedPlayer> playersById = new HashMap<UUID, NailedPlayer>();
+    private final HashMap<String, NailedPlayer> playersByName = new HashMap<String, NailedPlayer>();
 
     //Dimension registry stuff
     private boolean defaultsRegistered = false;
-    private Hashtable<Integer, WorldProvider> customProviders = new Hashtable<>();
-    private Hashtable<Integer, WorldServer> vanillaWorlds = new Hashtable<>();
-    private Hashtable<Integer, NailedWorld> worlds = new Hashtable<>();
-    private Hashtable<Integer, WorldContext> worldContext = new Hashtable<>();
-    private ArrayList<Integer> dimensions = new ArrayList<>();
-    private ArrayList<Integer> unloadQueue = new ArrayList<>();
+    private Hashtable<Integer, WorldProvider> customProviders = new Hashtable<Integer, WorldProvider>();
+    private Hashtable<Integer, WorldServer> vanillaWorlds = new Hashtable<Integer, WorldServer>();
+    private Hashtable<Integer, NailedWorld> worlds = new Hashtable<Integer, NailedWorld>();
+    private Hashtable<Integer, WorldContext> worldContext = new Hashtable<Integer, WorldContext>();
+    private ArrayList<Integer> dimensions = new ArrayList<Integer>();
+    private ArrayList<Integer> unloadQueue = new ArrayList<Integer>();
     private BitSet dimensionMap = new BitSet(java.lang.Long.SIZE << 4);
 
     private int[] vanillaWorldIdArray = new int[0];
@@ -108,10 +106,10 @@ public class NailedPlatform implements Platform {
         if(this.getClass().getClassLoader() == Launch.classLoader){
             globalEventBus.register(this);
             globalEventBus.register(NailedScheduler$.MODULE$);
-            globalEventBus.register(NailedMapLoader$.MODULE$);
+            globalEventBus.register(NailedMapLoader.instance());
             globalEventBus.register(BossBar$.MODULE$);
             globalEventBus.register(WorldItemEventHandler$.MODULE$);
-            globalEventBus.register(InvSeeTicker$.MODULE$);
+            globalEventBus.register(new InvSeeTicker());
             globalEventBus.register(MapInventoryListener$.MODULE$);
         }else{
             logger.info("------------------");
@@ -130,8 +128,8 @@ public class NailedPlatform implements Platform {
         pluginsDir.mkdir();
         NailedPluginManager$.MODULE$.loadPlugins(pluginsDir);
 
-        NailedEventFactory.fireEvent(new RegisterMappacksEvent(NailedMappackRegistry$.MODULE$, NailedMapLoader$.MODULE$));
-        NailedMapLoader.checkLobbyMappack();
+        NailedEventFactory.fireEvent(new RegisterMappacksEvent(NailedMappackRegistry.instance(), NailedMapLoader.instance()));
+        NailedMapLoader.instance().checkLobbyMappack();
         NailedCommandManager.registerPluginCommands();
     }
 
@@ -179,7 +177,7 @@ public class NailedPlatform implements Platform {
     @Nonnull
     @Override
     public GameTypeRegistry getGameTypeRegistry() {
-        return NailedGameTypeRegistry$.MODULE$;
+        return NailedGameTypeRegistry.instance();
     }
 
     @Nullable
@@ -218,18 +216,23 @@ public class NailedPlatform implements Platform {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinServerEvent event){
-        List<NailedPlayer> b = new ArrayList<>();
+        List<NailedPlayer> b = new ArrayList<NailedPlayer>();
         b.addAll(Arrays.asList(this.onlinePlayers));
         b.add((NailedPlayer) event.getPlayer());
         this.onlinePlayers = b.toArray(new NailedPlayer[b.size()]);
-        this.onlinePlayersCollection = ImmutableSet.copyOf(this.onlinePlayers);
+        this.onlinePlayersCollection = ImmutableSet.<Player>copyOf(this.onlinePlayers);
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerLeaveServerEvent event){
-        Stream<NailedPlayer> filtered = this.onlinePlayersCollection.stream().filter(p -> p != event.getPlayer()).map(e -> (NailedPlayer) e);
-        this.onlinePlayers = filtered.toArray(NailedPlayer[]::new);
-        this.onlinePlayersCollection = ImmutableSet.copyOf(this.onlinePlayers);
+        List<NailedPlayer> b = new ArrayList<NailedPlayer>();
+        for(Player p : this.onlinePlayersCollection){
+            if(p != event.getPlayer()){
+                b.add((NailedPlayer) p);
+            }
+        }
+        this.onlinePlayers = b.toArray(new NailedPlayer[b.size()]);
+        this.onlinePlayersCollection = ImmutableSet.<Player>copyOf(this.onlinePlayers);
     }
 
     @Override
@@ -269,7 +272,7 @@ public class NailedPlatform implements Platform {
     @Nonnull
     @Override
     public MappackRegistry getMappackRegistry() {
-        return NailedMappackRegistry$.MODULE$;
+        return NailedMappackRegistry.instance();
     }
 
     @Nonnull
@@ -281,7 +284,7 @@ public class NailedPlatform implements Platform {
     @Nonnull
     @Override
     public MapLoader getMapLoader() {
-        return NailedMapLoader$.MODULE$;
+        return NailedMapLoader.instance();
     }
 
     //Dimension Registry
@@ -325,7 +328,7 @@ public class NailedPlatform implements Platform {
             MinecraftServer.getServer().worldTickTimes.remove(id);
             logger.info("Unloading dimension " + id);
         }
-        List<WorldServer> builder = new ArrayList<>();
+        List<WorldServer> builder = new ArrayList<WorldServer>();
         if(this.vanillaWorlds.get(0) != null) builder.add(vanillaWorlds.get(0));
         for(Map.Entry<Integer, WorldServer> e : this.vanillaWorlds.entrySet()){
             int dim = e.getKey();
@@ -428,5 +431,17 @@ public class NailedPlatform implements Platform {
 
     public static NailedPlatform instance(){
         return INSTANCE;
+    }
+
+    public Config getConfig(){
+        return config;
+    }
+
+    public Gson getGson(){
+        return gson;
+    }
+
+    public EventBus getEventBus(){
+        return globalEventBus;
     }
 }

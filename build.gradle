@@ -18,7 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.4.6"
+        classpath "jk_5.nailed.mcp:mcp:1.4.8"
     }
 }
 
@@ -157,7 +157,7 @@ sourceSets {
         }
         java {
             srcDir 'src/main/java'
-            //srcDir 'minecraft/Nailed/src/main/java'
+            srcDir 'minecraft/Nailed/src/main/java'
         }
         resources {
             srcDir 'src/main/resources'
@@ -176,6 +176,10 @@ processResources {
         exclude 'internalplugin.json'
         exclude 'directorymappackloaderplugin.json'
     }
+}
+
+reobfuscate {
+    addExtraSrgFile project.mixinSrg
 }
 
 uploadArchives {

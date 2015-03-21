@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class TeamspeakManager {
 
-    private static final Config config = NailedPlatform.config().getConfig("teamspeak");
+    private static final Config config = NailedPlatform.instance().getConfig().getConfig("teamspeak");
     private static final boolean enabled = config.getBoolean("enabled");
     private static final String host = config.getString("host");
     private static final int port = config.getInt("port");

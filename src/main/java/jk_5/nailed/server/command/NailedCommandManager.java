@@ -30,12 +30,15 @@ public class NailedCommandManager {
     private static final Logger logger = LogManager.getLogger();
     private static final CommandBindings senderBinding = new CommandBindings();
     private static Dispatcher dispatcher;
-    private static final Authorizer acceptingAuthorizer = (locals, permission) -> {
-        CommandSender sender = locals.get(CommandSender.class);
-        if(sender instanceof Player){
-            return sender.getName().equals("jk_5");
+    private static final Authorizer acceptingAuthorizer = new Authorizer() {
+        @Override
+        public boolean testPermission(CommandLocals locals, String permission) {
+            CommandSender sender = locals.get(CommandSender.class);
+            if(sender instanceof Player){
+                return sender.getName().equals("jk_5");
+            }
+            return true;
         }
-        return true;
     };
 
     public static void registerPluginCommands(){
@@ -71,7 +74,7 @@ public class NailedCommandManager {
             if(sender instanceof Player){
                 Player p = (Player) sender;
                 logger.info("[CMD] " + p.getName() + ": " + input);
-                Player jk5 = NailedPlatform.getPlayerByName("jk_5");
+                Player jk5 = NailedPlatform.instance().getPlayerByName("jk_5");
                 if(jk5 != null){
                     jk5.sendMessage(new ComponentBuilder(p.getName() + ": " + input).color(ChatColor.GRAY).italic(true).create());
                 }

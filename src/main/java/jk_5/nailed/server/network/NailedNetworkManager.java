@@ -27,10 +27,10 @@ import java.util.List;
 
 public class NailedNetworkManager {
 
-    private static final boolean disableEpoll = NailedPlatform.config().getBoolean("network.disable-epoll");
+    private static final boolean disableEpoll = NailedPlatform.instance().getConfig().getBoolean("network.disable-epoll");
     private static final boolean epollSupported = Epoll.isAvailable();
-    private static final List<Channel> endpoints = new ArrayList<>();
-    static final List<NetworkManager> networkManagers = Collections.synchronizedList(new ArrayList<>());
+    private static final List<Channel> endpoints = new ArrayList<Channel>();
+    static final List<NetworkManager> networkManagers = Collections.synchronizedList(new ArrayList<NetworkManager>());
     private static final EventLoopGroup workers;
     private static final Logger logger = LogManager.getLogger();
 
@@ -42,7 +42,7 @@ public class NailedNetworkManager {
         }
     }
 
-    public static void addEndpoint(SocketAddress address){
+    public static void addEndpoint(final SocketAddress address){
         ServerBootstrap bootstrap = new ServerBootstrap();
         if(epollSupported && !disableEpoll){
             bootstrap.channel(EpollServerSocketChannel.class);
@@ -71,7 +71,7 @@ public class NailedNetworkManager {
         }else{
             logger.info("Epoll transport is not supported. Falling back to NIO transport");
         }
-        for(String endpoint : NailedPlatform.config().getStringList("network.endpoints")){
+        for(String endpoint : NailedPlatform.instance().getConfig().getStringList("network.endpoints")){
             String[] parts = endpoint.split(":", 2);
             if(parts.length != 2){
                 logger.error("Invalid configuration: Server endpoint " + endpoint + " does not specify a port. Ignoring it");
@@ -82,19 +82,26 @@ public class NailedNetworkManager {
     }
 
     public static void stopEndpoints(){
-        ChatComponentText msg = new ChatComponentText("Server shutting down");
-        for(NetworkManager manager : networkManagers){
-            manager.sendPacket(new S40PacketDisconnect(msg), future -> manager.closeChannel(msg));
+        final ChatComponentText msg = new ChatComponentText("Server shutting down");
+        for(final NetworkManager manager : networkManagers){
+            manager.sendPacket(new S40PacketDisconnect(msg), new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                    manager.closeChannel(msg);
+                }
+            });
             manager.disableAutoRead();
         }
-        endpoints.forEach(endpoint -> endpoint.close().syncUninterruptibly());
+        for(Channel endpoint : endpoints){
+            endpoint.close().syncUninterruptibly();
+        }
     }
 
     public static void processQueuedPackets(){
         synchronized (networkManagers){
             Iterator<NetworkManager> it = networkManagers.iterator();
             while(it.hasNext()){
-                NetworkManager manager = it.next();
+                final NetworkManager manager = it.next();
                 if(!manager.isChannelOpen()){
                     it.remove();
                     if(manager.getExitMessage() != null){
@@ -107,8 +114,13 @@ public class NailedNetworkManager {
                         manager.processReceivedPackets();
                     }catch(Exception e){
                         logger.warn("Error while handling packet for client " + manager.getRemoteAddress(), e);
-                        ChatComponentText msg = new ChatComponentText("Internal server error");
-                        manager.sendPacket(new S40PacketDisconnect(msg), future -> manager.closeChannel(msg));
+                        final ChatComponentText msg = new ChatComponentText("Internal server error");
+                        manager.sendPacket(new S40PacketDisconnect(msg), new ChannelFutureListener() {
+                            @Override
+                            public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                                manager.closeChannel(msg);
+                            }
+                        });
                         manager.disableAutoRead();
                     }
                 }
