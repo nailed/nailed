@@ -27,9 +27,9 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 /**
  * Executes tasks using a multi-stage process executor. Synchronous executions are via {@link jk_5.nailed.server.chunkloading.AsynchronousExecutor#finishActive()} or the {@link jk_5.nailed.server.chunkloading.AsynchronousExecutor#get(Object)} methods.
- * <li \> Stage 1 creates the object from a parameter, and is usually called asynchronously.
- * <li \> Stage 2 takes the parameter and object from stage 1 and does any synchronous processing to prepare it.
- * <li \> Stage 3 takes the parameter and object from stage 1, as well as a callback that was registered, and performs any synchronous calculations.
+ * * Stage 1 creates the object from a parameter, and is usually called asynchronously.
+ * * Stage 2 takes the parameter and object from stage 1 and does any synchronous processing to prepare it.
+ * * Stage 3 takes the parameter and object from stage 1, as well as a callback that was registered, and performs any synchronous calculations.
  *
  * @param <P> The type of parameter you provide to make the object that will be created. It should implement {@link Object#hashCode()} and {@link Object#equals(Object)} if you want to get the value early.
  * @param <T> The type of object you provide. This is created in stage 1, and passed to stage 2, 3, and returned if get() is called.

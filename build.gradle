@@ -14,11 +14,11 @@ buildscript {
         }
         maven {
             name = "jk-5"
-            url = "http://maven.jk-5.tk"
+            url = "http://maven.jk-5.nl"
         }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.4.8"
+        classpath "jk_5.nailed.mcp:mcp:1.5.0"
     }
 }
 
@@ -32,18 +32,17 @@ repositories {
     }
     maven {
         name "jk-5"
-        url "http://maven.jk-5.tk"
+        url "http://maven.jk-5.nl"
     }
 }
 
-apply plugin: "scala"
 apply plugin: "java"
 apply plugin: "idea"
 apply plugin: "maven"
 apply plugin: "nailed-mcp"
 
 group = "jk_5.nailed"
-version = "1.1.0-SNAPSHOT"
+version = "1.1.1-SNAPSHOT"
 
 ext.mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.srg")
 ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/mixins.nailed.refmap.json")
@@ -65,7 +64,6 @@ configurations {
 
 dependencies {
     nailed 'net.minecraft:launchwrapper:1.11'
-    nailed 'org.scala-lang:scala-library:2.11.2'
     nailed 'org.ow2.asm:asm-debug-all:5.0.3'
     nailed 'jk_5.eventbus:EventBus:2.0.1'
     nailed 'lzma:lzma:0.0.1'
@@ -119,6 +117,7 @@ compileJava {
             '-Xlint:all',
             '-Xlint:-path',
             '-Xlint:-processing',
+            '-Xlint:-unchecked',
             "-AoutSrgFile=${project.mixinSrg.getCanonicalPath()}",
             "-AoutRefMapFile=${project.mixinRefMap.getCanonicalPath()}"
     ]
@@ -147,14 +146,8 @@ afterEvaluate {
  * this program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-//If only i knew how to add scala sources with the gradle API.
-//If you know, please open an issue or message me (jk-5) on irc
-sourceSets {
+/*sourceSets {
     main {
-        scala {
-            srcDir 'src/main/scala'
-            srcDir 'minecraft/Nailed/src/main/java'
-        }
         java {
             srcDir 'src/main/java'
             srcDir 'minecraft/Nailed/src/main/java'
@@ -164,7 +157,7 @@ sourceSets {
             srcDir 'minecraft/Nailed/src/main/resources'
         }
     }
-}
+}*/
 
 processResources {
     from(sourceSets.main.resources.srcDirs) {
