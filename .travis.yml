@@ -1,5 +1,6 @@
 language: java
 notifications:
   email: false
-install: TERM=dumb ./gradlew setupNailed -s
-script: TERM=dumb ./gradlew buildPackages -s -x scaladoc -x packageScaladoc
+env: GRADLE_OPTS="-Xms1g -Xmx3g"
+install: TERM=dumb gradle setupNailed -s
+script: TERM=dumb gradle buildPackages
