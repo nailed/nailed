@@ -4,3 +4,5 @@ notifications:
 env: GRADLE_OPTS="-Xms1g -Xmx3g"
 install: TERM=dumb gradle setupNailed -s
 script: TERM=dumb gradle buildPackages
+jdk:
+  - oraclejdk8
