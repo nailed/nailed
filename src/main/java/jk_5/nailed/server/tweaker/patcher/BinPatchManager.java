@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -31,7 +32,7 @@ public class BinPatchManager {
     private final GDiffPatcher patcher = new GDiffPatcher();
 
     private Multimap<String, ClassPatch> patches;
-    private Map<String, byte[]> cache;
+    private Map<String, byte[]> cache = new HashMap<String, byte[]>();
     private File tempDir;
 
     public BinPatchManager() {

@@ -32,10 +32,10 @@ public class NailedMap implements Map {
     private final Set<Player> players = new HashSet<Player>();
     private World defaultWorld;
 
-    private final MapScoreboardManager scoreboardManager = new MapScoreboardManager(this);
-    private final MapTeamManager teamManager = new MapTeamManager(this);
-    private final NailedGameManager gameManager = new NailedGameManager(this);
-    private final NailedStatManager statManager = new NailedStatManager(this);
+    private final MapScoreboardManager scoreboardManager;
+    private final MapTeamManager teamManager;
+    private final NailedGameManager gameManager;
+    private final NailedStatManager statManager;
 
     public final HashMap<Player, NBTTagList> inventories = new HashMap<Player, NBTTagList>();
 
@@ -43,6 +43,11 @@ public class NailedMap implements Map {
         this.id = id;
         this.mappack = mappack;
         this.baseDir = baseDir;
+
+        this.scoreboardManager = new MapScoreboardManager(this);
+        this.teamManager = new MapTeamManager(this);
+        this.gameManager = new NailedGameManager(this);
+        this.statManager = new NailedStatManager(this);
     }
 
     @Override

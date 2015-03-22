@@ -1,7 +1,6 @@
 package jk_5.nailed.server.mappack.metadata.xml;
 
 import jk_5.nailed.api.mappack.metadata.StatConfig;
-import org.jdom2.Attribute;
 import org.jdom2.Element;
 
 import javax.annotation.Nonnull;
@@ -17,12 +16,7 @@ public class XmlStatConfig implements StatConfig {
     public XmlStatConfig(String name, Element element) {
         this.name = name;
 
-        Attribute trackAttr = element.getAttribute("track", element.getNamespace());
-        if(trackAttr != null){
-            this.track = trackAttr.getValue();
-        }else{
-            this.track = null;
-        }
+        this.track = XmlUtils.getAttributeValue(element, "track");
 
         this.attributes = new HashMap<String, String>();
         for (Element e : element.getChildren()) {

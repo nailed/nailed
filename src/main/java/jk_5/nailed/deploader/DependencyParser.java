@@ -75,6 +75,8 @@ public class DependencyParser {
 
         finished.await();
 
+        DepLoader.log("INFO", "Done!");
+
         PrintWriter p = new PrintWriter(new File("start.sh"));
         p.println("#! /bin/sh");
         p.print("java -Xmx1g -Xms1g -XX:PermSize=128m -server -Djava.awt.headless=true -cp ");

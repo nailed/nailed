@@ -76,7 +76,7 @@ public class DelegatingWorldProvider extends net.minecraft.world.WorldProvider {
     @Override
     public Location getSpawnPoint() {
         //TODO: check worldborder interference
-        return this.world.getConfig().spawnPoint();
+        return this.getWorld().getConfig().spawnPoint();
     }
 
     @Override

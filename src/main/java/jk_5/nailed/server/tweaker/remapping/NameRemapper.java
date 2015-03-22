@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import jk_5.nailed.server.tweaker.patcher.BinPatchManager;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +30,7 @@ public class NameRemapper extends Remapper {
     private static final NameRemapper INSTANCE = new NameRemapper();
     private static final Logger logger = LogManager.getLogger();
 
-    private LaunchClassLoader classLoader;
+    private LaunchClassLoader classLoader = Launch.classLoader;
     private BiMap<String, String> classNameMap = ImmutableBiMap.of();;
 
     private Map<String,Map<String,String>> rawFieldMaps;

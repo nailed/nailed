@@ -117,14 +117,14 @@ public class XmlMappackMetadata implements MappackMetadata {
             if(e.getChild("name", ns) == null){
                 throw new MappackConfigurationException("Missing required element <name> in <world> element");
             }
-            worlds.add(new XmlMappackWorld(e.getChild("name", ns).getText(), e, null)); //TODO: remove null in here as it is overloaded
+            worlds.add(new XmlMappackWorld(e.getChild("name", ns).getText(), e));
         }
         this.worlds = worlds.toArray(new MappackWorld[worlds.size()]);
 
         if(element.getChild("gametype", ns) == null){
             this.gameType = null;
         }else{
-            this.gameType = element.getChild("gametype").getAttributeValue("name", ns);
+            this.gameType = XmlUtils.getAttributeValue(element.getChild("gametype"), "name");
         }
 
         if(element.getChild("stats", ns) == null){
@@ -135,13 +135,7 @@ public class XmlMappackMetadata implements MappackMetadata {
                 if(!e.getName().equals("stat")){
                     throw new MappackConfigurationException("Invalid element in stats list: " + e.getName());
                 }
-                if(e.getAttribute("name", ns) == null){
-                    throw new MappackConfigurationException("Missing required attribute 'name' in stat element");
-                }
-                String name = e.getAttribute("name", ns).getValue();
-                if(name.isEmpty() || name.length() == 0){
-                    throw new MappackConfigurationException("Missing required attribute 'name' in stat element");
-                }
+                String name = XmlUtils.getAttributeValue(e, "name");
                 stats.add(new XmlStatConfig(name, e));
             }
             this.stats = stats.toArray(new StatConfig[stats.size()]);

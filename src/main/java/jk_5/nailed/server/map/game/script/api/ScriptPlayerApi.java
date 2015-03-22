@@ -118,7 +118,7 @@ public class ScriptPlayerApi {
         return player.getGameMode();
     }
 
-    public void setGameMode(GameMode gm) {
+    public void setGamemode(GameMode gm) {
         player.setGameMode(gm);
     }
 

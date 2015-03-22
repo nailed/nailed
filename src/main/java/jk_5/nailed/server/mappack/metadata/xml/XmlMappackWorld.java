@@ -52,7 +52,7 @@ public class XmlMappackWorld implements MappackWorld {
         this.name = name;
         this.generator = XmlUtils.getText(element, "generator", parent.generator());
 
-        String dim = XmlUtils.getText(element, "generator");
+        String dim = XmlUtils.getText(element, "dimension");
         if(dim == null) {
             this.dimension = parent.dimension();
         }else if(dim.equals("nether")){
@@ -91,7 +91,7 @@ public class XmlMappackWorld implements MappackWorld {
         this.disableDamage = XmlUtils.getBoolean(element, "disableDamage", parent.disableDamage());
         this.disableBlockBreaking = XmlUtils.getBoolean(element, "disableBlockBreaking", parent.disableBlockBreaking());
         this.disableBlockPlacement = XmlUtils.getBoolean(element, "disableBlockPlacement", parent.disableBlockPlacement());
-        this.isDefault = element.getAttributeValue("default", element.getNamespace(), "false").equals("true");
+        this.isDefault = XmlUtils.getAttributeValue(element, "default", "false").equals("true");
     }
 
     @Nonnull

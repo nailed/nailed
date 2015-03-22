@@ -92,7 +92,7 @@ public class NailedTweaker implements ITweaker {
         classLoader.addClassLoaderExclusion("org.fusesource.");
         classLoader.addTransformerExclusion("jk_5.nailed.server.tweaker.transformer.");
         classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.PatchingTransformer");
-        classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.EventSubscribtionTransformer");
+        classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.EventSubscriptionTransformer");
         if(!NailedTweaker.deobf) classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.RemappingTransformer");
         classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.AccessTransformer");
 

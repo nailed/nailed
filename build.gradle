@@ -71,7 +71,7 @@ dependencies {
     nailed 'org.mozilla:rhino:1.7R4'
     nailed 'org.jdom:jdom2:2.0.5'
     nailed 'com.typesafe:config:1.2.1'
-    nailed 'org.apache.logging.log4j:log4j-slf4j-impl:2.0.2'
+    nailed 'org.apache.logging.log4j:log4j-slf4j-impl:2.0-beta9'
     nailed 'org.javassist:javassist:3.18.2-GA'
 
     nailed "com.sk89q:worldedit:6.0.0-SNAPSHOT"
