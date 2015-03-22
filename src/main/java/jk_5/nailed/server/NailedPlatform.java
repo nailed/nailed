@@ -67,11 +67,11 @@ public class NailedPlatform implements Platform {
     private static final String apiVersion = Platform.class.getPackage().getImplementationVersion();
     private static final String implementationVersion = NailedPlatform.class.getPackage().getImplementationVersion();
     private static final String implementationName = "Nailed";
-    private static final File runtimeDirectory = NailedTweaker.gameDir();
+    private static final File runtimeDirectory = NailedTweaker.gameDir;
     private static final Logger logger = LogManager.getLogger();
     private static final Config config = Settings.load();
     private static final EventBus globalEventBus = new EventBus();
-    private static final File pluginsDir = new File(NailedTweaker.gameDir(), "plugins");
+    private static final File pluginsDir = new File(NailedTweaker.gameDir, "plugins");
     public static final Gson gson = new Gson();
     private final StandardMessenger messenger = new StandardMessenger(this);
 
@@ -245,7 +245,7 @@ public class NailedPlatform implements Platform {
     @Nonnull
     @Override
     public DefaultWorldProviders getDefaultWorldProviders() {
-        return NailedDefaultWorldProviders$.MODULE$;
+        return NailedDefaultWorldProviders.instance();
     }
 
     @Nonnull

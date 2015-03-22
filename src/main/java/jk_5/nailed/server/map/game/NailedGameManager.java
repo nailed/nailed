@@ -83,7 +83,7 @@ public class NailedGameManager implements GameManager {
         return true;
     }
 
-    void onEnded(boolean success){
+    public void onEnded(boolean success){
         if(!isGameRunning){
             return;
         }
@@ -182,5 +182,9 @@ public class NailedGameManager implements GameManager {
         for (Player player : map.players()) {
             player.clearSubtitle();
         }
+    }
+
+    public Map getMap() {
+        return map;
     }
 }

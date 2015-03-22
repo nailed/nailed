@@ -1,8 +1,9 @@
 package jk_5.nailed.server.map.game.script;
 
 import java.io.IOException;
+import java.io.InputStream;
 
-public interface IMountedFileBinary extends IMountedFile {
+public abstract class IMountedFileBinary extends InputStream implements IMountedFile {
 
-    public int read() throws IOException;
+    public abstract int read() throws IOException;
 }
