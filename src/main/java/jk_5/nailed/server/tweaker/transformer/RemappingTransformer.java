@@ -23,11 +23,11 @@ public class RemappingTransformer implements IClassTransformer, IClassNameTransf
 
     @Override
     public String unmapClassName(String name) {
-        return NameRemapper.unmap(name.replace('.', '/')).replace('/','.');
+        return NameRemapper.instance().unmap(name.replace('.', '/')).replace('/','.');
     }
 
     @Override
     public String remapClassName(String name) {
-        return NameRemapper.map(name.replace('.', '/')).replace('/', '.');
+        return NameRemapper.instance().map(name.replace('.', '/')).replace('/', '.');
     }
 }

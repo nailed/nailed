@@ -62,11 +62,11 @@ public class NailedPlayer implements Player {
     private final PlayerScoreboardManager scoreboardManager;
     private final Set<String> channels = new HashSet<String>();
 
-    private EntityPlayerMP entity;
+    public EntityPlayerMP entity;
     private String displayName;
-    private NetHandlerPlayServer netHandler;
+    public NetHandlerPlayServer netHandler;
     private boolean isAllowedToFly;
-    private boolean isOnline = false;
+    public boolean isOnline = false;
     private BaseComponent[] subtitle;
 
     public World world;
@@ -465,15 +465,19 @@ public class NailedPlayer implements Player {
     public Location getSpawnPoint(){
         Team team = this.map.getPlayerTeam(this); //TODO: this line throws an NPE when the player logs in for the second time (over EntityPlayerMP)
         if(team == null){
-            return ((NailedWorld) world).wrapped().provider.getSpawnPoint();
+            return ((NailedWorld) world).getWrapped().provider.getSpawnPoint();
         }else{
             Location s = team.getSpawnPoint();
             if(s == null){
-                return ((NailedWorld) world).wrapped().provider.getSpawnPoint();
+                return ((NailedWorld) world).getWrapped().provider.getSpawnPoint();
             }else{
                 return s;
             }
         }
+    }
+
+    public BaseComponent[] getSubtitle() {
+        return subtitle;
     }
 
     @Override

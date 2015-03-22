@@ -53,7 +53,7 @@ public class NailedMapLoader implements MapLoader {
      */
     @Deprecated
     public void checkLobbyMappack(){
-        this.setLobbyMappack(NailedMappackRegistry.getByName(NailedPlatform.instance().getConfig().getString("lobbyMappack")));
+        this.setLobbyMappack(NailedMappackRegistry.instance().getByName(NailedPlatform.instance().getConfig().getString("lobbyMappack")));
     }
 
     /**
@@ -119,9 +119,9 @@ public class NailedMapLoader implements MapLoader {
         }
 
         int id = nextMapId.getAndIncrement();
-        final Promise<Void> finishPromise = new DefaultPromise<Void>(NailedScheduler.executor().next());
+        final Promise<Void> finishPromise = new DefaultPromise<Void>(NailedScheduler.instance().getExecutor().next());
         final File baseDir = new File(mapsDir, "lobby");
-        NailedScheduler.submit(new Runnable() {
+        NailedScheduler.instance().submit(new Runnable() {
             @Override
             public void run() {
                 baseDir.mkdir();
@@ -148,15 +148,15 @@ public class NailedMapLoader implements MapLoader {
     @Override
     public Future<Map> createMapFor(@Nonnull final Mappack mappack) {
         final int id = nextMapId.getAndIncrement();
-        final Promise<Map> allDonePromise = new DefaultPromise<Map>(NailedScheduler.executor().next());
-        final Promise<Void> finishPromise = new DefaultPromise<Void>(NailedScheduler.executor().next());
+        final Promise<Map> allDonePromise = new DefaultPromise<Map>(NailedScheduler.instance().getExecutor().next());
+        final Promise<Void> finishPromise = new DefaultPromise<Void>(NailedScheduler.instance().getExecutor().next());
         finishPromise.addListener(new FutureListener<Void>() {
             @Override
             public void operationComplete(Future<Void> future){
                 if(future.isSuccess()){
-                    NailedScheduler.executeSync(new Runnable(){
+                    NailedScheduler.instance().executeSync(new Runnable() {
                         @Override
-                        public void run(){
+                        public void run() {
                             NailedMap map = new NailedMap(id, mappack, new File(mapsDir, "map_" + id));
                             registerMap(map);
                             loadMappackWorlds(map, mappack, "map_" + id);
@@ -168,7 +168,7 @@ public class NailedMapLoader implements MapLoader {
                 }
             }
         });
-        NailedScheduler.submit(new Runnable(){
+        NailedScheduler.instance().submit(new Runnable(){
             @Override
             public void run(){
                 File dir = new File(mapsDir, "map_" + id);

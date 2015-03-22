@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class ItemStackConverter {
 
-    public ItemStack toNailed(net.minecraft.item.ItemStack is){
+    public static ItemStack toNailed(net.minecraft.item.ItemStack is){
         if(is == null){
             return null;
         }
@@ -42,7 +42,7 @@ public class ItemStackConverter {
         return ret;
     }
 
-    public net.minecraft.item.ItemStack toVanilla(ItemStack is){
+    public static net.minecraft.item.ItemStack toVanilla(ItemStack is){
         if(is == null){
             return null;
         }

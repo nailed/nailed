@@ -177,6 +177,10 @@ public class NailedWorld implements World {
         }
     }
 
+    public WorldServer getWrapped() {
+        return wrapped;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)

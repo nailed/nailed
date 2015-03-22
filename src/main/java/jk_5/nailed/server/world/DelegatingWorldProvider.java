@@ -86,7 +86,7 @@ public class DelegatingWorldProvider extends net.minecraft.world.WorldProvider {
 
     public jk_5.nailed.api.world.World getWorld(){
         if(this.world == null){
-            this.world = NailedDimensionManager.getWorld(this.dimId);
+            this.world = NailedDimensionManager.instance().getWorld(this.dimId);
         }
         return this.world;
     }

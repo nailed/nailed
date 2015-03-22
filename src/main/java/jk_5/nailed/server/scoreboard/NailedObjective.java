@@ -91,4 +91,8 @@ public class NailedObjective implements Objective {
             ((NailedPlayer) player).sendPacket(p);
         }
     }
+
+    public NetworkedScoreboardManager getManager() {
+        return manager;
+    }
 }

@@ -1,5 +1,6 @@
 package jk_5.nailed.server.mappack.metadata.xml;
 
+import jk_5.nailed.api.mappack.MappackConfigurationException;
 import jk_5.nailed.api.mappack.metadata.Tutorial;
 import jk_5.nailed.api.mappack.metadata.TutorialStage;
 import org.jdom2.Element;
@@ -12,7 +13,7 @@ public class XmlTutorial implements Tutorial {
 
     private final TutorialStage[] stages;
 
-    public XmlTutorial(Element element) {
+    public XmlTutorial(Element element) throws MappackConfigurationException {
         if(element.getChild("stages", element.getNamespace()) == null){
             this.stages = new TutorialStage[0];
         }else{

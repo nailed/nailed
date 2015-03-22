@@ -13,7 +13,15 @@ import java.io.File;
 public class DummyLobbyMappack implements Mappack {
 
     private static final DummyLobbyMappack INSTANCE = new DummyLobbyMappack();
-    private final MappackMetadata metadata = XmlMappackMetadata.fromResource("dummy-mappack.xml");
+    private final MappackMetadata metadata;
+
+    public DummyLobbyMappack() {
+        try{
+            this.metadata = XmlMappackMetadata.fromResource("dummy-mappack.xml");
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
 
     @Nonnull
     @Override

@@ -13,7 +13,7 @@
  
      public static WorldProvider func_76570_a(int p_76570_0_) {
 -        return (WorldProvider)(p_76570_0_ == -1 ? new WorldProviderHell() : (p_76570_0_ == 0 ? new WorldProviderSurface() : (p_76570_0_ == 1 ? new WorldProviderEnd() : null)));
-+        return jk_5.nailed.server.world.NailedDimensionManager.createProviderFor(p_76570_0_);
++        return jk_5.nailed.server.world.NailedDimensionManager.instance().createProviderFor(p_76570_0_);
      }
  
      public BlockPos func_177496_h() {

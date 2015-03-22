@@ -4,7 +4,7 @@
          this.func_72966_v();
          this.func_72947_a();
          this.func_175723_af().func_177725_a(p_i45921_1_.func_175580_aG());
-+        jk_5.nailed.server.world.NailedDimensionManager.setWorld(p_i45921_4_, this);
++        jk_5.nailed.server.world.NailedDimensionManager.instance().setWorld(p_i45921_4_, this);
      }
  
      public World func_175643_b() {

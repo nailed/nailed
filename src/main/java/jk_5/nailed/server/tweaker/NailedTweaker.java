@@ -59,8 +59,8 @@ public class NailedTweaker implements ITweaker {
             logger.info("This is a snapshot version. It might be instable/buggy");
         }
 
-        BinPatchManager.setup();
-        NameRemapper.init();
+        BinPatchManager.instance().setup();
+        NameRemapper.instance().init();
 
         InternalLoggerFactory.getInstance("INITLOGGER"); //Force netty's logger to initialize
     }

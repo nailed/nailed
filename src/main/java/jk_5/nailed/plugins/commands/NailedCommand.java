@@ -11,7 +11,7 @@ public class NailedCommand {
 
     @Command(aliases = "version", desc = "Tells you the nailed version")
     public void reloadMappacks(CommandSender sender){
-        TextComponent message = new TextComponent("Nailed version " + NailedVersion.full() + " implementing api version " + NailedPlatform.instance().getAPIVersion() + " for minecraft " + NailedVersion.mcversion());
+        TextComponent message = new TextComponent("Nailed version " + NailedVersion.full + " implementing api version " + NailedPlatform.instance().getAPIVersion() + " for minecraft " + NailedVersion.mcversion);
         message.setColor(ChatColor.GOLD);
         sender.sendMessage(message);
     }

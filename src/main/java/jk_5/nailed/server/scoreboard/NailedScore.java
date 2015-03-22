@@ -48,9 +48,9 @@ public class NailedScore implements Score {
     public void update() {
         S3CPacketUpdateScore p = new S3CPacketUpdateScore();
         p.name = this.name;
-        p.objective = this.owner.id();
+        p.objective = this.owner.getId();
         p.value = this.value;
         p.action = S3CPacketUpdateScore.Action.CHANGE;
-        owner.manager().sendPacket(p);
+        owner.getManager().sendPacket(p);
     }
 }

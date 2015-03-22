@@ -31,17 +31,17 @@ import jk_5.nailed.server.map.NailedMapLoader;
 import jk_5.nailed.server.map.game.NailedGameTypeRegistry;
 import jk_5.nailed.server.mappack.NailedMappackRegistry;
 import jk_5.nailed.server.player.NailedPlayer;
-import jk_5.nailed.server.plugin.NailedPluginManager$;
-import jk_5.nailed.server.scheduler.NailedScheduler$;
+import jk_5.nailed.server.plugin.NailedPluginManager;
+import jk_5.nailed.server.scheduler.NailedScheduler;
 import jk_5.nailed.server.teamspeak.TeamspeakManager;
-import jk_5.nailed.server.teleport.MapInventoryListener$;
+import jk_5.nailed.server.teleport.MapInventoryListener;
 import jk_5.nailed.server.tileentity.OldStatEmitterConverter;
 import jk_5.nailed.server.tileentity.TileEntityStatEmitter;
 import jk_5.nailed.server.tweaker.NailedTweaker;
 import jk_5.nailed.server.utils.InvSeeTicker;
-import jk_5.nailed.server.utils.NailedPlayerSelector$;
+import jk_5.nailed.server.utils.NailedPlayerSelector;
 import jk_5.nailed.server.world.*;
-import jk_5.nailed.server.worlditems.WorldItemEventHandler$;
+import jk_5.nailed.server.worlditems.WorldItemEventHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.launchwrapper.Launch;
@@ -105,12 +105,12 @@ public class NailedPlatform implements Platform {
         logger.info("PLATFORM LOADED BY " + this.getClass().getClassLoader());
         if(this.getClass().getClassLoader() == Launch.classLoader){
             globalEventBus.register(this);
-            globalEventBus.register(NailedScheduler$.MODULE$);
+            globalEventBus.register(NailedScheduler.instance());
             globalEventBus.register(NailedMapLoader.instance());
-            globalEventBus.register(BossBar$.MODULE$);
-            globalEventBus.register(WorldItemEventHandler$.MODULE$);
+            globalEventBus.register(BossBar.instance());
+            globalEventBus.register(WorldItemEventHandler.instance());
             globalEventBus.register(new InvSeeTicker());
-            globalEventBus.register(MapInventoryListener$.MODULE$);
+            globalEventBus.register(new MapInventoryListener());
         }else{
             logger.info("------------------");
             logger.info("WRONG CLASSLOADER!");
@@ -126,7 +126,7 @@ public class NailedPlatform implements Platform {
         TileEntity.addMapping(OldStatEmitterConverter.class, "nailed.stat");
 
         pluginsDir.mkdir();
-        NailedPluginManager$.MODULE$.loadPlugins(pluginsDir);
+        NailedPluginManager.instance().loadPlugins(pluginsDir);
 
         NailedEventFactory.fireEvent(new RegisterMappacksEvent(NailedMappackRegistry.instance(), NailedMapLoader.instance()));
         NailedMapLoader.instance().checkLobbyMappack();
@@ -134,7 +134,7 @@ public class NailedPlatform implements Platform {
     }
 
     public void load(){
-        NailedPluginManager$.MODULE$.enablePlugins();
+        NailedPluginManager.instance().enablePlugins();
         TeamspeakManager.start();
     }
 
@@ -159,7 +159,7 @@ public class NailedPlatform implements Platform {
     @Nonnull
     @Override
     public PluginManager getPluginManager() {
-        return NailedPluginManager$.MODULE$;
+        return NailedPluginManager.instance();
     }
 
     @Nonnull
@@ -251,22 +251,22 @@ public class NailedPlatform implements Platform {
     @Nonnull
     @Override
     public World createNewWorld(WorldProvider provider, WorldContext ctx) {
-        int id = NailedDimensionManager.getNextFreeDimensionId();
-        NailedDimensionManager.registerDimension(id, provider);
-        NailedDimensionManager.initWorld(id, ctx);
-        return NailedDimensionManager.getWorld(id);
+        int id = NailedDimensionManager.instance().getNextFreeDimensionId();
+        NailedDimensionManager.instance().registerDimension(id, provider);
+        NailedDimensionManager.instance().initWorld(id, ctx);
+        return NailedDimensionManager.instance().getWorld(id);
     }
 
     @Nonnull
     @Override
     public Scheduler getScheduler() {
-        return NailedScheduler$.MODULE$;
+        return NailedScheduler.instance();
     }
 
     @Nonnull
     @Override
     public PlayerSelector getPlayerSelector() {
-        return NailedPlayerSelector$.MODULE$;
+        return NailedPlayerSelector.instance();
     }
 
     @Nonnull
@@ -278,7 +278,7 @@ public class NailedPlatform implements Platform {
     @Nonnull
     @Override
     public CommandSender getConsoleCommandSender() {
-        return NailedEventFactory.serverCommandSender();
+        return NailedEventFactory.serverCommandSender;
     }
 
     @Nonnull

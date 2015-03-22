@@ -45,7 +45,7 @@ public class TileEntityStatEmitter extends TileEntityCommandBlock implements Sta
     @Override
     public void setWorldObj(World world) {
         super.setWorldObj(world);
-        map = NailedDimensionManager.getWorld(world.provider.getDimensionId()).getMap();
+        map = NailedDimensionManager.instance().getWorld(world.provider.getDimensionId()).getMap();
     }
 
     //BlockCommandBlock is hardcoded to rely on CommandBlockLogic, and i don't want to change that

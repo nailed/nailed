@@ -9,6 +9,6 @@ public class ReloadCommand {
     @Command(aliases = "mappacks", desc = "Reload mappacks")
     @Require("admin")
     public void reloadMappacks(){
-        NailedMappackRegistry.reload();
+        NailedMappackRegistry.instance().reload();
     }
 }

@@ -7,6 +7,6 @@ public class PatchingTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String mappedName, byte[] bytes) {
-        return BinPatchManager.applyPatch(name, mappedName, bytes);
+        return BinPatchManager.instance().applyPatch(name, mappedName, bytes);
     }
 }

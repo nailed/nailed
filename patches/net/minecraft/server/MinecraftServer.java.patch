@@ -101,9 +101,9 @@
 -
 -        this.field_71318_t.func_72364_a(this.field_71305_c);
 -        this.func_147139_a(this.func_147135_j());
-+        jk_5.nailed.server.map.NailedMap map = (jk_5.nailed.server.map.NailedMap) jk_5.nailed.server.map.NailedMapLoader.createLobbyMap();
++        jk_5.nailed.server.map.NailedMap map = (jk_5.nailed.server.map.NailedMap) jk_5.nailed.server.map.NailedMapLoader.instance().createLobbyMap();
 +        jk_5.nailed.server.world.NailedWorld world = (jk_5.nailed.server.world.NailedWorld) map.worldsArray()[0];
-+        this.field_71318_t.func_72364_a(new WorldServer[]{world.wrapped()});
++        this.field_71318_t.func_72364_a(new WorldServer[]{world.getWrapped()});
          this.func_71222_d();
      }
  
@@ -138,7 +138,7 @@
 +            WorldServer[] tmp = field_71305_c;
 +            for(WorldServer world : tmp){
 +                //Nailed: unload the worlds from our system
-+                jk_5.nailed.server.world.NailedDimensionManager.setWorld(world.field_73011_w.func_177502_q(), null);
++                jk_5.nailed.server.world.NailedDimensionManager.instance().setWorld(world.field_73011_w.func_177502_q(), null);
 +            }
 +
              if (this.field_71307_n.func_76468_d()) {
@@ -149,14 +149,14 @@
  
                      if (j > 2000L && this.field_175591_ab - this.field_71299_R >= 15000L) {
 -                        field_147145_h.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] {Long.valueOf(j), Long.valueOf(j / 50L)});
-+                        if(jk_5.nailed.server.NailedPlatform$.MODULE$.config().getBoolean("warnings.cantKeepUp")) field_147145_h.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] {Long.valueOf(j), Long.valueOf(j / 50L)});
++                        if(jk_5.nailed.server.NailedPlatform.instance().getConfig().getBoolean("warnings.cantKeepUp")) field_147145_h.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] {Long.valueOf(j), Long.valueOf(j / 50L)});
                          j = 2000L;
                          this.field_71299_R = this.field_175591_ab;
                      }
  
                      if (j < 0L) {
 -                        field_147145_h.warn("Time ran backwards! Did the system time change?");
-+                        if(jk_5.nailed.server.NailedPlatform$.MODULE$.config().getBoolean("warnings.timeRanBackwards")) field_147145_h.warn("Time ran backwards! Did the system time change?");
++                        if(jk_5.nailed.server.NailedPlatform.instance().getConfig().getBoolean("warnings.timeRanBackwards")) field_147145_h.warn("Time ran backwards! Did the system time change?");
                          j = 0L;
                      }
  
@@ -189,7 +189,7 @@
 +        jk_5.nailed.server.chunkloading.ChunkIOExecutor.tick();
  
 -        for (j = 0; j < this.field_71305_c.length; ++j) {
-+        int[] ids = jk_5.nailed.server.world.NailedDimensionManager.getAllDimensionIds();
++        int[] ids = jk_5.nailed.server.world.NailedDimensionManager.instance().getAllDimensionIds();
 +        for (int x = 0; x < this.field_71305_c.length; x++) {
 +            int id = ids[x];
              long i = System.nanoTime();
@@ -197,7 +197,7 @@
 -            if (j == 0 || this.func_71255_r()) {
 -                WorldServer worldserver = this.field_71305_c[j];
 +            if (id == 0 || this.func_71255_r()) {
-+                WorldServer worldserver = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(id);
++                WorldServer worldserver = jk_5.nailed.server.world.NailedDimensionManager.instance().getVanillaWorld(id);
                  this.field_71304_b.func_76320_a(worldserver.func_72912_H().func_76065_j());
  
                  if (this.field_71315_w % 20 == 0) {
@@ -226,7 +226,7 @@
          }
  
 +        this.field_71304_b.func_76318_c("dimensionUnloading");
-+        jk_5.nailed.server.world.NailedDimensionManager.unloadWorlds(worldTickTimes);
++        jk_5.nailed.server.world.NailedDimensionManager.instance().unloadWorlds(worldTickTimes);
          this.field_71304_b.func_76318_c("connection");
 -        this.func_147137_ag().func_151269_c();
 +        jk_5.nailed.server.network.NailedNetworkManager.processQueuedPackets();
@@ -251,10 +251,10 @@
  
      public WorldServer func_71218_a(int p_71218_1_) {
 -        return p_71218_1_ == -1 ? this.field_71305_c[1] : (p_71218_1_ == 1 ? this.field_71305_c[2] : this.field_71305_c[0]);
-+        WorldServer world = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(p_71218_1_);
++        WorldServer world = jk_5.nailed.server.world.NailedDimensionManager.instance().getVanillaWorld(p_71218_1_);
 +        if(world == null){
-+            jk_5.nailed.server.world.NailedDimensionManager.initWorld(p_71218_1_, new jk_5.nailed.api.world.WorldContext(null, null, null));
-+            world = jk_5.nailed.server.world.NailedDimensionManager.getVanillaWorld(p_71218_1_);
++            jk_5.nailed.server.world.NailedDimensionManager.instance().initWorld(p_71218_1_, new jk_5.nailed.api.world.WorldContext(null, null, null));
++            world = jk_5.nailed.server.world.NailedDimensionManager.instance().getVanillaWorld(p_71218_1_);
 +        }
 +        return world;
      }

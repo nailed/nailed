@@ -15,15 +15,14 @@ import jk_5.nailed.api.command.util.auth.AuthorizationException;
 import jk_5.nailed.api.command.util.auth.Authorizer;
 import jk_5.nailed.api.event.RegisterCommandsEvent;
 import jk_5.nailed.api.player.Player;
-import jk_5.nailed.server.NailedEventFactory$;
+import jk_5.nailed.server.NailedEventFactory;
 import jk_5.nailed.server.NailedPlatform;
+import net.minecraft.command.ICommandSender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class NailedCommandManager {
 
@@ -49,7 +48,7 @@ public class NailedCommandManager {
         builder.setAuthorizer(acceptingAuthorizer);
 
         CommandGraph graph = new CommandGraph().builder(builder);
-        NailedEventFactory$.MODULE$.fireEvent(new RegisterCommandsEvent(graph.commands()));
+        NailedEventFactory.fireEvent(new RegisterCommandsEvent(graph.commands()));
         dispatcher = graph.getDispatcher();
         completer.dispatcher = dispatcher;
     }
@@ -67,9 +66,12 @@ public class NailedCommandManager {
         return fireCommand(input, sender, null);
     }
 
-    public static int fireCommand(String input, CommandSender sender, @Nullable Consumer<CommandLocals> withLocals){
+    //public static int fireCommand(String input, CommandSender sender, @Nullable Consumer<CommandLocals> withLocals){ //TODO: java 1.8
+    public static int fireCommand(String input, CommandSender sender, ICommandSender comSender){ //TODO: java 1.8
         CommandLocals locals = prepareLocals(new CommandLocals(), input, sender);
-        if(withLocals != null) withLocals.accept(locals);
+        //if(withLocals != null) withLocals.accept(locals); //JAVA 1.8
+        locals.put(ICommandSender.class, comSender);
+        /////
         try{
             if(sender instanceof Player){
                 Player p = (Player) sender;
@@ -102,9 +104,12 @@ public class NailedCommandManager {
         return fireAutocompletion(input, sender, null);
     }
 
-    public static List<String> fireAutocompletion(String input, CommandSender sender, @Nullable Consumer<CommandLocals> withLocals){
+    //public static List<String> fireAutocompletion(String input, CommandSender sender, @Nullable Consumer<CommandLocals> withLocals){ //TODO: java 1.8
+    public static List<String> fireAutocompletion(String input, CommandSender sender, ICommandSender comSender){
         CommandLocals locals = prepareLocals(new CommandLocals(), input, sender);
-        if(withLocals != null) withLocals.accept(locals);
+        //if(withLocals != null) withLocals.accept(locals); //TODO: java 1.8
+        locals.put(ICommandSender.class, comSender);
+        ////
         try{
             return dispatcher.getSuggestions(input, locals);
         }catch(InvocationCommandException e) {
