@@ -75,17 +75,17 @@
 +        }else if(p_147349_1_.func_149559_c().equals("REGISTER")){
 +            String channels = p_147349_1_.func_180760_b().func_150789_c(Integer.MAX_VALUE);
 +            for(String channel : channels.split("\0")){
-+                ((jk_5.nailed.server.player.NailedPlayer) jk_5.nailed.server.NailedPlatform$.MODULE$.getPlayerFromEntity(field_147369_b)).addChannel(channel);
++                ((jk_5.nailed.server.player.NailedPlayer) jk_5.nailed.server.NailedPlatform.instance().getPlayerFromEntity(field_147369_b)).addChannel(channel);
 +            }
 +        }else if(p_147349_1_.func_149559_c().equals("UNREGISTER")){
 +            String channels = p_147349_1_.func_180760_b().func_150789_c(Integer.MAX_VALUE);
 +            for(String channel : channels.split("\0")){
-+                ((jk_5.nailed.server.player.NailedPlayer) jk_5.nailed.server.NailedPlatform$.MODULE$.getPlayerFromEntity(field_147369_b)).removeChannel(channel);
++                ((jk_5.nailed.server.player.NailedPlayer) jk_5.nailed.server.NailedPlatform.instance().getPlayerFromEntity(field_147369_b)).removeChannel(channel);
 +            }
 +        }else{
 +            byte[] bytes = new byte[p_147349_1_.func_180760_b().readableBytes()];
 +            p_147349_1_.func_180760_b().readBytes(bytes);
-+            jk_5.nailed.server.NailedPlatform$.MODULE$.getMessenger().dispatchIncomingMessage(jk_5.nailed.server.NailedPlatform$.MODULE$.getPlayerFromEntity(field_147369_b), p_147349_1_.func_149559_c(), bytes);
++            jk_5.nailed.server.NailedPlatform.instance().getMessenger().dispatchIncomingMessage(jk_5.nailed.server.NailedPlatform.instance().getPlayerFromEntity(field_147369_b), p_147349_1_.func_149559_c(), bytes);
          }
      }
  

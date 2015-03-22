@@ -10,7 +10,7 @@
 -            int i = Math.max(5, p_i45285_1_.func_82357_ak() - 6);
 -            int j = MathHelper.func_76128_c(p_i45285_2_.func_175723_af().func_177729_b((double)blockpos.func_177958_n(), (double)blockpos.func_177952_p()));
 +        jk_5.nailed.api.util.Location spawn = this.field_70170_p.field_73011_w.getSpawnPoint();
-+        jk_5.nailed.server.player.NailedPlayer player = (jk_5.nailed.server.player.NailedPlayer) jk_5.nailed.server.NailedPlatform$.MODULE$.getPlayerFromEntity(this);
++        jk_5.nailed.server.player.NailedPlayer player = (jk_5.nailed.server.player.NailedPlayer) jk_5.nailed.server.NailedPlatform.instance().getPlayerFromEntity(this);
 +        if(player != null && player.getMap() != null) spawn = player.getSpawnPoint();
  
 -            if (j < i) {

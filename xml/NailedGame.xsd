@@ -16,7 +16,7 @@
   ~ this program. If not, see <http://opensource.org/licenses/MIT/>.
   -->
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://nailed.jk-5.tk/GameConfig/1.0.0" xmlns="http://nailed.jk-5.tk/GameConfig/1.0.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://nailed.jk-5.nl/GameConfig/1.0.0" xmlns="http://nailed.jk-5.nl/GameConfig/1.0.0">
     <xs:element name="game" type="GameModel">
         <xs:annotation>
             <xs:documentation source="version">1.0.0</xs:documentation>
