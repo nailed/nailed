@@ -75,21 +75,29 @@ public class DependencyParser {
 
         finished.await();
 
-        DepLoader.log("INFO", "Done!");
+        DepLoader.log("INFO", "Done downloading libraries");
+        DepLoader.log("INFO", "Generating start.sh script");
 
-        PrintWriter p = new PrintWriter(new File("start.sh"));
-        p.println("#! /bin/sh");
-        p.print("java -Xmx1g -Xms1g -XX:PermSize=128m -server -Djava.awt.headless=true -cp ");
-        p.print(DependencyParser.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        StringBuilder builder = new StringBuilder();
+        builder.append("#! /bin/sh\n");
+        builder.append("java -Xmx1g -Xms1g -XX:PermSize=128m -server -Djava.awt.headless=true -cp ");
+        builder.append(DependencyParser.class.getProtectionDomain().getCodeSource().getLocation().getPath());
         for(MavenDependency dep : dependencies){
-            p.print(':');
-            p.print(dep.getLibraryLocation(libDir).getPath());
+            builder.append(':');
+            builder.append(dep.getLibraryLocation(libDir).getPath());
         }
 
-        p.print(" net.minecraft.launchwrapper.Launch --tweakClass jk_5.nailed.server.tweaker.NailedTweaker");
-        p.println();
+        builder.append(" net.minecraft.launchwrapper.Launch --tweakClass jk_5.nailed.server.tweaker.NailedTweaker");
+        builder.append("\n");
 
+        DepLoader.log("INFO", "Generated start.sh script");
+        PrintWriter p = new PrintWriter(new File("start.sh"));
+        p.append(builder.toString());
         p.flush();
         p.close();
+
+        DepLoader.log("INFO", "Wrote start.sh script");
+        DepLoader.log("INFO", "Done!");
+        System.exit(0);
     }
 }

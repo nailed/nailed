@@ -72,6 +72,7 @@ nailedMCP {
 
 configurations {
     deployer
+    worldedit
     nailed.exclude module: 'lwjgl'
     nailed.exclude module: 'lwjgl-platform'
     nailed.exclude module: 'jinput'
@@ -157,6 +158,35 @@ reobfuscate {
     addExtraSrgFile project.mixinSrg
 }
 
+packageServer {
+    exclude("jk_5/nailed/plugins/worldedit/**")
+}
+
+task worldEditJar(type: Jar) {
+    baseName = "WorldEdit"
+    version = "1.0.0"
+
+    manifest {
+        attributes "Built-By": System.getProperty("user.name")
+        attributes "Build-Jdk": System.getProperty("java.version")
+        attributes "Created-By": "Gradle " + gradle.gradleVersion
+        attributes "Implementation-Version": "1.0.0"
+        attributes "Implementation-Title": "jk_5.nailed.plugins.worldedit"
+        attributes "Implementation-Vendor": "jk-5"
+        attributes "Specification-Version": "1.0.0"
+        attributes "Specification-Title": "WorldEdit plugin for Nailed"
+        attributes "Specification-Vendor": "jk-5"
+    }
+
+    dependsOn "generateBinaryPatches"
+    from zipTree("build/tmp/jars/binpatches.jar")
+    include("jk_5/nailed/plugins/worldedit/**")
+}
+
+artifacts {
+    worldedit worldEditJar
+}
+
 uploadArchives {
     if (project.hasProperty("deploymaven")) {
         repositories.mavenDeployer {
@@ -166,6 +196,57 @@ uploadArchives {
             }
             pom.project {
                 description = 'Nailed, the Minecraft PvP server framework'
+                url = 'https://github.com/nailed/nailed'
+
+                scm {
+                    url 'https://github.com/nailed/nailed'
+                    connection 'scm:git:git://github.com/nailed/nailed.git'
+                    developerConnection 'scm:git:git@github.com:nailed/nailed.git'
+                }
+
+                issueManagement {
+                    system 'github'
+                    url 'https://github.com/nailed/nailed/issues'
+                }
+
+                developers {
+                    developer {
+                        id = 'jk-5'
+                        name = 'jk-5'
+                        roles {
+                            role 'developer'
+                            role 'packager'
+                        }
+                    }
+                    developer {
+                        id = 'mattashii'
+                        name = 'mattashii'
+                        roles {
+                            role 'contributor'
+                        }
+                    }
+                }
+            }
+        }
+    }else{
+        repositories{
+            mavenLocal()
+        }
+    }
+}
+
+uploadWorldedit {
+    if (project.hasProperty("deploymaven")) {
+        repositories.mavenDeployer {
+            configuration = configurations.deployer
+            repository(url: project.deploymaven.url) {
+                authentication(userName: project.deploymaven.username, password: project.deploymaven.password)
+            }
+            pom.groupId = "jk_5.nailed.plugins"
+            pom.artifactId = "WorldEdit"
+            pom.version = "1.0.0"
+            pom.project {
+                description = 'WorldEdit plugin for nailed'
                 url = 'https://github.com/nailed/nailed'
 
                 scm {
