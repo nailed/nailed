@@ -91,7 +91,7 @@ dependencies {
     nailed 'org.apache.logging.log4j:log4j-slf4j-impl:2.0-beta9'
     nailed 'org.javassist:javassist:3.18.2-GA'
 
-    nailed "com.sk89q:worldedit:6.0.2-SNAPSHOT"
+    nailed "com.sk89q:worldedit:6.0.0-SNAPSHOT"
 
     compile project(':api')
     compile project(':Mixin')
