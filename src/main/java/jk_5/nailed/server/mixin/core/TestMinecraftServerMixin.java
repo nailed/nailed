@@ -1,17 +1,18 @@
 package jk_5.nailed.server.mixin.core;
 
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.storage.ISaveFormat;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(value = MixinTarget.class, remap = false)
-public abstract class TestMinecraftServerMixin extends MixinTarget {
+@Mixin(MinecraftServer.class)
+public abstract class TestMinecraftServerMixin {
 
-    @Override
-    public void something() {
-        nailedMethod("hai");
-        super.something();
-    }
+    @Shadow
+    private ISaveFormat anvilConverterForAnvilFile;
 
     public void nailedMethod(String msg){
         System.out.println("Fuck yeah! " + msg);
+        System.out.println(anvilConverterForAnvilFile);
     }
 }
