@@ -3,6 +3,7 @@ package jk_5.nailed.server.plugin;
 import com.google.common.base.MoreObjects;
 import jk_5.eventbus.Event;
 import jk_5.eventbus.EventBus;
+import jk_5.nailed.api.event.PlatformEvent;
 import jk_5.nailed.api.plugin.Plugin;
 import jk_5.nailed.api.plugin.PluginContainer;
 import jk_5.nailed.api.plugin.PluginIdentifier;
@@ -27,6 +28,9 @@ public class DefaultPluginContainer implements PluginContainer, PluginIdentifier
     }
 
     public <T extends Event> T fireEvent(T event){
+        if(event instanceof PlatformEvent){
+            ((PlatformEvent) event).setPlatform(NailedPlatform.instance());
+        }
         eventBus.post(event);
         return event;
     }
