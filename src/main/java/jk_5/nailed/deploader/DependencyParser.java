@@ -91,10 +91,13 @@ public class DependencyParser {
         builder.append("\n");
 
         DepLoader.log("INFO", "Generated start.sh script");
-        PrintWriter p = new PrintWriter(new File("start.sh"));
+        File startFile = new File("start.sh");
+        PrintWriter p = new PrintWriter(startFile);
         p.append(builder.toString());
         p.flush();
         p.close();
+
+        startFile.setExecutable(true);
 
         DepLoader.log("INFO", "Wrote start.sh script");
         DepLoader.log("INFO", "Done!");
