@@ -133,6 +133,10 @@ project.gradle.taskGraph.whenReady { taskGraph ->
             attributes("Specification-Version": "2.0.0", "jk_5.nailed.deploader")
             attributes("Specification-Title": "Nailed deploader", "jk_5.nailed.deploader")
             attributes("Specification-Vendor": "jk-5", "jk_5.nailed.deploader")
+
+            attributes("Implementation-Version": project(":Mixin").version, "org.spongepowered.tools")
+            attributes("Implementation-Title": "Mixin", "org.spongepowered.tools")
+            attributes("Implementation-Vendor": "http://spongepowered.org", "org.spongepowered.tools")
         }
     }
 }
@@ -159,6 +163,9 @@ reobfuscate {
 }
 
 packageServer {
+    from(project(":Mixin").sourceSets.main.output){
+        exclude("org/spongepowered/tools")
+    }
     exclude("jk_5/nailed/plugins/worldedit/**")
 }
 

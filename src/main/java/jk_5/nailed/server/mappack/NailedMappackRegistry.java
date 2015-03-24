@@ -76,7 +76,6 @@ public class NailedMappackRegistry implements MappackRegistry {
         logger.info("Reloading mappacks");
         mappacks.clear();
         NailedEventFactory.fireEvent(new RegisterMappacksEvent(this, NailedMapLoader.instance()));
-        NailedMapLoader.instance().checkLobbyMappack();
     }
 
     public static NailedMappackRegistry instance(){

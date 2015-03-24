@@ -108,7 +108,6 @@ public class NailedPlatform implements Platform {
         NailedPluginManager.instance().loadPlugins(pluginsDir);
 
         NailedEventFactory.fireEvent(new RegisterMappacksEvent(NailedMappackRegistry.instance(), NailedMapLoader.instance()));
-        NailedMapLoader.instance().checkLobbyMappack();
         NailedCommandManager.registerPluginCommands();
     }
 
