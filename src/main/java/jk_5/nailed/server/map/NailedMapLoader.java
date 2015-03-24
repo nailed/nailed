@@ -48,34 +48,17 @@ public class NailedMapLoader implements MapLoader {
     private Mappack lobbyMappack;
     private Map lobby;
 
-    /**
-     * @deprecated Use a built-in way of determining the lobby mappack
-     */
-    @Deprecated
-    public void checkLobbyMappack(){
-        this.setLobbyMappack(NailedMappackRegistry.instance().getByName(NailedPlatform.instance().getConfig().getString("lobbyMappack")));
-    }
-
-    /**
-     * @deprecated We will leave this as a config option only
-     */
-    @Deprecated
-    public boolean setLobbyMappack(@Nonnull Mappack mappack){
-        if(mappack == null){
-            throw new NullPointerException("lobbyMappack may not be null");
-        }
-        if(this.lobbyMappack == null){
-            logger.info("Lobby mappack was set to {}", mappack);
-            this.lobbyMappack = mappack;
-            return true;
-        }else{
-            return false;
-        }
-    }
-
     @Nonnull
     @Override
     public Mappack getLobbyMappack() {
+        String lobbyName = NailedPlatform.instance().getConfig().getString("lobbyMappack");
+        Mappack mp = NailedMappackRegistry.instance().getByName(lobbyName);
+        if(mp == null){
+            logger.warn("Mappack {} was defined as a lobby mappack in the config, but it does not exist. Falling back to a dummy", lobbyName);
+            this.lobbyMappack = DummyLobbyMappack.instance();
+        }else{
+            this.lobbyMappack = mp;
+        }
         return this.lobbyMappack;
     }
 
@@ -91,17 +74,6 @@ public class NailedMapLoader implements MapLoader {
         return this.maps.get(mapid);
     }
 
-    @Deprecated
-    @Nonnull
-    @Override
-    public Map getOrCreateMap(int mapid) {
-        Map map = this.maps.get(mapid);
-        if(map == null){
-            throw new RuntimeException("No map exists for mapid " + mapid);
-        }
-        return map;
-    }
-
     public NailedMap registerMap(NailedMap map){
         if(map.id() == 0){
             this.lobby = map;
@@ -112,12 +84,6 @@ public class NailedMapLoader implements MapLoader {
     }
 
     public Map createLobbyMap(){
-        if(this.lobbyMappack == null){
-            //TODO: try to check in the config which mappack should be lobby. If it exists, use that, otherwise set it to a dummy
-            logger.warn("A lobby mappack was not registered yet, bu t we need it now. Setting it to a default void mappack");
-            this.setLobbyMappack(DummyLobbyMappack.instance());
-        }
-
         int id = nextMapId.getAndIncrement();
         final Promise<Void> finishPromise = new DefaultPromise<Void>(NailedScheduler.instance().getExecutor().next());
         final File baseDir = new File(mapsDir, "lobby");
@@ -125,7 +91,7 @@ public class NailedMapLoader implements MapLoader {
             @Override
             public void run() {
                 baseDir.mkdir();
-                lobbyMappack.prepareWorld(baseDir, finishPromise);
+                getLobbyMappack().prepareWorld(baseDir, finishPromise);
             }
         });
         try{
@@ -133,13 +99,13 @@ public class NailedMapLoader implements MapLoader {
         }catch(Exception e){
             logger.error("Exception while waiting for the promise to finish", e);
         }
-        NailedMap map = new NailedMap(id, lobbyMappack, baseDir);
+        NailedMap map = new NailedMap(id, getLobbyMappack(), baseDir);
         if(finishPromise.isSuccess()){
             this.registerMap(map);
-            this.loadMappackWorlds(map, lobbyMappack, "lobby");
+            this.loadMappackWorlds(map, getLobbyMappack(), "lobby");
             return map;
         }else{
-            logger.warn("Loading of map {} with mappack {} failed.", map, lobbyMappack);
+            logger.warn("Loading of map {} with mappack {} failed.", map, getLobbyMappack());
             throw new MappackLoadingFailedException("Map loading failed", finishPromise.cause());
         }
     }
