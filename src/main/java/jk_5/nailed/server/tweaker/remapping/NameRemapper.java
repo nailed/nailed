@@ -4,10 +4,7 @@ import LZMA.LzmaInputStream;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.*;
 import jk_5.nailed.server.tweaker.patcher.BinPatchManager;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
@@ -212,7 +209,7 @@ public class NameRemapper extends Remapper {
                 return null;
             }
         }
-        return fieldNameMaps.get(className);
+        return methodNameMaps.get(className);
     }
 
     private void findAndMergeSuperMaps(String name){
@@ -265,12 +262,12 @@ public class NameRemapper extends Remapper {
             fieldMap.putAll(rawFieldMaps.get(name));
         }
 
-        methodNameMaps.put(name, methodMap);
-        fieldNameMaps.put(name, fieldMap);
+        methodNameMaps.put(name, ImmutableMap.copyOf(methodMap));
+        fieldNameMaps.put(name, ImmutableMap.copyOf(fieldMap));
     }
 
     public Set<String> getObfuscatedClasses(){
-        return classNameMap.keySet();
+        return ImmutableSet.copyOf(classNameMap.keySet());
     }
 
     public String getStaticFieldType(String oldType, String oldName, String newType, String newName){
