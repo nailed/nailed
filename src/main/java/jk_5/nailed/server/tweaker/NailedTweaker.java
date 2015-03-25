@@ -14,6 +14,8 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,11 +48,16 @@ public class NailedTweaker implements ITweaker {
             options = null;
         }
 
+        //Step 2 - Initialize mixin system
+        MixinBootstrap.init();
+        MixinEnvironment env = MixinEnvironment.getCurrentEnvironment();
+        env.addConfiguration("mixins.nailed.core.json");
+
         if(options.has("accept-eula")){
             NailedTweaker.acceptEula = true;
         }
 
-        //Step 2 - Read configuration
+        //Step 3 - Read configuration
         NailedTweaker.gameDir = gameDir;
         NailedVersion.readConfig();
 
@@ -92,13 +99,14 @@ public class NailedTweaker implements ITweaker {
         classLoader.addClassLoaderExclusion("org.fusesource.");
         classLoader.addTransformerExclusion("jk_5.nailed.server.tweaker.transformer.");
         classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.PatchingTransformer");
+        //classLoader.registerTransformer(MixinBootstrap.TRANSFORMER_CLASS);
         classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.EventSubscriptionTransformer");
         if(!NailedTweaker.deobf) classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.RemappingTransformer");
         classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.AccessTransformer");
 
         AccessTransformer.readConfig("nailed_at.cfg");
 
-        // Step 3 - Initialize logging
+        // Step 4 - Initialize logging
         System.setOut(new PrintStream(new LoggerOutputStream(LogManager.getLogger("SYSOUT"), Level.INFO), true));
         System.setErr(new PrintStream(new LoggerOutputStream(LogManager.getLogger("SYSERR"), Level.WARN), true));
     }

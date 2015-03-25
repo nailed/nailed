@@ -4,17 +4,14 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class CoreMixinPlugin implements IMixinConfigPlugin {
 
-    private List<String> mixins = new ArrayList<String>();
-
     @Override
     public void onLoad(String mixinPackage) {
-
+        System.out.println("Mixin system loaded");
     }
 
     @Override
@@ -34,7 +31,7 @@ public class CoreMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public List<String> getMixins() {
-        return mixins;
+        return null;
     }
 
     @Override
