@@ -75,6 +75,10 @@ public class NailedPluginManager implements PluginManager {
         PluginDiscoverer.discoverClasspathPlugins();
         PluginDiscoverer.discoverJarPlugins(dir);
         Set<PluginDiscoverer.DiscoveredPlugin> discovered = PluginDiscoverer.getDiscovered();
+        logger.info("Discovered " + discovered.size() + " plugins");
+        for(PluginDiscoverer.DiscoveredPlugin d : discovered){
+            logger.trace("  - {} ({} version: {}) -> {}", d.id, d.name, d.version, d.className);
+        }
         for (PluginDiscoverer.DiscoveredPlugin p : discovered) {
             try{
                 if(!p.isClasspath){

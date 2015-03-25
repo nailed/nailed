@@ -64,11 +64,6 @@ public class PluginDiscoverer {
             }catch(Exception e){
             }
         }
-
-        logger.info("Discovered " + discovered.size() + " plugins");
-        for(DiscoveredPlugin d : discovered){
-            logger.trace("  - {} ({} version: {}) -> {}", d.id, d.name, d.version, d.className);
-        }
     }
 
     private static void recurseChildren(File fi) throws IOException {
