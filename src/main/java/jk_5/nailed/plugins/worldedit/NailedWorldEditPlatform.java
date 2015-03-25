@@ -5,6 +5,8 @@ import com.sk89q.worldedit.entity.Player;
 import com.sk89q.worldedit.extension.platform.*;
 import com.sk89q.worldedit.util.command.Dispatcher;
 import com.sk89q.worldedit.world.World;
+import jk_5.nailed.server.NailedPlatform;
+import jk_5.nailed.server.player.NailedPlayer;
 import jk_5.nailed.server.world.NailedDimensionManager;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -74,8 +76,11 @@ class NailedWorldEditPlatform extends AbstractPlatform implements MultiUserPlatf
         if (player instanceof WorldEditPlayer) {
             return player;
         } else {
-            EntityPlayerMP entity = server.getConfigurationManager().getPlayerByUsername(player.getName());
-            return entity != null ? new WorldEditPlayer(this, entity) : null;
+            NailedPlayer pl = NailedPlatform.instance().getPlayer(player.getUniqueId());
+            if(pl == null){
+                return null;
+            }
+            return new WorldEditPlayer(pl);
         }
     }
 
@@ -152,10 +157,10 @@ class NailedWorldEditPlatform extends AbstractPlatform implements MultiUserPlatf
     public Collection<Actor> getConnectedUsers() {
         List<Actor> users = new ArrayList<Actor>();
         ServerConfigurationManager scm = server.getConfigurationManager();
-        for (String name : scm.getAllUsernames()) {
+        for(String name : scm.getAllUsernames()){
             EntityPlayerMP entity = scm.getPlayerByUsername(name);
-            if (entity != null) {
-                users.add(new WorldEditPlayer(this, entity));
+            if(entity != null){
+                users.add(new WorldEditPlayer(NailedPlatform.instance().getPlayerFromEntity(entity)));
             }
         }
         return users;

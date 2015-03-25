@@ -11,42 +11,42 @@ import com.sk89q.worldedit.internal.LocalWorldAdapter;
 import com.sk89q.worldedit.internal.cui.CUIEvent;
 import com.sk89q.worldedit.session.SessionKey;
 import com.sk89q.worldedit.util.Location;
-import io.netty.buffer.Unpooled;
+import jk_5.nailed.api.chat.ChatColor;
+import jk_5.nailed.api.chat.TextComponent;
+import jk_5.nailed.server.NailedPlatform;
+import jk_5.nailed.server.player.NailedPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.S3FPacketCustomPayload;
-import net.minecraft.util.ChatComponentText;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class WorldEditPlayer extends AbstractPlayerActor {
 
-    private final NailedWorldEditPlatform platform;
-    private final EntityPlayerMP player;
+    private final NailedPlayer player;
+    private final EntityPlayerMP playerEntity;
 
-    protected WorldEditPlayer(NailedWorldEditPlatform platform, EntityPlayerMP player) {
-        this.platform = platform;
+    protected WorldEditPlayer(NailedPlayer player) {
         this.player = player;
+        this.playerEntity = player.getEntity();
         ThreadSafeCache.getInstance().getOnlineIds().add(getUniqueId());
     }
 
     @Override
     public UUID getUniqueId() {
-        return player.getUniqueID();
+        return player.getUniqueId();
     }
 
     @Override
     public int getItemInHand() {
-        ItemStack is = this.player.getCurrentEquippedItem();
+        ItemStack is = this.playerEntity.getCurrentEquippedItem();
         return is == null ? 0 : Item.getIdFromItem(is.getItem());
     }
 
     @Override
     public String getName() {
-        return this.player.getCommandSenderName();
+        return player.getName();
     }
 
     @Override
@@ -56,37 +56,37 @@ public class WorldEditPlayer extends AbstractPlayerActor {
 
     @Override
     public Location getLocation() {
-        Vector position = new Vector(this.player.posX, this.player.posY, this.player.posZ);
+        Vector position = new Vector(this.playerEntity.posX, this.playerEntity.posY, this.playerEntity.posZ);
         return new Location(
-                WorldEditWorld.wrap(this.player.worldObj),
+                WorldEditWorld.wrap(this.playerEntity.worldObj),
                 position,
-                this.player.cameraYaw,
-                this.player.cameraPitch);
+                this.playerEntity.cameraYaw,
+                this.playerEntity.cameraPitch);
     }
 
     @Override
     public WorldVector getPosition() {
-        return new WorldVector(LocalWorldAdapter.adapt(WorldEditWorld.wrap(this.player.worldObj)), this.player.posX, this.player.posY, this.player.posZ);
+        return new WorldVector(LocalWorldAdapter.adapt(WorldEditWorld.wrap(this.playerEntity.worldObj)), this.playerEntity.posX, this.playerEntity.posY, this.playerEntity.posZ);
     }
 
     @Override
     public com.sk89q.worldedit.world.World getWorld() {
-        return WorldEditWorld.wrap(this.player.worldObj);
+        return WorldEditWorld.wrap(this.playerEntity.worldObj);
     }
 
     @Override
     public double getPitch() {
-        return this.player.rotationPitch;
+        return this.playerEntity.rotationPitch;
     }
 
     @Override
     public double getYaw() {
-        return this.player.rotationYaw;
+        return this.playerEntity.rotationYaw;
     }
 
     @Override
     public void giveItem(int type, int amt) {
-        this.player.inventory.addItemStackToInventory(new ItemStack(Item.getItemById(type), amt, 0));
+        this.playerEntity.inventory.addItemStackToInventory(new ItemStack(Item.getItemById(type), amt, 0));
     }
 
     @Override
@@ -96,47 +96,51 @@ public class WorldEditPlayer extends AbstractPlayerActor {
         if (params.length > 0) {
             send = send + "|" + StringUtil.joinString(params, "|");
         }
-        PacketBuffer buffer = new PacketBuffer(Unpooled.copiedBuffer(send.getBytes(Charsets.UTF_8)));
-        S3FPacketCustomPayload packet = new S3FPacketCustomPayload("WECUI", buffer);
-        this.player.playerNetServerHandler.sendPacket(packet);
+        player.sendPluginMessage(NailedWorldEditPlugin.instance().identifier, "WECUI", send.getBytes(Charsets.UTF_8));
     }
 
     @Override
     public void printRaw(String msg) {
         for (String part : msg.split("\n")) {
-            this.player.addChatMessage(new ChatComponentText(part));
+            this.player.sendMessage(new TextComponent(part));
         }
     }
 
     @Override
     public void printDebug(String msg) {
         for (String part : msg.split("\n")) {
-            this.player.addChatMessage(new ChatComponentText("\u00a77" + part));
+            TextComponent comp = new TextComponent(part);
+            comp.setColor(ChatColor.GRAY);
+            this.player.sendMessage(comp);
         }
     }
 
     @Override
     public void print(String msg) {
         for (String part : msg.split("\n")) {
-            this.player.addChatMessage(new ChatComponentText("\u00a7d" + part));
+            TextComponent comp = new TextComponent(part);
+            comp.setColor(ChatColor.LIGHT_PURPLE);
+            this.player.sendMessage(comp);
         }
     }
 
     @Override
     public void printError(String msg) {
         for (String part : msg.split("\n")) {
-            this.player.addChatMessage(new ChatComponentText("\u00a7c" + part));
+            TextComponent comp = new TextComponent(part);
+            comp.setColor(ChatColor.RED);
+            this.player.sendMessage(comp);
         }
     }
 
     @Override
     public void setPosition(Vector pos, float pitch, float yaw) {
-        this.player.playerNetServerHandler.setPlayerLocation(pos.getX(), pos.getY(), pos.getZ(), pitch, yaw);
+        this.playerEntity.playerNetServerHandler.setPlayerLocation(pos.getX(), pos.getY(), pos.getZ(), pitch, yaw);
     }
 
     @Override
     public String[] getGroups() {
-        return new String[]{}; // WorldEditMod.inst.getPermissionsResolver().getGroups(this.player.username);
+        return new String[]{}; // WorldEditMod.inst.getPermissionsResolver().getGroups(this.playerEntity.username);
     }
 
     @Override
@@ -146,7 +150,7 @@ public class WorldEditPlayer extends AbstractPlayerActor {
 
     @Override
     public boolean hasPermission(String perm) {
-        //return ForgeWorldEdit.inst.getPermissionsProvider().hasPermission(player, perm);
+        //return ForgeWorldEdit.inst.getPermissionsProvider().hasPermission(playerEntity, perm);
         return true; //TODO: permissions
     }
 
@@ -158,7 +162,7 @@ public class WorldEditPlayer extends AbstractPlayerActor {
 
     @Override
     public SessionKey getSessionKey() {
-        return new SessionKeyImpl(player.getUniqueID(), player.getCommandSenderName());
+        return new SessionKeyImpl(player.getUniqueId(), player.getName());
     }
 
     private static class SessionKeyImpl implements SessionKey {
@@ -196,7 +200,12 @@ public class WorldEditPlayer extends AbstractPlayerActor {
         }
     }
 
+    @Deprecated
     public static WorldEditPlayer wrap(EntityPlayerMP player){
-        return new WorldEditPlayer(NailedWorldEditPlatform.instance(), player);
+        return new WorldEditPlayer(NailedPlatform.instance().getPlayerFromEntity(player));
+    }
+
+    public static WorldEditPlayer wrap(NailedPlayer player){
+        return new WorldEditPlayer(player);
     }
 }

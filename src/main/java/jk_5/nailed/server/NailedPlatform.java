@@ -160,13 +160,13 @@ public class NailedPlatform implements Platform {
 
     @Nullable
     @Override
-    public Player getPlayer(UUID uuid) {
+    public NailedPlayer getPlayer(UUID uuid) {
         return this.playersById.get(uuid);
     }
 
     @Nullable
     @Override
-    public Player getPlayerByName(String name) {
+    public NailedPlayer getPlayerByName(String name) {
         return this.playersByName.get(name);
     }
 
@@ -176,8 +176,8 @@ public class NailedPlatform implements Platform {
         return this.onlinePlayersCollection;
     }
 
-    public Player getPlayerFromEntity(EntityPlayerMP entity){
-        return this.getPlayer(entity.getGameProfile().getId());
+    public NailedPlayer getPlayerFromEntity(EntityPlayerMP entity){
+        return (NailedPlayer) this.getPlayer(entity.getGameProfile().getId());
     }
 
     public NailedPlayer getOrCreatePlayer(EntityPlayerMP entity){
