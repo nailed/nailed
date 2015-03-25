@@ -71,8 +71,11 @@ nailedMCP {
 }
 
 configurations {
-    deployer
-    worldedit
+    deployer //Jars needed for maven deployer
+    worldedit //Deploy configuration for worldedit
+    shadeWorldedit //Libraries shaded into the worldedit jar
+    compile.extendsFrom shadeWorldedit
+
     nailed.exclude module: 'lwjgl'
     nailed.exclude module: 'lwjgl-platform'
     nailed.exclude module: 'jinput'
@@ -92,7 +95,7 @@ dependencies {
     nailed 'org.apache.logging.log4j:log4j-slf4j-impl:2.0-beta9'
     nailed 'org.javassist:javassist:3.18.2-GA'
 
-    nailed "com.sk89q:worldedit:6.0.0-SNAPSHOT"
+    shadeWorldedit "com.sk89q:worldedit:6.0.0-SNAPSHOT"
 
     compile project(':api')
     compile project(':Mixin')
@@ -187,7 +190,18 @@ task worldEditJar(type: Jar) {
 
     dependsOn "generateBinaryPatches"
     from zipTree("build/tmp/jars/binpatches.jar")
+    from {
+        configurations.shadeWorldedit.collect {
+            it.isDirectory() ? it : zipTree(it).matching {
+                exclude "META-INF", "META-INF/**", "*META-INF*", "meta-inf"
+                exclude "**.jar", "**/*.jar", "*.jar"
+            }
+        }
+    }
     include("jk_5/nailed/plugins/worldedit/**")
+    include("com/sk89q/**")
+    include("com/thoughtworks/paranamer/**")
+    include("net/royawesome/jlibnoise/**")
 }
 
 artifacts {
