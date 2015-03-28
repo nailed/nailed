@@ -5,6 +5,6 @@
   "plugin" : "jk_5.nailed.server.mixin.CoreMixinPlugin",
   "refmap": "mixins.nailed.refmap.json",
   "mixins": [
-    "TestMinecraftServerMixin"
+    "server.MixinMinecraftServer"
   ]
 }

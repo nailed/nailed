@@ -83,7 +83,7 @@ public class NailedMapLoader implements MapLoader {
         return map;
     }
 
-    public Map createLobbyMap(){
+    public NailedMap createLobbyMap(){
         int id = nextMapId.getAndIncrement();
         final Promise<Void> finishPromise = new DefaultPromise<Void>(NailedScheduler.instance().getExecutor().next());
         final File baseDir = new File(mapsDir, "lobby");
