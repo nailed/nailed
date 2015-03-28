@@ -1,7 +1,7 @@
 package jk_5.nailed.server.mixin.core;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.storage.ISaveFormat;
+import net.minecraft.server.management.ServerConfigurationManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class TestMinecraftServerMixin {
 
     @Shadow
-    private ISaveFormat anvilConverterForAnvilFile;
+    private ServerConfigurationManager serverConfigManager;
 
     public void nailedMethod(String msg){
         System.out.println("Fuck yeah! " + msg);
-        System.out.println(anvilConverterForAnvilFile);
+        System.out.println(serverConfigManager.getMaxPlayers());
     }
 }

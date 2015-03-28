@@ -92,16 +92,20 @@ public class NailedTweaker implements ITweaker {
 
         classLoader.addClassLoaderExclusion("scala.");
         classLoader.addClassLoaderExclusion("LZMA.");
+        classLoader.addClassLoaderExclusion("io.netty.");
+        classLoader.addClassLoaderExclusion("gnu.trove.");
         classLoader.addClassLoaderExclusion("com.google.");
         classLoader.addClassLoaderExclusion("com.nothome.delta.");
         classLoader.addClassLoaderExclusion("org.apache.");
         classLoader.addClassLoaderExclusion("com.mojang.");
         classLoader.addClassLoaderExclusion("org.fusesource.");
+        classLoader.addClassLoaderExclusion("org.spongepowered.asm.");
+        classLoader.addClassLoaderExclusion("jk_5.nailed.server.mixin.");
         classLoader.addTransformerExclusion("jk_5.nailed.server.tweaker.transformer.");
         classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.PatchingTransformer");
-        //classLoader.registerTransformer(MixinBootstrap.TRANSFORMER_CLASS);
         classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.EventSubscriptionTransformer");
         if(!NailedTweaker.deobf) classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.RemappingTransformer");
+        classLoader.registerTransformer(MixinBootstrap.TRANSFORMER_CLASS);
         classLoader.registerTransformer("jk_5.nailed.server.tweaker.transformer.AccessTransformer");
 
         AccessTransformer.readConfig("nailed_at.cfg");
