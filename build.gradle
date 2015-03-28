@@ -25,6 +25,10 @@ buildscript {
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
         maven {
+            name = "sonatype public"
+            url = "https://oss.sonatype.org/content/groups/public/"
+        }
+        maven {
             //MinecraftForge repo for Srg2Source
             name = "forge"
             url = "http://files.minecraftforge.net/maven/"
@@ -35,11 +39,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath "jk_5.nailed.mcp:mcp:1.5.0"
+        classpath "jk_5.nailed.mcp:mcp:1.6.3"
     }
 }
-
-evaluationDependsOn('Mixin')
 
 repositories {
     mavenLocal()
@@ -51,6 +53,10 @@ repositories {
         name "jk-5"
         url "http://maven.jk-5.nl"
     }
+    maven {
+        name "sponge"
+        url "http://repo.spongepowered.org/maven/"
+    }
 }
 
 apply plugin: "java"
@@ -61,8 +67,12 @@ apply plugin: "nailed-mcp"
 group = "jk_5.nailed"
 version = "1.1.1-SNAPSHOT"
 
+ext.reobfSrg = new File(project.buildDir, "tmp/mappings/generated/srg/mcp2srg.srg")
 ext.mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.srg")
 ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/mixins.nailed.refmap.json")
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 nailedMCP {
     minecraftVersion = "1.8"
@@ -74,102 +84,131 @@ configurations {
     deployer //Jars needed for maven deployer
     worldedit //Deploy configuration for worldedit
     shadeWorldedit //Libraries shaded into the worldedit jar
+    shaded //Libraries shaded into the main jar
+    compile.extendsFrom shaded
     compile.extendsFrom shadeWorldedit
 
-    nailed.exclude module: 'lwjgl'
-    nailed.exclude module: 'lwjgl-platform'
-    nailed.exclude module: 'jinput'
-    nailed.exclude module: 'jinput-platform'
-    nailed.exclude module: 'jutils'
+    compile.exclude module: 'lwjgl'
+    compile.exclude module: 'lwjgl-platform'
+    compile.exclude module: 'jinput'
+    compile.exclude module: 'jinput-platform'
+    compile.exclude module: 'jutils'
+
+    shaded.exclude module: 'lwjgl'
+    shaded.exclude module: 'lwjgl-platform'
+    shaded.exclude module: 'jinput'
+    shaded.exclude module: 'jinput-platform'
+    shaded.exclude module: 'jutils'
 }
 
 dependencies {
-    nailed 'net.minecraft:launchwrapper:1.11'
-    nailed 'org.ow2.asm:asm-debug-all:5.0.3'
-    nailed 'jk_5.eventbus:EventBus:2.0.1'
-    nailed 'lzma:lzma:0.0.1'
-    nailed 'com.nothome:javaxdelta:2.0.1'
-    nailed 'org.mozilla:rhino:1.7R4'
-    nailed 'org.jdom:jdom2:2.0.5'
-    nailed 'com.typesafe:config:1.2.1'
-    nailed 'org.apache.logging.log4j:log4j-slf4j-impl:2.0-beta9'
-    nailed 'org.javassist:javassist:3.18.2-GA'
+    compile 'net.minecraft:launchwrapper:1.11'
+    shaded 'org.ow2.asm:asm-debug-all:5.0.3'
+    shaded 'jk_5.eventbus:EventBus:2.0.1'
+    shaded 'lzma:lzma:0.0.1'
+    shaded 'com.nothome:javaxdelta:2.0.1'
+    shaded 'org.mozilla:rhino:1.7R4'
+    shaded 'org.jdom:jdom2:2.0.5'
+    shaded 'com.typesafe:config:1.2.1'
+    shaded 'org.apache.logging.log4j:log4j-slf4j-impl:2.0-beta9'
+    shaded 'org.javassist:javassist:3.18.2-GA'
+    shaded 'org.spongepowered:mixin:0.2-SNAPSHOT'
 
     shadeWorldedit "com.sk89q:worldedit:6.0.0-SNAPSHOT"
 
-    compile project(':api')
-    compile project(':Mixin')
+    shaded project(':api')
 
     testCompile 'junit:junit:4.12-beta-1'
 
     deployer 'org.apache.maven.wagon:wagon-ssh:2.6'
 }
 
-packageServer.manifest {
-    attributes "TweakClass": "jk_5.nailed.server.tweaker.NailedTweaker"
-    attributes "Main-Class": "jk_5.nailed.deploader.DepLoader"
-    attributes "Built-By": System.getProperty("user.name")
-    attributes "Build-Jdk": System.getProperty("java.version")
-    attributes "Created-By": "Gradle " + gradle.gradleVersion
-    attributes "Implementation-Version": project.version
-    attributes "Implementation-Title": "jk_5.nailed"
-    attributes "Implementation-Vendor": "jk-5"
-    attributes "Specification-Version": project.version
-    attributes "Specification-Title": "Nailed server implementation"
-    attributes "Specification-Vendor": "jk-5"
+task nailedJar(type: Jar) {
+    classifier = ''
+
+    from {
+        configurations.shaded.collect {
+            it.isDirectory() ? it : zipTree(it).matching {
+                exclude "META-INF", "META-INF/**", "*META-INF*", "meta-inf"
+                exclude "**.jar", "**/*.jar", "*.jar"
+            }
+        }
+    }
+
+    manifest {
+        attributes "Main-Class": "jk_5.nailed.launch.ServerMain"
+        attributes "Built-By": System.getProperty("user.name")
+        attributes "Build-Jdk": System.getProperty("java.version")
+        attributes "Created-By": "Gradle " + gradle.gradleVersion
+        attributes "Implementation-Version": project.version
+        attributes "Implementation-Title": "jk_5.nailed"
+        attributes "Implementation-Vendor": "jk-5"
+        attributes "Specification-Version": project.version
+        attributes "Specification-Title": "Nailed server implementation"
+        attributes "Specification-Vendor": "jk-5"
+        attributes "Class-Path": "bin/minecraft_server.1.8.jar bin/launchwrapper-1.11.jar"
+    }
+
+    dependsOn "generateBinaryPatches"
+    dependsOn ":api:jar"
+
+    from project.mixinRefMap
+
+    from plugins.getPlugin('nailed-mcp').toDelayedZipFileTree(jk_5.nailed.mcp.Constants.BINPATCHES())
+    from plugins.getPlugin('nailed-mcp').toDelayedFileTree(jk_5.nailed.mcp.Constants.NAILED_RESOURCES())
+
+    exclude("jk_5/nailed/plugins/worldedit/**")
 }
 
-//Delay evaluation of packageServer manifest
+//Delay evaluation of shadowJar manifest
 project.gradle.taskGraph.whenReady { taskGraph ->
-    if(taskGraph.hasTask(packageServer)){
-        packageServer.manifest{
+    if(taskGraph.hasTask(nailedJar)){
+        nailedJar.manifest{
             attributes("Implementation-Version": project(":api").version, "jk_5.nailed.api")
             attributes("Implementation-Title": "jk_5.nailed.api", "jk_5.nailed.api")
             attributes("Implementation-Vendor": "jk-5", "jk_5.nailed.api")
             attributes("Specification-Version": project(":api").version, "jk_5.nailed.api")
             attributes("Specification-Title": "Nailed api", "jk_5.nailed.api")
             attributes("Specification-Vendor": "jk-5", "jk_5.nailed.api")
-
-            attributes("Implementation-Version": "2.0.0", "jk_5.nailed.deploader")
-            attributes("Implementation-Title": "jk_5.nailed.deploader", "jk_5.nailed.deploader")
-            attributes("Implementation-Vendor": "jk-5", "jk_5.nailed.deploader")
-            attributes("Specification-Version": "2.0.0", "jk_5.nailed.deploader")
-            attributes("Specification-Title": "Nailed deploader", "jk_5.nailed.deploader")
-            attributes("Specification-Vendor": "jk-5", "jk_5.nailed.deploader")
-
-            attributes("Implementation-Version": project(":Mixin").version, "org.spongepowered.tools")
-            attributes("Implementation-Title": "Mixin", "org.spongepowered.tools")
-            attributes("Implementation-Vendor": "http://spongepowered.org", "org.spongepowered.tools")
         }
     }
 }
 
 compileJava {
     options.compilerArgs += [
-            '-Xlint:all',
+            //'-Xlint:all', //TODO
             '-Xlint:-path',
             '-Xlint:-processing',
             '-Xlint:-unchecked',
+            "-AreobfSrgFile=${project.reobfSrg.getCanonicalPath()}",
             "-AoutSrgFile=${project.mixinSrg.getCanonicalPath()}",
             "-AoutRefMapFile=${project.mixinRefMap.getCanonicalPath()}"
     ]
     options.deprecation = true
     options.encoding = 'UTF-8'
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
 }
 
-afterEvaluate {
-    tasks.compileJava.options.compilerArgs += "-AreobfSrgFile=${tasks.reobfuscate.srg}"
+javadoc {
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.jFlags('-Xms256m', '-Xmx512m')
+    source = [
+            project("api").sourceSets.main.java,
+            sourceSets.main.java
+    ]
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+    tasks.withType(Javadoc) {
+        // disable the crazy super-strict doclint tool in Java 8
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
 }
 
 reobfuscate {
     addExtraSrgFile project.mixinSrg
-}
-
-packageServer {
-    from(project(":Mixin").sourceSets.main.output){
-        exclude("org/spongepowered/tools")
-    }
-    exclude("jk_5/nailed/plugins/worldedit/**")
 }
 
 task worldEditJar(type: Jar) {
@@ -206,6 +245,7 @@ task worldEditJar(type: Jar) {
 
 artifacts {
     worldedit worldEditJar
+    archives nailedJar
 }
 
 uploadArchives {

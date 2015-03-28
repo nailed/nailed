@@ -9,7 +9,7 @@
              public void run() {
                  BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(System.in));
                  String s4;
-@@ -93,11 +93,13 @@
+@@ -93,8 +93,10 @@
              field_155771_h.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
          }
  
@@ -20,11 +20,7 @@
 +        this.field_71340_o = new jk_5.nailed.server.config.MinecraftConfig();
          this.field_154332_n = new ServerEula(new File("eula.txt"));
  
--        if (!this.field_154332_n.func_154346_a()) {
-+        if (!jk_5.nailed.server.tweaker.NailedTweaker.acceptEula && !this.field_154332_n.func_154346_a()) {
-             field_155771_h.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
-             this.field_154332_n.func_154348_b();
-             return false;
+         if (!this.field_154332_n.func_154346_a()) {
 @@ -106,106 +108,47 @@
                  this.func_71189_e("127.0.0.1");
              } else {
