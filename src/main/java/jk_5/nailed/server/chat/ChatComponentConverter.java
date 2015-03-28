@@ -5,6 +5,7 @@ import net.minecraft.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@Deprecated
 public class ChatComponentConverter {
 
     private static final Logger logger = LogManager.getLogger();
